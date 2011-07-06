@@ -1,0 +1,23 @@
+<ui:composition template="/resources/Plantillas/plantilla3.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Bienvenido"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGrid>
+            <br/>
+            <h:outputText value="En el Mapa de Recursos de Identificación podrá realizar consultas sobre el estado de los mismos, gestionados por la CRC."/>
+            <br/>
+            <h:outputText value="Para ello tendrá que realizar búsquedas seleccionando, en primer lugar, el tipo de recurso."/>
+            <h:outputText value="En segundo lugar, se deberá elegir un criterio específico de búsqueda entre los incluidos en una lista desplegable."/>
+            <h:outputText value="Finalmente, se deberá indicar el valor que debe ser objeto de búsqueda."/>
+            <br/>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
