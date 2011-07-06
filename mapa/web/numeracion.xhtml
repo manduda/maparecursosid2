@@ -17,15 +17,13 @@
                 <p:dataTable value="#{numeracionBean.num}" var="nu" paginator="false"
                              selectionMode="multiplecell" selection="#{numeracionBean.selectedCell}"
                              emptyMessage="No se encontraron registros" style="font-size:8px">
-                    <p:column headerText="Municipio" >
+                    <p:column headerText="" >
                         <h:outputText value="#{nu.get(0)}"/>
                     </p:column>
                     <p:column headerText="0" >
-                        <h:panelGrid>
-                            <h:outputText value="#{nu.get(1).skRegionCode.skRegionNombre}"/>
-                            <h:outputText value="#{nu.get(1).emrCodigo.emtNombre}"/>
-                            <h:outputText value="#{nu.get(1).nunInicio}-#{nu.get(1).nunFin}"/>
-                        </h:panelGrid>
+                        <div align="center"><h:outputText value="#{nu.get(1).nunInicio} - #{nu.get(1).nunFin}"/></div>
+                        <h:outputText value="#{nu.get(1).skRegionCode.skRegionNombre}"/><br/>
+                        <h:outputText value="#{nu.get(1).emrCodigo.emtNombre}" style="font-weight: bold"/>
                     </p:column>
                     <p:column headerText="1" >
                         <h:outputText value="#{nu.get(2).skRegionCode.skRegionNombre}"/>
