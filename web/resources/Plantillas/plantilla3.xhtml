@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <title>Mapa Recursos ID</title>
+    </h:head>
+
+    <h:body>
+        <div align="center">
+        <h:panelGrid>
+            <h:graphicImage url="/resources/images/cabezote.jpg"/>
+        </h:panelGrid>
+        </div>
+        <div id="top" align="center">
+            <h:outputText value="MAPA DE RECURSOS DE IDENTIFICACIÓN - CRC"/>
+        </div>
+        <h:form>
+            <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
+                
+                <p:menuitem value="Inicio" url="/faces/index.xhtml"></p:menuitem>
+                
+                <p:menuitem value="Mapa de numeración" url="/faces/numeracion.xhtml"></p:menuitem>
+
+                <p:submenu label="Mapa de señalización">  
+                    <p:menuitem value="Undo" url="#" icon="ui-icon ui-icon-arrowreturnthick-1-w" helpText="CTRL+Z"></p:menuitem>  
+                    <p:menuitem value="Redo" url="#" icon="ui-icon ui-icon-arrowreturnthick-1-e" helpText="CTRL+Y"></p:menuitem>  
+                </p:submenu>  
+
+                <p:menuitem value="Códigos LD" url="/faces/codigosld.xhtml"></p:menuitem>
+
+                <p:submenu label="Matriz 1XY">  
+                    <p:submenu label="Ajax" icon="ui-icon ui-icon-refresh">  
+                        <p:menuitem value="Save" actionListener="#{buttonBean.save}" icon="ui-icon ui-icon-disk" update="messages"/>  
+                        <p:menuitem value="Update" actionListener="#{buttonBean.update}" icon="ui-icon ui-icon-arrowrefresh-1-w" update="messages"/>  
+                    </p:submenu>  
+                    <p:submenu label="Non-Ajax" icon="ui-icon ui-icon-newwin">  
+                        <p:menuitem value="Delete" actionListener="#{buttonBean.delete}" icon="ui-icon ui-icon-close" update="messages" ajax="false"/>  
+                    </p:submenu>  
+                </p:submenu>  
+
+                <p:submenu label="Código IIN">  
+                    <p:submenu label="Ajax" icon="ui-icon ui-icon-refresh">  
+                        <p:menuitem value="Save" actionListener="#{buttonBean.save}" icon="ui-icon ui-icon-disk" update="messages"/>  
+                        <p:menuitem value="Update" actionListener="#{buttonBean.update}" icon="ui-icon ui-icon-arrowrefresh-1-w" update="messages"/>  
+                    </p:submenu>  
+                    <p:submenu label="Non-Ajax" icon="ui-icon ui-icon-newwin">  
+                        <p:menuitem value="Delete" actionListener="#{buttonBean.delete}" icon="ui-icon ui-icon-close" update="messages" ajax="false"/>  
+                    </p:submenu>  
+                </p:submenu>
+                
+                <p:submenu label="Códigos MNC">  
+                    <p:submenu label="Ajax" icon="ui-icon ui-icon-refresh">  
+                        <p:menuitem value="Save" actionListener="#{buttonBean.save}" icon="ui-icon ui-icon-disk" update="messages"/>  
+                        <p:menuitem value="Update" actionListener="#{buttonBean.update}" icon="ui-icon ui-icon-arrowrefresh-1-w" update="messages"/>  
+                    </p:submenu>  
+                    <p:submenu label="Non-Ajax" icon="ui-icon ui-icon-newwin">  
+                        <p:menuitem value="Delete" actionListener="#{buttonBean.delete}" icon="ui-icon ui-icon-close" update="messages" ajax="false"/>  
+                    </p:submenu>  
+                </p:submenu>  
+            </p:menubar> 
+        </h:form>
+        
+        <div class="header">
+            <div id="titulo" >
+                <ui:insert name="titulo">Titulo</ui:insert>
+            </div>
+            <div id="content" align="center" >       
+                <ui:insert name="content">Content</ui:insert>
+            </div>
+        </div>
+        <div id="bottom" align="center">
+            <p:panel styleClass="title ui-widget-header ui-corner-all" >
+                <h:outputText value="Comisión de Regulación de Comunicaciones - CRC"/>
+                <br/>
+                <h:outputText value="Dirección: Carrera 7 # 77 - 07 Pisos 9 y 10 Edificio Torre Siete 77 Teléfono: +57(1)3198300 Bogotá D.C., Colombia"/>
+            </p:panel>
+        </div>
+    </h:body>
+
+</html>

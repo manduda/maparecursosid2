@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/resources/Plantillas/plantilla3.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Códigos de Larga Distancia"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGrid>
+            <h:form>
+                <p:dataTable value="#{codigosLdBean.coLD}" var="ld" paginator="false"
+                             selectionMode="single" 
+                             emptyMessage="No se encontraron códigos de larga distancia" >
+                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}" >
+                        <h:outputText value="#{ld.clnCodigoLd}"/>
+                    </p:column>
+                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}">
+                        <h:outputText value="#{ld.esnCodigo.estNombre}"/>
+                    </p:column>
+                    <p:column headerText="Empresa">
+                        <h:outputText value="#{ld.esnCodigo.esnCodigo == '1' ? 'NINGUNO' : ld.emrCodigo.emtNombre}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
