@@ -14,43 +14,32 @@
     <ui:define name="content">
         <h:panelGrid>
             <h:form>
-                <p:dataTable value="#{numeracionBean.num}" var="nu" paginator="false"
-                             selectionMode="multiplecell" selection="#{numeracionBean.selectedCell}"
+                <p:dataTable value="#{numeracionBean.nume}" var="num" paginator="false"
+                             selectionMode="multiple" selection="#{numeracionBean.selectedCell}"
                              emptyMessage="No se encontraron registros" style="font-size:8px">
-                    <p:column headerText="" >
-                        <h:outputText value="#{nu.get(0)}"/>
+                    <p:column headerText="NDC" >
+                        <h:outputText value="#{num.ndnCodigo.ndtNombre}"/>
                     </p:column>
-                    <p:column headerText="0" >
-                        <div align="center"><h:outputText value="#{nu.get(1).nunInicio} - #{nu.get(1).nunFin}"/></div>
-                        <h:outputText value="#{nu.get(1).skRegionCode.skRegionNombre}"/><br/>
-                        <h:outputText value="#{nu.get(1).emrCodigo.emtNombre}" style="font-weight: bold"/>
+                    <p:column headerText="INICIO" >
+                        <h:outputText value="#{num.nunInicio}"/>
                     </p:column>
-                    <p:column headerText="1" >
-                        <h:outputText value="#{nu.get(2).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="FIN" >
+                        <h:outputText value="#{num.nunFin}"/>
                     </p:column>
-                    <p:column headerText="2" >
-                        <h:outputText value="#{nu.get(3).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="CANTIDAD" >
+                        <h:outputText value="#{num.nunFin-num.nunInicio+1}"/>
                     </p:column>
-                    <p:column headerText="3" >
-                        <h:outputText value="#{nu.get(4).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="MUNICIPIO" >
+                        <h:outputText value="#{num.skRegionCode.skRegionNombre}"/>
                     </p:column>
-                    <p:column headerText="4" >
-                        <h:outputText value="#{nu.get(5).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="ESTADO" >
+                        <h:outputText value="#{num.esnCodigo.estNombre}"/>
                     </p:column>
-                    <p:column headerText="5" >
-                        <h:outputText value="#{nu.get(6).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="EMPRESA" >
+                        <h:outputText value="#{num.emrCodigo.emtNombre}"/>
                     </p:column>
-                    <p:column headerText="6" >
-                        <h:outputText value="#{nu.get(7).skRegionCode.skRegionNombre}"/>
-                    </p:column>
-                    <p:column headerText="7" >
-                        <h:outputText value="#{nu.get(8).skRegionCode.skRegionNombre}"/>
-                    </p:column>
-                    <p:column headerText="8" >
-                        <h:outputText value="#{nu.get(9).skRegionCode.skRegionNombre}"/>
-                    </p:column>
-                    <p:column headerText="9" >
-                        <h:outputText value="#{nu.get(10).skRegionCode.skRegionNombre}"/>
+                    <p:column headerText="OBSERVACIONES" >
+                        <h:outputText value="#{num.nutObservaciones}"/>
                     </p:column>
                 </p:dataTable>
             </h:form>

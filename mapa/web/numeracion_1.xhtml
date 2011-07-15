@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/resources/Plantillas/plantilla3.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Códigos de Larga Distancia"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGrid>
+            <h:form>
+                <p:dataTable value="#{numeracionBean.num}" var="nu" paginator="false"
+                             selectionMode="multiplecell" selection="#{numeracionBean.selectedCell}"
+                             emptyMessage="No se encontraron registros" style="font-size:8px">
+                    <p:column headerText="" >
+                        <h:outputText value="#{nu.get(0)}"/>
+                    </p:column>
+                    <p:column headerText="0" >
+                        <div align="center"><h:outputText value="#{nu.get(1).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="1" >
+                        <div align="center"><h:outputText value="#{nu.get(2).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="2" >
+                        <div align="center"><h:outputText value="#{nu.get(3).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="3" >
+                        <div align="center"><h:outputText value="#{nu.get(4).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="4" >
+                        <div align="center"><h:outputText value="#{nu.get(5).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="5" >
+                        <div align="center"><h:outputText value="#{nu.get(6).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="6" >
+                        <div align="center"><h:outputText value="#{nu.get(7).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="7" >
+                        <div align="center"><h:outputText value="#{nu.get(8).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="8" >
+                        <div align="center"><h:outputText value="#{nu.get(9).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                    <p:column headerText="9" >
+                        <div align="center"><h:outputText value="#{nu.get(10).skRegionCode.skRegionNombre}"/></div>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
