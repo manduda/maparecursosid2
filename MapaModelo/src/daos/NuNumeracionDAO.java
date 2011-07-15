@@ -32,7 +32,7 @@ public class NuNumeracionDAO {
     }
     
     public static List<NuNumeracion> getList(EntityManager em){
-        Query query = em.createQuery("SELECT e FROM NuNumeracion e");
+        Query query = em.createQuery("SELECT e FROM NuNumeracion e ORDER BY e.nunInicio ASC");
         return query.getResultList();
     }
     
