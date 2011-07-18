@@ -4,6 +4,7 @@
  */
 package daos;
 
+import entities.EmOperador;
 import entities.NuNumeracion;
 import java.math.BigDecimal;
 import java.util.List;
@@ -43,5 +44,10 @@ public class NuNumeracionDAO {
             en = 0L;
         }
         return en;
+    }
+    
+    public static List<EmOperador> getListOperadores(EntityManager em){
+        Query query = em.createQuery("SELECT DISTINCT e FROM EmOperador e JOIN e.nuNumeracionCollection n ORDER BY e.emtNombre ASC");
+        return query.getResultList();
     }
 }

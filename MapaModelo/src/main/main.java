@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import vo.ClCodigosLdVO;
+import vo.EmOperadorVO;
 import vo.NuNumeracionVO;
 
 /**
@@ -32,16 +33,26 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
-        vo = inicio.ListaNumeracion();
-        for(int i=1; i < vo.size();i++) {
-            BigDecimal codigo = vo.get(i).getNunCodigo();
-            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
-            String estado = vo.get(i).getEsnCodigo().getEstNombre();
-            String region = vo.get(i).getSkRegionCode().getSkRegionNombre();
-            System.out.println(codigo+"-"+operador+"-"+estado+"-"+region);
-	}
-        //-------------------------------------
+//        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+//        vo = inicio.ListaNumeracion();
+//        for(int i=1; i < vo.size();i++) {
+//            BigDecimal codigo = vo.get(i).getNunCodigo();
+//            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+//            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+//            String region = vo.get(i).getSkRegionCode().getSkRegionNombre();
+//            System.out.println(codigo+"-"+operador+"-"+estado+"-"+region);
+//	}
+//        //-------------------------------------
+        facade fachada = new facade();
+       
+        List<EmOperadorVO> ope = fachada.listaOperador();
+        
+        System.out.println("hola:"+ope.size());
+        
+        for (int i = 0; i < ope.size(); i++){
+            System.out.println(ope.get(i).getEmtNombre());
+        }
+        
     
     }
 }

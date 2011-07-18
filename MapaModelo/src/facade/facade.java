@@ -10,8 +10,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import services.ClCodigosLdService;
+import services.NdNdcService;
 import services.NuNumeracionService;
 import vo.ClCodigosLdVO;
+import vo.EmOperadorVO;
+import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 
 /**
@@ -21,10 +24,12 @@ import vo.NuNumeracionVO;
 public class facade {
     private ClCodigosLdService codigosld;
     private NuNumeracionService numeracion;
+    private NdNdcService ndc;
 
     public facade(){
         codigosld = new ClCodigosLdService();
         numeracion = new NuNumeracionService();
+        ndc = new NdNdcService();
     }
 
     public List<ClCodigosLdVO> ListaCodigosLd(){
@@ -77,4 +82,55 @@ public class facade {
         }
         return vo;
     }
+    
+    public List<NdNdcVO> listaNDC() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<NdNdcVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = ndc.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<EmOperadorVO> listaOperador() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = numeracion.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
 }

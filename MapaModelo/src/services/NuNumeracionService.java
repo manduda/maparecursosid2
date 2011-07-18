@@ -5,6 +5,7 @@
 package services;
 
 import daos.NuNumeracionDAO;
+import entities.EmOperador;
 import entities.NuNumeracion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -70,5 +71,25 @@ public class NuNumeracionService {
             numeracionVO.add(vo);
         }
         return numeracionVO;
+    }
+
+    public List<EmOperadorVO> getListOperadores(EntityManager em){
+        List<EmOperador> operador = NuNumeracionDAO.getListOperadores(em);
+        List<EmOperadorVO> operadorVO = new ArrayList<EmOperadorVO>();        
+        EmOperadorVO vo = new EmOperadorVO();
+        int size = operador.size();
+        
+        for (int i = 0; i < size; i++) {
+            vo = getVOFromEntityOperador(operador.get(i));
+            operadorVO.add(vo);
+        }
+        return operadorVO;
+    }
+
+    public EmOperadorVO getVOFromEntityOperador(EmOperador entity){
+        EmOperadorVO vo = new EmOperadorVO();
+        vo.setEmrCodigo(entity.getEmrCodigo());
+        vo.setEmtNombre(entity.getEmtNombre());
+        return vo;
     }
 }
