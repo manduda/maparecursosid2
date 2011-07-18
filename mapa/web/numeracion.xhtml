@@ -12,10 +12,28 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGrid>
-            <h:form>
-                <p:dataTable value="#{numeracionBean.nume}" var="num" paginator="false"
-                             selectionMode="multiple" selection="#{numeracionBean.selectedCell}"
+        <h:form>
+            <h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText value="NDC"/>
+                    <h:selectOneMenu value="#{numeracionBean.ndcVO.ndnCodigo}">
+                        <f:selectItems value="#{numeracionBean.listaNDC}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Operador"/>
+                    <h:selectOneMenu value="#{numeracionBean.operadorVO.emrCodigo}">
+                        <f:selectItems value="#{numeracionBean.listaOperador}" />  
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:commandButton value="Consultar" actionListener="#{numeracionBean.buscar}" update="datos"/>
+                    <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                    </p:dialog>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid>
+                <p:dataTable id="datos" value="#{numeracionBean.num}" var="num" paginator="false"
                              emptyMessage="No se encontraron registros" style="font-size:8px">
                     <p:column headerText="NDC" >
                         <h:outputText value="#{num.ndnCodigo.ndtNombre}"/>
@@ -42,7 +60,7 @@
                         <h:outputText value="#{num.nutObservaciones}"/>
                     </p:column>
                 </p:dataTable>
-            </h:form>
-        </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 </ui:composition>

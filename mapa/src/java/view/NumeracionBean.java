@@ -5,13 +5,20 @@
 package view;
 
 import facade.facade;
+import helper.ConvertirListasHelper;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import org.primefaces.model.Cell;
+import javax.faces.model.SelectItem;
+import vo.EmOperadorVO;
+import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 
 /**
@@ -22,29 +29,41 @@ import vo.NuNumeracionVO;
 @RequestScoped
 public class NumeracionBean {
 
-    private List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
-    private Cell selectedCell;
-    private ArrayList num = new ArrayList();
-    private List<NuNumeracionVO> nume = new ArrayList<NuNumeracionVO>();
+//    private List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
+    private List<NuNumeracionVO> num = null;//new ArrayList<NuNumeracionVO>();
+    private Collection<SelectItem> listaNDC;
+    private Collection<SelectItem> listaOperador;
+    private NdNdcVO ndcVO;
+    private EmOperadorVO operadorVO;
     
     public NumeracionBean() {
-        String columna1 = "";
+        facade fachada = new facade();
+       
+//        List<EmOperadorVO> ope = fachada.listaOperador();
+//        System.out.println("hola:"+ope.size());
+//        for (int i = 0; i < ope.size(); i++){
+//            System.out.println(ope.get(i).getEmtNombre());
+//        }
+        
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
+            listaOperador = convertir.createSelectItemsList(fachada.listaOperador(), null, null, "getEmtNombre", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
+        }
+          
+
+        
+    }
+
+    public String buscar() {
+        System.out.println("HOLA");
+        List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         facade fachada = new facade();
         numeracion = fachada.ListaNumeracion();
-        int x = 0;
-        System.out.println(numeracion.size());
-        for(int i = 0; i < numeracion.size()/10; i++){
-            num.add(new ArrayList());
-            columna1 = numeracion.get(x).getNunInicio().toString().substring(0, 3);
-            ((ArrayList)num.get(i)).add(columna1);
-            for(int j = 0; j < 10; j++){
-               ((ArrayList)num.get(i)).add(numeracion.get(x));
-               x = x + 1;
-            }
-        }
-        nume = agruparNumeracin(numeracion);
-        
-        
+        num = agruparNumeracin(numeracion);
+        return null;
     }
     
     public List<NuNumeracionVO> agruparNumeracin(List<NuNumeracionVO> numeracion){
@@ -88,46 +107,62 @@ public class NumeracionBean {
             
         }
         
-        for(int i = 0; i < numeros.size(); i++){
-            System.out.println(numeros.get(i).getNdnCodigo().getNdtNombre());
-            System.out.println(numeros.get(i).getEmrCodigo().getEmtNombre());
-            System.out.println(numeros.get(i).getNunInicio() + "-" + numeros.get(i).getNunFin());
-            System.out.println("---");
-        }        
+//        for(int i = 0; i < numeros.size(); i++){
+//            System.out.println(numeros.get(i).getNdnCodigo().getNdtNombre());
+//            System.out.println(numeros.get(i).getEmrCodigo().getEmtNombre());
+//            System.out.println(numeros.get(i).getNunInicio() + "-" + numeros.get(i).getNunFin());
+//            System.out.println("---");
+//        }        
         
         return numeros;
     }
+    
+//    public List<NuNumeracionVO> getNumeracion() {
+//        return numeracion;
+//    }
+//
+//    public void setNumeracion(List<NuNumeracionVO> numeracion) {
+//        this.numeracion = numeracion;
+//    }
 
-    public List<NuNumeracionVO> getNumeracion() {
-        return numeracion;
-    }
-
-    public void setNumeracion(List<NuNumeracionVO> numeracion) {
-        this.numeracion = numeracion;
-    }
-
-    public Cell getSelectedCell() {
-        return selectedCell;
-    }
-
-    public void setSelectedCell(Cell selectedCell) {
-        this.selectedCell = selectedCell;
-    }
-
-    public ArrayList getNum() {
+    public List<NuNumeracionVO> getNum() {
         return num;
     }
 
-    public void setNum(ArrayList num) {
+    public void setNum(List<NuNumeracionVO> num) {
         this.num = num;
     }
 
-    public List<NuNumeracionVO> getNume() {
-        return nume;
+    public Collection<SelectItem> getListaNDC() {
+        return listaNDC;
     }
 
-    public void setNume(List<NuNumeracionVO> nume) {
-        this.nume = nume;
+    public void setListaNDC(Collection<SelectItem> listaNDC) {
+        this.listaNDC = listaNDC;
+    }
+
+     public NdNdcVO getNdcVO() {
+        return ndcVO;
+    }
+
+    public void setNdcVO(NdNdcVO ndcVO) {
+        this.ndcVO = ndcVO;
+    }
+
+    public Collection<SelectItem> getListaOperador() {
+        return listaOperador;
+    }
+
+    public void setListaOperador(Collection<SelectItem> listaOperador) {
+        this.listaOperador = listaOperador;
+    }
+
+    public EmOperadorVO getOperadorVO() {
+        return operadorVO;
+    }
+
+    public void setOperadorVO(EmOperadorVO operadorVO) {
+        this.operadorVO = operadorVO;
     }
 
 }
