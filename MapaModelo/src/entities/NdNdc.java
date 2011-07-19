@@ -31,7 +31,7 @@ public class NdNdc implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "NDN_CODIGO")
-    private BigDecimal ndnCodigo;
+    private int ndnCodigo;
     
     @Basic(optional = false)
     @Column(name = "NDT_NOMBRE")
@@ -47,11 +47,11 @@ public class NdNdc implements Serializable {
     public NdNdc() {
     }
 
-    public BigDecimal getNdnCodigo() {
+    public int getNdnCodigo() {
         return ndnCodigo;
     }
 
-    public void setNdnCodigo(BigDecimal ndnCodigo) {
+    public void setNdnCodigo(int ndnCodigo) {
         this.ndnCodigo = ndnCodigo;
     }
 

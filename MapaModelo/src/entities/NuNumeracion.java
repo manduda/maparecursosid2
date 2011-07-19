@@ -40,11 +40,11 @@ public class NuNumeracion implements Serializable {
     
     @Basic(optional = false)
     @Column(name = "NUN_INICIO")
-    private BigInteger nunInicio;
+    private int nunInicio;
     
     @Basic(optional = false)
     @Column(name = "NUN_FIN")
-    private BigInteger nunFin;
+    private int nunFin;
     
     @Column(name = "NUT_OBSERVACIONES")
     private String nutObservaciones;
@@ -84,19 +84,19 @@ public class NuNumeracion implements Serializable {
         this.skRegionCode = skRegionCode;
     }
 
-    public BigInteger getNunInicio() {
+    public int getNunInicio() {
         return nunInicio;
     }
 
-    public void setNunInicio(BigInteger nunInicio) {
+    public void setNunInicio(int nunInicio) {
         this.nunInicio = nunInicio;
     }
 
-    public BigInteger getNunFin() {
+    public int getNunFin() {
         return nunFin;
     }
 
-    public void setNunFin(BigInteger nunFin) {
+    public void setNunFin(int nunFin) {
         this.nunFin = nunFin;
     }
 

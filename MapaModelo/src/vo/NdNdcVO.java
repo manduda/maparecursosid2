@@ -11,18 +11,18 @@ import java.math.BigDecimal;
  * @author miguel.duran
  */
 public class NdNdcVO {
-    private BigDecimal ndnCodigo;
+    private int ndnCodigo;
     private String ndtNombre;
     private NtTipondcVO ntnCodigo;
 
     public NdNdcVO() {
     }
 
-    public BigDecimal getNdnCodigo() {
+    public int getNdnCodigo() {
         return ndnCodigo;
     }
 
-    public void setNdnCodigo(BigDecimal ndnCodigo) {
+    public void setNdnCodigo(int ndnCodigo) {
         this.ndnCodigo = ndnCodigo;
     }
 

@@ -9,7 +9,7 @@ package vo;
  * @author miguel.duran
  */
 public class EmOperadorVO {
-    private byte[] emrCodigo;
+    private String emrCodigo;
     private String emtNombre;
 
     public String getEmtNombre() {
@@ -20,11 +20,11 @@ public class EmOperadorVO {
         this.emtNombre = emtNombre;
     }
 
-    public byte[] getEmrCodigo() {
+    public String getEmrCodigo() {
         return emrCodigo;
     }
 
-    public void setEmrCodigo(byte[] emrCodigo) {
+    public void setEmrCodigo(String emrCodigo) {
         this.emrCodigo = emrCodigo;
     }
 

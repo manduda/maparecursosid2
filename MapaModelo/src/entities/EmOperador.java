@@ -29,7 +29,7 @@ public class EmOperador implements Serializable {
     @Basic(optional = false)
     @Lob
     @Column(name = "SK_EMPRESA_CODE")
-    private byte[] emrCodigo;
+    private String emrCodigo;
     
     @Basic(optional = false)
     @Column(name = "DESCRIPCION")
@@ -60,11 +60,11 @@ public class EmOperador implements Serializable {
         this.nuNumeracionCollection = nuNumeracionCollection;
     }
 
-    public byte[] getEmrCodigo() {
+    public String getEmrCodigo() {
         return emrCodigo;
     }
 
-    public void setEmrCodigo(byte[] emrCodigo) {
+    public void setEmrCodigo(String emrCodigo) {
         this.setEmrCodigo(emrCodigo);
     }
 

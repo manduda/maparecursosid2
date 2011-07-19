@@ -58,7 +58,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> ListaNumeracion(){
+    public List<NuNumeracionVO> cargarNumeracion(String operador, int ndc, int inicio, int fin){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -68,7 +68,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.getList(em);
+            vo = numeracion.cargarNumeracion(operador, ndc, inicio, fin, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

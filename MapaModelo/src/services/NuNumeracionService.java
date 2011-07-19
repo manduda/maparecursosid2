@@ -61,6 +61,18 @@ public class NuNumeracionService {
         return getVOFromEntity(entity);
     }
 
+    public List<NuNumeracionVO> cargarNumeracion(String operador, int ndc, int inicio, int fin, EntityManager em){
+        List<NuNumeracion> numeracion = NuNumeracionDAO.cargarNumeracion(operador, ndc, inicio, fin, em);
+        List<NuNumeracionVO> numeracionVO = new ArrayList<NuNumeracionVO>();        
+        NuNumeracionVO vo = new NuNumeracionVO();
+        int size = numeracion.size();
+        for (int i = 0; i < size; i++) {
+            vo = getVOFromEntity(numeracion.get(i));
+            numeracionVO.add(vo);
+        }
+        return numeracionVO;
+    }
+
     public List<NuNumeracionVO> getList(EntityManager em){
         List<NuNumeracion> numeracion = NuNumeracionDAO.getList(em);
         List<NuNumeracionVO> numeracionVO = new ArrayList<NuNumeracionVO>();        
@@ -72,7 +84,7 @@ public class NuNumeracionService {
         }
         return numeracionVO;
     }
-
+    
     public List<EmOperadorVO> getListOperadores(EntityManager em){
         List<EmOperador> operador = NuNumeracionDAO.getListOperadores(em);
         List<EmOperadorVO> operadorVO = new ArrayList<EmOperadorVO>();        

@@ -15,8 +15,8 @@ public class NuNumeracionVO {
     private BigDecimal nunCodigo;
     private SkRegionVO skRegionCode;
     private EmOperadorVO emrCodigo;
-    private BigInteger nunInicio;
-    private BigInteger nunFin;
+    private int nunInicio;
+    private int nunFin;
     private String nutObservaciones;
     private NdNdcVO ndnCodigo;
     private EsEstadoVO esnCodigo;
@@ -48,19 +48,19 @@ public class NuNumeracionVO {
         this.nunCodigo = nunCodigo;
     }
 
-    public BigInteger getNunFin() {
+    public int getNunFin() {
         return nunFin;
     }
 
-    public void setNunFin(BigInteger nunFin) {
+    public void setNunFin(int nunFin) {
         this.nunFin = nunFin;
     }
 
-    public BigInteger getNunInicio() {
+    public int getNunInicio() {
         return nunInicio;
     }
 
-    public void setNunInicio(BigInteger nunInicio) {
+    public void setNunInicio(int nunInicio) {
         this.nunInicio = nunInicio;
     }
 
