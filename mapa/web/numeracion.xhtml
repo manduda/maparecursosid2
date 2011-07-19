@@ -8,24 +8,29 @@
                 xmlns:p="http://primefaces.prime.com.tr/ui">
 
     <ui:define name="titulo">
-        <h:outputText value="Códigos de Larga Distancia"/>
+        <h:outputText value="Numeración"/>
     </ui:define>
 
     <ui:define name="content">
+        <f:view>
         <h:form>
             <h:panelGrid>
                 <h:panelGrid columns="2">
-                    <h:outputText value="NDC"/>
-                    <h:selectOneMenu value="#{numeracionBean.ndcVO.ndnCodigo}">
-                        <f:selectItems value="#{numeracionBean.listaNDC}" />  
-                    </h:selectOneMenu>
                     <h:outputText value="Operador"/>
-                    <h:selectOneMenu value="#{numeracionBean.operadorVO.emrCodigo}">
-                        <f:selectItems value="#{numeracionBean.listaOperador}" />  
+                    <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}">
+                        <f:selectItems value="#{NumeracionBean.listaOperador}" />  
                     </h:selectOneMenu>
+                    <h:outputText value="NDC"/>
+                    <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndnCodigo}">
+                        <f:selectItems value="#{NumeracionBean.listaNDC}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Número inicio"/>
+                    <h:inputText value="#{NumeracionBean.numInicio}" maxlength="7"/>
+                    <h:outputText value="Número Fin"/>
+                    <h:inputText value="#{NumeracionBean.numFin}"  maxlength="7"/>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" actionListener="#{numeracionBean.buscar}" update="datos"/>
+                    <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" update="datos"/>
                     <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
                     <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
                         <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
@@ -33,8 +38,10 @@
                 </h:panelGrid>
             </h:panelGrid>
             <h:panelGrid>
-                <p:dataTable id="datos" value="#{numeracionBean.num}" var="num" paginator="false"
-                             emptyMessage="No se encontraron registros" style="font-size:8px">
+                <p:dataTable id="datos" value="#{NumeracionBean.num}" var="num" paginator="true" paginatorPosition="top"
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <f:facet name="header">Mapa de numeración</f:facet>
                     <p:column headerText="NDC" >
                         <h:outputText value="#{num.ndnCodigo.ndtNombre}"/>
                     </p:column>
@@ -62,5 +69,6 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+            </f:view>
     </ui:define>
 </ui:composition>

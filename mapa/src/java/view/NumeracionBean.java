@@ -6,8 +6,6 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 import vo.EmOperadorVO;
 import vo.NdNdcVO;
@@ -25,16 +24,18 @@ import vo.NuNumeracionVO;
  *
  * @author miguel.duran
  */
-@ManagedBean
-@RequestScoped
+@ManagedBean(name = "NumeracionBean")
+@SessionScoped
 public class NumeracionBean {
 
 //    private List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
     private List<NuNumeracionVO> num = null;//new ArrayList<NuNumeracionVO>();
     private Collection<SelectItem> listaNDC;
     private Collection<SelectItem> listaOperador;
-    private NdNdcVO ndcVO;
-    private EmOperadorVO operadorVO;
+    private NdNdcVO ndcVO = new NdNdcVO();
+    private EmOperadorVO operadorVO = new EmOperadorVO();
+    private String NumInicio;
+    private String NumFin;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -48,7 +49,7 @@ public class NumeracionBean {
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
-            listaOperador = convertir.createSelectItemsList(fachada.listaOperador(), null, null, "getEmtNombre", true, "");
+            listaOperador = convertir.createSelectItemsList(fachada.listaOperador(), "getEmrCodigo", null, "getEmtNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
@@ -58,10 +59,28 @@ public class NumeracionBean {
     }
 
     public String buscar() {
-        System.out.println("HOLA");
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         facade fachada = new facade();
-        numeracion = fachada.ListaNumeracion();
+        System.out.println("operador:" + operadorVO.getEmrCodigo());
+        System.out.println("ndc:" + ndcVO.getNdnCodigo());
+        Integer inicio;
+        Integer fin;
+        
+        if (NumInicio.equals("")) {
+            inicio = -1;
+        } else {
+            inicio = Integer.parseInt(NumInicio);
+        }
+        
+        if (NumFin.equals("")) {
+            fin = -1;
+        } else {
+            fin = Integer.parseInt(NumFin);
+        }
+            
+        numeracion = fachada.cargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
+//        BigDecimal ndc = new BigDecimal("1");
+//        numeracion = fachada.cargarNumeracion("01BF", ndc);
         num = agruparNumeracin(numeracion);
         return null;
     }
@@ -72,14 +91,14 @@ public class NumeracionBean {
         NuNumeracionVO numera = new NuNumeracionVO();
         NuNumeracionVO numeraF = new NuNumeracionVO();
         
-        BigDecimal ndc = BigDecimal.ZERO;
-        BigInteger inicio = BigInteger.ZERO;
-        BigInteger fin = BigInteger.ZERO;
+        int ndc = 0;
+        Integer inicio = 0;
+        Integer fin = 0;
         String operador = "";
         
-        BigDecimal ndcF = BigDecimal.ZERO;
-        BigInteger inicioF = BigInteger.ZERO;
-        BigInteger finF = BigInteger.ZERO;
+        int ndcF = 0;
+        Integer inicioF = 0;
+        Integer finF = 0;
         String operadorF = "";
         
         int x = 0;
@@ -141,14 +160,6 @@ public class NumeracionBean {
         this.listaNDC = listaNDC;
     }
 
-     public NdNdcVO getNdcVO() {
-        return ndcVO;
-    }
-
-    public void setNdcVO(NdNdcVO ndcVO) {
-        this.ndcVO = ndcVO;
-    }
-
     public Collection<SelectItem> getListaOperador() {
         return listaOperador;
     }
@@ -157,12 +168,36 @@ public class NumeracionBean {
         this.listaOperador = listaOperador;
     }
 
+    public NdNdcVO getNdcVO() {
+        return ndcVO;
+    }
+
+    public void setNdcVO(NdNdcVO ndcVO) {
+        this.ndcVO = ndcVO;
+    }
+
     public EmOperadorVO getOperadorVO() {
         return operadorVO;
     }
 
     public void setOperadorVO(EmOperadorVO operadorVO) {
         this.operadorVO = operadorVO;
+    }
+
+    public String getNumInicio() {
+        return NumInicio;
+    }
+
+    public void setNumInicio(String NumInicio) {
+        this.NumInicio = NumInicio;
+    }
+
+    public String getNumFin() {
+        return NumFin;
+    }
+
+    public void setNumFin(String NumFin) {
+        this.NumFin = NumFin;
     }
 
 }

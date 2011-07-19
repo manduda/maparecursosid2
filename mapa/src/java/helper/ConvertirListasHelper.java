@@ -9,7 +9,6 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.Iterator;
 
 /**
@@ -128,11 +127,11 @@ public class ConvertirListasHelper {
         
     }
 
-    private BigDecimal obtainIntegerValue(Object obj, Class itemClass, String methodName)
+    private Integer obtainIntegerValue(Object obj, Class itemClass, String methodName)
             throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Method mtd = null;
         mtd = itemClass.getMethod(methodName, new Class[0]);
-        BigDecimal codigoInteger = (BigDecimal) mtd.invoke(obj, new java.lang.Object[0]);
+        Integer codigoInteger = (Integer) mtd.invoke(obj, new java.lang.Object[0]);
         return codigoInteger;
     }
     

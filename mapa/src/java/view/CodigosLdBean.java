@@ -15,7 +15,7 @@ import vo.ClCodigosLdVO;
  *
  * @author juan.loaiza
  */
-@ManagedBean
+@ManagedBean(name = "codigosLdBean")
 @RequestScoped
 public class CodigosLdBean {
     
