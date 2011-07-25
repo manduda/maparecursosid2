@@ -19,7 +19,7 @@ import vo.NuNumeracionVO;
  */
 public class main {
     public static void main(String[] args) {
-        facade inicio = new facade();
+        facade fachada = new facade();
 
         /*//----  CODIGOS LD
         List<ClCodigosLdVO> vo = new ArrayList<ClCodigosLdVO>();
@@ -34,14 +34,18 @@ public class main {
  
         //----  NUMERACION
         List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        int cantidad = 0;
 //        BigDecimal ndc = new BigDecimal("-1");
-        vo = inicio.cargarNumeracion("-1",-1,30,31);
-        for(int i=1; i < vo.size();i++) {
+        vo = fachada.cargarNumeracion(0, -1, "0163",-1,30,-1);
+        cantidad = fachada.countCargarNumeracion("0163",-1,30,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
             BigDecimal codigo = vo.get(i).getNunCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
             String region = vo.get(i).getSkRegionCode().getSkRegionNombre();
-            System.out.println(codigo+"-"+operador+"-"+estado+"-"+region);
+            int inicio = vo.get(i).getNunInicio();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
 	}
 //        //-------------------------------------
 //        facade fachada = new facade();

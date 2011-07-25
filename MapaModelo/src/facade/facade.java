@@ -58,7 +58,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> cargarNumeracion(String operador, int ndc, int inicio, int fin){
+    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -68,7 +68,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.cargarNumeracion(operador, ndc, inicio, fin, em);
+            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -81,6 +81,31 @@ public class facade {
             }
         }
         return vo;
+    }
+    
+    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
     }
     
     public List<NdNdcVO> listaNDC() {
