@@ -6,16 +6,19 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
+import org.primefaces.model.LazyDataModel;
 import vo.EmOperadorVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
@@ -36,6 +39,7 @@ public class NumeracionBean {
     private EmOperadorVO operadorVO = new EmOperadorVO();
     private String NumInicio;
     private String NumFin;
+    private LazyDataModel<NuNumeracionVO> lazyModel;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -54,17 +58,40 @@ public class NumeracionBean {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
           
-
-        
+        lazyModel = new LazyDataModel<NuNumeracionVO>() {  
+  
+            /** 
+             * Dummy implementation of loading a certain segment of data. 
+             * In a real application, this method should load data from a datasource 
+             */  
+            @Override
+            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+                //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
+  
+                //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
+                List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
+                List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
+                facade fachada = new facade();
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1); 
+                lazyNumeracion = agruparNumeracin(numera);
+  
+                return lazyNumeracion;  
+            }  
+        };
+        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1)); 
     }
 
+    public LazyDataModel<NuNumeracionVO> getLazyModel() {  
+        return lazyModel;  
+    }
+        
     public String buscar() {
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         facade fachada = new facade();
         System.out.println("operador:" + operadorVO.getEmrCodigo());
         System.out.println("ndc:" + ndcVO.getNdnCodigo());
-        Integer inicio;
-        Integer fin;
+        final Integer inicio;
+        final Integer fin;
         
         if (NumInicio.equals("")) {
             inicio = -1;
@@ -77,11 +104,41 @@ public class NumeracionBean {
         } else {
             fin = Integer.parseInt(NumFin);
         }
-            
-        numeracion = fachada.cargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
-//        BigDecimal ndc = new BigDecimal("1");
-//        numeracion = fachada.cargarNumeracion("01BF", ndc);
-        num = agruparNumeracin(numeracion);
+
+        lazyModel = new LazyDataModel<NuNumeracionVO>() {  
+  
+            /** 
+             * Dummy implementation of loading a certain segment of data. 
+             * In a real application, this method should load data from a datasource 
+             */  
+            @Override
+            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+                //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
+  
+                //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
+                List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
+                List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
+                facade fachada = new facade();
+                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin); 
+                lazyNumeracion = agruparNumeracin(numera);
+                
+                for(int i=0; i < numera.size();i++) {
+                    BigDecimal codigo = numera.get(i).getNunCodigo();
+                    String operador = numera.get(i).getEmrCodigo().getEmtNombre();
+                    String estado = numera.get(i).getEsnCodigo().getEstNombre();
+                    String region = numera.get(i).getSkRegionCode().getSkRegionNombre();
+                    int inicio = numera.get(i).getNunInicio();
+                    System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
+                }
+                
+                return lazyNumeracion;  
+            }  
+        };
+        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin)); 
+        
+        
+//        numeracion = fachada.cargarNumeracion(0, -1, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
+//        num = agruparNumeracin(numeracion);
         return null;
     }
     
@@ -125,7 +182,7 @@ public class NumeracionBean {
             
             
         }
-        
+        System.out.println("X es:"+x);
 //        for(int i = 0; i < numeros.size(); i++){
 //            System.out.println(numeros.get(i).getNdnCodigo().getNdtNombre());
 //            System.out.println(numeros.get(i).getEmrCodigo().getEmtNombre());

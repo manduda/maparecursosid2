@@ -12,7 +12,6 @@
     </ui:define>
 
     <ui:define name="content">
-        <f:view>
         <h:form>
             <h:panelGrid>
                 <h:panelGrid columns="2">
@@ -30,7 +29,7 @@
                     <h:inputText value="#{NumeracionBean.numFin}"  maxlength="7"/>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" update="datos"/>
+                    <h:commandButton value="Consultar" action="#{NumeracionBean.buscar}"/>
                     <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
                     <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
                         <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
@@ -38,9 +37,9 @@
                 </h:panelGrid>
             </h:panelGrid>
             <h:panelGrid>
-                <p:dataTable id="datos" value="#{NumeracionBean.num}" var="num" paginator="true" paginatorPosition="top"
-                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px"
-                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top"
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                             paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de numeración</f:facet>
                     <p:column headerText="NDC" >
                         <h:outputText value="#{num.ndnCodigo.ndtNombre}"/>
@@ -63,12 +62,8 @@
                     <p:column headerText="EMPRESA" >
                         <h:outputText value="#{num.emrCodigo.emtNombre}"/>
                     </p:column>
-                    <p:column headerText="OBSERVACIONES" >
-                        <h:outputText value="#{num.nutObservaciones}"/>
-                    </p:column>
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
-            </f:view>
     </ui:define>
 </ui:composition>
