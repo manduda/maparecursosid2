@@ -7,7 +7,6 @@ package daos;
 import entities.EmOperador;
 import entities.NuNumeracion;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -53,7 +52,7 @@ public class NuNumeracionDAO {
         return query.getResultList();
     }
     
-    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, EntityManager em){
+    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, EntityManager em){
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
 
         StringBuilder searchQuery1 = new StringBuilder(
@@ -86,7 +85,11 @@ public class NuNumeracionDAO {
             searchQuery1.append("AND n.NUN_FIN LIKE ?4 ");
             searchQuery.append("AND n.nunFin LIKE ?4 ");
         }
-
+        if(estado != -1) {
+            searchQuery1.append("AND n.ESN_CODIGO = ?5 ");
+            searchQuery.append("AND n.esnCodigo.esnCodigo = ?5 ");
+        }
+        
         searchQuery1.append(" ) a");
         
         Query query1 = em.createNativeQuery(searchQuery1.toString());
@@ -103,6 +106,9 @@ public class NuNumeracionDAO {
         if(fin != -1) {
             query1.setParameter(4, fin + "%");
         }
+        if(estado != -1) {
+            query1.setParameter(5, estado);
+        }        
         
         List<Object[]> results = query1.getResultList();
         
@@ -125,6 +131,9 @@ public class NuNumeracionDAO {
         }
         if(fin != -1) {
             query.setParameter(4, fin + "%");
+        }
+        if(estado != -1) {
+            query.setParameter(5, estado);
         }        
         
         if (results.get(0)[0] != null){
@@ -143,7 +152,7 @@ public class NuNumeracionDAO {
         return numeracion;
     }
     
-    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, EntityManager em){
+    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(*) FROM (SELECT DISTINCT "
@@ -167,6 +176,9 @@ public class NuNumeracionDAO {
         if(fin != -1) {
             searchQuery.append("AND n.NUN_FIN LIKE ?4 ");
         }
+        if(estado != -1) {
+            searchQuery.append("AND n.ESN_CODIGO = ?5 ");
+        }
         
         searchQuery.append(" ) a");
         
@@ -183,6 +195,9 @@ public class NuNumeracionDAO {
         }
         if(fin != -1) {
             query.setParameter(4, fin + "%");
+        }
+        if(estado != -1) {
+            query.setParameter(5, estado);
         }
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();

@@ -5,17 +5,23 @@
 package facade;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import services.ClCodigosLdService;
+import services.EsEstadoService;
 import services.NdNdcService;
 import services.NuNumeracionService;
+import services.UsUsuariosService;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
+import vo.EsEstadoVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
+import vo.UsUsuariosVO;
 
 /**
  *
@@ -25,11 +31,15 @@ public class facade {
     private ClCodigosLdService codigosld;
     private NuNumeracionService numeracion;
     private NdNdcService ndc;
+    private EsEstadoService estado;
+    private UsUsuariosService usuario;
 
     public facade(){
         codigosld = new ClCodigosLdService();
         numeracion = new NuNumeracionService();
         ndc = new NdNdcService();
+        estado = new EsEstadoService();
+        usuario = new UsUsuariosService();
     }
 
     public List<ClCodigosLdVO> ListaCodigosLd(){
@@ -58,7 +68,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin){
+    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -68,7 +78,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, em);
+            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -83,7 +93,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin){
+    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -93,7 +103,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, em);
+            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -145,6 +155,69 @@ public class facade {
             tx.begin();
             vo = numeracion.getListOperadores(em);
             tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<EsEstadoVO> listaEstado() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EsEstadoVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = estado.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public UsUsuariosVO iniciarSesion(String user, String contrasena) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        UsUsuariosVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.cargarUsuario(user, contrasena, em);
+            tx.commit();
+            
+/*            if(vo!=null){
+            //Se valida la vigencia del usuario
+                if(vo.getUsnEstado() == 1 ){
+                    //return vo;
+                } else {
+                    Logger.getAnonymousLogger().log(Level.INFO, "Usuario " + vo.getUsnCodigo().getLogin() + " no está vigente.");
+                    //return null;
+                }
+            } else {
+                Logger.getAnonymousLogger().log(Level.INFO, "Nombre de usuario y contraseña inválidos.");
+            }
+            //return null;*/
         } catch (Exception e) {
             if(em != null && tx != null){
                 tx.rollback();

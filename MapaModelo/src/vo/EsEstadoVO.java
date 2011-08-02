@@ -11,17 +11,17 @@ import java.math.BigDecimal;
  * @author miguel.duran
  */
 public class EsEstadoVO {
-    private BigDecimal esnCodigo;
+    private int esnCodigo;
     private String estNombre;
 
     public EsEstadoVO() {
     }
 
-    public BigDecimal getEsnCodigo() {
+    public int getEsnCodigo() {
         return esnCodigo;
     }
 
-    public void setEsnCodigo(BigDecimal esnCodigo) {
+    public void setEsnCodigo(int esnCodigo) {
         this.esnCodigo = esnCodigo;
     }
 

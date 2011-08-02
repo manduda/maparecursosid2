@@ -28,7 +28,7 @@ public class EsEstado implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "ESN_CODIGO")
-    private BigDecimal esnCodigo;
+    private int esnCodigo;
     
     @Basic(optional = false)
     @Column(name = "EST_NOMBRE")
@@ -43,11 +43,11 @@ public class EsEstado implements Serializable {
     public EsEstado() {
     }
 
-    public BigDecimal getEsnCodigo() {
+    public int getEsnCodigo() {
         return esnCodigo;
     }
 
-    public void setEsnCodigo(BigDecimal esnCodigo) {
+    public void setEsnCodigo(int esnCodigo) {
         this.esnCodigo = esnCodigo;
     }
 
