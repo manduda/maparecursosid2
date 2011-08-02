@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition>
+        <h:form>
+            <h:panelGroup rendered="#{!UserBean.login}">
+                <p:panel header="Iniciar Sesion">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Usuario"/>
+                        <h:inputText value="#{inicioBean.user}" size="15" maxlength="15"/>
+                        <h:outputText value="Contraseña"/>
+                        <h:inputText value="#{inicioBean.password}" size="15" maxlength="15"/>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <h:commandButton value="Iniciar Sesión" action="#{inicioBean.validarUsuario}"/>
+                        <h:outputText style="color:red" value="#{inicioBean.mensaje}" />
+                    </h:panelGrid>
+                </p:panel>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{UserBean.login}">
+                <p:panel header="Bienvenido">
+                    <h:panelGrid columns="1">
+                        <h:outputText value="#{UserBean.userVO.usnCodigo.name} #{UserBean.userVO.usnCodigo.lastName}"/>
+                        <h:commandButton value="Cerrar Sesión" action="#{inicioBean.cerrarSesion}"/>
+                    </h:panelGrid>
+                </p:panel>
+            </h:panelGroup>
+        </h:form>
+
+    </ui:composition>
+</html>

@@ -20,6 +20,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import vo.EmOperadorVO;
+import vo.EsEstadoVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 
@@ -35,8 +36,10 @@ public class NumeracionBean {
     private List<NuNumeracionVO> num = null;//new ArrayList<NuNumeracionVO>();
     private Collection<SelectItem> listaNDC;
     private Collection<SelectItem> listaOperador;
+    private Collection<SelectItem> listaEstado;
     private NdNdcVO ndcVO = new NdNdcVO();
     private EmOperadorVO operadorVO = new EmOperadorVO();
+    private EsEstadoVO estadoVO = new EsEstadoVO();
     private String NumInicio;
     private String NumFin;
     private LazyDataModel<NuNumeracionVO> lazyModel;
@@ -54,6 +57,7 @@ public class NumeracionBean {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperador(), "getEmrCodigo", null, "getEmtNombre", true, "");
+            listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
@@ -72,13 +76,13 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1); 
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1, -1); 
                 lazyNumeracion = agruparNumeracin(numera);
   
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1)); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1, -1)); 
     }
 
     public LazyDataModel<NuNumeracionVO> getLazyModel() {  
@@ -119,7 +123,7 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin); 
+                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo()); 
                 lazyNumeracion = agruparNumeracin(numera);
                 
                 for(int i=0; i < numera.size();i++) {
@@ -134,7 +138,7 @@ public class NumeracionBean {
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin)); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo())); 
         
         
 //        numeracion = fachada.cargarNumeracion(0, -1, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
@@ -225,6 +229,14 @@ public class NumeracionBean {
         this.listaOperador = listaOperador;
     }
 
+    public Collection<SelectItem> getListaEstado() {
+        return listaEstado;
+    }
+
+    public void setListaEstado(Collection<SelectItem> listaEstado) {
+        this.listaEstado = listaEstado;
+    }
+
     public NdNdcVO getNdcVO() {
         return ndcVO;
     }
@@ -255,6 +267,14 @@ public class NumeracionBean {
 
     public void setNumFin(String NumFin) {
         this.NumFin = NumFin;
+    }
+
+    public EsEstadoVO getEstadoVO() {
+        return estadoVO;
+    }
+
+    public void setEstadoVO(EsEstadoVO estadoVO) {
+        this.estadoVO = estadoVO;
     }
 
 }

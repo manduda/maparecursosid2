@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition template="/resources/Plantillas/plantilla3.xhtml"
+<ui:composition template="/resources/Plantillas/normal.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -13,7 +13,7 @@
 
     <ui:define name="content">
         <h:form>
-            <h:panelGrid>
+            <h:panelGrid header="Filtro" closable="true">
                 <h:panelGrid columns="2">
                     <h:outputText value="Operador"/>
                     <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}">
@@ -22,6 +22,10 @@
                     <h:outputText value="NDC"/>
                     <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndnCodigo}">
                         <f:selectItems value="#{NumeracionBean.listaNDC}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Estado"/>
+                    <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}">
+                        <f:selectItems value="#{NumeracionBean.listaEstado}" />  
                     </h:selectOneMenu>
                     <h:outputText value="Número inicio"/>
                     <h:inputText value="#{NumeracionBean.numInicio}" maxlength="7"/>
@@ -35,6 +39,10 @@
                         <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
                     </p:dialog>
                 </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:outputText value="Registros encontrados:"/>
+                <h:outputText value="#{NumeracionBean.lazyModel.rowCount}"/>
             </h:panelGrid>
             <h:panelGrid>
                 <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top"
