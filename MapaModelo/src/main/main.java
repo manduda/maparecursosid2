@@ -62,5 +62,8 @@ public class main {
             System.out.println("Usuario o contraseña incorrectos");
         }
         //-------------------------------------
+        /*Class itemClass = null;
+        itemClass = usuario.getClass();
+        System.out.println("Clase: " + itemClass.getName());*/
     }
 }
