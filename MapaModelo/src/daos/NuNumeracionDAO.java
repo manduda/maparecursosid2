@@ -29,8 +29,8 @@ public class NuNumeracionDAO {
         em.merge(entity);
     }
 
-    public static NuNumeracion findbyId(BigDecimal clnCodigo, EntityManager em){
-        return em.find(NuNumeracion.class, clnCodigo);
+    public static NuNumeracion findbyId(BigDecimal nunCodigo, EntityManager em){
+        return em.find(NuNumeracion.class, nunCodigo);
     }
     
     public static List<NuNumeracion> getList(EntityManager em){

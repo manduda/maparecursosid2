@@ -30,9 +30,9 @@ public class NuNumeracion implements Serializable {
     @Column(name = "NUN_CODIGO")
     private BigDecimal nunCodigo;
     
-    @JoinColumn(name = "SK_REGION_CODE", referencedColumnName = "SK_REGION_CODE")
+    @JoinColumn(name = "SK_REGION_CODE", referencedColumnName = "CODIGO_MUNICIPIO")
     @ManyToOne(optional = false)
-    private SkRegion skRegionCode;
+    private Municipios codigoMunicipio;
     
     @JoinColumn(name = "SK_EMPRESA_CODE", referencedColumnName = "SK_EMPRESA_CODE")
     @ManyToOne(optional = false)
@@ -76,12 +76,12 @@ public class NuNumeracion implements Serializable {
         this.emrCodigo = emrCodigo;
     }
 
-    public SkRegion getSkRegionCode() {
-        return skRegionCode;
+    public Municipios getCodigoMunicipio() {
+        return codigoMunicipio;
     }
 
-    public void setSkRegionCode(SkRegion skRegionCode) {
-        this.skRegionCode = skRegionCode;
+    public void setCodigoMunicipio(Municipios codigoMunicipio) {
+        this.codigoMunicipio = codigoMunicipio;
     }
 
     public int getNunInicio() {

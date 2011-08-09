@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
-import vo.SkRegionVO;
+import vo.MunicipiosVO;
 
 /**
  *
@@ -36,11 +37,17 @@ public class NuNumeracionService {
         operador.setEmtNombre(entity.getEmrCodigo().getEmtNombre());
         vo.setEmrCodigo(operador);
         //------------------------------------
-        // Region
-        SkRegionVO region = new SkRegionVO();
-        region.setSkRegionCode(entity.getSkRegionCode().getSkRegionCode());
-        region.setSkRegionNombre(entity.getSkRegionCode().getSkRegionNombre());
-        vo.setSkRegionCode(region);
+        // Departamento
+        DepartamentosVO departamento = new DepartamentosVO();
+        departamento.setCodigoDepartamento(entity.getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento());
+        departamento.setNombreDepartamento(entity.getCodigoMunicipio().getCodigoDepartamento().getNombreDepartamento());
+        //------------------------------------
+        // Municipio
+        MunicipiosVO municipio = new MunicipiosVO();
+        municipio.setCodigoMunicipio(entity.getCodigoMunicipio().getCodigoMunicipio());
+        municipio.setNombreMunicipio(entity.getCodigoMunicipio().getNombreMunicipio());
+        municipio.setCodigoDepartamento(departamento);
+        vo.setCodigoMunicipio(municipio);
         //------------------------------------
         // NDC
         NdNdcVO ndc = new NdNdcVO();

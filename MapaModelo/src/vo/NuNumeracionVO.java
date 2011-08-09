@@ -13,7 +13,7 @@ import java.math.BigInteger;
  */
 public class NuNumeracionVO {
     private BigDecimal nunCodigo;
-    private SkRegionVO skRegionCode;
+    private MunicipiosVO codigoMunicipio;
     private EmOperadorVO emrCodigo;
     private int nunInicio;
     private int nunFin;
@@ -80,12 +80,12 @@ public class NuNumeracionVO {
         this.emrCodigo = emrCodigo;
     }
 
-    public SkRegionVO getSkRegionCode() {
-        return skRegionCode;
+    public MunicipiosVO getCodigoMunicipio() {
+        return codigoMunicipio;
     }
 
-    public void setSkRegionCode(SkRegionVO skRegionCode) {
-        this.skRegionCode = skRegionCode;
+    public void setCodigoMunicipio(MunicipiosVO codigoMunicipio) {
+        this.codigoMunicipio = codigoMunicipio;
     }
 
 }

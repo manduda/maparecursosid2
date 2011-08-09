@@ -12,6 +12,9 @@ public class EmOperadorVO {
     private String emrCodigo;
     private String emtNombre;
 
+    public EmOperadorVO() {
+    }
+    
     public String getEmtNombre() {
         return emtNombre;
     }

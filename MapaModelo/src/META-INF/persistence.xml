@@ -8,11 +8,19 @@
     <class>entities.NdNdc</class>
     <class>entities.NtTipondc</class>
     <class>entities.NuNumeracion</class>
-    <class>entities.SkRegion</class>
     <class>entities.AcAccion</class>
     <class>entities.UsUsuarios</class>
     <class>entities.TuTipoUsuario</class>
     <class>entities.Users</class>
+    <class>entities.SeSenalizacion</class>
+    <class>entities.TeTipoSenalizacion</class>
+    <class>entities.RtTipoRegion</class>
+    <class>entities.ReRegion</class>
+    <class>entities.Departamentos</class>
+    <class>entities.Municipios</class>
+    <class>entities.TrTramites</class>
+    <class>entities.EtEstadoTramite</class>
+    <class>entities.GtGestionTramite</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>

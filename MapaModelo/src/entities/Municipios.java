@@ -5,13 +5,15 @@
 package entities;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,54 +22,54 @@ import javax.persistence.Table;
  * @author miguel.duran
  */
 @Entity
-@Table(name = "ES_ESTADO")
-public class EsEstado implements Serializable {
+@Table(name = "SA.MUNICIPIOS")
+public class Municipios implements Serializable {
     private static final long serialVersionUID = 1L;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    
+
     @Id
     @Basic(optional = false)
-    @Column(name = "ESN_CODIGO")
-    private int esnCodigo;
+    @Column(name = "CODIGO_MUNICIPIO")
+    private String codigoMunicipio;
     
     @Basic(optional = false)
-    @Column(name = "EST_NOMBRE")
-    private String estNombre;
+    @Column(name = "NOMBRE_MUNICIPIO")
+    private String nombreMunicipio;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esnCodigo")
-    private Collection<ClCodigosLd> clCodigosLdCollection;
+    @JoinColumn(name = "CODIGO_DEPARTAMENTO", referencedColumnName = "CODIGO_DEPARTAMENTO")
+    @ManyToOne(optional = false)
+    private Departamentos codigoDepartamento;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esnCodigo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoMunicipio")
     private Collection<NuNumeracion> nuNumeracionCollection;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "esnCodigo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoMunicipio")
     private Collection<SeSenalizacion> seSenalizacionCollection;
-    
-    public EsEstado() {
+
+    public Municipios() {
     }
 
-    public int getEsnCodigo() {
-        return esnCodigo;
+    public Departamentos getCodigoDepartamento() {
+        return codigoDepartamento;
     }
 
-    public void setEsnCodigo(int esnCodigo) {
-        this.esnCodigo = esnCodigo;
+    public void setCodigoDepartamento(Departamentos codigoDepartamento) {
+        this.codigoDepartamento = codigoDepartamento;
     }
 
-    public String getEstNombre() {
-        return estNombre;
+    public String getCodigoMunicipio() {
+        return codigoMunicipio;
     }
 
-    public void setEstNombre(String estNombre) {
-        this.estNombre = estNombre;
+    public void setCodigoMunicipio(String codigoMunicipio) {
+        this.codigoMunicipio = codigoMunicipio;
     }
 
-    public Collection<ClCodigosLd> getClCodigosLdCollection() {
-        return clCodigosLdCollection;
+    public String getNombreMunicipio() {
+        return nombreMunicipio;
     }
 
-    public void setClCodigosLdCollection(Collection<ClCodigosLd> clCodigosLdCollection) {
-        this.clCodigosLdCollection = clCodigosLdCollection;
+    public void setNombreMunicipio(String nombreMunicipio) {
+        this.nombreMunicipio = nombreMunicipio;
     }
 
     public Collection<NuNumeracion> getNuNumeracionCollection() {
@@ -85,5 +87,5 @@ public class EsEstado implements Serializable {
     public void setSeSenalizacionCollection(Collection<SeSenalizacion> seSenalizacionCollection) {
         this.seSenalizacionCollection = seSenalizacionCollection;
     }
-   
+
 }

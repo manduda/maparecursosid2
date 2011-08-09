@@ -19,6 +19,9 @@ public class UsersVO {
     private String password;
     private Collection<UsUsuariosVO> usUsuariosCollection;
 
+    public UsersVO() {
+    }
+    
     public String getEmail() {
         return email;
     }

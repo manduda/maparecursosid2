@@ -5,22 +5,28 @@
 package facade;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import services.ClCodigosLdService;
 import services.EsEstadoService;
+import services.MunicipiosService;
 import services.NdNdcService;
 import services.NuNumeracionService;
+import services.ReRegionService;
+import services.SeSenalizacionService;
+import services.TrTramitesService;
 import services.UsUsuariosService;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
+import vo.MunicipiosVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
+import vo.ReRegionVO;
+import vo.SeSenalizacionVO;
+import vo.TrTramitesVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -30,16 +36,24 @@ import vo.UsUsuariosVO;
 public class facade {
     private ClCodigosLdService codigosld;
     private NuNumeracionService numeracion;
+    private SeSenalizacionService senalizacion;
     private NdNdcService ndc;
+    private MunicipiosService municipios;
+    private ReRegionService regionSenalizacion;
     private EsEstadoService estado;
     private UsUsuariosService usuario;
+    private TrTramitesService tramites;
 
     public facade(){
         codigosld = new ClCodigosLdService();
         numeracion = new NuNumeracionService();
+        senalizacion = new SeSenalizacionService();
         ndc = new NdNdcService();
+        municipios = new MunicipiosService();
+        regionSenalizacion = new ReRegionService();
         estado = new EsEstadoService();
         usuario = new UsUsuariosService();
+        tramites = new TrTramitesService();
     }
 
     public List<ClCodigosLdVO> ListaCodigosLd(){
@@ -143,7 +157,7 @@ public class facade {
         return vo;
     }
     
-    public List<EmOperadorVO> listaOperador() {
+    public List<EmOperadorVO> listaOperadorNumeracion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -179,6 +193,131 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = estado.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<SeSenalizacionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = senalizacion.cargarSenalizacion(first, max, operador, region, zona, ps, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = senalizacion.countCargarSenalizacion(operador, region, zona, ps, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<ReRegionVO> listaRegionSenalizacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<ReRegionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = regionSenalizacion.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<EmOperadorVO> listaOperadorSenalizacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = senalizacion.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<MunicipiosVO> listaMunicipios() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<MunicipiosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = municipios.getList(em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -230,5 +369,49 @@ public class facade {
         }
         return vo;
     }
+    
+    public List<TrTramitesVO> cargarTramites(int tipo, int usnCodigo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TrTramitesVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            switch(tipo) {
+                case 1:
+                    vo = tramites.getTramitesCreados(usnCodigo, em);
+                    break;
+                case 2:
+                    vo = tramites.getTramitesEnviados(em);
+                    break;
+                case 3:
+                    vo = tramites.getTramitesDevueltos(usnCodigo, em);
+                    break;
+                case 4:
+                    vo = tramites.getTramitesAprobados(em);
+                    break;
+                case 5:
+                    vo = tramites.getTramitesTerminados(em);
+                    break;
+                default:
+                    vo = tramites.getTramites(em);
+            }
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
     
 }

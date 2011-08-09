@@ -18,6 +18,9 @@ public class UsUsuariosVO {
     private TuTipoUsuarioVO tunCodigo;
     private int usnEstado;
 
+    public UsUsuariosVO() {
+    }
+        
     public TuTipoUsuarioVO getTunCodigo() {
         return tunCodigo;
     }

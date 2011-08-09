@@ -15,6 +15,9 @@ public class TuTipoUsuarioVO {
     private String tutNombre;
     private Collection<UsUsuariosVO> usUsuariosCollection;
 
+    public TuTipoUsuarioVO() {
+    }
+        
     public int getTunCodigo() {
         return tunCodigo;
     }

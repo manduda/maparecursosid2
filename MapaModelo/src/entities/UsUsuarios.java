@@ -12,6 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import vo.TuTipoUsuarioVO;
+import vo.UsUsuariosVO;
+import vo.UsersVO;
 
 /**
  *
@@ -35,6 +38,33 @@ public class UsUsuarios implements Serializable {
     @Column(name = "USN_ESTADO")
     private int usnEstado;
 
+    public UsUsuarios(){
+    }
+
+    public UsUsuariosVO toVO(){
+        UsUsuariosVO vo = new UsUsuariosVO();
+        // Datos Usuario
+        UsersVO datosusuario = new UsersVO();
+        datosusuario.setUserCode(this.getUsnCodigo().getUserCode());
+        datosusuario.setName(this.getUsnCodigo().getName());
+        datosusuario.setLastName(this.getUsnCodigo().getLastName());
+        datosusuario.setEmail(this.getUsnCodigo().getEmail());
+        datosusuario.setLogin(this.getUsnCodigo().getLogin());
+        datosusuario.setPassword(this.getUsnCodigo().getPassword());
+        vo.setUsnCodigo(datosusuario);
+        //------------------------------------
+        // Tipo Usuario
+        TuTipoUsuarioVO tipousuario = new TuTipoUsuarioVO();
+        tipousuario.setTunCodigo(this.getTunCodigo().getTunCodigo());
+        tipousuario.setTutNombre(this.getTunCodigo().getTutNombre());
+        vo.setTunCodigo(tipousuario);
+        //------------------------------------
+        vo.setUsnEstado(this.getUsnEstado());
+        
+        return vo;
+    }
+    
+    
     public TuTipoUsuario getTunCodigo() {
         return tunCodigo;
     }

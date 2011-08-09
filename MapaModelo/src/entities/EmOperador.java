@@ -40,6 +40,9 @@ public class EmOperador implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
     private Collection<NuNumeracion> nuNumeracionCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
+    private Collection<SeSenalizacion> seSenalizacionCollection;
 
     public EmOperador() {
     }
@@ -75,5 +78,20 @@ public class EmOperador implements Serializable {
     public void setEmtNombre(String emtNombre) {
         this.emtNombre = emtNombre;
     }
-   
+
+    public Collection<SeSenalizacion> getSeSenalizacionCollection() {
+        return seSenalizacionCollection;
+    }
+
+    public void setSeSenalizacionCollection(Collection<SeSenalizacion> seSenalizacionCollection) {
+        this.seSenalizacionCollection = seSenalizacionCollection;
+    }
+    
+    public EmOperadorVO toVO(){
+        EmOperadorVO vo = new EmOperadorVO();
+        vo.setEmrCodigo(this.getEmrCodigo());
+        vo.setEmtNombre(this.getEmtNombre());
+        return vo;
+    }
+    
 }

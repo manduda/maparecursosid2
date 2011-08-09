@@ -4,14 +4,22 @@
  */
 package main;
 
+import daos.MunicipiosDAO;
+import entities.Municipios;
 import facade.facade;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
+import vo.GtGestionTramiteVO;
+import vo.MunicipiosVO;
 import vo.NuNumeracionVO;
+import vo.SeSenalizacionVO;
+import vo.TrTramitesVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -49,8 +57,34 @@ public class main {
 	}*/
         //-------------------------------------
        
+        //----  SEÑALIZACION
+        /*List<SeSenalizacionVO> vo = new ArrayList<SeSenalizacionVO>();
+        int cantidad = 0;
+        vo = fachada.cargarSenalizacion(0, -1, "-1",-1,-1,-1,1);
+        cantidad = fachada.countCargarSenalizacion("-1",-1,-1,-1,1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getSenCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            String municipio = vo.get(i).getCodigoMunicipio().getNombreMunicipio();
+            int regionSenalizacion = vo.get(i).getRenCodigo().getRenCodigo();
+            int zona = vo.get(i).getSenZona();
+            int ps = vo.get(i).getSenPs();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+municipio+"-"+regionSenalizacion+"-"+zona+"-"+ps);
+	}*/
+        //-------------------------------------
+        /*List<MunicipiosVO> vo = new ArrayList<MunicipiosVO>();
+        vo = fachada.listaMunicipios();
+        for(int i=0; i < vo.size();i++) {
+            String codigo = vo.get(i).getCodigoMunicipio();
+            String municipio = vo.get(i).getNombreMunicipio();
+            String departamento = vo.get(i).getCodigoDepartamento().getNombreDepartamento();
+            System.out.println(codigo+"-"+municipio+"-"+departamento);
+	}*/
+        
         //----  USUARIO
-        UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
+        /*UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
         
         if (usuario != null){
             if (usuario.getUsnEstado() == 1){
@@ -60,10 +94,31 @@ public class main {
             }
         } else {
             System.out.println("Usuario o contraseña incorrectos");
-        }
+        }*/
         //-------------------------------------
         /*Class itemClass = null;
         itemClass = usuario.getClass();
         System.out.println("Clase: " + itemClass.getName());*/
+        
+        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        vo = fachada.cargarTramites(3, 3378);
+        for (TrTramitesVO t : vo) {
+            int codigo = t.getTrnCodigo();
+            String estado = t.getEtnCodigo().getEttNombre();
+            String operador = t.getEmrCodigo().getEmtNombre();
+            String usuario = t.getUsnCodigo().getUsnCodigo().getLogin();
+            Date fecha = t.getTrfFecha();
+            System.out.println(codigo+"-"+estado+"-"+operador+"-"+usuario+"-"+fecha);
+            System.out.println("- - - - - -");
+            Collection<GtGestionTramiteVO> gestionVO = t.getGtGetionTramiteCollection();
+            for (GtGestionTramiteVO gt : gestionVO) {
+                int codigoGT = gt.getGtnCodigo();
+                String usuarioGT = gt.getUsnCodigo().getUsnCodigo().getLogin();
+                String estadoGT = gt.getEtnCodigo().getEttNombre();
+                Date fechaGT = gt.getGtfFecha();
+                System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
+            }
+        }
+        
     }
 }
