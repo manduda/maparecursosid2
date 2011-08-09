@@ -23,9 +23,9 @@ public class UserBean {
     public UserBean() {
     }
 
-    /*public boolean isIsLoggedIn() {
+    public boolean isIsLoggedIn() {
         return userVO.getUsnCodigo().getLogin() != null;
-    }*/
+    }
 
     public UsUsuariosVO getUserVO() {
         return userVO;

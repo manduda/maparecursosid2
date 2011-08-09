@@ -22,12 +22,12 @@
 }
 
 #bottom {
-    clear:both;
+    /*clear:both;*/
     /*background-color: #c2dfef;*/
-    margin: 5px auto 0px auto;
+    margin: 0px auto 0px auto;
     width: 100%;
     float: left;
-    display: block;
+    /*display: block;*/
     min-width: 1040px;
 }
 
@@ -62,16 +62,17 @@
 
 #container {
     border: 1px solid #acbece;
-    margin: 5px auto 5px auto;
+    margin: 0px auto 5px auto;
     width: 100%;
     float: left; /*display: block; clear: both;*/
     min-width: 1040px;
 }
 
 #titulo {
-    height: 20px;
-    vertical-align: middle;
+    height: 25px;
+    
     width: 100%;
+    padding-top: 5px;
     margin: 5px auto 0px auto;
     font-weight: bold;
     border: 1px solid #acbece;
@@ -79,6 +80,7 @@
     color: #000000;
     font-weight: bold;
     min-width: 1040px;
+    float: left;
 }
 
 /*#top a:link, #top a:visited {

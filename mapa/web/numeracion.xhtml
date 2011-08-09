@@ -13,7 +13,7 @@
 
     <ui:define name="content">
         <h:form>
-            <h:panelGrid header="Filtro" closable="true">
+            <h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:outputText value="Operador"/>
                     <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}">
@@ -61,8 +61,11 @@
                     <p:column headerText="CANTIDAD" >
                         <h:outputText value="#{num.nunFin-num.nunInicio+1}"/>
                     </p:column>
+                    <p:column headerText="DEPARTAMENTO" >
+                        <h:outputText value="#{num.codigoMunicipio.codigoDepartamento.nombreDepartamento}"/>
+                    </p:column>
                     <p:column headerText="MUNICIPIO" >
-                        <h:outputText value="#{num.skRegionCode.skRegionNombre}"/>
+                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
                     </p:column>
                     <p:column headerText="ESTADO" >
                         <h:outputText value="#{num.esnCodigo.estNombre}"/>

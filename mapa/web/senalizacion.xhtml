@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Señalización"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formSen">
+            <h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Operador"/>
+                    <h:selectOneMenu value="#{SenalizacionBean.operadorVO.emrCodigo}">
+                        <f:selectItems value="#{SenalizacionBean.listaOperador}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Estado"/>
+                    <h:selectOneMenu value="#{SenalizacionBean.estadoVO.esnCodigo}">
+                        <f:selectItems value="#{SenalizacionBean.listaEstado}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Region"/>
+                    <h:selectOneMenu value="#{SenalizacionBean.regionSenalizacionVO.renCodigo}">
+                        <f:selectItems value="#{SenalizacionBean.listaRegionSenalizacion}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Zona"/>
+                    <h:inputText value="#{SenalizacionBean.zonaSenalizacion}" maxlength="2"/>
+                    <h:outputText value="Ps"/>
+                    <h:inputText value="#{SenalizacionBean.psSenalizacion}"  maxlength="2"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Consultar" action="#{SenalizacionBean.buscar}"/>
+                    <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                    </p:dialog>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:outputText value="Registros encontrados:"/>
+                <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
+            </h:panelGrid>
+            <h:panelGrid>
+                <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
+                             selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();" 
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                             paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <f:facet name="header">Mapa de señalización</f:facet>
+                    <p:column headerText="REGION" >
+                        <h:outputText value="#{sen.renCodigo.retNombre}"/>
+                    </p:column>
+                    <p:column headerText="ZONA" >
+                        <h:outputText value="#{sen.senZona}"/>
+                    </p:column>
+                    <p:column headerText="PS" >
+                        <h:outputText value="#{sen.senPs}"/>
+                    </p:column>
+                    <p:column headerText="DEPARTAMENTO" >
+                        <h:outputText value="#{sen.codigoMunicipio.codigoDepartamento.nombreDepartamento}"/>
+                    </p:column>
+                    <p:column headerText="MUNICIPIO" >
+                        <h:outputText value="#{sen.codigoMunicipio.nombreMunicipio}"/>
+                    </p:column>
+                    <p:column headerText="ESTADO" >
+                        <h:outputText value="#{sen.esnCodigo.estNombre}"/>
+                    </p:column>
+                    <p:column headerText="EMPRESA" >
+                        <h:outputText value="#{sen.emrCodigo.emtNombre}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
+                          width="500" showEffect="fade" hideEffect="fade" position="center">  
+                    <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;">
+                        <h:panelGrid columns="2" cellpadding="4" >
+                            <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
+                            <h:outputText value="Estado:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
+                            <h:outputText value="Operador:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
+                            <h:outputText value="Muncipio:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio}" />
+                            <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
+                                <h:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" action="#{SenalizacionBean.buscar}"/>
+                                <h:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" action="#{SenalizacionBean.recuperar}" />
+                                <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
+                                <p:commandButton value="Recuperar" actionListener="#{SenalizacionBean.recuperar}" update="datos,menu" oncomplete="senDialog.hide();"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

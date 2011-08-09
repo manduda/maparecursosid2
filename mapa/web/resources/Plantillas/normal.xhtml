@@ -12,28 +12,44 @@
     </h:head>
 
     <h:body>
+        <!-- Header -->
         <div id="top">
             <ui:include src="header.xhtml"/>
             <ui:include src="menu.xhtml"/>
         </div>
+        <!-- Barra título -->
         <div id="titulo">
             <ui:insert name="titulo">Titulo</ui:insert>
+            <h:panelGroup rendered="#{UserBean.login}">
+                <h:panelGrid columns="2" style="float: right;">
+                    <h:outputText value="#{UserBean.userVO.usnCodigo.name} #{UserBean.userVO.usnCodigo.lastName}" style="font-weight: bold"/>
+                    <h:form id="cerrar">
+                        <h:commandLink value="[Cerrar sesión]" action="#{inicioBean.cerrarSesion}" />
+                    </h:form>
+                </h:panelGrid>
+            </h:panelGroup>
         </div>
+        <!-- Centro -->
         <div id="container">
+            <!-- Contenido -->
             <div id="content" class="right_content" >       
                 <ui:insert name="content">Content</ui:insert>
             </div>
+            <!-- Derecha -->
             <div id="right" >
                 <div>
-                    <ui:include src="/resources/Plantillas/sesion.xhtml"/>
+                    <ui:include src="/sesion.xhtml"/>
                 </div>
                 <h:panelGroup rendered="#{UserBean.login}">
                     <div>
-                        <ui:include src="/resources/Plantillas/menu_right.xhtml"/>
+                         <ui:include src="/usuarios/menu_administrador.xhtml"/>
+                         <ui:include src="/usuarios/menu_coordinador.xhtml"/>
+                         <ui:include src="/usuarios/menu_asesor.xhtml"/>
                     </div>
                 </h:panelGroup>
             </div>
         </div>
+        <!-- Bottom -->
         <div id="bottom" align="center">
             <ui:include src="footer.xhtml"/>
         </div>

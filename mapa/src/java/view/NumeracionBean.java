@@ -56,7 +56,7 @@ public class NumeracionBean {
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
-            listaOperador = convertir.createSelectItemsList(fachada.listaOperador(), "getEmrCodigo", null, "getEmtNombre", true, "");
+            listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
@@ -130,7 +130,7 @@ public class NumeracionBean {
                     BigDecimal codigo = numera.get(i).getNunCodigo();
                     String operador = numera.get(i).getEmrCodigo().getEmtNombre();
                     String estado = numera.get(i).getEsnCodigo().getEstNombre();
-                    String region = numera.get(i).getSkRegionCode().getSkRegionNombre();
+                    String region = numera.get(i).getCodigoMunicipio().getNombreMunicipio();
                     int inicio = numera.get(i).getNunInicio();
                     System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
                 }
@@ -156,11 +156,13 @@ public class NumeracionBean {
         Integer inicio = 0;
         Integer fin = 0;
         String operador = "";
+        String municipio = "";
         
         int ndcF = 0;
         Integer inicioF = 0;
         Integer finF = 0;
         String operadorF = "";
+        String municipioF = "";
         
         int x = 0;
 
@@ -170,8 +172,9 @@ public class NumeracionBean {
             inicioF = numeraF.getNunInicio();
             finF = numeraF.getNunFin();
             operadorF = numeraF.getEmrCodigo().getEmtNombre();
+            municipioF = numeraF.getCodigoMunicipio().getCodigoMunicipio();
             
-            if ((ndc == ndcF)&&(operador.equals(operadorF))&&(inicio.toString().substring(0,4).equals(inicioF.toString().substring(0,4)))){
+            if ((ndc == ndcF)&&(operador.equals(operadorF))&&(municipio.equals(municipioF))&&(inicio.toString().substring(0,4).equals(inicioF.toString().substring(0,4)))){
                 numeros.get(x-1).setNunFin(finF);
             } else {
                 numeros.add(x, numeraF);
@@ -183,6 +186,7 @@ public class NumeracionBean {
             inicio = numera.getNunInicio();
             fin = numera.getNunFin();
             operador = numera.getEmrCodigo().getEmtNombre();
+            municipio = numera.getCodigoMunicipio().getCodigoMunicipio();
             
             
         }

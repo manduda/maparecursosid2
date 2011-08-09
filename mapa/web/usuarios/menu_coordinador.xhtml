@@ -4,8 +4,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui">
     <ui:composition>
-        <p:panel header="Menu">
-            <div >
+        <p:panel header="Menu Coordinador" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 2}">
+            <div id="menu">
                 Contenido Menu
             </div>
         </p:panel>
