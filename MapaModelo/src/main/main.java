@@ -101,13 +101,14 @@ public class main {
         System.out.println("Clase: " + itemClass.getName());*/
         
         List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
-        vo = fachada.cargarTramites(3, 3378);
+        vo = fachada.cargarTramites(6, 3378);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
             String estado = t.getEtnCodigo().getEttNombre();
             String operador = t.getEmrCodigo().getEmtNombre();
             String usuario = t.getUsnCodigo().getUsnCodigo().getLogin();
             Date fecha = t.getTrfFecha();
+            System.out.println("* * * * * *");
             System.out.println(codigo+"-"+estado+"-"+operador+"-"+usuario+"-"+fecha);
             System.out.println("- - - - - -");
             Collection<GtGestionTramiteVO> gestionVO = t.getGtGetionTramiteCollection();

@@ -396,8 +396,9 @@ public class facade {
                 case 5:
                     vo = tramites.getTramitesTerminados(em);
                     break;
-                default:
-                    vo = tramites.getTramites(em);
+                case 6:
+                    vo = tramites.getTramitesAsesor(usnCodigo, em);
+                    break;
             }
             tx.commit();
         } catch (Exception e) {
