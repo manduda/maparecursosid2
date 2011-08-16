@@ -26,9 +26,13 @@ public class UsUsuarios implements Serializable {
     private static final long serialVersionUID = 1L;
     
     @Id
-    @JoinColumn(name = "USN_CODIGO", referencedColumnName = "USER_CODE")
+    @Basic(optional = false)
+    @Column(name = "USN_CODIGO")
+    private int usnCodigo;
+    
+    @JoinColumn(name = "CODIGO_SIUST", referencedColumnName = "USER_CODE")
     @ManyToOne(optional = false)
-    private Users usnCodigo;
+    private Users codigoSIUST;
     
     @JoinColumn(name = "TUN_CODIGO", referencedColumnName = "TUN_CODIGO")
     @ManyToOne(optional = false)
@@ -45,13 +49,13 @@ public class UsUsuarios implements Serializable {
         UsUsuariosVO vo = new UsUsuariosVO();
         // Datos Usuario
         UsersVO datosusuario = new UsersVO();
-        datosusuario.setUserCode(this.getUsnCodigo().getUserCode());
-        datosusuario.setName(this.getUsnCodigo().getName());
-        datosusuario.setLastName(this.getUsnCodigo().getLastName());
-        datosusuario.setEmail(this.getUsnCodigo().getEmail());
-        datosusuario.setLogin(this.getUsnCodigo().getLogin());
-        datosusuario.setPassword(this.getUsnCodigo().getPassword());
-        vo.setUsnCodigo(datosusuario);
+        datosusuario.setUserCode(this.getCodigoSIUST().getUserCode());
+        datosusuario.setName(this.getCodigoSIUST().getName());
+        datosusuario.setLastName(this.getCodigoSIUST().getLastName());
+        datosusuario.setEmail(this.getCodigoSIUST().getEmail());
+        datosusuario.setLogin(this.getCodigoSIUST().getLogin());
+        datosusuario.setPassword(this.getCodigoSIUST().getPassword());
+        vo.setCodigoSIUST(datosusuario);
         //------------------------------------
         // Tipo Usuario
         TuTipoUsuarioVO tipousuario = new TuTipoUsuarioVO();
@@ -59,12 +63,20 @@ public class UsUsuarios implements Serializable {
         tipousuario.setTutNombre(this.getTunCodigo().getTutNombre());
         vo.setTunCodigo(tipousuario);
         //------------------------------------
+        vo.setUsnCodigo(this.getUsnCodigo());
         vo.setUsnEstado(this.getUsnEstado());
         
         return vo;
     }
-    
-    
+
+    public Users getCodigoSIUST() {
+        return codigoSIUST;
+    }
+
+    public void setCodigoSIUST(Users codigoSIUST) {
+        this.codigoSIUST = codigoSIUST;
+    }
+
     public TuTipoUsuario getTunCodigo() {
         return tunCodigo;
     }
@@ -73,11 +85,11 @@ public class UsUsuarios implements Serializable {
         this.tunCodigo = tunCodigo;
     }
 
-    public Users getUsnCodigo() {
+    public int getUsnCodigo() {
         return usnCodigo;
     }
 
-    public void setUsnCodigo(Users usnCodigo) {
+    public void setUsnCodigo(int usnCodigo) {
         this.usnCodigo = usnCodigo;
     }
 
@@ -88,5 +100,5 @@ public class UsUsuarios implements Serializable {
     public void setUsnEstado(int usnEstado) {
         this.usnEstado = usnEstado;
     }
-
+    
 }

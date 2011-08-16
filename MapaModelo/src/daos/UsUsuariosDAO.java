@@ -5,6 +5,8 @@
 package daos;
 
 import entities.UsUsuarios;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -17,10 +19,12 @@ public class UsUsuariosDAO {
     public static UsUsuarios cargar(String usuario, String contrasena, EntityManager em) {
         
         Query query = em.createQuery("SELECT u FROM UsUsuarios u "
-                + "WHERE u.usnCodigo.login = :usuario AND u.usnCodigo.password = :contrasena");
+                + "WHERE u.codigoSIUST.login = :usuario AND u.codigoSIUST.password = :contrasena "
+                + "ORDER BY u.usnCodigo DESC");
         
         query.setParameter("usuario", usuario);
         query.setParameter("contrasena", contrasena);
+        query.setMaxResults(1);
         
         UsUsuarios u = null;
         u = (UsUsuarios)query.getSingleResult();

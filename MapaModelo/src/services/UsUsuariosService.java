@@ -20,13 +20,13 @@ public class UsUsuariosService {
         UsUsuariosVO vo = new UsUsuariosVO();
         // Datos Usuario
         UsersVO datosusuario = new UsersVO();
-        datosusuario.setUserCode(entity.getUsnCodigo().getUserCode());
-        datosusuario.setName(entity.getUsnCodigo().getName());
-        datosusuario.setLastName(entity.getUsnCodigo().getLastName());
-        datosusuario.setEmail(entity.getUsnCodigo().getEmail());
-        datosusuario.setLogin(entity.getUsnCodigo().getLogin());
-        datosusuario.setPassword(entity.getUsnCodigo().getPassword());
-        vo.setUsnCodigo(datosusuario);
+        datosusuario.setUserCode(entity.getCodigoSIUST().getUserCode());
+        datosusuario.setName(entity.getCodigoSIUST().getName());
+        datosusuario.setLastName(entity.getCodigoSIUST().getLastName());
+        datosusuario.setEmail(entity.getCodigoSIUST().getEmail());
+        datosusuario.setLogin(entity.getCodigoSIUST().getLogin());
+        datosusuario.setPassword(entity.getCodigoSIUST().getPassword());
+        vo.setCodigoSIUST(datosusuario);
         //------------------------------------
         // Tipo Usuario
         TuTipoUsuarioVO tipousuario = new TuTipoUsuarioVO();
@@ -34,6 +34,7 @@ public class UsUsuariosService {
         tipousuario.setTutNombre(entity.getTunCodigo().getTutNombre());
         vo.setTunCodigo(tipousuario);
         //------------------------------------
+        vo.setUsnCodigo(entity.getUsnCodigo());
         vo.setUsnEstado(entity.getUsnEstado());
 
         return vo;

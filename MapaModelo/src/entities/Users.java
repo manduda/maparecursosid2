@@ -48,7 +48,7 @@ public class Users implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usnCodigo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSIUST")
     private Collection<UsUsuarios> usUsuariosCollection;
 
     public String getEmail() {

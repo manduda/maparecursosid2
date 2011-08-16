@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
+import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.MunicipiosVO;
 import vo.NuNumeracionVO;
@@ -90,7 +91,7 @@ public class main {
             if (usuario.getUsnEstado() == 1){
                 System.out.println("Usuario logueado como: " + usuario.getTunCodigo().getTutNombre());
             } else {
-                System.out.println("Usuario " + usuario.getUsnCodigo().getLogin() + " está deshabilitado");
+                System.out.println("Usuario " + usuario.getCodigoSIUST().getLogin() + " está deshabilitado");
             }
         } else {
             System.out.println("Usuario o contraseña incorrectos");
@@ -100,13 +101,14 @@ public class main {
         itemClass = usuario.getClass();
         System.out.println("Clase: " + itemClass.getName());*/
         
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
-        vo = fachada.cargarTramites(6, 3378);
+        //---- GET TRAMITES
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        vo = fachada.cargarTramites(6, 1);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
             String estado = t.getEtnCodigo().getEttNombre();
             String operador = t.getEmrCodigo().getEmtNombre();
-            String usuario = t.getUsnCodigo().getUsnCodigo().getLogin();
+            String usuario = t.getUsnCodigo().getCodigoSIUST().getLogin();
             Date fecha = t.getTrfFecha();
             System.out.println("* * * * * *");
             System.out.println(codigo+"-"+estado+"-"+operador+"-"+usuario+"-"+fecha);
@@ -114,12 +116,40 @@ public class main {
             Collection<GtGestionTramiteVO> gestionVO = t.getGtGetionTramiteCollection();
             for (GtGestionTramiteVO gt : gestionVO) {
                 int codigoGT = gt.getGtnCodigo();
-                String usuarioGT = gt.getUsnCodigo().getUsnCodigo().getLogin();
+                String usuarioGT = gt.getUsnCodigo().getCodigoSIUST().getLogin();
                 String estadoGT = gt.getEtnCodigo().getEttNombre();
                 Date fechaGT = gt.getGtfFecha();
                 System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
             }
-        }
+        }*/
+        //-------------------------------------
         
+        //---- CREAR TRAMITES
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        EmOperadorVO operador = new EmOperadorVO();
+        operador.setEmrCodigo("01");
+        
+        EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
+        estado.setEtnCodigo(1);
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(1);
+        
+        Date fecha = new Date();
+        
+        GtGestionTramiteVO gestion = new GtGestionTramiteVO();
+        gestion.setUsnCodigo(usuario);
+        gestion.setGtfFecha(fecha);
+        
+        vo.setEmrCodigo(operador);
+        vo.setEtnCodigo(estado);
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        
+        boolean resultado = fachada.crearTramite(vo);
+
+        System.out.println("Resultado: "+resultado);
+        //-------------------------------------
     }
 }

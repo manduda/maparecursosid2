@@ -14,13 +14,22 @@ public class UsUsuariosVO {
     public static final int COORDINADOR = 2;
     public static final int ASESOR = 3;
     
-    private UsersVO usnCodigo;
+    private int usnCodigo;
+    private UsersVO codigoSIUST;
     private TuTipoUsuarioVO tunCodigo;
     private int usnEstado;
 
     public UsUsuariosVO() {
     }
-        
+
+    public UsersVO getCodigoSIUST() {
+        return codigoSIUST;
+    }
+
+    public void setCodigoSIUST(UsersVO codigoSIUST) {
+        this.codigoSIUST = codigoSIUST;
+    }
+
     public TuTipoUsuarioVO getTunCodigo() {
         return tunCodigo;
     }
@@ -29,11 +38,11 @@ public class UsUsuariosVO {
         this.tunCodigo = tunCodigo;
     }
 
-    public UsersVO getUsnCodigo() {
+    public int getUsnCodigo() {
         return usnCodigo;
     }
 
-    public void setUsnCodigo(UsersVO usnCodigo) {
+    public void setUsnCodigo(int usnCodigo) {
         this.usnCodigo = usnCodigo;
     }
 
@@ -44,5 +53,5 @@ public class UsUsuariosVO {
     public void setUsnEstado(int usnEstado) {
         this.usnEstado = usnEstado;
     }
-
+        
 }

@@ -30,22 +30,31 @@ public class TrTramitesDAO {
         return em.find(TrTramites.class, trnCodigo);
     }
     
+    public static int getMaxId(EntityManager em){
+        Query query = em.createQuery("SELECT MAX(t.id) FROM TrTramites t");
+        Integer n = (Integer)query.getSingleResult();
+        if (n == null){
+            n = 0;
+        }
+        return n;
+    }
+    
     public static List<TrTramites> getTramitesAsesor(int usnCodigo, EntityManager em){
-        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo.userCode = :usuario "
+        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo = :usuario "
                 + "AND e.etnCodigo.etnCodigo IN (1,3) ORDER BY e.trfFecha DESC");
         query.setParameter("usuario", usnCodigo);
         return query.getResultList();
     }
     
     public static List<TrTramites> getTramitesCreados(int usnCodigo, EntityManager em){
-        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo.userCode = :usuario "
+        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo = :usuario "
                 + "AND e.etnCodigo.etnCodigo = 1");
         query.setParameter("usuario", usnCodigo);
         return query.getResultList();
     }
     
     public static List<TrTramites> getTramitesDevueltos(int usnCodigo, EntityManager em){
-        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo.userCode = :ususario "
+        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo = :ususario "
                 + "AND e.etnCodigo.etnCodigo = 3");
         query.setParameter("ususario", usnCodigo);
         return query.getResultList();
