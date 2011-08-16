@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -43,6 +45,7 @@ public class NumeracionBean {
     private String NumInicio;
     private String NumFin;
     private LazyDataModel<NuNumeracionVO> lazyModel;
+    private List<NuNumeracionVO> selectedNum;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -209,6 +212,12 @@ public class NumeracionBean {
 //        this.numeracion = numeracion;
 //    }
 
+    public String onRowSelectNavigate(SelectEvent event) {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedNum", event.getObject());
+        System.out.println("tamaño: "+selectedNum.size());
+        return null;
+    }
+    
     public List<NuNumeracionVO> getNum() {
         return num;
     }
@@ -279,6 +288,14 @@ public class NumeracionBean {
 
     public void setEstadoVO(EsEstadoVO estadoVO) {
         this.estadoVO = estadoVO;
+    }
+
+    public List<NuNumeracionVO> getSelectedNum() {
+        return selectedNum;
+    }
+
+    public void setSelectedNum(List<NuNumeracionVO> selectedNum) {
+        this.selectedNum = selectedNum;
     }
 
 }

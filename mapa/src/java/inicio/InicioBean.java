@@ -32,7 +32,7 @@ public class InicioBean {
         userVO = fachada.iniciarSesion(user, password);
 
         if (userVO != null){
-            userVO.getUsnCodigo().setPassword("");//se quita la contraseña para que no quede en sesion
+            userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
             if (userVO.getUsnEstado() == 1){
                 //Usuario logueado
                 UserBean usuario = new UserBean();
@@ -45,7 +45,7 @@ public class InicioBean {
                 return null;
             } else {
                 //Usuario está deshabilitado
-                Mensaje = "Usuario " + userVO.getUsnCodigo().getLogin() + " está deshabilitado";
+                Mensaje = "Usuario " + userVO.getCodigoSIUST().getLogin() + " está deshabilitado";
                 return null;
             }
         } else {

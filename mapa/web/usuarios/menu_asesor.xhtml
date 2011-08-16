@@ -6,9 +6,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition>
+        <!-- TRAMITE ACTIVO -->
         <p:panel header="Menu Asesor" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
         
         </p:panel>
+        <!-- TRAMITES -->
         <p:panel header="Trámites" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
             <div id="menu">
                 <h:dataTable id="datosTramites" value="#{TramiteBean.tramites}" var="tramite" style="font-size:9px">
@@ -61,7 +63,7 @@
                             <f:facet name="header">
                                 <h:outputText value="usuario"/>
                             </f:facet>
-                            <h:outputText value="#{selTramite.usnCodigo.usnCodigo.login}"/>
+                            <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">

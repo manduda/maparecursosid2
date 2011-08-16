@@ -22,7 +22,7 @@
             <ui:insert name="titulo">Titulo</ui:insert>
             <h:panelGroup rendered="#{UserBean.login}">
                 <h:panelGrid columns="2" style="float: right;">
-                    <h:outputText value="#{UserBean.userVO.usnCodigo.name} #{UserBean.userVO.usnCodigo.lastName}" style="font-weight: bold"/>
+                    <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}" style="font-weight: bold"/>
                     <h:form id="cerrar">
                         <h:commandLink value="[Cerrar sesión]" action="#{inicioBean.cerrarSesion}" />
                     </h:form>

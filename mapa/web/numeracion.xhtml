@@ -47,6 +47,7 @@
             <h:panelGrid>
                 <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                             selectionMode="multiple" selection="#{NumeracionBean.selectedNum}" rowSelectListener="#{NumeracionBean.onRowSelectNavigate}"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de numeración</f:facet>
                     <p:column headerText="NDC" >
