@@ -19,7 +19,13 @@ public class MunicipiosDAO {
     }
     
     public static List<Municipios> getList(EntityManager em){
-        Query query = em.createQuery("SELECT e FROM Municipios e");
+        Query query = em.createQuery("SELECT m FROM Municipios m");
+        return query.getResultList();
+    }
+    
+    public static List<Municipios> cargarMunicipios(String departamento, EntityManager em){
+        Query query = em.createQuery("SELECT m FROM Municipios m WHERE m.codigoDepartamento.codigoDepartamento = :departamento ORDER BY m.nombreMunicipio");
+        query.setParameter("departamento", departamento);
         return query.getResultList();
     }
 

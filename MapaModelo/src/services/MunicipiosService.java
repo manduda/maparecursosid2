@@ -4,7 +4,9 @@
  */
 package services;
 
+import daos.DepartamentosDAO;
 import daos.MunicipiosDAO;
+import entities.Departamentos;
 import entities.Municipios;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,5 +47,26 @@ public class MunicipiosService {
             municipioVO.add(vo);
         }
         return municipioVO;
+    }
+    
+    public List<MunicipiosVO> cargarMunicipios(String departamento, EntityManager em){
+        List<Municipios> municipio = MunicipiosDAO.cargarMunicipios(departamento, em);
+        List<MunicipiosVO> municipioVO = new ArrayList<MunicipiosVO>();
+        MunicipiosVO vo = new MunicipiosVO();
+        int size = municipio.size();
+        for (int i = 0; i < size; i++) {
+            vo = getVOFromEntity(municipio.get(i));
+            municipioVO.add(vo);
+        }
+        return municipioVO;
+    }
+    
+    public List<DepartamentosVO> cargarDepartamentos(EntityManager em){
+        List<Departamentos> departamento = DepartamentosDAO.cargarDepartamentos(em);
+        List<DepartamentosVO> departamentoVO = new ArrayList<DepartamentosVO>();
+        for (Departamentos d : departamento) {
+            departamentoVO.add(d.toVO());
+        }
+        return departamentoVO;
     }
 }

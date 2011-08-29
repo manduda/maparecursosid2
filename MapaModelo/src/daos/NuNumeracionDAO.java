@@ -52,7 +52,7 @@ public class NuNumeracionDAO {
         return query.getResultList();
     }
     
-    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, EntityManager em){
+    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio, EntityManager em){
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
 
         StringBuilder searchQuery1 = new StringBuilder(
@@ -61,7 +61,8 @@ public class NuNumeracionDAO {
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
-                + "n.NDN_CODIGO "
+                + "n.NDN_CODIGO, "
+                + "n.SK_REGION_CODE "
                 + "FROM NU_NUMERACION n " +
                 "WHERE 1=1 ");
         
@@ -89,6 +90,10 @@ public class NuNumeracionDAO {
             searchQuery1.append("AND n.ESN_CODIGO = ?5 ");
             searchQuery.append("AND n.esnCodigo.esnCodigo = ?5 ");
         }
+        if(!municipio.equals("-1")) {
+            searchQuery1.append("AND n.SK_REGION_CODE = ?6 ");
+            searchQuery.append("AND n.codigoMunicipio.codigoMunicipio = ?6 ");
+        }
         
         searchQuery1.append(" ) a");
         
@@ -108,7 +113,10 @@ public class NuNumeracionDAO {
         }
         if(estado != -1) {
             query1.setParameter(5, estado);
-        }        
+        }
+        if(!municipio.equals("-1")) {
+            query1.setParameter(6, municipio);
+        }
         
         List<Object[]> results = query1.getResultList();
         
@@ -134,7 +142,10 @@ public class NuNumeracionDAO {
         }
         if(estado != -1) {
             query.setParameter(5, estado);
-        }        
+        }
+        if(!municipio.equals("-1")) {
+            query.setParameter(6, municipio);
+        }
         
         if (results.get(0)[0] != null){
             Integer a = Integer.valueOf(results.get(0)[0].toString());
@@ -152,7 +163,7 @@ public class NuNumeracionDAO {
         return numeracion;
     }
     
-    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, EntityManager em){
+    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(*) FROM (SELECT DISTINCT "
@@ -160,7 +171,8 @@ public class NuNumeracionDAO {
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
-                + "n.NDN_CODIGO "
+                + "n.NDN_CODIGO, "
+                + "n.SK_REGION_CODE "
                 + "FROM NU_NUMERACION n " +
                 "WHERE 1=1 ");
 
@@ -178,6 +190,9 @@ public class NuNumeracionDAO {
         }
         if(estado != -1) {
             searchQuery.append("AND n.ESN_CODIGO = ?5 ");
+        }
+        if(!municipio.equals("-1")) {
+            searchQuery.append("AND n.SK_REGION_CODE = ?6 ");
         }
         
         searchQuery.append(" ) a");
@@ -198,6 +213,9 @@ public class NuNumeracionDAO {
         }
         if(estado != -1) {
             query.setParameter(5, estado);
+        }
+        if(!municipio.equals("-1")) {
+            query.setParameter(6, municipio);
         }
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();

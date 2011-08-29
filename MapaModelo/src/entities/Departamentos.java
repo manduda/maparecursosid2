@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.DepartamentosVO;
 
 /**
  *
@@ -38,6 +39,15 @@ public class Departamentos implements Serializable {
     public Departamentos() {
     }
 
+    public DepartamentosVO toVO(){
+        DepartamentosVO vo = new DepartamentosVO();
+        
+        vo.setCodigoDepartamento(this.getCodigoDepartamento());
+        vo.setNombreDepartamento(this.getNombreDepartamento());
+        
+        return vo;
+    }
+        
     public String getCodigoDepartamento() {
         return codigoDepartamento;
     }

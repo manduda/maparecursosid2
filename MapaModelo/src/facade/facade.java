@@ -19,6 +19,7 @@ import services.SeSenalizacionService;
 import services.TrTramitesService;
 import services.UsUsuariosService;
 import vo.ClCodigosLdVO;
+import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.MunicipiosVO;
@@ -82,7 +83,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado){
+    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -92,7 +93,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, em);
+            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, municipio, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -107,7 +108,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado){
+    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -117,7 +118,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, em);
+            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, municipio, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -307,7 +308,32 @@ public class facade {
         return vo;
     }
     
-    public List<MunicipiosVO> listaMunicipios() {
+    public List<DepartamentosVO> listaDepartamentos() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<DepartamentosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = municipios.cargarDepartamentos(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<MunicipiosVO> listaMunicipios(String departamento) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -317,7 +343,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = municipios.getList(em);
+            vo = municipios.cargarMunicipios(departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

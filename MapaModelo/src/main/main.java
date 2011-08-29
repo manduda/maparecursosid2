@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import vo.ClCodigosLdVO;
+import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
@@ -43,19 +44,19 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        /*List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
         int cantidad = 0;
-        vo = fachada.cargarNumeracion(0, 20, "0163",-1,-1,-1,3);
-        cantidad = fachada.countCargarNumeracion("0163",-1,-1,-1,3);
+        vo = fachada.cargarNumeracion(0, 20, "0163",-1,-1,-1,3,"2AF9");
+        cantidad = fachada.countCargarNumeracion("0163",-1,-1,-1,3,"2AF9");
         System.out.println("Cantidad:"+cantidad);
         for(int i=0; i < vo.size();i++) {
             BigDecimal codigo = vo.get(i).getNunCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
-            String region = vo.get(i).getSkRegionCode().getSkRegionNombre();
+            String region = vo.get(i).getCodigoMunicipio().getNombreMunicipio();
             int inicio = vo.get(i).getNunInicio();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
-	}*/
+	}
         //-------------------------------------
        
         //----  SEÑALIZACION
@@ -75,14 +76,27 @@ public class main {
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+municipio+"-"+regionSenalizacion+"-"+zona+"-"+ps);
 	}*/
         //-------------------------------------
+        
+        //----  MUNICIPIOS
         /*List<MunicipiosVO> vo = new ArrayList<MunicipiosVO>();
-        vo = fachada.listaMunicipios();
+        vo = fachada.listaMunicipios("4C");
         for(int i=0; i < vo.size();i++) {
             String codigo = vo.get(i).getCodigoMunicipio();
             String municipio = vo.get(i).getNombreMunicipio();
             String departamento = vo.get(i).getCodigoDepartamento().getNombreDepartamento();
             System.out.println(codigo+"-"+municipio+"-"+departamento);
 	}*/
+        //-------------------------------------
+        
+        //----  MUNICIPIOS
+        /*List<DepartamentosVO> vo = new ArrayList<DepartamentosVO>();
+        vo = fachada.listaDepartamentos();
+        for(int i=0; i < vo.size();i++) {
+            String codigo = vo.get(i).getCodigoDepartamento();
+            String departamento = vo.get(i).getNombreDepartamento();
+            System.out.println(codigo+"-"+departamento);
+	}*/
+        //-------------------------------------
         
         //----  USUARIO
         /*UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
@@ -125,7 +139,7 @@ public class main {
         //-------------------------------------
         
         //---- CREAR TRAMITES
-        TrTramitesVO vo = new TrTramitesVO();
+        /*TrTramitesVO vo = new TrTramitesVO();
         
         EmOperadorVO operador = new EmOperadorVO();
         operador.setEmrCodigo("01");
@@ -149,7 +163,7 @@ public class main {
         
         boolean resultado = fachada.crearTramite(vo);
 
-        System.out.println("Resultado: "+resultado);
+        System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
     }
 }
