@@ -6,8 +6,6 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,14 +13,14 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyDataModel;
+import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
+import vo.MunicipiosVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 
@@ -39,13 +37,17 @@ public class NumeracionBean {
     private Collection<SelectItem> listaNDC;
     private Collection<SelectItem> listaOperador;
     private Collection<SelectItem> listaEstado;
+    private Collection<SelectItem> listaDepartamento;
+    private Collection<SelectItem> listaMunicipio;
     private NdNdcVO ndcVO = new NdNdcVO();
+    private DepartamentosVO departamentoVO = new DepartamentosVO();
+    private MunicipiosVO municipioVO = new MunicipiosVO();
     private EmOperadorVO operadorVO = new EmOperadorVO();
     private EsEstadoVO estadoVO = new EsEstadoVO();
     private String NumInicio;
     private String NumFin;
     private LazyDataModel<NuNumeracionVO> lazyModel;
-    private List<NuNumeracionVO> selectedNum;
+    private NuNumeracionVO[] selectedNum;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -61,6 +63,7 @@ public class NumeracionBean {
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
+            listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
@@ -79,13 +82,13 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1, -1); 
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1, -1, "-1"); 
                 lazyNumeracion = agruparNumeracin(numera);
   
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1, -1)); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1, -1,"-1")); 
     }
 
     public LazyDataModel<NuNumeracionVO> getLazyModel() {  
@@ -126,22 +129,22 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo()); 
+                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio()); 
                 lazyNumeracion = agruparNumeracin(numera);
                 
-                for(int i=0; i < numera.size();i++) {
+                /*for(int i=0; i < numera.size();i++) {
                     BigDecimal codigo = numera.get(i).getNunCodigo();
                     String operador = numera.get(i).getEmrCodigo().getEmtNombre();
                     String estado = numera.get(i).getEsnCodigo().getEstNombre();
                     String region = numera.get(i).getCodigoMunicipio().getNombreMunicipio();
                     int inicio = numera.get(i).getNunInicio();
                     System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
-                }
+                }*/
                 
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo())); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio())); 
         
         
 //        numeracion = fachada.cargarNumeracion(0, -1, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
@@ -212,12 +215,17 @@ public class NumeracionBean {
 //        this.numeracion = numeracion;
 //    }
 
-    public String onRowSelectNavigate(SelectEvent event) {
-        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedNum", event.getObject());
-        System.out.println("tamaño: "+selectedNum.size());
-        return null;
+    public void cambiarDepartamento() {
+        facade fachada = new facade();
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamentoVO.getCodigoDepartamento()), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
+        }
+           
     }
-    
+       
     public List<NuNumeracionVO> getNum() {
         return num;
     }
@@ -290,12 +298,44 @@ public class NumeracionBean {
         this.estadoVO = estadoVO;
     }
 
-    public List<NuNumeracionVO> getSelectedNum() {
+    public NuNumeracionVO[] getSelectedNum() {
         return selectedNum;
     }
 
-    public void setSelectedNum(List<NuNumeracionVO> selectedNum) {
+    public void setSelectedNum(NuNumeracionVO[] selectedNum) {
         this.selectedNum = selectedNum;
     }
 
+    public Collection<SelectItem> getListaDepartamento() {
+        return listaDepartamento;
+    }
+
+    public void setListaDepartamento(Collection<SelectItem> listaDepartamento) {
+        this.listaDepartamento = listaDepartamento;
+    }
+
+    public DepartamentosVO getDepartamentoVO() {
+        return departamentoVO;
+    }
+
+    public void setDepartamentoVO(DepartamentosVO departamentoVO) {
+        this.departamentoVO = departamentoVO;
+    }
+
+    public Collection<SelectItem> getListaMunicipio() {
+        return listaMunicipio;
+    }
+
+    public void setListaMunicipio(Collection<SelectItem> listaMunicipio) {
+        this.listaMunicipio = listaMunicipio;
+    }
+
+    public MunicipiosVO getMunicipioVO() {
+        return municipioVO;
+    }
+
+    public void setMunicipioVO(MunicipiosVO municipioVO) {
+        this.municipioVO = municipioVO;
+    }
+    
 }

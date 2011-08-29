@@ -23,6 +23,16 @@
                     <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndnCodigo}">
                         <f:selectItems value="#{NumeracionBean.listaNDC}" />  
                     </h:selectOneMenu>
+
+                    <h:outputText value="Departamento"/>
+                    <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}">
+                        <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
+                        <p:ajax update="municipios" listener="#{NumeracionBean.cambiarDepartamento}" />
+                    </h:selectOneMenu>
+                    <h:outputText value="Municipio"/>
+                    <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}">
+                        <f:selectItems value="#{NumeracionBean.listaMunicipio}" />  
+                    </h:selectOneMenu>
                     <h:outputText value="Estado"/>
                     <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}">
                         <f:selectItems value="#{NumeracionBean.listaEstado}" />  
@@ -45,9 +55,9 @@
                 <h:outputText value="#{NumeracionBean.lazyModel.rowCount}"/>
             </h:panelGrid>
             <h:panelGrid>
-                <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top"
-                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
-                             selectionMode="multiple" selection="#{NumeracionBean.selectedNum}" rowSelectListener="#{NumeracionBean.onRowSelectNavigate}"
+                <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top" 
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50" 
+                             selection="#{NumeracionBean.selectedNum}" selectionMode="multiple" 
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de numeración</f:facet>
                     <p:column headerText="NDC" >
