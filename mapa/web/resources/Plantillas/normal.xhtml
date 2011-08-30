@@ -31,10 +31,6 @@
         </div>
         <!-- Centro -->
         <div id="container">
-            <!-- Contenido -->
-            <div id="content" class="right_content" >       
-                <ui:insert name="content">Content</ui:insert>
-            </div>
             <!-- Derecha -->
             <div id="right" >
                 <div>
@@ -47,6 +43,12 @@
                          <ui:include src="/usuarios/menu_asesor.xhtml"/>
                     </div>
                 </h:panelGroup>
+            </div>
+            <!-- Contenido -->
+            <div id="content" class="right_content" >       
+                <h:panelGrid width="100%">
+                    <ui:insert name="content">Content</ui:insert>
+                </h:panelGrid>
             </div>
         </div>
         <!-- Bottom -->

@@ -19,6 +19,15 @@
                     <h:selectOneMenu value="#{SenalizacionBean.operadorVO.emrCodigo}">
                         <f:selectItems value="#{SenalizacionBean.listaOperador}" />  
                     </h:selectOneMenu>
+                    <h:outputText value="Departamento"/>
+                    <h:selectOneMenu value="#{SenalizacionBean.departamentoVO.codigoDepartamento}">
+                        <f:selectItems value="#{SenalizacionBean.listaDepartamento}" />
+                        <p:ajax update="municipios" listener="#{SenalizacionBean.cambiarDepartamento}" />
+                    </h:selectOneMenu>
+                    <h:outputText value="Municipio"/>
+                    <h:selectOneMenu id="municipios" value="#{SenalizacionBean.municipioVO.codigoMunicipio}">
+                        <f:selectItems value="#{SenalizacionBean.listaMunicipio}" />  
+                    </h:selectOneMenu>
                     <h:outputText value="Estado"/>
                     <h:selectOneMenu value="#{SenalizacionBean.estadoVO.esnCodigo}">
                         <f:selectItems value="#{SenalizacionBean.listaEstado}" />  
@@ -28,7 +37,11 @@
                         <f:selectItems value="#{SenalizacionBean.listaRegionSenalizacion}" />  
                     </h:selectOneMenu>
                     <h:outputText value="Zona"/>
-                    <h:inputText value="#{SenalizacionBean.zonaSenalizacion}" maxlength="2"/>
+
+                    <h:selectOneMenu value="#{SenalizacionBean.zonaSenalizacion}">
+                        <f:selectItems value="#{SenalizacionBean.listaZona}" />  
+                    </h:selectOneMenu>
+                    
                     <h:outputText value="Ps"/>
                     <h:inputText value="#{SenalizacionBean.psSenalizacion}"  maxlength="2"/>
                 </h:panelGrid>
@@ -44,10 +57,10 @@
                 <h:outputText value="Registros encontrados:"/>
                 <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
             </h:panelGrid>
-            <h:panelGrid>
+            <h:panelGrid width="100%">
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
                              selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();" 
+                             onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de señalización</f:facet>

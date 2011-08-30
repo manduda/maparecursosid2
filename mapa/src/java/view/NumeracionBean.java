@@ -64,6 +64,7 @@ public class NumeracionBean {
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamentoVO.getCodigoDepartamento()), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
@@ -82,13 +83,13 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1, -1, "-1"); 
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", -1, -1, -1, -1, "-1", "-1"); 
                 lazyNumeracion = agruparNumeracin(numera);
   
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1, -1,"-1")); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", -1, -1, -1, -1,"-1","-1")); 
     }
 
     public LazyDataModel<NuNumeracionVO> getLazyModel() {  
@@ -98,8 +99,8 @@ public class NumeracionBean {
     public String buscar() {
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         facade fachada = new facade();
-        System.out.println("operador:" + operadorVO.getEmrCodigo());
-        System.out.println("ndc:" + ndcVO.getNdnCodigo());
+        //System.out.println("operador:" + operadorVO.getEmrCodigo());
+        //System.out.println("ndc:" + ndcVO.getNdnCodigo());
         final Integer inicio;
         final Integer fin;
         
@@ -129,7 +130,7 @@ public class NumeracionBean {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio()); 
+                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento()); 
                 lazyNumeracion = agruparNumeracin(numera);
                 
                 /*for(int i=0; i < numera.size();i++) {
@@ -144,7 +145,7 @@ public class NumeracionBean {
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio())); 
+        lazyModel.setRowCount(fachada.countCargarNumeracion(operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento())); 
         
         
 //        numeracion = fachada.cargarNumeracion(0, -1, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
@@ -196,7 +197,7 @@ public class NumeracionBean {
             
             
         }
-        System.out.println("X es:"+x);
+        //System.out.println("X es:"+x);
 //        for(int i = 0; i < numeros.size(); i++){
 //            System.out.println(numeros.get(i).getNdnCodigo().getNdtNombre());
 //            System.out.println(numeros.get(i).getEmrCodigo().getEmtNombre());

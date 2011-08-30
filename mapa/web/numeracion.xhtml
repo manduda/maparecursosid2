@@ -19,11 +19,6 @@
                     <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}">
                         <f:selectItems value="#{NumeracionBean.listaOperador}" />  
                     </h:selectOneMenu>
-                    <h:outputText value="NDC"/>
-                    <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndnCodigo}">
-                        <f:selectItems value="#{NumeracionBean.listaNDC}" />  
-                    </h:selectOneMenu>
-
                     <h:outputText value="Departamento"/>
                     <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}">
                         <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
@@ -36,6 +31,10 @@
                     <h:outputText value="Estado"/>
                     <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}">
                         <f:selectItems value="#{NumeracionBean.listaEstado}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="NDC"/>
+                    <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndnCodigo}">
+                        <f:selectItems value="#{NumeracionBean.listaNDC}" />  
                     </h:selectOneMenu>
                     <h:outputText value="Número inicio"/>
                     <h:inputText value="#{NumeracionBean.numInicio}" maxlength="7"/>
@@ -54,7 +53,7 @@
                 <h:outputText value="Registros encontrados:"/>
                 <h:outputText value="#{NumeracionBean.lazyModel.rowCount}"/>
             </h:panelGrid>
-            <h:panelGrid>
+            <h:panelGrid width="100%">
                 <p:dataTable id="datos" value="#{NumeracionBean.lazyModel}" var="num" paginator="true" paginatorPosition="top" 
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50" 
                              selection="#{NumeracionBean.selectedNum}" selectionMode="multiple" 

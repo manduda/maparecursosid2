@@ -12,22 +12,28 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGrid>
-            <h:form>
+        <h:form>
+            <h:panelGrid width="100%">
                 <p:dataTable value="#{codigosLdBean.coLD}" var="ld" paginator="false"
                              selectionMode="single" style="font-size:10px"
                              emptyMessage="No se encontraron códigos de larga distancia" >
-                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}" >
+                    <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
+                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
                     </p:column>
-                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}">
+                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}"
+                              filterOptions="#{codigosLdBean.listaEstado}" filterMatchMode="exact">
                         <h:outputText value="#{ld.esnCodigo.estNombre}"/>
                     </p:column>
                     <p:column headerText="Empresa">
                         <h:outputText value="#{ld.esnCodigo.esnCodigo == '1' ? 'NINGUNO' : ld.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
-            </h:form>
-        </h:panelGrid>
+                <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                    <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                </p:dialog>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 </ui:composition>
