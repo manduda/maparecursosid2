@@ -37,7 +37,7 @@ public class SeSenalizacionDAO {
         return query.getResultList();
     }
 
-    public static List<SeSenalizacion> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, EntityManager em){
+    public static List<SeSenalizacion> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
         List<SeSenalizacion> senalizacion = new ArrayList<SeSenalizacion>();
 
         StringBuilder searchQuery = new StringBuilder(
@@ -59,6 +59,12 @@ public class SeSenalizacionDAO {
         if(estado != -1) {
             searchQuery.append("AND s.esnCodigo.esnCodigo = ?5 ");
         }
+        if(!municipio.equals("-1")) {
+            searchQuery.append("AND s.codigoMunicipio.codigoMunicipio = ?6 ");
+        }
+        if(!departamento.equals("-1")) {
+            searchQuery.append("AND s.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?7 ");
+        }
         
         searchQuery.append("ORDER BY s.renCodigo.renCodigo,s.senZona,s.senPs ASC");
         
@@ -78,7 +84,13 @@ public class SeSenalizacionDAO {
         }
         if(estado != -1) {
             query.setParameter(5, estado);
-        }        
+        }
+        if(!municipio.equals("-1")) {
+            query.setParameter(6, municipio);
+        }
+        if(!departamento.equals("-1")) {
+            query.setParameter(7, departamento);
+        }
         
         query.setFirstResult(first);
         if(max != -1) {
@@ -88,7 +100,7 @@ public class SeSenalizacionDAO {
         return senalizacion;
     }
 
-    public static int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, EntityManager em){
+    public static int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(s) FROM SeSenalizacion s " +
@@ -109,6 +121,12 @@ public class SeSenalizacionDAO {
         if(estado != -1) {
             searchQuery.append("AND s.esnCodigo.esnCodigo = ?5 ");
         }
+        if(!municipio.equals("-1")) {
+            searchQuery.append("AND s.codigoMunicipio.codigoMunicipio = ?6 ");
+        }
+        if(!departamento.equals("-1")) {
+            searchQuery.append("AND s.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?7 ");
+        }
         
         Query query = em.createQuery(searchQuery.toString());
         
@@ -126,6 +144,12 @@ public class SeSenalizacionDAO {
         }
         if(estado != -1) {
             query.setParameter(5, estado);
+        }
+        if(!municipio.equals("-1")) {
+            query.setParameter(6, municipio);
+        }
+        if(!departamento.equals("-1")) {
+            query.setParameter(7, departamento);
         }
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();

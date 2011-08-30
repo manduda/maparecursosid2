@@ -17,7 +17,7 @@ public class TrTramitesVO {
     private EmOperadorVO emrCodigo;
     private EtEstadoTramiteVO etnCodigo;
     private Date trfFecha;
-    private int trnResolucion;
+    private String trnResolucion;
     private Date trfFechaResolucion;
     private String trtObservaciones;
     private Collection<GtGestionTramiteVO> gtGetionTramiteCollection;
@@ -65,11 +65,11 @@ public class TrTramitesVO {
         this.trnCodigo = trnCodigo;
     }
 
-    public int getTrnResolucion() {
+    public String getTrnResolucion() {
         return trnResolucion;
     }
 
-    public void setTrnResolucion(int trnResolucion) {
+    public void setTrnResolucion(String trnResolucion) {
         this.trnResolucion = trnResolucion;
     }
 

@@ -83,7 +83,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio){
+    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -93,7 +93,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, municipio, em);
+            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, municipio, departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -108,7 +108,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio){
+    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -118,7 +118,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, municipio, em);
+            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, municipio, departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -208,7 +208,7 @@ public class facade {
         return vo;
     }
     
-    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado){
+    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -218,7 +218,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = senalizacion.cargarSenalizacion(first, max, operador, region, zona, ps, estado, em);
+            vo = senalizacion.cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -233,7 +233,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado){
+    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -243,7 +243,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            cantidad = senalizacion.countCargarSenalizacion(operador, region, zona, ps, estado, em);
+            cantidad = senalizacion.countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento,  em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

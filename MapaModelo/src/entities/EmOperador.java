@@ -27,7 +27,6 @@ public class EmOperador implements Serializable {
     
     @Id
     @Basic(optional = false)
-    @Lob
     @Column(name = "SK_EMPRESA_CODE")
     private String emrCodigo;
     
@@ -68,7 +67,7 @@ public class EmOperador implements Serializable {
     }
 
     public void setEmrCodigo(String emrCodigo) {
-        this.setEmrCodigo(emrCodigo);
+        this.emrCodigo = emrCodigo;
     }
 
     public String getEmtNombre() {

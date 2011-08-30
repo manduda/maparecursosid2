@@ -84,8 +84,8 @@ public class SeSenalizacionService {
         return getVOFromEntity(entity);
     }
     
-    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, EntityManager em){
-        List<SeSenalizacion> senalizacion = SeSenalizacionDAO.cargarSenalizacion(first, max, operador, region, zona, ps, estado, em);
+    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
+        List<SeSenalizacion> senalizacion = SeSenalizacionDAO.cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, em);
         List<SeSenalizacionVO> senalizacionVO = new ArrayList<SeSenalizacionVO>();        
         SeSenalizacionVO vo = new SeSenalizacionVO();
         int size = senalizacion.size();
@@ -96,8 +96,8 @@ public class SeSenalizacionService {
         return senalizacionVO;
     }
     
-    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, EntityManager em){
-        int senalizacion = SeSenalizacionDAO.countCargarSenalizacion(operador, region, zona, ps, estado, em);
+    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
+        int senalizacion = SeSenalizacionDAO.countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento, em);
         return senalizacion;
     }
     

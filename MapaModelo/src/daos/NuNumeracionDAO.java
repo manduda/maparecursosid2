@@ -52,7 +52,7 @@ public class NuNumeracionDAO {
         return query.getResultList();
     }
     
-    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio, EntityManager em){
+    public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
 
         StringBuilder searchQuery1 = new StringBuilder(
@@ -63,8 +63,10 @@ public class NuNumeracionDAO {
                 + "n.ESN_CODIGO, "
                 + "n.NDN_CODIGO, "
                 + "n.SK_REGION_CODE "
-                + "FROM NU_NUMERACION n " +
-                "WHERE 1=1 ");
+                + "FROM NU_NUMERACION n, SA.DEPARTAMENTOS d, SA.MUNICIPIOS m "
+                + "WHERE 1=1 "
+                + "AND n.SK_REGION_CODE = m.CODIGO_MUNICIPIO "
+                + "AND m.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO ");
         
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT n FROM NuNumeracion n " +
@@ -94,6 +96,10 @@ public class NuNumeracionDAO {
             searchQuery1.append("AND n.SK_REGION_CODE = ?6 ");
             searchQuery.append("AND n.codigoMunicipio.codigoMunicipio = ?6 ");
         }
+        if(!departamento.equals("-1")) {
+            searchQuery1.append("AND d.CODIGO_DEPARTAMENTO = ?7 ");
+            searchQuery.append("AND n.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?7 ");
+        }
         
         searchQuery1.append(" ) a");
         
@@ -117,10 +123,14 @@ public class NuNumeracionDAO {
         if(!municipio.equals("-1")) {
             query1.setParameter(6, municipio);
         }
+        if(!departamento.equals("-1")) {
+            query1.setParameter(7, departamento);
+        }
         
-        List<Object[]> results = query1.getResultList();
+        Object[] results = (Object [])query1.getSingleResult();
+//                getResultList();
         
-        if (results.get(0)[0] != null){
+        if (results[0] != null){
             searchQuery.append("AND n.nunInicio >= ?10 AND n.nunFin <= ?11 ");
         }        
         
@@ -146,10 +156,13 @@ public class NuNumeracionDAO {
         if(!municipio.equals("-1")) {
             query.setParameter(6, municipio);
         }
+        if(!departamento.equals("-1")) {
+            query.setParameter(7, departamento);
+        }
         
-        if (results.get(0)[0] != null){
-            Integer a = Integer.valueOf(results.get(0)[0].toString());
-            Integer b = Integer.valueOf(results.get(0)[1].toString());
+        if (results[0] != null){
+            Integer a = Integer.valueOf(results[0].toString());
+            Integer b = Integer.valueOf(results[1].toString());
             query.setParameter(10, a);
             query.setParameter(11, b);
         }
@@ -163,7 +176,7 @@ public class NuNumeracionDAO {
         return numeracion;
     }
     
-    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio, EntityManager em){
+    public static int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(*) FROM (SELECT DISTINCT "
@@ -173,8 +186,10 @@ public class NuNumeracionDAO {
                 + "n.ESN_CODIGO, "
                 + "n.NDN_CODIGO, "
                 + "n.SK_REGION_CODE "
-                + "FROM NU_NUMERACION n " +
-                "WHERE 1=1 ");
+                + "FROM NU_NUMERACION n, SA.DEPARTAMENTOS d, SA.MUNICIPIOS m "
+                + "WHERE 1=1 "
+                + "AND n.SK_REGION_CODE = m.CODIGO_MUNICIPIO "
+                + "AND m.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO ");
 
         if(!operador.equals("-1")) {
             searchQuery.append("AND n.SK_EMPRESA_CODE = ?1 ");
@@ -193,6 +208,9 @@ public class NuNumeracionDAO {
         }
         if(!municipio.equals("-1")) {
             searchQuery.append("AND n.SK_REGION_CODE = ?6 ");
+        }
+        if(!departamento.equals("-1")) {
+            searchQuery.append("AND d.CODIGO_DEPARTAMENTO = ?7 ");
         }
         
         searchQuery.append(" ) a");
@@ -216,6 +234,9 @@ public class NuNumeracionDAO {
         }
         if(!municipio.equals("-1")) {
             query.setParameter(6, municipio);
+        }
+        if(!departamento.equals("-1")) {
+            query.setParameter(7, departamento);
         }
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();

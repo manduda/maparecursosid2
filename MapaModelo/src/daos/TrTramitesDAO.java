@@ -31,7 +31,7 @@ public class TrTramitesDAO {
     }
     
     public static int getMaxId(EntityManager em){
-        Query query = em.createQuery("SELECT MAX(t.id) FROM TrTramites t");
+        Query query = em.createQuery("SELECT MAX(t.trnCodigo) FROM TrTramites t");
         Integer n = (Integer)query.getSingleResult();
         if (n == null){
             n = 0;

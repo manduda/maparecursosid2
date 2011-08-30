@@ -4,9 +4,11 @@
  */
 package services;
 
+import daos.GtGestionTramiteDAO;
 import daos.TrTramitesDAO;
 import entities.EmOperador;
 import entities.EtEstadoTramite;
+import entities.GtGestionTramite;
 import entities.TrTramites;
 import entities.UsUsuarios;
 import java.util.ArrayList;
@@ -36,7 +38,17 @@ public class TrTramitesService {
         entity.setEtnCodigo(estado);
         entity.setUsnCodigo(usuario);
         entity.setTrfFecha(vo.getTrfFecha());
+        
         TrTramitesDAO.persist(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
     }
     
     public TrTramitesVO getById(int id, EntityManager em){

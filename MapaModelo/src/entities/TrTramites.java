@@ -57,13 +57,16 @@ public class TrTramites implements Serializable {
     private Date trfFecha;
     
     @Column(name = "TRN_RESOLUCION")
-    private int trnResolucion;
+    @Basic(optional = true)
+    private String trnResolucion;
     
     @Column(name = "TRF_FECHA_RESOLUCION")
+    @Basic(optional = true)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date trfFechaResolucion;
     
     @Column(name = "TRT_OBSERVACIONES")
+    @Basic(optional = true)
     private String trtObservaciones;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
@@ -142,11 +145,11 @@ public class TrTramites implements Serializable {
         this.trnCodigo = trnCodigo;
     }
 
-    public int getTrnResolucion() {
+    public String getTrnResolucion() {
         return trnResolucion;
     }
 
-    public void setTrnResolucion(int trnResolucion) {
+    public void setTrnResolucion(String trnResolucion) {
         this.trnResolucion = trnResolucion;
     }
 

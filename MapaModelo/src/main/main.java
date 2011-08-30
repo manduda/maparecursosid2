@@ -44,10 +44,10 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        /*List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
         int cantidad = 0;
-        vo = fachada.cargarNumeracion(0, 20, "0163",-1,-1,-1,3,"2AF9");
-        cantidad = fachada.countCargarNumeracion("0163",-1,-1,-1,3,"2AF9");
+        vo = fachada.cargarNumeracion(0, 20, "-1",-1,-1,-1,-1,"2AF9","0B");
+        cantidad = fachada.countCargarNumeracion("-1",-1,-1,-1,-1,"2AF9","0B");
         System.out.println("Cantidad:"+cantidad);
         for(int i=0; i < vo.size();i++) {
             BigDecimal codigo = vo.get(i).getNunCodigo();
@@ -56,14 +56,14 @@ public class main {
             String region = vo.get(i).getCodigoMunicipio().getNombreMunicipio();
             int inicio = vo.get(i).getNunInicio();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
-	}
+	}*/
         //-------------------------------------
        
         //----  SEÑALIZACION
         /*List<SeSenalizacionVO> vo = new ArrayList<SeSenalizacionVO>();
         int cantidad = 0;
-        vo = fachada.cargarSenalizacion(0, -1, "-1",-1,-1,-1,1);
-        cantidad = fachada.countCargarSenalizacion("-1",-1,-1,-1,1);
+        vo = fachada.cargarSenalizacion(0, -1,"-1",-1,-1,-1,-1,"-1","-1");
+        cantidad = fachada.countCargarSenalizacion("-1",-1,-1,-1,-1,"-1","-1");
         System.out.println("Cantidad:"+cantidad);
         for(int i=0; i < vo.size();i++) {
             int codigo = vo.get(i).getSenCodigo();
@@ -139,7 +139,7 @@ public class main {
         //-------------------------------------
         
         //---- CREAR TRAMITES
-        /*TrTramitesVO vo = new TrTramitesVO();
+        TrTramitesVO vo = new TrTramitesVO();
         
         EmOperadorVO operador = new EmOperadorVO();
         operador.setEmrCodigo("01");
@@ -160,10 +160,10 @@ public class main {
         vo.setEtnCodigo(estado);
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
-        
+   
         boolean resultado = fachada.crearTramite(vo);
 
-        System.out.println("Resultado: "+resultado);*/
+        System.out.println("Resultado: "+resultado);
         //-------------------------------------
     }
 }
