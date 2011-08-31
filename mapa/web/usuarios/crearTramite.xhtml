@@ -1,0 +1,40 @@
+<ui:composition template="/resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Crear trámite"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+            <h:form>
+                <h:panelGroup rendered="#{(TramiteBean.mensajeCrearTramite == '')}">
+                    <h:panelGrid>
+                        <h:outputText value="Operador"/>
+                        <h:selectOneMenu value="#{TramiteBean.operadorCrearTramite}">
+                            <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                        </h:selectOneMenu>
+                        <br/>
+                        <h:outputText value="Observaciones"/>
+                        <h:inputTextarea id="observaciones" rows="5" cols="80" />
+                    </h:panelGrid>
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <h:commandButton value="Crear trámite" action="#{TramiteBean.crearTramite}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{!(TramiteBean.mensajeCrearTramite == '')}">
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <br/><br/><br/>
+                        <h:outputText value="#{TramiteBean.mensajeCrearTramite}" escape="false"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+    
+</ui:composition>
+
