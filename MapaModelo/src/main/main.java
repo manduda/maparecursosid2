@@ -88,7 +88,7 @@ public class main {
 	}*/
         //-------------------------------------
         
-        //----  MUNICIPIOS
+        //----  DEPARTAMENTOS
         /*List<DepartamentosVO> vo = new ArrayList<DepartamentosVO>();
         vo = fachada.listaDepartamentos();
         for(int i=0; i < vo.size();i++) {
@@ -139,7 +139,7 @@ public class main {
         //-------------------------------------
         
         //---- CREAR TRAMITES
-        TrTramitesVO vo = new TrTramitesVO();
+        /*TrTramitesVO vo = new TrTramitesVO();
         
         EmOperadorVO operador = new EmOperadorVO();
         operador.setEmrCodigo("01");
@@ -163,7 +163,18 @@ public class main {
    
         boolean resultado = fachada.crearTramite(vo);
 
-        System.out.println("Resultado: "+resultado);
+        System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
+        
+        //----  OPERADORES
+        List<EmOperadorVO> vo = new ArrayList<EmOperadorVO>();
+        vo = fachada.cargarOperadores();
+        for(int i=0; i < vo.size();i++) {
+            String codigo = vo.get(i).getEmrCodigo();
+            String operador = vo.get(i).getEmtNombre();
+            System.out.println(codigo+"-"+operador);
+	}
+        //-------------------------------------
+        
     }
 }

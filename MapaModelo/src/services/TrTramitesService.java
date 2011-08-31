@@ -4,6 +4,7 @@
  */
 package services;
 
+import daos.EmOperadorDAO;
 import daos.GtGestionTramiteDAO;
 import daos.TrTramitesDAO;
 import entities.EmOperador;
@@ -14,6 +15,7 @@ import entities.UsUsuarios;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
+import vo.EmOperadorVO;
 import vo.TrTramitesVO;
 
 /**
@@ -109,4 +111,14 @@ public class TrTramitesService {
         }
         return tramitesVO;
     }
+    
+    public List<EmOperadorVO> cargarOperadores(EntityManager em){
+        List<EmOperador> operadores = EmOperadorDAO.cargarOperadores(em);
+        List<EmOperadorVO> operadoresVO = new ArrayList<EmOperadorVO>();        
+        for (EmOperador t : operadores) {
+            operadoresVO.add(t.toVO());
+        }
+        return operadoresVO;
+    }
+    
 }
