@@ -1,0 +1,94 @@
+<ui:composition template="/resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="DETALLE TRÁMITE"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup id="panelTramite" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+            <h:form>
+                <h:panelGroup rendered="#{!(TramiteBean.mensajeTramite == '')}">
+                    <h:panelGrid width="100%" style="text-align: center">
+                        <br/><br/><br/>
+                        <h:outputText value="#{TramiteBean.mensajeTramite}" escape="false"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{(TramiteBean.mensajeTramite == '')}">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Trámite ID:"/>
+                        <h:outputText value="#{TramiteBean.selectedTramite.trnCodigo}" style="font-weight: bold;"/>
+                        <h:outputText value="Estado:"/>
+                        <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
+                        <h:outputText value="Operador:"/>
+                        <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
+                    </h:panelGrid>
+                    <br/>
+                    <h:panelGrid>
+                        <h:outputText value="Observaciones"/>
+                        <h:inputTextarea id="observaciones" rows="5" cols="80" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="6">
+                        <h:commandButton value="Enviar trámite"/>
+                        
+                        <p:commandButton value="Historia trámite" onclick="dialogHistoria.show()"/>
+                        <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
+                                  width="500" showEffect="fade" hideEffect="fade" position="center">  
+                            <h:dataTable value="#{TramiteBean.selectedTramite.gtGetionTramiteCollection}"
+                                         var="selTramite" border="1" style="font-size:9px" width="100%"
+                                         styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="FECHA"/>
+                                    </f:facet>
+                                    <h:outputText value="#{selTramite.gtfFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                                    </h:outputText>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="ESTADO"/>
+                                    </f:facet>
+                                    <h:outputText value="#{selTramite.etnCodigo.ettNombre}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="USUARIO"/>
+                                    </f:facet>
+                                    <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="ROL"/>
+                                    </f:facet>
+                                    <h:outputText value="#{selTramite.usnCodigo.tunCodigo.tutNombre}"/>
+                                </h:column>
+                            </h:dataTable>
+                        </p:dialog>
+                        
+                        <p:commandButton value="Borrar trámite" onclick="confirmarBorrar.show()"/>
+                        <p:confirmDialog message="Deseas borrar el trámite?"  
+                                    showEffect="fade" hideEffect="fade"  
+                                    header="Confirmación" severity="alert" widgetVar="confirmarBorrar">  
+                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                <p:commandButton value="Si" action="#{TramiteBean.borrarTramite}" update="panelTramite" oncomplete="confirmarBorrar.hide()" ajax="false"/>
+                                <p:commandButton value="No" onclick="confirmarBorrar.hide()" />
+                            </h:panelGrid>
+                        </p:confirmDialog>
+                    </h:panelGrid>
+                    <br/>
+                    <h:panelGrid width="100%" style="border: 1px solid; text-align: center; font-weight: bold;">
+                        <h:outputText value="Detalle del trámite"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+    
+</ui:composition>
+

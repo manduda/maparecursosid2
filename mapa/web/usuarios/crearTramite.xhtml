@@ -21,9 +21,8 @@
                         <br/>
                         <h:outputText value="Observaciones"/>
                         <h:inputTextarea id="observaciones" rows="5" cols="80" />
-                    </h:panelGrid>
-                    <h:panelGrid width="100%" style="text-align: center">
-                        <h:commandButton value="Crear trámite" action="#{TramiteBean.crearTramite}"/>
+                        <br/>
+                        <p:commandButton value="Crear trámite" action="#{TramiteBean.crearTramite}" ajax="false"/>
                     </h:panelGrid>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{!(TramiteBean.mensajeCrearTramite == '')}">

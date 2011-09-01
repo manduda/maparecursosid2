@@ -21,23 +21,29 @@
                             <h:panelGrid width="100%" cellpadding="0" cellspacing="0" style="border: 1px solid;background-color: #acbece">
                                 <h:outputText value="#{tramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0"
+                            <h:panelGrid width="100%" cellpadding="0"
                                          style="border-bottom: 1px solid; border-left: 1px solid; border-right: 1px solid;">
-                                <h:outputText value="id:" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramite.trnCodigo}"/>
-                                <h:outputText value="estado:" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramite.etnCodigo.ettNombre}"/>
-                                <h:outputText value="fecha:" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramite.trfFecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
-                                </h:outputText>
-                            </h:panelGrid>
+                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0" width="100%">
+                                    <h:outputText value="id:" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramite.trnCodigo}"/>
+                                    <h:outputText value="estado:" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramite.etnCodigo.ettNombre}"/>
+                                    <h:outputText value="fecha:" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramite.trfFecha}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                                    </h:outputText>
+                                </h:panelGrid>
                                 <h:form>
-                                    <p:commandLink value="Ver historia trámite" oncomplete="trDialog.show()" update="detalleTramite" action="#{TramiteBean.detalleTramite}">
-                                        <f:param name="codigoTramite" value="#{tramite.trnCodigo}"/>
-                                    </p:commandLink>
+                                    <h:panelGrid style="text-align: center;" width="100%" columns="2">
+                                        <h:commandLink value="Ver trámite" action="#{TramiteBean.detalleTramite}">
+                                            <f:param name="codigoTramite" value="#{tramite.trnCodigo}"/>
+                                        </h:commandLink>
+                                        <p:commandLink value="Ver historia" oncomplete="trDialog.show()" update="detalleTramite" action="#{TramiteBean.historiaTramite}">
+                                            <f:param name="codigoTramite" value="#{tramite.trnCodigo}"/>
+                                        </p:commandLink>
+                                    </h:panelGrid>
                                 </h:form>
-
+                            </h:panelGrid>
                             <br/>
                         </h:panelGroup>
                     </h:column>

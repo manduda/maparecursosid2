@@ -41,6 +41,7 @@ public class TramiteBean {
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
     private String mensajeCrearTramite;
+    private String mensajeTramite;
 
     /** Creates a new instance of TramiteBean */
     public TramiteBean() {
@@ -66,7 +67,7 @@ public class TramiteBean {
         //tramites = fachada.cargarTramites(6, 1);
     }
     
-    public String detalleTramite() {
+    public String historiaTramite() {
         FacesContext context = FacesContext.getCurrentInstance();
         Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
         //System.out.println("Codigo: "+codigoTramite);
@@ -92,10 +93,14 @@ public class TramiteBean {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
         
-        return "usuarios/crearTramite";
+        return "/usuarios/crearTramite";
     }
     
     public String crearTramite() {
+        if(operadorCrearTramite.equals("-1")){
+            mensajeCrearTramite = "<b>Error al crear el trámite.</b><br><br>Debes escoger un operador";
+            return null;
+        }
         facade fachada = new facade();
 
         TrTramitesVO vo = new TrTramitesVO();
@@ -122,7 +127,7 @@ public class TramiteBean {
         
         if (resultado == true){
             tramites = fachada.cargarTramites(6, userVO.getUsnCodigo());
-            mensajeCrearTramite = "Trámite creado.<br><br>Código del trámite: "+tramites.get(0).getTrnCodigo();
+            mensajeCrearTramite = "<b>Trámite creado.</b><br><br>Código del trámite: "+tramites.get(0).getTrnCodigo();
         } else {
             mensajeCrearTramite = "<b>Error al crear el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador";
         }
@@ -130,6 +135,51 @@ public class TramiteBean {
         return null;
     }
     
+    public String detalleTramite() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
+        mensajeTramite = "";
+
+        for (TrTramitesVO detalleVO : tramites) {
+            if (detalleVO.getTrnCodigo() == codigoTramite){
+                selectedTramite = detalleVO;
+                break;
+            }
+        }
+
+        return "/usuarios/tramite";
+    }
+    
+    public String borrarTramite() {
+        facade fachada = new facade();
+
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
+        estado.setEtnCodigo(6);
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setEtnCodigo(estado);
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+   
+        boolean resultado = fachada.borrarTramite(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(6, userVO.getUsnCodigo());
+            mensajeTramite = "<b>Trámite borrado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo();
+        } else {
+            mensajeCrearTramite = "<b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador";
+        }
+        
+        return null;
+    }
+
     
 
     public List<TrTramitesVO> getTramites() {
@@ -178,6 +228,14 @@ public class TramiteBean {
 
     public void setMensajeCrearTramite(String mensajeCrearTramite) {
         this.mensajeCrearTramite = mensajeCrearTramite;
+    }
+
+    public String getMensajeTramite() {
+        return mensajeTramite;
+    }
+
+    public void setMensajeTramite(String mensajeTramite) {
+        this.mensajeTramite = mensajeTramite;
     }
     
 }
