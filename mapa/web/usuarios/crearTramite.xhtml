@@ -12,6 +12,19 @@
     <ui:define name="content">
         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
             <h:form>
+                <h:panelGroup rendered="#{!(TramiteBean.mensajeCrearTramite == '')}">
+                    <h:panelGrid width="100%">
+                        <br/><br/><br/>
+                        <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                            <h:panelGrid style="border-bottom: 1px solid; background:#acbece" width="100%">
+                                <h:outputText value="Resultado" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%">
+                                <h:outputText value="#{TramiteBean.mensajeCrearTramite}" escape="false"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeCrearTramite == '')}">
                     <h:panelGrid>
                         <h:outputText value="Operador"/>
@@ -23,12 +36,6 @@
                         <h:inputTextarea id="observaciones" rows="5" cols="80" />
                         <br/>
                         <p:commandButton value="Crear trámite" action="#{TramiteBean.crearTramite}" ajax="false"/>
-                    </h:panelGrid>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{!(TramiteBean.mensajeCrearTramite == '')}">
-                    <h:panelGrid width="100%" style="text-align: center">
-                        <br/><br/><br/>
-                        <h:outputText value="#{TramiteBean.mensajeCrearTramite}" escape="false"/>
                     </h:panelGrid>
                 </h:panelGroup>
             </h:form>

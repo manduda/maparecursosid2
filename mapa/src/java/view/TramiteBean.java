@@ -42,6 +42,7 @@ public class TramiteBean {
     private UsUsuariosVO userVO;
     private String mensajeCrearTramite;
     private String mensajeTramite;
+    private Integer tipoUsuario = 0;
 
     /** Creates a new instance of TramiteBean */
     public TramiteBean() {
@@ -55,7 +56,18 @@ public class TramiteBean {
         //System.out.println("user: "+userSession);
         if (userSession.isIsLoggedIn()) {
             userVO = userSession.getUserVO();
-            tramites = fachada.cargarTramites(6, userVO.getUsnCodigo());
+            switch(userVO.getTunCodigo().getTunCodigo()) {
+                case 1:
+                    tipoUsuario = 4;
+                    break;
+                case 2:
+                    tipoUsuario = 2;
+                    break;
+                case 3:
+                    tipoUsuario = 6;
+                    break;
+            }
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
             //System.out.print("user: "+userVO.getUsnCodigo());
         }
         
@@ -98,18 +110,19 @@ public class TramiteBean {
     
     public String crearTramite() {
         if(operadorCrearTramite.equals("-1")){
-            mensajeCrearTramite = "<b>Error al crear el trámite.</b><br><br>Debes escoger un operador";
+            mensajeCrearTramite = "<br><b>Error al crear el trámite.</b><br><br>Debes escoger un operador<br><br>";
             return null;
         }
         facade fachada = new facade();
-
         TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeCrearTramite = "";
         
         EmOperadorVO operador = new EmOperadorVO();
         operador.setEmrCodigo(operadorCrearTramite);
         
-        EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
-        estado.setEtnCodigo(1);
+        //EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
+        //estado.setEtnCodigo(1);
         
         UsUsuariosVO usuario = new UsUsuariosVO();
         usuario.setUsnCodigo(userVO.getUsnCodigo());
@@ -117,7 +130,7 @@ public class TramiteBean {
         Date fecha = new Date();
         
         vo.setEmrCodigo(operador);
-        vo.setEtnCodigo(estado);
+        //vo.setEtnCodigo(estado);
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
    
@@ -126,10 +139,10 @@ public class TramiteBean {
         System.out.println("resultado: "+resultado);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(6, userVO.getUsnCodigo());
-            mensajeCrearTramite = "<b>Trámite creado.</b><br><br>Código del trámite: "+tramites.get(0).getTrnCodigo();
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeCrearTramite = "<br><b>Trámite creado.</b><br><br>Código del trámite: "+tramites.get(0).getTrnCodigo()+"<br><br>";
         } else {
-            mensajeCrearTramite = "<b>Error al crear el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador";
+            mensajeCrearTramite = "<br><b>Error al crear el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
@@ -152,11 +165,12 @@ public class TramiteBean {
     
     public String borrarTramite() {
         facade fachada = new facade();
-
         TrTramitesVO vo = new TrTramitesVO();
         
-        EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
-        estado.setEtnCodigo(6);
+        mensajeTramite = "";
+        
+        //EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
+        //estado.setEtnCodigo(6);
         
         UsUsuariosVO usuario = new UsUsuariosVO();
         usuario.setUsnCodigo(userVO.getUsnCodigo());
@@ -164,23 +178,52 @@ public class TramiteBean {
         Date fecha = new Date();
         
         vo.setTrnCodigo(selectedTramite.getTrnCodigo());
-        vo.setEtnCodigo(estado);
+        //vo.setEtnCodigo(estado);
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
    
         boolean resultado = fachada.borrarTramite(vo);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(6, userVO.getUsnCodigo());
-            mensajeTramite = "<b>Trámite borrado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo();
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeTramite = "<br><b>Trámite borrado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
-            mensajeCrearTramite = "<b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador";
+            mensajeCrearTramite = "<br><b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
     }
-
     
+    public String enviarTramite() {
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeTramite = "";
+        
+        //EtEstadoTramiteVO estado = new EtEstadoTramiteVO();
+        //estado.setEtnCodigo(2);
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        //vo.setEtnCodigo(estado);
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+   
+        boolean resultado = fachada.enviarTramite(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        } else {
+            mensajeCrearTramite = "<br><b>Error al enviar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        return null;
+    }
 
     public List<TrTramitesVO> getTramites() {
         return tramites;

@@ -10,18 +10,27 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGroup id="panelTramite" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+        <h:panelGroup id="panelTramite" rendered="#{UserBean.login == true}">
             <h:form>
                 <h:panelGroup rendered="#{!(TramiteBean.mensajeTramite == '')}">
-                    <h:panelGrid width="100%" style="text-align: center">
+                    <h:panelGrid width="100%">
                         <br/><br/><br/>
-                        <h:outputText value="#{TramiteBean.mensajeTramite}" escape="false"/>
+                        <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                            <h:panelGrid style="border-bottom: 1px solid; background:#acbece" width="100%">
+                                <h:outputText value="Resultado" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%">
+                                <h:outputText value="#{TramiteBean.mensajeTramite}" escape="false"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
                     </h:panelGrid>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeTramite == '')}">
                     <h:panelGrid columns="2">
                         <h:outputText value="Trámite ID:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.trnCodigo}" style="font-weight: bold;"/>
+                        <h:outputText value="Usuario:" rendered="#{UserBean.userVO.tunCodigo.tunCodigo != 3}"/>
+                        <h:outputText value="#{TramiteBean.selectedTramite.usnCodigo.codigoSIUST.login}" style="font-weight: bold;" rendered="#{UserBean.userVO.tunCodigo.tunCodigo != 3}"/>
                         <h:outputText value="Estado:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
                         <h:outputText value="Operador:"/>
@@ -32,8 +41,18 @@
                         <h:outputText value="Observaciones"/>
                         <h:inputTextarea id="observaciones" rows="5" cols="80" />
                     </h:panelGrid>
-                    <h:panelGrid columns="6">
-                        <h:commandButton value="Enviar trámite"/>
+                    <h:panelGrid columns="12">
+                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+                            <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()"/>
+                            <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
+                                        showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                        header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Si" action="#{TramiteBean.enviarTramite}" ajax="false"/>
+                                    <p:commandButton value="No" onclick="confirmarEnviar.hide()" />
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                        </h:panelGroup>
                         
                         <p:commandButton value="Historia trámite" onclick="dialogHistoria.show()"/>
                         <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
@@ -70,15 +89,17 @@
                             </h:dataTable>
                         </p:dialog>
                         
-                        <p:commandButton value="Borrar trámite" onclick="confirmarBorrar.show()"/>
-                        <p:confirmDialog message="Deseas borrar el trámite?"  
-                                    showEffect="fade" hideEffect="fade"  
-                                    header="Confirmación" severity="alert" widgetVar="confirmarBorrar">  
-                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                <p:commandButton value="Si" action="#{TramiteBean.borrarTramite}" update="panelTramite" oncomplete="confirmarBorrar.hide()" ajax="false"/>
-                                <p:commandButton value="No" onclick="confirmarBorrar.hide()" />
-                            </h:panelGrid>
-                        </p:confirmDialog>
+                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+                            <p:commandButton value="Borrar trámite" onclick="confirmarBorrar.show()"/>
+                            <p:confirmDialog message="Deseas borrar el trámite?"  
+                                        showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                        header="Confirmación" severity="alert" widgetVar="confirmarBorrar">  
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Si" action="#{TramiteBean.borrarTramite}" ajax="false"/>
+                                    <p:commandButton value="No" onclick="confirmarBorrar.hide()" />
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                        </h:panelGroup>
                     </h:panelGrid>
                     <br/>
                     <h:panelGrid width="100%" style="border: 1px solid; text-align: center; font-weight: bold;">
