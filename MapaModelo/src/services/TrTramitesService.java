@@ -64,9 +64,37 @@ public class TrTramitesService {
         UsUsuarios usuario = new UsUsuarios();
         usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
         
-        entity.setTrnCodigo(vo.getTrnCodigo());
+        //entity.setTrnCodigo(vo.getTrnCodigo());
         entity.setEtnCodigo(estado);
-        entity.setUsnCodigo(usuario);
+        //entity.setUsnCodigo(usuario);
+        entity.setTrfFecha(vo.getTrfFecha());
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
+    }
+    
+    public void enviarTramite(TrTramitesVO vo, EntityManager em){
+        TrTramites entity = new TrTramites();
+        
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
+        
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(2);
+        
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        
+        //entity.setTrnCodigo(vo.getTrnCodigo());
+        entity.setEtnCodigo(estado);
+        //entity.setUsnCodigo(usuario);
         entity.setTrfFecha(vo.getTrfFecha());
         
         TrTramitesDAO.merge(entity, em);

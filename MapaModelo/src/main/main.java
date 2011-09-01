@@ -116,8 +116,8 @@ public class main {
         System.out.println("Clase: " + itemClass.getName());*/
         
         //---- GET TRAMITES
-        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
-        vo = fachada.cargarTramites(6, 1);
+        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        vo = fachada.cargarTramites(2, 1);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
             String estado = t.getEtnCodigo().getEttNombre();
@@ -135,7 +135,7 @@ public class main {
                 Date fechaGT = gt.getGtfFecha();
                 System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
             }
-        }*/
+        }
         //-------------------------------------
         
         //---- CREAR TRAMITES
@@ -167,7 +167,7 @@ public class main {
         //-------------------------------------
         
         //---- BORRAR TRAMITES
-        TrTramitesVO vo = new TrTramitesVO();
+        /*TrTramitesVO vo = new TrTramitesVO();
        
         UsUsuariosVO usuario = new UsUsuariosVO();
         usuario.setUsnCodigo(1);
@@ -180,7 +180,7 @@ public class main {
    
         boolean resultado = fachada.borrarTramite(vo);
 
-        System.out.println("Resultado: "+resultado);
+        System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
         
         //----  OPERADORES
