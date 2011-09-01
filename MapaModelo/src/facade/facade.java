@@ -424,6 +424,33 @@ public class facade {
         return resultado;
     }
     
+    public boolean borrarTramite(TrTramitesVO vo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            tramites.borrarTramite(vo, em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
     public List<TrTramitesVO> cargarTramites(int tipo, int usnCodigo){
         EntityManagerFactory emf = null;
         EntityManager em = null;

@@ -53,6 +53,34 @@ public class TrTramitesService {
         GtGestionTramiteDAO.persist(gestionTramite, em);
     }
     
+    public void borrarTramite(TrTramitesVO vo, EntityManager em){
+        TrTramites entity = new TrTramites();
+        
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
+        
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(6);
+        
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        
+        entity.setTrnCodigo(vo.getTrnCodigo());
+        entity.setEtnCodigo(estado);
+        entity.setUsnCodigo(usuario);
+        entity.setTrfFecha(vo.getTrfFecha());
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
+    }
+    
     public TrTramitesVO getById(int id, EntityManager em){
         TrTramites entity = TrTramitesDAO.findbyId(id, em);
         return entity.toVO();

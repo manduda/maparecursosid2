@@ -166,14 +166,31 @@ public class main {
         System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
         
+        //---- BORRAR TRAMITES
+        TrTramitesVO vo = new TrTramitesVO();
+       
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(1);
+        
+        Date fecha = new Date();
+        
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        vo.setTrnCodigo(4);
+   
+        boolean resultado = fachada.borrarTramite(vo);
+
+        System.out.println("Resultado: "+resultado);
+        //-------------------------------------
+        
         //----  OPERADORES
-        List<EmOperadorVO> vo = new ArrayList<EmOperadorVO>();
+        /*List<EmOperadorVO> vo = new ArrayList<EmOperadorVO>();
         vo = fachada.cargarOperadores();
         for(int i=0; i < vo.size();i++) {
             String codigo = vo.get(i).getEmrCodigo();
             String operador = vo.get(i).getEmtNombre();
             System.out.println(codigo+"-"+operador);
-	}
+	}*/
         //-------------------------------------
         
     }
