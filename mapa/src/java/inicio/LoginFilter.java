@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpSession;
  * @author MADD
  */
 public class LoginFilter implements Filter {
-    private static final String LOGIN_JSP = "/faces/index.xhtml";
+    private static final String LOGIN = "/index.xhtml";
 
     public LoginFilter() {
 
@@ -47,11 +48,18 @@ public class LoginFilter implements Filter {
         boolean isLoggedIn = checkLoginState(request, response);
         //System.out.println("sesion: "+isLoggedIn);
 	if (isRedirect((HttpServletRequest) request) && !isLoggedIn) {
-            String loginURI = LOGIN_JSP;
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(loginURI);
+            HttpServletRequest httpRequest = (HttpServletRequest) request;
+            
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.sendRedirect(httpRequest.getContextPath()+ LOGIN);
+            
+            //String loginURI = httpRequest.getContextPath()+ LOGIN_JSP;
+            //System.out.println(loginURI);
+            
+            
+            //RequestDispatcher requestDispatcher = request.getRequestDispatcher(loginURI);
             // Force the login
-            requestDispatcher.forward(request, response);
-            return;
+            //requestDispatcher.forward(request, response);
 	} else {
             try {
                 chain.doFilter(request, response);
@@ -64,7 +72,7 @@ public class LoginFilter implements Filter {
 
     private boolean isRedirect(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-	return (!requestURI.contains(LOGIN_JSP));
+	return (!requestURI.contains(LOGIN));
     }
 
     @Override
