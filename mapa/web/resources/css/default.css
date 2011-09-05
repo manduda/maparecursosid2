@@ -50,3 +50,23 @@ a:link:hover, a:visited:hover  {
 	background:none repeat scroll 0 0 #F9F9F9;
 	border-top:1px solid #BBBBBB;
 }
+
+.tabla-encabezado {
+    text-align: center;
+    background: none repeat scroll 0 0 #045491;
+    border: 1px solid #000000;
+    border-bottom: 0px;
+    color: #ffffff;
+}
+.tabla-eliminar { 
+    width: 50px;
+}
+.tabla-radicado { 
+    width: 100px;
+}
+.tabla-accion { 
+    width: 100px;
+}
+.tabla-recurso { 
+    width: 150px;
+}

@@ -6,7 +6,7 @@
     </context-param>
     <context-param>  
         <param-name>primefaces.THEME</param-name>  
-        <param-value>glass-x</param-value>  
+        <param-value>glass-x</param-value>
     </context-param>
     <filter>
         <description>Require that the user log in before accessing any page other than the entry pages</description>

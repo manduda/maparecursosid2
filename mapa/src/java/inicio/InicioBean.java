@@ -63,7 +63,7 @@ public class InicioBean {
         session.removeAttribute("UserBean");
         session.invalidate(); 
         
-        return null;
+        return "/cerrar";
     }
     
     public String getMensaje() {

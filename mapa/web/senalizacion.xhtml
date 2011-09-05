@@ -47,10 +47,12 @@
                 </h:panelGrid>
                 <h:panelGrid>
                     <h:commandButton value="Consultar" action="#{SenalizacionBean.buscar}"/>
-                    <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-                    <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
-                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
-                    </p:dialog>
+                    <h:panelGroup rendered="#{UserBean.login}">
+                        <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                        <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                            <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                        </p:dialog>
+                    </h:panelGroup>
                 </h:panelGrid>
             </h:panelGrid>
             <h:panelGrid columns="2">
@@ -87,9 +89,9 @@
                     </p:column>
                 </p:dataTable>
                 <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
-                          width="500" showEffect="fade" hideEffect="fade" position="center">  
-                    <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;">
-                        <h:panelGrid columns="2" cellpadding="4" >
+                          width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">  
+                    <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;" width="100%">
+                        <h:panelGrid columns="2" cellpadding="4" width="100%">
                             <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
                             <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
                             <h:outputText value="Estado:" style="font-weight: bold;"/>
@@ -100,13 +102,22 @@
                             <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio}" />
                             <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
                             <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
+                            <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
+                            <h:outputText value="Dirección:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
+                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
                         </h:panelGrid>
-                        <h:panelGrid>
+                        <h:panelGrid width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
-                                <h:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" action="#{SenalizacionBean.buscar}"/>
-                                <h:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" action="#{SenalizacionBean.recuperar}" />
-                                <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
-                                <p:commandButton value="Recuperar" actionListener="#{SenalizacionBean.recuperar}" update="datos,menu" oncomplete="senDialog.hide();"/>
+                                <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();"/>
+                                <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();">
+                                    <f:param name="codigoAccion" value="5"/>
+                                </p:commandButton>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" update="datos" oncomplete="senDialog.hide();"/>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();"/>
                             </h:panelGroup>
                         </h:panelGrid>
                     </h:panelGrid>

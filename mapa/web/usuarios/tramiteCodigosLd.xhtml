@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <ui:composition>
+        <h:panelGrid width="100%" style="text-align: center; font-weight: bold;" cellpadding="0" cellspacing="0"
+                     rendered="#{!empty TramiteBean.selectedTramite.tlTramiteLdCollection}">
+            <h:panelGrid width="100%" styleClass="tabla-encabezado">
+                <h:outputText value="TRÁMITE CÓDIGO LD" style="font-size:11px"/>
+            </h:panelGrid>
+            <h:dataTable value="#{TramiteBean.selectedTramite.tlTramiteLdCollection}"
+                         var="tramiteLD" border="1" style="font-size:9px" width="100%"
+                         styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row"
+                         columnClasses="tabla-eliminar,tabla-radicado,tabla-accion,tabla-recurso">
+                <h:column>
+                    <h:outputLink>
+                        <h:graphicImage url="/resources/images/eliminar.png"/>
+                    </h:outputLink>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="RADICADO"/>
+                    </f:facet>
+                    <h:outputText value="#{tramiteLD.tlnRadicado}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="ACCION"/>
+                    </f:facet>
+                    <h:outputText value="#{tramiteLD.acnCodigo.actNombre}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="CODIGO LD"/>
+                    </f:facet>
+                    <h:outputText value="#{tramiteLD.clnCodigo.clnCodigoLd}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="OPERADOR"/>
+                    </f:facet>
+                    <h:outputText value="#{tramiteLD.emrCodigo.emtNombre}"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="OBSERVACIOES"/>
+                    </f:facet>
+                    <h:outputText value="#{tramiteLD.tltObservaciones}"/>
+                </h:column>
+            </h:dataTable>
+        </h:panelGrid>
+    </ui:composition>
+</html>

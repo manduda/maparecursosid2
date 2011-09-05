@@ -27,13 +27,10 @@
                 </h:panelGroup>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeCrearTramite == '')}">
                     <h:panelGrid>
-                        <h:outputText value="Operador"/>
+                        <h:outputText value="Escoger Operador" style="font-weight: bold;"/>
                         <h:selectOneMenu value="#{TramiteBean.operadorCrearTramite}">
                             <f:selectItems value="#{TramiteBean.listaOperador}" />  
                         </h:selectOneMenu>
-                        <br/>
-                        <h:outputText value="Observaciones"/>
-                        <h:inputTextarea id="observaciones" rows="5" cols="80" />
                         <br/>
                         <p:commandButton value="Crear trámite" action="#{TramiteBean.crearTramite}" ajax="false"/>
                     </h:panelGrid>
@@ -41,6 +38,5 @@
             </h:form>
         </h:panelGroup>
     </ui:define>
-    
 </ui:composition>
 

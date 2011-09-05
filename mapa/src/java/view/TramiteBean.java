@@ -22,10 +22,14 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import vo.AcAccionVO;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
+import vo.MunicipiosVO;
+import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
+import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -188,7 +192,7 @@ public class TramiteBean {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
             mensajeTramite = "<br><b>Trámite borrado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
-            mensajeCrearTramite = "<br><b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            mensajeTramite = "<br><b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
@@ -219,7 +223,95 @@ public class TramiteBean {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
-            mensajeCrearTramite = "<br><b>Error al enviar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            mensajeTramite = "<br><b>Error al enviar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        return null;
+    }
+    
+    public String devolverTramite() {
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+   
+        boolean resultado = fachada.devolverTramite(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        } else {
+            mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        return null;
+    }
+    
+    public String agregarRecurso() {
+        facade fachada = new facade();
+        
+        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        
+        SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+        Integer codigoAccion = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoAccion")[0]);
+        
+        TrTramitesVO tramite = new TrTramitesVO();
+        tramite.setTrnCodigo(this.selectedTramite.getTrnCodigo());
+        
+        SeSenalizacionVO senalizacion = new SeSenalizacionVO();
+        senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
+        
+        AcAccionVO accion = new AcAccionVO();
+        accion.setAcnCodigo(codigoAccion);
+        
+        MunicipiosVO municipio = new MunicipiosVO();
+        EmOperadorVO operador = new EmOperadorVO();
+        String nombreNodo = "";
+        String marcaModelo = "";
+        String direccion = "";
+        String observaciones = "";
+        
+        switch(codigoAccion){
+            case 5:
+                municipio.setCodigoMunicipio("C0159C");
+                operador.setEmrCodigo("C0159C");
+                nombreNodo = "";
+                marcaModelo = "";
+                direccion = "";
+                observaciones = "";
+                break;
+        }
+        
+        vo.setTrnCodigo(tramite);
+        vo.setSenCodigo(senalizacion);
+        vo.setAcnCodigo(accion);
+        vo.setTsnRadicado(201170111);
+        vo.setCodigoMunicipio(municipio);
+        vo.setEmrCodigo(operador);
+        vo.setTstNombreNodo(nombreNodo);
+        vo.setTstMarcaModelo(marcaModelo);
+        vo.setTstDireccion(direccion);
+        vo.setTstObservaciones(observaciones);
+   
+        boolean resultado = fachada.agregarRecurso(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            //mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        } else {
+            //mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;

@@ -37,13 +37,17 @@
                         <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
                     </h:panelGrid>
                     <br/>
+                    <!-- HIISTORIA TRAMITE -->
+                    <ui:include src="/usuarios/tramiteHistoria.xhtml"/>
+                    <br/>
                     <h:panelGrid>
                         <h:outputText value="Observaciones"/>
                         <h:inputTextarea id="observaciones" rows="5" cols="80" />
                     </h:panelGrid>
                     <h:panelGrid columns="12">
+                        <!-- ENVIAR TRAMITE -->
                         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
-                            <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()"/>
+                            <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection)}"/>
                             <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                         showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                         header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
@@ -54,41 +58,20 @@
                             </p:confirmDialog>
                         </h:panelGroup>
                         
-                        <p:commandButton value="Historia trámite" onclick="dialogHistoria.show()"/>
-                        <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
-                                  width="500" showEffect="fade" hideEffect="fade" position="center">  
-                            <h:dataTable value="#{TramiteBean.selectedTramite.gtGetionTramiteCollection}"
-                                         var="selTramite" border="1" style="font-size:9px" width="100%"
-                                         styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="FECHA"/>
-                                    </f:facet>
-                                    <h:outputText value="#{selTramite.gtfFecha}">
-                                        <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
-                                    </h:outputText>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="ESTADO"/>
-                                    </f:facet>
-                                    <h:outputText value="#{selTramite.etnCodigo.ettNombre}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="USUARIO"/>
-                                    </f:facet>
-                                    <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
-                                </h:column>
-                                <h:column>
-                                    <f:facet name="header">
-                                        <h:outputText value="ROL"/>
-                                    </f:facet>
-                                    <h:outputText value="#{selTramite.usnCodigo.tunCodigo.tutNombre}"/>
-                                </h:column>
-                            </h:dataTable>
-                        </p:dialog>
+                        <!-- DEVOLVER TRAMITE -->
+                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 2}">
+                            <p:commandButton value="Devolver trámite" onclick="confirmarDevolver.show()"/>
+                            <p:confirmDialog message="Deseas devolver el trámite al Asesor?"  
+                                        showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                        header="Confirmación" severity="alert" widgetVar="confirmarDevolver">  
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Si" action="#{TramiteBean.devolverTramite}" ajax="false"/>
+                                    <p:commandButton value="No" onclick="confirmarDevolver.hide()" />
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                        </h:panelGroup>
                         
+                        <!-- BORRAR TRAMITE -->
                         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
                             <p:commandButton value="Borrar trámite" onclick="confirmarBorrar.show()"/>
                             <p:confirmDialog message="Deseas borrar el trámite?"  
@@ -100,13 +83,13 @@
                                 </h:panelGrid>
                             </p:confirmDialog>
                         </h:panelGroup>
+                        
                     </h:panelGrid>
                     <br/>
-                    <h:panelGrid width="100%" style="border: 1px solid; text-align: center; font-weight: bold;">
-                        <h:outputText value="Detalle del trámite"/>
-                    </h:panelGrid>
+                    <ui:include src="/usuarios/tramiteSenalizacion.xhtml"/>
+                    <br/>
+                    <ui:include src="/usuarios/tramiteCodigosLd.xhtml"/>
                 </h:panelGroup>
-
             </h:form>
         </h:panelGroup>
     </ui:define>

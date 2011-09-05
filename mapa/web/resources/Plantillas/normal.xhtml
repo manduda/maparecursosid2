@@ -2,6 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html">
 
     <h:head>
@@ -19,15 +20,43 @@
         </div>
         <!-- Barra título -->
         <div id="titulo">
-            <ui:insert name="titulo">Titulo</ui:insert>
-            <h:panelGroup rendered="#{UserBean.login}">
-                <h:panelGrid columns="2" style="float: right;">
-                    <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}" style="font-weight: bold"/>
-                    <h:form id="cerrar">
-                        <h:commandLink value="[Cerrar sesión]" action="#{inicioBean.cerrarSesion}" />
-                    </h:form>
-                </h:panelGrid>
-            </h:panelGroup>
+            <div style="float: right;" border="1">
+                <h:panelGroup rendered="#{!UserBean.login}">
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:outputLink id="loginLink" value="javascript:void(0)" onclick="loginDlg.show()" title="login">     
+                            <p:graphicImage value="/resources/images/login.png" />
+                        </h:outputLink>
+                    </h:panelGrid>
+                    
+                    <p:dialog id="loginDialog" header="Iniciar Sesion" widgetVar="loginDlg" modal="true" resizable="false" draggable="false">
+                        <h:form id="frmLogin">
+                            <h:panelGrid columns="2" width="100%">
+                                <h:outputText value="Usuario"/>
+                                <h:inputText value="#{inicioBean.user}" size="15" maxlength="15"/>
+                                <h:outputText value="Contraseña"/>
+                                <h:inputText value="#{inicioBean.password}" size="15" maxlength="15"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%" style="text-align: center;">
+                                <p:commandButton value="Iniciar Sesión" action="#{inicioBean.validarUsuario}" update="growl" ajax="false"/>
+                                <h:outputText id="mensajeLogin" style="color:red" value="#{inicioBean.mensaje}" />
+                                <p:growl id="growl" showDetail="true" life="3000" /> 
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    
+                    
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{UserBean.login}">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}" style="font-weight: bold"/>
+                        <h:form id="cerrar">
+                            <h:commandLink value="[Cerrar sesión]" action="#{inicioBean.cerrarSesion}" />
+                        </h:form>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </div>
+            <div><ui:insert name="titulo">Titulo</ui:insert></div>
         </div>
         <!-- Centro -->
         <div id="container">
