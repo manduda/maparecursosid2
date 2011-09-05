@@ -10,7 +10,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGroup id="panelTramite" rendered="#{UserBean.login == true}">
+        <h:panelGroup id="pgTramite" rendered="#{UserBean.login == true}">
             <h:form>
                 <h:panelGroup rendered="#{!(TramiteBean.mensajeTramite == '')}">
                     <h:panelGrid width="100%">
@@ -37,13 +37,10 @@
                         <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
                     </h:panelGrid>
                     <br/>
-                    <!-- HIISTORIA TRAMITE -->
+                    <!-- HISTORIA TRAMITE -->
                     <ui:include src="/usuarios/tramiteHistoria.xhtml"/>
                     <br/>
-                    <h:panelGrid>
-                        <h:outputText value="Observaciones"/>
-                        <h:inputTextarea id="observaciones" rows="5" cols="80" />
-                    </h:panelGrid>
+                    <h:panelGroup id="pgAccionTramite">
                     <h:panelGrid columns="12">
                         <!-- ENVIAR TRAMITE -->
                         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
@@ -71,20 +68,21 @@
                             </p:confirmDialog>
                         </h:panelGroup>
                         
-                        <!-- BORRAR TRAMITE -->
-                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
-                            <p:commandButton value="Borrar trámite" onclick="confirmarBorrar.show()"/>
+                        <!-- ARCHIVAR TRAMITE -->
+                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 2}">
+                            <p:commandButton value="Archivar trámite" onclick="confirmarArchivar.show()"/>
                             <p:confirmDialog message="Deseas borrar el trámite?"  
                                         showEffect="fade" hideEffect="fade" modal="true" draggable="false"
-                                        header="Confirmación" severity="alert" widgetVar="confirmarBorrar">  
+                                        header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
                                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                    <p:commandButton value="Si" action="#{TramiteBean.borrarTramite}" ajax="false"/>
-                                    <p:commandButton value="No" onclick="confirmarBorrar.hide()" />
+                                    <p:commandButton value="Si" action="#{TramiteBean.archivarTramite}" ajax="false"/>
+                                    <p:commandButton value="No" onclick="confirmarArchivar.hide()" />
                                 </h:panelGrid>
                             </p:confirmDialog>
                         </h:panelGroup>
                         
                     </h:panelGrid>
+                    </h:panelGroup>
                     <br/>
                     <ui:include src="/usuarios/tramiteSenalizacion.xhtml"/>
                     <br/>

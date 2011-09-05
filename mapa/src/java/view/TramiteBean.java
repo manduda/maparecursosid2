@@ -42,11 +42,17 @@ public class TramiteBean {
     private List<TrTramitesVO> tramites = new ArrayList<TrTramitesVO>();
     private TrTramitesVO selectedTramite;
     private Collection<SelectItem> listaOperador;
+    private Collection<SelectItem> listaTramites;
+    private Integer tramiteAgregarRecurso;
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
     private String mensajeCrearTramite;
     private String mensajeTramite;
+    private String mensajeRecurso;
+    private String radicadoAgregarRecurso;
+    private String observacionesAgregarRecurso;
     private Integer tipoUsuario = 0;
+    private Integer codigoDetalleTramite = 0;
 
     /** Creates a new instance of TramiteBean */
     public TramiteBean() {
@@ -167,7 +173,7 @@ public class TramiteBean {
         return "/usuarios/tramite";
     }
     
-    public String borrarTramite() {
+    public String archivarTramite() {
         facade fachada = new facade();
         TrTramitesVO vo = new TrTramitesVO();
         
@@ -186,7 +192,7 @@ public class TramiteBean {
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
    
-        boolean resultado = fachada.borrarTramite(vo);
+        boolean resultado = fachada.archivarTramite(vo);
         
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
@@ -257,9 +263,24 @@ public class TramiteBean {
     }
     
     public String agregarRecurso() {
-        facade fachada = new facade();
+        if(radicadoAgregarRecurso.equals("")){
+            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar un número de radicado<br><br>";
+            return null;
+        }
         
+        if(!validaNum(radicadoAgregarRecurso)){
+            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>El radicado debe ser un número entero.<br><br>";
+            return null;
+        }
+        
+        if(tramiteAgregarRecurso <= 0){
+            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes escoger un trámite<br><br>";
+            return null;
+        }
+        facade fachada = new facade();
         TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        
+        mensajeRecurso = "";
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
@@ -268,7 +289,7 @@ public class TramiteBean {
         Integer codigoAccion = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoAccion")[0]);
         
         TrTramitesVO tramite = new TrTramitesVO();
-        tramite.setTrnCodigo(this.selectedTramite.getTrnCodigo());
+        tramite.setTrnCodigo(tramiteAgregarRecurso);
         
         SeSenalizacionVO senalizacion = new SeSenalizacionVO();
         senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
@@ -282,22 +303,23 @@ public class TramiteBean {
         String marcaModelo = "";
         String direccion = "";
         String observaciones = "";
+        Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
         
         switch(codigoAccion){
-            case 5:
-                municipio.setCodigoMunicipio("C0159C");
+            case 5: //Recuperar
+                municipio.setCodigoMunicipio("06053D2E");
                 operador.setEmrCodigo("C0159C");
                 nombreNodo = "";
                 marcaModelo = "";
                 direccion = "";
-                observaciones = "";
+                observaciones = this.observacionesAgregarRecurso;
                 break;
         }
         
         vo.setTrnCodigo(tramite);
         vo.setSenCodigo(senalizacion);
         vo.setAcnCodigo(accion);
-        vo.setTsnRadicado(201170111);
+        vo.setTsnRadicado(radicado);
         vo.setCodigoMunicipio(municipio);
         vo.setEmrCodigo(operador);
         vo.setTstNombreNodo(nombreNodo);
@@ -309,12 +331,78 @@ public class TramiteBean {
         
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
-            //mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            mensajeRecurso = "<br><b>Recurso agregado correctamente al trámite.</b><br><br>Código del trámite: "+tramiteAgregarRecurso+"<br><br>";
         } else {
-            //mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        this.setTramiteAgregarRecurso(-1);
+        this.radicadoAgregarRecurso = "";
+        this.observacionesAgregarRecurso = "";
+        
+        return null;
+    }
+    
+    public String seleccionarCodigoDetalleTramite() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        
+        Integer codigo = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoDetalleTramite")[0]);
+        
+        codigoDetalleTramite = codigo;
+        
+        return null;
+    }
+    
+    public String eliminarRecurso() {
+        facade fachada = new facade();
+        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        
+        mensajeRecurso = "";
+        
+        System.out.println("Codigo: "+codigoDetalleTramite);
+        vo.setTsnCodigo(codigoDetalleTramite);
+   
+        boolean resultado = fachada.eliminarRecurso(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            for (TrTramitesVO detalleVO : tramites) {
+                if (detalleVO.getTrnCodigo() == selectedTramite.getTrnCodigo()){
+                    selectedTramite = detalleVO;
+                    break;
+                }
+            }
+            mensajeRecurso = "<br><b>Recurso eliminado correctamente del trámite.</b><br><br>";
+        } else {
+            mensajeRecurso = "<br><b>Error al eliminar recurso del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
+    }
+    
+    public Collection<SelectItem> cargarListaTramites() {
+        ArrayList selectItemsList = new ArrayList();
+        SelectItem selectItem = new SelectItem();
+        selectItem.setValue("-1");
+        selectItem.setLabel("Escoger un trámite");
+        selectItemsList.add(selectItem);
+        for (Integer i = this.tramites.size()-1 ; i >= 0 ; i--){
+            selectItem = new SelectItem();
+            selectItem.setValue(this.tramites.get(i).getTrnCodigo());
+            selectItem.setLabel(this.tramites.get(i).getTrnCodigo()+"-"+this.tramites.get(i).getEmrCodigo().getEmtNombre());
+            selectItemsList.add(selectItem);
+        }
+        return selectItemsList;
+    }
+    
+    public static boolean validaNum(String Valor) {
+        try {
+            Integer.parseInt(Valor);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public List<TrTramitesVO> getTramites() {
@@ -371,6 +459,54 @@ public class TramiteBean {
 
     public void setMensajeTramite(String mensajeTramite) {
         this.mensajeTramite = mensajeTramite;
+    }
+
+    public Collection<SelectItem> getListaTramites() {
+        return cargarListaTramites();
+    }
+
+    public void setListaTramites(Collection<SelectItem> listaTramites) {
+        this.listaTramites = listaTramites;
+    }
+
+    public Integer getTramiteAgregarRecurso() {
+        return tramiteAgregarRecurso;
+    }
+
+    public void setTramiteAgregarRecurso(Integer tramiteAgregarRecurso) {
+        this.tramiteAgregarRecurso = tramiteAgregarRecurso;
+    }
+
+    public String getMensajeRecurso() {
+        return mensajeRecurso;
+    }
+
+    public void setMensajeRecurso(String mensajeRecurso) {
+        this.mensajeRecurso = mensajeRecurso;
+    }
+
+    public Integer getCodigoDetalleTramite() {
+        return codigoDetalleTramite;
+    }
+
+    public void setCodigoDetalleTramite(Integer codigoDetalleTramite) {
+        this.codigoDetalleTramite = codigoDetalleTramite;
+    }
+
+    public String getObservacionesAgregarRecurso() {
+        return observacionesAgregarRecurso;
+    }
+
+    public void setObservacionesAgregarRecurso(String observacionesAgregarRecurso) {
+        this.observacionesAgregarRecurso = observacionesAgregarRecurso;
+    }
+
+    public String getRadicadoAgregarRecurso() {
+        return radicadoAgregarRecurso;
+    }
+
+    public void setRadicadoAgregarRecurso(String radicadoAgregarRecurso) {
+        this.radicadoAgregarRecurso = radicadoAgregarRecurso;
     }
     
 }

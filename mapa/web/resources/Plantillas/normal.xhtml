@@ -59,13 +59,14 @@
             <div><ui:insert name="titulo">Titulo</ui:insert></div>
         </div>
         <!-- Centro -->
+        <h:panelGroup id="pagina">
         <div id="container">
             <!-- Derecha -->
             <div id="right" >
                 <div>
                     <ui:include src="/sesion.xhtml"/>
                 </div>
-                <h:panelGroup rendered="#{UserBean.login}">
+                <h:panelGroup id="pgMenuTramite" rendered="#{UserBean.login}">
                     <div>
                          <ui:include src="/usuarios/menu_tramites.xhtml"/>
                     </div>
@@ -78,6 +79,7 @@
                 </h:panelGrid>
             </div>
         </div>
+        </h:panelGroup>
         <!-- Bottom -->
         <div id="bottom" align="center">
             <ui:include src="footer.xhtml"/>

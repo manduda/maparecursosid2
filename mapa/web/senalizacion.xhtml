@@ -88,40 +88,9 @@
                         <h:outputText value="#{sen.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
-                <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
-                          width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">  
-                    <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;" width="100%">
-                        <h:panelGrid columns="2" cellpadding="4" width="100%">
-                            <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
-                            <h:outputText value="Estado:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
-                            <h:outputText value="Operador:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
-                            <h:outputText value="Muncipio:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio}" />
-                            <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
-                            <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
-                            <h:outputText value="Dirección:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
-                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
-                        </h:panelGrid>
-                        <h:panelGrid width="100%" style="text-align: center;">
-                            <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
-                                <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();"/>
-                                <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();">
-                                    <f:param name="codigoAccion" value="5"/>
-                                </p:commandButton>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" update="datos" oncomplete="senDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" update="datos" oncomplete="senDialog.hide();"/>
-                            </h:panelGroup>
-                        </h:panelGrid>
-                    </h:panelGrid>
-                </p:dialog>
+                
+                <ui:include src="/usuarios/detalleSenalizacion.xhtml"/>
+                
             </h:panelGrid>
         </h:form>
     </ui:define>
