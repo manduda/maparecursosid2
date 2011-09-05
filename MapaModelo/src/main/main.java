@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import vo.AcAccionVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
@@ -22,6 +23,7 @@ import vo.MunicipiosVO;
 import vo.NuNumeracionVO;
 import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
+import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -62,7 +64,7 @@ public class main {
         //----  SEÑALIZACION
         /*List<SeSenalizacionVO> vo = new ArrayList<SeSenalizacionVO>();
         int cantidad = 0;
-        vo = fachada.cargarSenalizacion(0, -1,"-1",-1,-1,-1,-1,"-1","-1");
+        vo = fachada.cargarSenalizacion(51, 50,"C0159C",-1,-1,-1,-1,"-1","-1");
         cantidad = fachada.countCargarSenalizacion("-1",-1,-1,-1,-1,"-1","-1");
         System.out.println("Cantidad:"+cantidad);
         for(int i=0; i < vo.size();i++) {
@@ -116,7 +118,7 @@ public class main {
         System.out.println("Clase: " + itemClass.getName());*/
         
         //---- GET TRAMITES
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         vo = fachada.cargarTramites(2, 1);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
@@ -135,7 +137,7 @@ public class main {
                 Date fechaGT = gt.getGtfFecha();
                 System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
             }
-        }
+        }*/
         //-------------------------------------
         
         //---- CREAR TRAMITES
@@ -181,6 +183,40 @@ public class main {
         boolean resultado = fachada.borrarTramite(vo);
 
         System.out.println("Resultado: "+resultado);*/
+        //-------------------------------------
+        
+        //---- AGREGAR RECURSO
+        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        
+        TrTramitesVO tramite = new TrTramitesVO();
+        tramite.setTrnCodigo(3);
+        
+        SeSenalizacionVO senalizacion = new SeSenalizacionVO();
+        senalizacion.setSenCodigo(4);
+        
+        AcAccionVO accion = new AcAccionVO();
+        accion.setAcnCodigo(1);
+        
+        MunicipiosVO municipio = new MunicipiosVO();
+        municipio.setCodigoMunicipio("2AF9");
+        
+        EmOperadorVO operador = new EmOperadorVO();
+        operador.setEmrCodigo("0163");
+        
+        vo.setTrnCodigo(tramite);
+        vo.setSenCodigo(senalizacion);
+        vo.setAcnCodigo(accion);
+        vo.setTsnRadicado(201170111);
+        vo.setCodigoMunicipio(municipio);
+        vo.setEmrCodigo(operador);
+        vo.setTstNombreNodo("");
+        vo.setTstMarcaModelo("");
+        vo.setTstDireccion("");
+        vo.setTstObservaciones("");
+   
+        boolean resultado = fachada.agregarRecurso(vo);
+
+        System.out.println("Resultado: "+resultado);
         //-------------------------------------
         
         //----  OPERADORES

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.TeTipoSenalizacionVO;
 
 /**
  *
@@ -36,6 +37,13 @@ public class TeTipoSenalizacion implements Serializable {
     private Collection<SeSenalizacion> seSenalizacionCollection;
 
     public TeTipoSenalizacion() {
+    }
+    
+    public TeTipoSenalizacionVO toVO() {
+        TeTipoSenalizacionVO vo = new TeTipoSenalizacionVO();
+        vo.setTenCodigo(this.getTenCodigo());
+        vo.setTetNombre(this.getTetNombre());
+        return vo;
     }
     
     public Collection<SeSenalizacion> getSeSenalizacionCollection() {

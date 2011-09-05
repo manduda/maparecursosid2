@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import vo.ClCodigosLdVO;
 
 /**
  *
@@ -42,6 +43,15 @@ public class ClCodigosLd implements Serializable {
     private EsEstado esnCodigo;
 
     public ClCodigosLd() {
+    }
+    
+    public ClCodigosLdVO toVO() {
+        ClCodigosLdVO vo = new ClCodigosLdVO();
+        vo.setClnCodigo(this.getClnCodigo());
+        vo.setEmrCodigo(this.getEmrCodigo().toVO());
+        vo.setEsnCodigo(this.getEsnCodigo().toVO());
+        vo.setClnCodigoLd(this.getClnCodigoLd());
+        return vo;
     }
 
     public BigDecimal getClnCodigo() {

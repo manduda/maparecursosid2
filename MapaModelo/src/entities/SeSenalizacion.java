@@ -5,13 +5,23 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.EmOperadorVO;
+import vo.EsEstadoVO;
+import vo.GtGestionTramiteVO;
+import vo.ReRegionVO;
+import vo.SeSenalizacionVO;
+import vo.TeTipoSenalizacionVO;
 
 /**
  *
@@ -66,8 +76,26 @@ public class SeSenalizacion implements Serializable {
     
     @Column(name = "SET_OBSERVACIONES")
     private String setObservaciones;
-
+    
     public SeSenalizacion() {
+    }
+    
+    public SeSenalizacionVO toVO() {
+        SeSenalizacionVO vo = new SeSenalizacionVO();
+        vo.setSenCodigo(this.getSenCodigo());
+        vo.setCodigoMunicipio(this.getCodigoMunicipio().toVO());
+        vo.setEmrCodigo(this.getEmrCodigo().toVO());
+        vo.setEsnCodigo(this.getEsnCodigo().toVO());
+        vo.setTenCodigo(this.getTenCodigo().toVO());
+        vo.setRenCodigo(this.getRenCodigo().toVO());
+        vo.setSenZona(this.getSenZona());
+        vo.setSenPs(this.getSenPs());
+        vo.setSetNombreNodo(this.getSetNombreNodo());
+        vo.setSetMarcaModelo(this.getSetMarcaModelo());
+        vo.setSetDireccion(this.getSetDireccion());
+        vo.setSetObservaciones(this.getSetObservaciones());
+        
+        return vo;
     }
     
     public EmOperador getEmrCodigo() {

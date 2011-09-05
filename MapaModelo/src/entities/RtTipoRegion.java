@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.RtTipoRegionVO;
 
 /**
  *
@@ -36,6 +37,13 @@ public class RtTipoRegion implements Serializable {
     private Collection<ReRegion> reRegionCollection;
 
     public RtTipoRegion() {
+    }
+    
+    public RtTipoRegionVO toVO() {
+        RtTipoRegionVO vo = new RtTipoRegionVO();
+        vo.setRtnCodigo(this.getRtnCodigo());
+        vo.setRttNombre(this.getRttNombre());
+        return vo;
     }
 
     public Collection<ReRegion> getReRegionCollection() {

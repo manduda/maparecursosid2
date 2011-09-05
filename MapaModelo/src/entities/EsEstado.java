@@ -14,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.EsEstadoVO;
 
 /**
  *
@@ -44,6 +45,13 @@ public class EsEstado implements Serializable {
     private Collection<SeSenalizacion> seSenalizacionCollection;
     
     public EsEstado() {
+    }
+    
+    public EsEstadoVO toVO() {
+        EsEstadoVO vo = new EsEstadoVO();
+        vo.setEsnCodigo(this.getEsnCodigo());
+        vo.setEstNombre(this.getEstNombre());
+        return vo;
     }
 
     public int getEsnCodigo() {

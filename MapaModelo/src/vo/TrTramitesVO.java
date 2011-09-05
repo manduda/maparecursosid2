@@ -21,6 +21,8 @@ public class TrTramitesVO {
     private Date trfFechaResolucion;
     private String trtObservaciones;
     private Collection<GtGestionTramiteVO> gtGetionTramiteCollection;
+    private Collection<TsTramiteSenalizacionVO> tsTramiteSenalizacionCollection;
+    private Collection<TlTramiteLdVO> tlTramiteLdCollection;
     
     public TrTramitesVO() {
     }
@@ -95,6 +97,22 @@ public class TrTramitesVO {
 
     public void setGtGetionTramiteCollection(Collection<GtGestionTramiteVO> gtGetionTramiteCollection) {
         this.gtGetionTramiteCollection = gtGetionTramiteCollection;
+    }
+
+    public Collection<TsTramiteSenalizacionVO> getTsTramiteSenalizacionCollection() {
+        return tsTramiteSenalizacionCollection;
+    }
+
+    public void setTsTramiteSenalizacionCollection(Collection<TsTramiteSenalizacionVO> tsTramiteSenalizacionCollection) {
+        this.tsTramiteSenalizacionCollection = tsTramiteSenalizacionCollection;
+    }
+
+    public Collection<TlTramiteLdVO> getTlTramiteLdCollection() {
+        return tlTramiteLdCollection;
+    }
+
+    public void setTlTramiteLdCollection(Collection<TlTramiteLdVO> tlTramiteLdCollection) {
+        this.tlTramiteLdCollection = tlTramiteLdCollection;
     }
 
 }

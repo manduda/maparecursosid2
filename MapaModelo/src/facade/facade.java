@@ -28,6 +28,7 @@ import vo.NuNumeracionVO;
 import vo.ReRegionVO;
 import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
+import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -464,6 +465,65 @@ public class facade {
             tramites.enviarTramite(vo, em);
             tx.commit();
             resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    public boolean devolverTramite(TrTramitesVO vo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            tramites.devolverTramite(vo, em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    public boolean agregarRecurso(Object Recurso){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            String nombre = Recurso.getClass().getSimpleName();
+            if (nombre.equals("TsTramiteSenalizacionVO")){
+                resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+            } else {
+                resultado = false;
+            }
+
+            tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
                 resultado = false;

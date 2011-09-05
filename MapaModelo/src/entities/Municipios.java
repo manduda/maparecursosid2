@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.MunicipiosVO;
 
 /**
  *
@@ -46,6 +47,14 @@ public class Municipios implements Serializable {
     private Collection<SeSenalizacion> seSenalizacionCollection;
 
     public Municipios() {
+    }
+    
+    public MunicipiosVO toVO() {
+        MunicipiosVO vo = new MunicipiosVO();
+        vo.setCodigoMunicipio(this.getCodigoMunicipio());
+        vo.setNombreMunicipio(this.getNombreMunicipio());
+        vo.setCodigoDepartamento(this.getCodigoDepartamento().toVO());
+        return vo;
     }
 
     public Departamentos getCodigoDepartamento() {

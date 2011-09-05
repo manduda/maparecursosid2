@@ -22,7 +22,9 @@ import javax.persistence.Temporal;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
+import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
+import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 
 /**
@@ -71,6 +73,12 @@ public class TrTramites implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<GtGestionTramite> gtGetionTramiteCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TsTramiteSenalizacion> tsTramiteSenalizacionCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TlTramiteLd> tlTramiteldCollection;
         
     public TrTramites() {
     }
@@ -91,6 +99,16 @@ public class TrTramites implements Serializable {
         for (GtGestionTramite gt : this.gtGetionTramiteCollection) {
             getionTramitesVO.add(gt.toVO());
         }
+        // Tramite señalizacion
+        Collection<TsTramiteSenalizacionVO> tramiteSenalizacionVO = new ArrayList<TsTramiteSenalizacionVO>();        
+        for (TsTramiteSenalizacion ts : this.tsTramiteSenalizacionCollection) {
+            tramiteSenalizacionVO.add(ts.toVO());
+        }
+        // Tramite LD
+        Collection<TlTramiteLdVO> tramiteLdVO = new ArrayList<TlTramiteLdVO>();        
+        for (TlTramiteLd tld : this.tlTramiteldCollection) {
+            tramiteLdVO.add(tld.toVO());
+        }
         
         vo.setTrnCodigo(this.getTrnCodigo());
         vo.setUsnCodigo(userVO);
@@ -101,6 +119,8 @@ public class TrTramites implements Serializable {
         vo.setTrfFechaResolucion(this.getTrfFechaResolucion());
         vo.setTrtObservaciones(this.getTrtObservaciones());
         vo.setGtGetionTramiteCollection(getionTramitesVO);
+        vo.setTsTramiteSenalizacionCollection(tramiteSenalizacionVO);
+        vo.setTlTramiteLdCollection(tramiteLdVO);
         
         return vo;
     }
@@ -177,4 +197,20 @@ public class TrTramites implements Serializable {
         this.gtGetionTramiteCollection = gtGetionTramiteCollection;
     }
 
-}
+    public Collection<TsTramiteSenalizacion> getTsTramiteSenalizacionCollection() {
+        return tsTramiteSenalizacionCollection;
+    }
+
+    public void setTsTramiteSenalizacionCollection(Collection<TsTramiteSenalizacion> tsTramiteSenalizacionCollection) {
+        this.tsTramiteSenalizacionCollection = tsTramiteSenalizacionCollection;
+    }
+
+    public Collection<TlTramiteLd> getTlTramiteldCollection() {
+        return tlTramiteldCollection;
+    }
+
+    public void setTlTramiteldCollection(Collection<TlTramiteLd> tlTramiteldCollection) {
+        this.tlTramiteldCollection = tlTramiteldCollection;
+    }
+
+ }

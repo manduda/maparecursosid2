@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import vo.ReRegionVO;
+import vo.RtTipoRegionVO;
 
 /**
  *
@@ -36,6 +38,19 @@ public class ReRegion implements Serializable {
     private RtTipoRegion rtnCodigo;
     
     public ReRegion() {
+    }
+    
+    public ReRegionVO toVO() {
+        ReRegionVO vo = new ReRegionVO();
+        
+        // Tipo región señalización
+        RtTipoRegionVO tipoRegionSenalizacionVO = new RtTipoRegionVO();
+        tipoRegionSenalizacionVO = this.getRtnCodigo().toVO();
+        
+        vo.setRenCodigo(this.getRenCodigo());
+        vo.setRetNombre(this.getRetNombre());
+        vo.setRtnCodigo(tipoRegionSenalizacionVO);
+        return vo;
     }
     
     public int getRenCodigo() {
