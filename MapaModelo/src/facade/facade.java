@@ -425,7 +425,7 @@ public class facade {
         return resultado;
     }
     
-    public boolean borrarTramite(TrTramitesVO vo){
+    public boolean archivarTramite(TrTramitesVO vo){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -435,7 +435,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            tramites.borrarTramite(vo, em);
+            tramites.archivarTramite(vo, em);
             tx.commit();
             resultado = true;
         } catch (Exception e) {
@@ -519,6 +519,38 @@ public class facade {
             String nombre = Recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+            } else {
+                resultado = false;
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    public boolean eliminarRecurso(Object Recurso){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            String nombre = Recurso.getClass().getSimpleName();
+            if (nombre.equals("TsTramiteSenalizacionVO")){
+                resultado = tramites.eliminarRecurso((TsTramiteSenalizacionVO) Recurso, em);
             } else {
                 resultado = false;
             }

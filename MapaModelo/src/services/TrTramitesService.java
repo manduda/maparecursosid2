@@ -59,7 +59,7 @@ public class TrTramitesService {
         GtGestionTramiteDAO.persist(gestionTramite, em);
     }
     
-    public void borrarTramite(TrTramitesVO vo, EntityManager em){
+    public void archivarTramite(TrTramitesVO vo, EntityManager em){
         TrTramites entity = new TrTramites();
         
         entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
@@ -249,6 +249,16 @@ public class TrTramitesService {
         
         return true;
         
+    }
+    
+    public boolean eliminarRecurso(TsTramiteSenalizacionVO vo, EntityManager em){
+        TsTramiteSenalizacion entity = new TsTramiteSenalizacion();
+        
+        entity = TsTramiteSenalizacionDAO.findbyId(vo.getTsnCodigo(), em);
+
+        TsTramiteSenalizacionDAO.delete(entity, em);
+        
+        return true;
     }
     
 }

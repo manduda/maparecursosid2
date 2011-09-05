@@ -186,7 +186,7 @@ public class main {
         //-------------------------------------
         
         //---- AGREGAR RECURSO
-        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        /*TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         TrTramitesVO tramite = new TrTramitesVO();
         tramite.setTrnCodigo(3);
@@ -215,6 +215,16 @@ public class main {
         vo.setTstObservaciones("");
    
         boolean resultado = fachada.agregarRecurso(vo);
+
+        System.out.println("Resultado: "+resultado);*/
+        //-------------------------------------
+        
+        //---- ELIMINAR RECURSO
+        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        
+        vo.setTsnCodigo(1);
+   
+        boolean resultado = fachada.eliminarRecurso(vo);
 
         System.out.println("Resultado: "+resultado);
         //-------------------------------------
