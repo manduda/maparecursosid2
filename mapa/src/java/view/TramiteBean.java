@@ -169,7 +169,14 @@ public class TramiteBean {
                 break;
             }
         }
-
+        facade fachada = new facade();
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
+        }
+        
         return "/usuarios/tramite";
     }
     
@@ -277,63 +284,83 @@ public class TramiteBean {
             mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes escoger un trámite<br><br>";
             return null;
         }
-        facade fachada = new facade();
-        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         mensajeRecurso = "";
-
+        
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         
-        SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
         Integer codigoAccion = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoAccion")[0]);
         
         TrTramitesVO tramite = new TrTramitesVO();
         tramite.setTrnCodigo(tramiteAgregarRecurso);
         
-        SeSenalizacionVO senalizacion = new SeSenalizacionVO();
-        senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
-        
         AcAccionVO accion = new AcAccionVO();
         accion.setAcnCodigo(codigoAccion);
         
-        MunicipiosVO municipio = new MunicipiosVO();
-        EmOperadorVO operador = new EmOperadorVO();
-        String nombreNodo = "";
-        String marcaModelo = "";
-        String direccion = "";
-        String observaciones = "";
-        Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+        facade fachada = new facade();
         
-        switch(codigoAccion){
-            case 5: //Recuperar
-                municipio.setCodigoMunicipio("06053D2E");
-                operador.setEmrCodigo("C0159C");
-                nombreNodo = "";
-                marcaModelo = "";
-                direccion = "";
-                observaciones = this.observacionesAgregarRecurso;
-                break;
+        Integer resultado = 0;
+        
+        if(tipoRecurso.equals("senalizacion")){
+            TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+            SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+            
+            SeSenalizacionVO senalizacion = new SeSenalizacionVO();
+            senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
+
+            MunicipiosVO municipio = new MunicipiosVO();
+            EmOperadorVO operador = new EmOperadorVO();
+            String nombreNodo = "";
+            String marcaModelo = "";
+            String direccion = "";
+            String observaciones = "";
+            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+
+            switch(codigoAccion){
+                case 5: //Recuperar
+                    municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
+                    operador.setEmrCodigo("C0159C");
+                    nombreNodo = "";
+                    marcaModelo = "";
+                    direccion = "";
+                    observaciones = this.observacionesAgregarRecurso;
+                    break;
+            }
+
+            vo.setTrnCodigo(tramite);
+            vo.setSenCodigo(senalizacion);
+            vo.setAcnCodigo(accion);
+            vo.setTsnRadicado(radicado);
+            vo.setCodigoMunicipio(municipio);
+            vo.setEmrCodigo(operador);
+            vo.setTstNombreNodo(nombreNodo);
+            vo.setTstMarcaModelo(marcaModelo);
+            vo.setTstDireccion(direccion);
+            vo.setTstObservaciones(observaciones);
+            
+            resultado = fachada.agregarRecurso(vo);
+        
         }
         
-        vo.setTrnCodigo(tramite);
-        vo.setSenCodigo(senalizacion);
-        vo.setAcnCodigo(accion);
-        vo.setTsnRadicado(radicado);
-        vo.setCodigoMunicipio(municipio);
-        vo.setEmrCodigo(operador);
-        vo.setTstNombreNodo(nombreNodo);
-        vo.setTstMarcaModelo(marcaModelo);
-        vo.setTstDireccion(direccion);
-        vo.setTstObservaciones(observaciones);
-   
-        boolean resultado = fachada.agregarRecurso(vo);
-        
-        if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
-            mensajeRecurso = "<br><b>Recurso agregado correctamente al trámite.</b><br><br>Código del trámite: "+tramiteAgregarRecurso+"<br><br>";
-        } else {
-            mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        switch(resultado){
+            case 0:
+                mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+                mensajeRecurso = "<br><b>Recurso agregado correctamente al trámite.</b><br><br>Código del trámite: "+tramiteAgregarRecurso+"<br><br>";
+                break;
+            case 2:
+                mensajeRecurso = "<br><b>Falta diligenciar un dato.</b><br><br>";
+                break;
+            case 3:
+                mensajeRecurso = "<br><b>El operador del recurso debe ser el mismo del trámite.</b><br><br>";
+                break;
+            case 4:
+                mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>El recurso ya tiene un trámite asociado.<br><br>";
+                break;
         }
         
         this.setTramiteAgregarRecurso(-1);

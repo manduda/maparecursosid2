@@ -65,6 +65,7 @@
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="recuperarDialog.hide();resultadoAgregarDialog.show();">
                         <f:param name="codigoAccion" value="5"/>
+                        <f:param name="tipoRecurso" value="senalizacion"/>
                     </p:commandButton>
                     <p:commandButton value="Cancelar" onclick="recuperarDialog.hide();"/>
                 </h:panelGrid>

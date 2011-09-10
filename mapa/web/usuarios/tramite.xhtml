@@ -34,9 +34,23 @@
                         <h:outputText value="Estado:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
                         <h:outputText value="Operador:"/>
-                        <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
+                        <h:panelGroup rendered="#{TramiteBean.selectedTramite.etnCodigo.etnCodigo != 1}">
+                            <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)}">
+                            <h:selectOneMenu value="#{TramiteBean.selectedTramite.emrCodigo.emrCodigo}">
+                                <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                            </h:selectOneMenu>
+                        </h:panelGroup>
                     </h:panelGrid>
                     <br/>
+                    
+                    <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                    <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                    </p:dialog>
+                    
+                    
                     <!-- HISTORIA TRAMITE -->
                     <ui:include src="/usuarios/tramiteHistoria.xhtml"/>
                     <br/>
@@ -44,7 +58,7 @@
                     <h:panelGrid columns="12">
                         <!-- ENVIAR TRAMITE -->
                         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
-                            <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection)}"/>
+                            <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty TramiteBean.selectedTramite.tlTramiteLdCollection)}"/>
                             <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                         showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                         header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
