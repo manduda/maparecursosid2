@@ -506,11 +506,18 @@ public class facade {
         return resultado;
     }
     
-    public boolean agregarRecurso(Object Recurso){
+    public Integer agregarRecurso(Object Recurso){
+        /*
+         * 0: Error al agregar el recurso
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+        */
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
-        boolean resultado = false;
+        Integer resultado = 0;
         try {
             emf = Persistence.createEntityManagerFactory("MapaModeloPU");
             em = emf.createEntityManager();
@@ -520,13 +527,13 @@ public class facade {
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) Recurso, em);
             } else {
-                resultado = false;
+                resultado = 0;
             }
 
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
-                resultado = false;
+                resultado = 0;
                 tx.rollback();
             }
         } finally {

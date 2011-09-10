@@ -4,8 +4,10 @@
  */
 package services;
 
+import daos.CoConfiguracionDAO;
 import daos.EmOperadorDAO;
 import daos.GtGestionTramiteDAO;
+import daos.SeSenalizacionDAO;
 import daos.TrTramitesDAO;
 import daos.TsTramiteSenalizacionDAO;
 import entities.AcAccion;
@@ -211,27 +213,42 @@ public class TrTramitesService {
         return operadoresVO;
     }
     
-    public boolean agregarRecurso(TsTramiteSenalizacionVO vo, EntityManager em){
-        if (TsTramiteSenalizacionDAO.findIdSenalizacion(vo.getSenCodigo().getSenCodigo(), em)) {
-            return false;
+    public Integer agregarRecurso(TsTramiteSenalizacionVO vo, EntityManager em){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+        */
+        
+        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getSenCodigo().getSenCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getCodigoMunicipio().getCodigoMunicipio().equals(""))){
+            return 2;
         }
         
+        TrTramites tramite = TrTramitesDAO.findbyId(vo.getTrnCodigo().getTrnCodigo(), em);
+        String operadorTramite = tramite.getEmrCodigo().getEmrCodigo();
+        
+        SeSenalizacion senalizacion = SeSenalizacionDAO.findbyId(vo.getSenCodigo().getSenCodigo(), em);
+        String operadorRecurso = senalizacion.getEmrCodigo().getEmrCodigo();
+        
+        if(!operadorTramite.equals(operadorRecurso)){
+            return 3;
+        }
+        
+        if (TsTramiteSenalizacionDAO.findIdSenalizacion(vo.getSenCodigo().getSenCodigo(), em)) {
+            return 4;
+        }
+         
         TsTramiteSenalizacion entity = new TsTramiteSenalizacion();
-        
-        TrTramites tramite = new TrTramites();
-        tramite.setTrnCodigo(vo.getTrnCodigo().getTrnCodigo());
-        
-        SeSenalizacion senalizacion = new SeSenalizacion();
-        senalizacion.setSenCodigo(vo.getSenCodigo().getSenCodigo());
         
         AcAccion accion = new AcAccion();
         accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
         
         Municipios municipio = new Municipios();
-        municipio.setCodigoMunicipio(vo.getCodigoMunicipio().getCodigoMunicipio());
+        municipio.setCodigoMunicipio(senalizacion.getCodigoMunicipio().getCodigoMunicipio());
         
         EmOperador operador = new EmOperador();
-        operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+        operador.setEmrCodigo(CoConfiguracionDAO.findbyId(1, em).getCotValor());
         
         entity.setTsnCodigo(TsTramiteSenalizacionDAO.getMaxId(em)+1);
         entity.setTrnCodigo(tramite);
@@ -247,7 +264,7 @@ public class TrTramitesService {
         
         TsTramiteSenalizacionDAO.persist(entity, em);
         
-        return true;
+        return 1;
         
     }
     

@@ -186,13 +186,13 @@ public class main {
         //-------------------------------------
         
         //---- AGREGAR RECURSO
-        /*TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         TrTramitesVO tramite = new TrTramitesVO();
         tramite.setTrnCodigo(3);
         
         SeSenalizacionVO senalizacion = new SeSenalizacionVO();
-        senalizacion.setSenCodigo(4);
+        senalizacion.setSenCodigo(1);
         
         AcAccionVO accion = new AcAccionVO();
         accion.setAcnCodigo(1);
@@ -201,7 +201,7 @@ public class main {
         municipio.setCodigoMunicipio("2AF9");
         
         EmOperadorVO operador = new EmOperadorVO();
-        operador.setEmrCodigo("0163");
+        operador.setEmrCodigo("01");
         
         vo.setTrnCodigo(tramite);
         vo.setSenCodigo(senalizacion);
@@ -214,19 +214,19 @@ public class main {
         vo.setTstDireccion("");
         vo.setTstObservaciones("");
    
-        boolean resultado = fachada.agregarRecurso(vo);
+        Integer resultado = fachada.agregarRecurso(vo);
 
-        System.out.println("Resultado: "+resultado);*/
+        System.out.println("Resultado: "+resultado);
         //-------------------------------------
         
         //---- ELIMINAR RECURSO
-        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        /*TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         vo.setTsnCodigo(1);
    
         boolean resultado = fachada.eliminarRecurso(vo);
 
-        System.out.println("Resultado: "+resultado);
+        System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
         
         //----  OPERADORES
