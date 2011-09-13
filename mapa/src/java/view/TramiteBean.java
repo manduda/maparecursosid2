@@ -4,6 +4,7 @@
  */
 package view;
 
+import entities.SeSenalizacion;
 import facade.facade;
 import helper.ConvertirListasHelper;
 import inicio.LoginFilter;
@@ -39,6 +40,9 @@ import vo.UsUsuariosVO;
 @ManagedBean(name = "TramiteBean")
 @SessionScoped
 public class TramiteBean {
+    private String rutaContexto;
+    private String operadorNinguno;
+    private String municipioNinguno;
     private List<TrTramitesVO> tramites = new ArrayList<TrTramitesVO>();
     private TrTramitesVO selectedTramite;
     private Collection<SelectItem> listaOperador;
@@ -53,6 +57,7 @@ public class TramiteBean {
     private String observacionesAgregarRecurso;
     private Integer tipoUsuario = 0;
     private Integer codigoDetalleTramite = 0;
+    boolean tramiteTieneDetalle;
 
     /** Creates a new instance of TramiteBean */
     public TramiteBean() {
@@ -63,6 +68,14 @@ public class TramiteBean {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         userSession = (UserBean) session.getAttribute("UserBean");
+        
+        // ----- CARGAR CONFIGURACION -----
+        ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
+        operadorNinguno = configuracion.getOperadorNinguno();
+        municipioNinguno = configuracion.getMunicipioNinguno();
+        rutaContexto = configuracion.getRutaContexto();
+        // --------------------------------
+        
         //System.out.println("user: "+userSession);
         if (userSession.isIsLoggedIn()) {
             userVO = userSession.getUserVO();
@@ -115,7 +128,7 @@ public class TramiteBean {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
         
-        return "/usuarios/crearTramite";
+        return rutaContexto+"usuarios/crearTramite";
     }
     
     public String crearTramite() {
@@ -177,7 +190,7 @@ public class TramiteBean {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
         
-        return "/usuarios/tramite";
+        return rutaContexto+"usuarios/tramite";
     }
     
     public String archivarTramite() {
@@ -321,7 +334,7 @@ public class TramiteBean {
             switch(codigoAccion){
                 case 5: //Recuperar
                     municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
-                    operador.setEmrCodigo("C0159C");
+                    operador.setEmrCodigo(operadorNinguno);
                     nombreNodo = "";
                     marcaModelo = "";
                     direccion = "";
@@ -366,7 +379,12 @@ public class TramiteBean {
         this.setTramiteAgregarRecurso(-1);
         this.radicadoAgregarRecurso = "";
         this.observacionesAgregarRecurso = "";
+        /*SenalizacionBean sen = (SenalizacionBean) facesContext.getExternalContext().getSessionMap().get("SenalizacionBean");
         
+        sen.setSelectedSen(null);
+        
+        facesContext.getExternalContext().getSessionMap().put("SenalizacionBean", sen);*/
+
         return null;
     }
     
@@ -430,6 +448,19 @@ public class TramiteBean {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public boolean isTramiteTieneDetalle() {
+        boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
+        boolean hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
+        if (haySenalizacion || hayCodigosLd){
+            return true;
+        }
+        return false;
+    }
+
+    public void setTramiteTieneDetalle(boolean tramiteTieneDetalle) {
+        this.tramiteTieneDetalle = tramiteTieneDetalle;
     }
 
     public List<TrTramitesVO> getTramites() {

@@ -59,7 +59,7 @@
                 <h:outputText value="Registros encontrados:"/>
                 <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
             </h:panelGrid>
-            <h:panelGrid width="100%">
+            <h:panelGrid id="pgSenalizacion" width="100%">
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
                              selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                              onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();"

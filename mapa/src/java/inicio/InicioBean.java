@@ -9,6 +9,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import view.ConfiguracionBean;
 import vo.UsUsuariosVO;
 
 /**
@@ -21,9 +22,13 @@ public class InicioBean {
     private String user;
     private String password;
     private String Mensaje = "";
+    private String rutaContexto;
     /** Creates a new instance of InicioBean */
     public InicioBean() {
-        
+        // ----- CARGAR CONFIGURACION -----
+        ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
+        rutaContexto = configuracion.getRutaContexto();
+        // --------------------------------
     }
 
     public String validarUsuario() {
@@ -63,7 +68,7 @@ public class InicioBean {
         session.removeAttribute("UserBean");
         session.invalidate(); 
         
-        return "/cerrar";
+        return rutaContexto+"cerrar";
     }
     
     public String getMensaje() {

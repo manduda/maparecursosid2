@@ -77,7 +77,7 @@
                   width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
             <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
                 <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite"/>
+                <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgSenalizacion"/>
             </h:panelGrid>
         </p:dialog>
         

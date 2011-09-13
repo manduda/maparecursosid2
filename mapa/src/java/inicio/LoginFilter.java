@@ -5,6 +5,11 @@
 package inicio;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -15,17 +20,32 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import view.ConfiguracionBean;
 
 /**
  *
  * @author MADD
  */
 public class LoginFilter implements Filter {
-    private static final String LOGIN = "/index.xhtml";
+    private String LOGIN;
 
     public LoginFilter() {
+        Properties properties = new Properties();
+        try {
+            InputStream input = LoginFilter.class.getResourceAsStream("../properties/parametros.properties");
+            properties.load(input);
+            input.close();
+            
+            String rutaContexto = properties.getProperty("rutaContexto");
+            LOGIN = rutaContexto+"index.xhtml";
+          
+        } catch (IOException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo parametros.properties no encontrado", e);
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros", e);
+        }
 
-	}
+    }
 
     private static boolean checkLoginState(ServletRequest request, ServletResponse response) throws IOException, ServletException {
         boolean isLoggedIn = false;

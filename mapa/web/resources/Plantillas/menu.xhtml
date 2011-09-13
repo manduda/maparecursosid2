@@ -7,10 +7,10 @@
     <ui:composition>
         <h:form>
             <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
-                <p:menuitem value="Inicio" url="/index.xhtml"/>
-                <p:menuitem value="Mapa de numeración" url="/numeracion.xhtml"/>
-                <p:menuitem value="Mapa de señalización" url="/senalizacion.xhtml"/>
-                <p:menuitem value="Códigos LD" url="/codigosld.xhtml"/>
+                <p:menuitem value="Inicio" url="#{ConfiguracionBean.rutaInicio}"/>
+                <p:menuitem value="Mapa de numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}"/>
+                <p:menuitem value="Mapa de señalización" url="#{ConfiguracionBean.rutaMapaSenalizacion}"/>
+                <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}"/>
                 <p:menuitem value="Matriz 1XY"/>
                 <p:menuitem value="Código IIN"/>
                 <p:menuitem value="Códigos MNC"/>

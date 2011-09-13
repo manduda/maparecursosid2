@@ -77,7 +77,7 @@
                          showEffect="fade" hideEffect="fade" modal="true" closable="false"
                          header="Confirmación" severity="alert" widgetVar="eliminarSenalizacionDialog">  
             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
+                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgTramite,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
                 <p:commandButton value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
             </h:panelGrid>
         </p:confirmDialog>
