@@ -219,11 +219,18 @@ public class TrTramitesService {
          * 2: Falta un dato del VO
          * 3: El operador del recurso es diferente al del trámite
          * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
         */
         
-        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getSenCodigo().getSenCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getCodigoMunicipio().getCodigoMunicipio().equals(""))){
+        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getSenCodigo().getSenCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getCodigoMunicipio().getCodigoMunicipio().equals(""))||(vo.getEmrCodigo().getEmrCodigo().equals(""))){
             return 2;
         }
+        
+        if (TsTramiteSenalizacionDAO.findIdSenalizacion(vo.getSenCodigo().getSenCodigo(), em)) {
+            return 4;
+        }
+        
+        TsTramiteSenalizacion entity = new TsTramiteSenalizacion();
         
         TrTramites tramite = TrTramitesDAO.findbyId(vo.getTrnCodigo().getTrnCodigo(), em);
         String operadorTramite = tramite.getEmrCodigo().getEmrCodigo();
@@ -231,24 +238,40 @@ public class TrTramitesService {
         SeSenalizacion senalizacion = SeSenalizacionDAO.findbyId(vo.getSenCodigo().getSenCodigo(), em);
         String operadorRecurso = senalizacion.getEmrCodigo().getEmrCodigo();
         
-        if(!operadorTramite.equals(operadorRecurso)){
-            return 3;
-        }
-        
-        if (TsTramiteSenalizacionDAO.findIdSenalizacion(vo.getSenCodigo().getSenCodigo(), em)) {
-            return 4;
-        }
-         
-        TsTramiteSenalizacion entity = new TsTramiteSenalizacion();
-        
-        AcAccion accion = new AcAccion();
-        accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
-        
         Municipios municipio = new Municipios();
-        municipio.setCodigoMunicipio(senalizacion.getCodigoMunicipio().getCodigoMunicipio());
-        
         EmOperador operador = new EmOperador();
-        operador.setEmrCodigo(CoConfiguracionDAO.findbyId(1, em).getCotValor());
+        AcAccion accion = new AcAccion();
+        String nombreNodo = "";
+        String marcaModelo = "";
+        String direccion = "";
+        
+        switch(vo.getAcnCodigo().getAcnCodigo()){
+            case 1: //LIBERAR
+                break;
+            case 2: //PREASIGNAR
+                break;
+            case 3: //ASIGNAR
+                break;
+            case 4: //RESERVAR
+                break;
+            case 5: //RECUPERAR
+                if(senalizacion.getEsnCodigo().getEsnCodigo()!=3){ // El estado de la señalización no es asignado
+                    return 5;
+                }
+                
+                if(!operadorTramite.equals(operadorRecurso)){ // El operador del trámite es diferente al del recurso
+                    return 3;
+                }
+                municipio.setCodigoMunicipio(senalizacion.getCodigoMunicipio().getCodigoMunicipio());
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                nombreNodo = "";
+                marcaModelo = "";
+                direccion = "";
+
+                break;
+        }
+        
+        accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
         
         entity.setTsnCodigo(TsTramiteSenalizacionDAO.getMaxId(em)+1);
         entity.setTrnCodigo(tramite);
@@ -257,9 +280,9 @@ public class TrTramitesService {
         entity.setTsnRadicado(vo.getTsnRadicado());
         entity.setCodigoMunicipio(municipio);
         entity.setEmrCodigo(operador);
-        entity.setTstNombreNodo(vo.getTstNombreNodo());
-        entity.setTstMarcaModelo(vo.getTstMarcaModelo());
-        entity.setTstDireccion(vo.getTstDireccion());
+        entity.setTstNombreNodo(nombreNodo);
+        entity.setTstMarcaModelo(marcaModelo);
+        entity.setTstDireccion(direccion);
         entity.setTstObservaciones(vo.getTstObservaciones());
         
         TsTramiteSenalizacionDAO.persist(entity, em);

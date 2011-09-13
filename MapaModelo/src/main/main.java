@@ -189,13 +189,13 @@ public class main {
         TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         TrTramitesVO tramite = new TrTramitesVO();
-        tramite.setTrnCodigo(3);
+        tramite.setTrnCodigo(4);
         
         SeSenalizacionVO senalizacion = new SeSenalizacionVO();
         senalizacion.setSenCodigo(1);
         
         AcAccionVO accion = new AcAccionVO();
-        accion.setAcnCodigo(1);
+        accion.setAcnCodigo(5);
         
         MunicipiosVO municipio = new MunicipiosVO();
         municipio.setCodigoMunicipio("2AF9");
