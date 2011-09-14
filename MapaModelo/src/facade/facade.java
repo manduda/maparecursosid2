@@ -645,4 +645,46 @@ public class facade {
         }
         return vo;
     }
+    
+    public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            
+            if (num){
+                numeracion.transferirNumeracion(operadorOrigen, operadorDestino, em);
+            }
+            if (sen){
+                senalizacion.transferirSenalizacion(operadorOrigen, operadorDestino, em);
+            }              
+            
+            /*if (iin){
+                senalizacion.transferirIIN(operadorOrigen, operadorDestino, em);
+            }              
+            if (mnc){
+                senalizacion.transferirMNC(operadorOrigen, operadorDestino, em);
+            }              
+             */
+            
+            resultado=true;
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
 }

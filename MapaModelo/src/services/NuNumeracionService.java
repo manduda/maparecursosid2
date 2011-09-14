@@ -116,4 +116,8 @@ public class NuNumeracionService {
         vo.setEmtNombre(entity.getEmtNombre());
         return vo;
     }
+   
+    public void transferirNumeracion (String operadorOrigen, String operadorDestino, EntityManager em){
+        NuNumeracionDAO.transferirNumeracionDAO(operadorOrigen, operadorDestino, em);
+    }
 }

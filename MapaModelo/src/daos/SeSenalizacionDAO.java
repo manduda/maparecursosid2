@@ -154,4 +154,17 @@ public class SeSenalizacionDAO {
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();
     }
+    
+        public static void transferirSenalizacionDAO(String operadorOrigen, String operadorDestino, EntityManager em){
+
+        String searchQuery = "UPDATE SE_SENALIZACION SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
+                
+        Query query = em.createNativeQuery(searchQuery);
+
+        query.setParameter(1, operadorDestino);
+        query.setParameter(2, operadorOrigen);
+        
+        query.executeUpdate();
+        
+    }
 }

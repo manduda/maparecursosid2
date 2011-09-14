@@ -33,7 +33,15 @@ import vo.UsUsuariosVO;
 public class main {
     public static void main(String[] args) {
         facade fachada = new facade();
-
+       
+        //----INICIO TRANSFERENCIA DE ----
+        boolean transferencia = false;
+        
+        transferencia = fachada.transferirRecursos("017E", "1D", false, true, false, false);
+        
+        System.out.println("Transferencia= "+transferencia);
+        //----FIN TRANSFERENCIA DE RECURSOS----
+        
         /*//----  CODIGOS LD
         List<ClCodigosLdVO> vo = new ArrayList<ClCodigosLdVO>();
         vo = inicio.ListaCodigosLd();
@@ -186,7 +194,7 @@ public class main {
         //-------------------------------------
         
         //---- AGREGAR RECURSO
-        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        /*TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         
         TrTramitesVO tramite = new TrTramitesVO();
         tramite.setTrnCodigo(4);
@@ -216,7 +224,7 @@ public class main {
    
         Integer resultado = fachada.agregarRecurso(vo);
 
-        System.out.println("Resultado: "+resultado);
+        System.out.println("Resultado: "+resultado);*/
         //-------------------------------------
         
         //---- ELIMINAR RECURSO
