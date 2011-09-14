@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="/resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Transferencia de recursos entre operadores"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+            <h:form>
+                <h:panelGroup rendered="#{(TramiteBean.mensajeTransferirRecursos == '')}">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Operador origen"/>
+                            <h:selectOneMenu value="#{TramiteBean.operadorOrigen}">
+                                <f:selectItems value="#{TramiteBean.listaOperador}" />
+                                <p:ajax update="opcionesRecursos" listener="#{TramiteBean.cambioOperadorOrigen}" />
+                            </h:selectOneMenu>
+                            <h:outputText value="Operador destino"/>
+                            <h:selectOneMenu value="#{TramiteBean.operadorDestino}">
+                                <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                            </h:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" border="2">
+                            <h:panelGrid>
+                                 <h:outputText value="Seleccione los recursos a transferir" style=""/>    
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" width="100%" id="opcionesRecursos">
+                                <h:outputText value="Numeración"/>
+                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionNumeracion}" disabled="#{!TramiteBean.opcionNumeracion}"/>
+                                <h:outputText value="Señalización"/>
+                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionSenalizacion}" disabled="#{!TramiteBean.opcionSenalizacion}"/>
+                                <h:outputText value="Códigos IIN"/>
+                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionIin}" disabled="#{!TramiteBean.opcionIin}"/>
+                                <h:outputText value="Códigos MNC"/>
+                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionMnc}" disabled="#{!TramiteBean.opcionMnc}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:commandButton value="Transferir" onclick="confirmarTransferenciaDialog.show()"/>
+                            <!-- Mensaje de confirmación para transferencia de recursos -->
+                            <p:confirmDialog message="Esta seguro que quiere realizar esta operación? Recuerde que no puede devolverse una ves se haga"  
+                                             showEffect="fade" hideEffect="fade" modal="true" closable="false"
+                                             header="Confirmación" severity="alert" widgetVar="confirmarTransferenciaDialog">  
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" actionListener="#{TramiteBean.transferirRecursos}" oncomplete="confirmarTransferenciaDialog.hide();" ajax="false"/>
+                                    <p:commandButton value="Cancelar" onclick="confirmarTransferenciaDialog.hide();"/>
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+                            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
+                                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                            </p:dialog>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{!(TramiteBean.mensajeTransferirRecursos == '')}">
+                    <h:panelGrid width="100%">
+                        <br/><br/><br/>
+                        <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                            <h:panelGrid style="border-bottom: 1px solid; background:#acbece" width="100%">
+                                <h:outputText value="Resultado" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%">
+                                <h:outputText value="#{TramiteBean.mensajeTransferirRecursos}" escape="false"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

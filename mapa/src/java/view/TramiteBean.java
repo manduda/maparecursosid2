@@ -46,6 +46,8 @@ public class TramiteBean {
     private List<TrTramitesVO> tramites = new ArrayList<TrTramitesVO>();
     private TrTramitesVO selectedTramite;
     private Collection<SelectItem> listaOperador;
+    private String operadorOrigen;
+    private String operadorDestino;
     private Collection<SelectItem> listaTramites;
     private Integer tramiteAgregarRecurso;
     private String operadorCrearTramite;
@@ -53,11 +55,21 @@ public class TramiteBean {
     private String mensajeCrearTramite;
     private String mensajeTramite;
     private String mensajeRecurso;
+    private String mensajeTransferirRecursos;
     private String radicadoAgregarRecurso;
     private String observacionesAgregarRecurso;
     private Integer tipoUsuario = 0;
     private Integer codigoDetalleTramite = 0;
+    private Boolean seleccionNumeracion;
+    private Boolean seleccionSenalizacion;
+    private Boolean seleccionIin;
+    private Boolean seleccionMnc;
+    private Boolean opcionNumeracion;
+    private Boolean opcionSenalizacion;
+    private Boolean opcionIin;
+    private Boolean opcionMnc;
     boolean tramiteTieneDetalle;
+
 
     /** Creates a new instance of TramiteBean */
     public TramiteBean() {
@@ -449,6 +461,106 @@ public class TramiteBean {
             return false;
         }
     }
+    
+    public String opcionesTransferirRecursos() {
+        facade fachada = new facade();
+       
+        // limpia las opciones de las variables en la transferencia de recursos
+        operadorOrigen = "-1";
+        operadorDestino = "-1";
+        seleccionNumeracion=false;
+        seleccionSenalizacion=false;
+        seleccionIin=false;
+        seleccionMnc=false;
+        opcionNumeracion=false;
+        opcionSenalizacion=false;
+        opcionIin=false;
+        opcionMnc=false;
+        
+        mensajeTransferirRecursos = "";
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Transferencia de recursos", e);
+        }
+        return "/usuarios/transferenciaRecursos";
+    }
+   
+    public String transferirRecursos() {
+        boolean transferencia;
+        if(operadorOrigen.equals("-1") || operadorDestino.equals("-1"))
+        {
+            mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>Debes seleccionar operador origen y operador destino<br><br>";
+            return null;
+        }
+
+
+        if(operadorOrigen.equals(operadorDestino)){
+            mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>El operador origen y el operador destino deben ser diferentes<br><br>";
+            return null;
+        }
+
+        if((!seleccionNumeracion) && (!seleccionSenalizacion) && (!seleccionIin) && (!seleccionMnc)){
+            mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>Debes seleccionar por lo menos un recurso a transferir<br><br>";
+            return null;
+        }
+            
+        facade fachada = new facade();
+                
+        mensajeTransferirRecursos = "";
+        
+        transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc);
+        
+        /*System.out.println(
+                "numeración: "+numeracion+
+                "Señalización: "+senalizacion+
+                "IIN: "+iin+
+                "MNC: "+mnc
+                );*/
+       
+        if (transferencia){
+            mensajeTransferirRecursos = "<br><b>Recursos transferidos exitosamente.</b><br>";
+            if(seleccionNumeracion){
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("NumeracionBean");
+            }
+            if(seleccionSenalizacion){
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("SenalizacionBean");
+            }
+            /*if(seleccionIin){
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("IinBean");
+            }
+            if(seleccionMnc){
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("MncBean");
+            }*/
+        }else{
+            mensajeTransferirRecursos = "<br><b>Error al transferir recrusos.</b><br>";
+        } 
+         return mensajeTransferirRecursos;
+    }
+    
+    public void cambioOperadorOrigen(){
+        int countRecurso=0;
+        opcionNumeracion=false;
+        opcionSenalizacion=false;
+        opcionIin=false;
+        opcionMnc=false;
+        
+        facade fachada = new facade();
+        
+        // Activa el campo de numeración en transferencia de recursos        
+        countRecurso = fachada.countCargarNumeracion(operadorOrigen, -1, -1, -1, -1, "-1", "-1");
+        if(countRecurso > 0){
+            opcionNumeracion = true;
+        }
+        // Activa el campo de señalizacion en transferencia de recursos
+        countRecurso = fachada.countCargarSenalizacion(operadorOrigen, -1, -1, -1, -1, "-1", "-1");
+        if(countRecurso > 0){
+            opcionSenalizacion = true;
+        }
+            
+    } 
+
 
     public boolean isTramiteTieneDetalle() {
         boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
@@ -462,6 +574,7 @@ public class TramiteBean {
     public void setTramiteTieneDetalle(boolean tramiteTieneDetalle) {
         this.tramiteTieneDetalle = tramiteTieneDetalle;
     }
+
 
     public List<TrTramitesVO> getTramites() {
         return tramites;
@@ -566,5 +679,99 @@ public class TramiteBean {
     public void setRadicadoAgregarRecurso(String radicadoAgregarRecurso) {
         this.radicadoAgregarRecurso = radicadoAgregarRecurso;
     }
+
+    public String getOperadorDestino() {
+        return operadorDestino;
+    }
+
+    public void setOperadorDestino(String operadorDestino) {
+        this.operadorDestino = operadorDestino;
+    }
+
+    public String getOperadorOrigen() {
+        return operadorOrigen;
+    }
+
+    public void setOperadorOrigen(String operadorOrigen) {
+        this.operadorOrigen = operadorOrigen;
+    }
+
+    public String getMensajeTransferirRecursos() {
+        return mensajeTransferirRecursos;
+    }
+
+    public void setMensajeTransferirRecursos(String mensajeTransferirRecursos) {
+        this.mensajeTransferirRecursos = mensajeTransferirRecursos;
+    }
+
+    public Boolean getSeleccionIin() {
+        return seleccionIin;
+    }
+
+    public void setSeleccionIin(Boolean seleccionIin) {
+        this.seleccionIin = seleccionIin;
+    }
+
+    public Boolean getSeleccionMnc() {
+        return seleccionMnc;
+    }
+
+    public void setSeleccionMnc(Boolean seleccionMnc) {
+        this.seleccionMnc = seleccionMnc;
+    }
+
+    public Boolean getSeleccionNumeracion() {
+        return seleccionNumeracion;
+    }
+
+    public void setSeleccionNumeracion(Boolean seleccionNumeracion) {
+        this.seleccionNumeracion = seleccionNumeracion;
+    }
+
+    public Boolean getSeleccionSenalizacion() {
+        return seleccionSenalizacion;
+    }
+
+    public void setSeleccionSenalizacion(Boolean seleccionSenalizacion) {
+        this.seleccionSenalizacion = seleccionSenalizacion;
+    }
+
+    public Boolean getOpcionIin() {
+        return opcionIin;
+    }
+
+    public void setOpcionIin(Boolean opcionIin) {
+        this.opcionIin = opcionIin;
+    }
+
+    public Boolean getOpcionMnc() {
+        return opcionMnc;
+    }
+
+    public void setOpcionMnc(Boolean opcionMnc) {
+        this.opcionMnc = opcionMnc;
+    }
+
+    public Boolean getOpcionNumeracion() {
+        return opcionNumeracion;
+    }
+
+    public void setOpcionNumeracion(Boolean opcionNumeracion) {
+        this.opcionNumeracion = opcionNumeracion;
+    }
+
+    public Boolean getOpcionSenalizacion() {
+        return opcionSenalizacion;
+    }
+
+    public void setOpcionSenalizacion(Boolean opcionSenalizacion) {
+        this.opcionSenalizacion = opcionSenalizacion;
+    }
+
+
+
+
+    
+    
     
 }

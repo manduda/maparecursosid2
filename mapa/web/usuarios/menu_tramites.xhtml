@@ -6,10 +6,16 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition>
-        <!-- TRAMITE ACTIVO -->
+        <!-- MENU ASESOR -->
         <p:panel header="Menu Asesor" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
             <h:form style="font-size:10px">
                 <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}"/>
+            </h:form>
+        </p:panel>
+        <!-- MENU ADMINISTRADOR -->
+        <p:panel header="Menu Administrador" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+            <h:form style="font-size:10px">
+                <h:commandLink value="* Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}"/>
             </h:form>
         </p:panel>
         <!-- TRAMITES -->
