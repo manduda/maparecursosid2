@@ -46,16 +46,16 @@ public class InicioBean {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
                 facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
-                Mensaje = "";
+                Mensaje = "<br>Sesión iniciada<br><br>";
                 return null;
             } else {
                 //Usuario está deshabilitado
-                Mensaje = "Usuario " + userVO.getCodigoSIUST().getLogin() + " está deshabilitado";
+                Mensaje = "<br>Usuario " + userVO.getCodigoSIUST().getLogin() + " está deshabilitado<br><br>";
                 return null;
             }
         } else {
             //Usuario o contraseña incorrectos
-            Mensaje = "Nombre de usuario o contraseña incorrectos";
+            Mensaje = "<br>Nombre de usuario o contraseña incorrectos<br><br>";
             return null;
         }
         

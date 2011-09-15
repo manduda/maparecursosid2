@@ -49,6 +49,10 @@ public class TramiteBean {
     private String operadorOrigen;
     private String operadorDestino;
     private Collection<SelectItem> listaTramites;
+    private Collection<SelectItem> listaDepartamento;
+    private Collection<SelectItem> listaMunicipio;
+    private String departamento;
+    private String municipio;
     private Integer tramiteAgregarRecurso;
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
@@ -87,6 +91,15 @@ public class TramiteBean {
         municipioNinguno = configuracion.getMunicipioNinguno();
         rutaContexto = configuracion.getRutaContexto();
         // --------------------------------
+        
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaOperador = convertir.createSelectItemsList(fachada.listaOperadorSenalizacion(), "getEmrCodigo", null, "getEmtNombre", true, "");
+            listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+        }
         
         //System.out.println("user: "+userSession);
         if (userSession.isIsLoggedIn()) {
@@ -366,7 +379,7 @@ public class TramiteBean {
             vo.setTstObservaciones(observaciones);
             
             resultado = fachada.agregarRecurso(vo);
-        
+            
         }
         
         switch(resultado){
@@ -388,14 +401,9 @@ public class TramiteBean {
                 break;
         }
         
-        this.setTramiteAgregarRecurso(-1);
-        this.radicadoAgregarRecurso = "";
-        this.observacionesAgregarRecurso = "";
-        /*SenalizacionBean sen = (SenalizacionBean) facesContext.getExternalContext().getSessionMap().get("SenalizacionBean");
-        
-        sen.setSelectedSen(null);
-        
-        facesContext.getExternalContext().getSessionMap().put("SenalizacionBean", sen);*/
+        //this.setTramiteAgregarRecurso(-1);
+        //this.radicadoAgregarRecurso = "";
+        //this.observacionesAgregarRecurso = "";
 
         return null;
     }
@@ -460,6 +468,20 @@ public class TramiteBean {
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    public void cambiarDepartamento() {
+        facade fachada = new facade();
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        String codigoDepartamento = facesContext.getExternalContext().getRequestParameterValuesMap().get("departamento")[0].toString();
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(codigoDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+        }
+           
     }
     
     public String opcionesTransferirRecursos() {
@@ -559,7 +581,7 @@ public class TramiteBean {
             opcionSenalizacion = true;
         }
             
-    } 
+    }
 
 
     public boolean isTramiteTieneDetalle() {
@@ -773,5 +795,37 @@ public class TramiteBean {
 
     
     
+    
+    public Collection<SelectItem> getListaDepartamento() {
+        return listaDepartamento;
+    }
+
+    public void setListaDepartamento(Collection<SelectItem> listaDepartamento) {
+        this.listaDepartamento = listaDepartamento;
+    }
+
+    public Collection<SelectItem> getListaMunicipio() {
+        return listaMunicipio;
+    }
+
+    public void setListaMunicipio(Collection<SelectItem> listaMunicipio) {
+        this.listaMunicipio = listaMunicipio;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
     
 }

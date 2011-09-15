@@ -34,13 +34,15 @@
                         <h:outputText value="Estado:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
                         <h:outputText value="Operador:"/>
-                        <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 1)or(TramiteBean.tramiteTieneDetalle)}">
-                            <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
-                        </h:panelGroup>
-                        <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)and(!TramiteBean.tramiteTieneDetalle)}">
-                            <h:selectOneMenu value="#{TramiteBean.selectedTramite.emrCodigo.emrCodigo}">
-                                <f:selectItems value="#{TramiteBean.listaOperador}" />  
-                            </h:selectOneMenu>
+                        <h:panelGroup id="pgOperadorTramite">
+                            <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 1)or(TramiteBean.tramiteTieneDetalle)}">
+                                <h:outputText value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)and(!TramiteBean.tramiteTieneDetalle)}">
+                                <h:selectOneMenu value="#{TramiteBean.selectedTramite.emrCodigo.emrCodigo}">
+                                    <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                                </h:selectOneMenu>
+                            </h:panelGroup>
                         </h:panelGroup>
                     </h:panelGrid>
                     <br/>

@@ -7,8 +7,8 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <title>Mapa Recursos ID</title>
     </h:head>
 
@@ -21,31 +21,9 @@
         <!-- Barra título -->
         <div id="titulo">
             <div style="float: right;" border="1">
-                <h:panelGroup rendered="#{!UserBean.login}">
-                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                        <h:outputLink id="loginLink" value="javascript:void(0)" onclick="loginDlg.show()" title="login">     
-                            <p:graphicImage value="/resources/images/login.png" />
-                        </h:outputLink>
-                    </h:panelGrid>
-                    
-                    <p:dialog id="loginDialog" header="Iniciar Sesion" widgetVar="loginDlg" modal="true" resizable="false" draggable="false">
-                        <h:form id="frmLogin">
-                            <h:panelGrid columns="2" width="100%">
-                                <h:outputText value="Usuario"/>
-                                <h:inputText value="#{inicioBean.user}" size="15" maxlength="15"/>
-                                <h:outputText value="Contraseña"/>
-                                <h:inputText value="#{inicioBean.password}" size="15" maxlength="15"/>
-                            </h:panelGrid>
-                            <h:panelGrid width="100%" style="text-align: center;">
-                                <p:commandButton value="Iniciar Sesión" action="#{inicioBean.validarUsuario}" update="growl" ajax="false"/>
-                                <h:outputText id="mensajeLogin" style="color:red" value="#{inicioBean.mensaje}" />
-                                <p:growl id="growl" showDetail="true" life="3000" /> 
-                            </h:panelGrid>
-                        </h:form>
-                    </p:dialog>
-                    
-                    
-                </h:panelGroup>
+                
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}login.xhtml"/>  
+                
 
                 <h:panelGroup rendered="#{UserBean.login}">
                     <h:panelGrid columns="2">
@@ -63,12 +41,10 @@
         <div id="container">
             <!-- Derecha -->
             <div id="right" >
-                <div>
-                    <ui:include src="/sesion.xhtml"/>
-                </div>
+                
                 <h:panelGroup id="pgMenuTramite" rendered="#{UserBean.login}">
                     <div>
-                         <ui:include src="/usuarios/menu_tramites.xhtml"/>
+                         <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/menu_tramites.xhtml"/>
                     </div>
                 </h:panelGroup>
             </div>

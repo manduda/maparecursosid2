@@ -13,21 +13,26 @@
                     <h:outputText value="TRÁMITE SEÑALIZACIÓN" style="font-size:11px; font-weight: bold;"/>
                 </h:panelGrid>
                 <p:dataTable value="#{TramiteBean.selectedTramite.tsTramiteSenalizacionCollection}"
-                             var="tramiteSenalizacion" style="font-size:9px" styleClass="order-table">
+                             var="tramiteSenalizacion" style="font-size:7px" styleClass="order-table">
                     <p:columnGroup type="header">  
                         <p:row>  
-                            <p:column colspan="6" headerText="RECURSO" style="font-weight: bold;"/>  
-                            <p:column colspan="4" headerText="TRÁMITE" style="font-weight: bold;"/>  
+                            <p:column colspan="6" headerText="RECURSO" style="font-weight: bold; font-size:8px;"/>  
+                            <p:column colspan="9" headerText="TRÁMITE" style="font-weight: bold; font-size:8px;"/>  
                         </p:row>
-                        <p:row>  
-                            <p:column headerText="PUNTO SEÑALIZACION" />
+                        <p:row>
+                            <p:column headerText="SEÑALIZACION" />
                             <p:column headerText="MUNICIPIO" />
                             <p:column headerText="OPERADOR" />
                             <p:column headerText="NOMBRE NODO" />
-                            <p:column headerText="MARCA MODELO" />
+                            <p:column headerText="MARCA/MODELO" />
                             <p:column headerText="DIRECCIÓN" />
                             <p:column headerText="ACCIÓN" />
                             <p:column headerText="RADICADO" />
+                            <p:column headerText="MUNICIPIO" />
+                            <p:column headerText="OPERADOR" />
+                            <p:column headerText="NOMBRE NODO" />
+                            <p:column headerText="MARCA/MODELO" />
+                            <p:column headerText="DIRECCIÓN" />
                             <p:column headerText="OBSERVACIONES" />
                             <p:column headerText="" />
                         </p:row>
@@ -54,18 +59,35 @@
                         <h:outputText value="#{tramiteSenalizacion.senCodigo.setDireccion}"/>
                     </p:column>
                     <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.acnCodigo.actNombre}"/>
+                        <h:outputText value="#{tramiteSenalizacion.acnCodigo.actNombre}" style="font-weight: bold;"/>
                     </p:column>
                     <p:column>
                         <h:outputText value="#{tramiteSenalizacion.tsnRadicado}"/>
                     </p:column>
                     <p:column>
+                        <h:outputText value="#{tramiteSenalizacion.codigoMunicipio.nombreMunicipio}"/>
+                        <br/>
+                        <h:outputText value="(#{tramiteSenalizacion.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{tramiteSenalizacion.emrCodigo.emtNombre}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{tramiteSenalizacion.tstNombreNodo}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{tramiteSenalizacion.tstMarcaModelo}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText value="#{tramiteSenalizacion.tstDireccion}"/>
+                    </p:column>
+                    <p:column>
                         <h:outputText value="#{tramiteSenalizacion.tstObservaciones}"/>
                     </p:column>
                     <p:column>
-                        <p:commandLink actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarSenalizacionDialog.show()" update="eliminarSenalizacionDialog">
+                        <p:commandLink rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}" actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarSenalizacionDialog.show()" update="eliminarSenalizacionDialog">
                             <f:param name="codigoDetalleTramite" value="#{tramiteSenalizacion.tsnCodigo}" />
-                            <h:graphicImage url="/resources/images/eliminar.png"/>
+                            <h:graphicImage url="/resources/images/eliminar.png" style="border:0px"/>
                         </p:commandLink>
                     </p:column>
                 </p:dataTable>
@@ -77,7 +99,7 @@
                          showEffect="fade" hideEffect="fade" modal="true" closable="false"
                          header="Confirmación" severity="alert" widgetVar="eliminarSenalizacionDialog">  
             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgTramite,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
+                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
                 <p:commandButton value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
             </h:panelGrid>
         </p:confirmDialog>
