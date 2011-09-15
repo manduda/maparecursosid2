@@ -27,13 +27,13 @@ public class EmOperadorDAO {
                 + "LEFT JOIN SA.ATRIBUTOS_EMPRESA AE ON EM.SK_EMPRESA_CODE=AE.SK_EMPRESA_CODE AND AE.TIPO_ATRIB_EMPRESA_CODE='C4' "
                 + "WHERE ES.SERVICIO_CODE='02' "
                 + "AND AE.VALOR IN ('ACTIVA','OPERATIVA','PREOPERATIVA') "
-                + "UNION "
+                /*+ "UNION "
                 + "SELECT DISTINCT EM.SK_EMPRESA_CODE, EM.DESCRIPCION "
                 + "FROM NU_NUMERACION NU INNER JOIN SA.SK_EMPRESA EM ON NU.SK_EMPRESA_CODE=EM.SK_EMPRESA_CODE "
                 + "UNION "
                 + "SELECT EM.SK_EMPRESA_CODE, EM.DESCRIPCION "
                 + "FROM SA.SK_EMPRESA EM "
-                + "WHERE EM.SK_EMPRESA_CODE = 'C0159C' "
+                + "WHERE EM.SK_EMPRESA_CODE = 'C0159C' "*/
                 + ") ORDER BY DESCRIPCION");
         
         Query query = em.createNativeQuery(searchQuery.toString());
