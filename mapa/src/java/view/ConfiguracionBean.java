@@ -11,6 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ApplicationScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -26,6 +28,7 @@ public class ConfiguracionBean {
     private String rutaMapaSenalizacion;
     private String rutaMapaNumeracion;
     private String rutaCodigosLd;
+    private String tiempoSesion;
     /** Creates a new instance of ConfiguracionBean */
     public ConfiguracionBean() {
         
@@ -38,6 +41,7 @@ public class ConfiguracionBean {
             operadorNinguno = properties.getProperty("operadorNinguno");
             municipioNinguno = properties.getProperty("municipioNinguno");
             rutaContexto = properties.getProperty("rutaContexto");
+            tiempoSesion = properties.getProperty("tiempoSesion");
             
             rutaInicio = rutaContexto + "index.xhtml";
             rutaMapaSenalizacion = rutaContexto + "senalizacion.xhtml";
@@ -79,6 +83,14 @@ public class ConfiguracionBean {
 
     public String getRutaMapaNumeracion() {
         return rutaMapaNumeracion;
+    }
+
+    public String getTiempoSesion() {
+        return tiempoSesion;
+    }
+
+    public void setTiempoSesion(String tiempoSesion) {
+        this.tiempoSesion = tiempoSesion;
     }
 
 }

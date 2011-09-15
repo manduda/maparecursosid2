@@ -5,10 +5,14 @@
 package inicio;
 
 import facade.facade;
+import java.io.IOException;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.IdleEvent;
 import view.ConfiguracionBean;
 import vo.UsUsuariosVO;
 
@@ -70,6 +74,18 @@ public class InicioBean {
         
         return rutaContexto+"cerrar";
     }
+    
+    public void idleListener(IdleEvent event) throws IOException {  
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+
+        session.removeAttribute("UserBean");
+        session.invalidate();
+        
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String path = servletContext.getContextPath()+rutaContexto;
+        facesContext.getExternalContext().redirect(path+"cerrar.xhtml");
+    }  
     
     public String getMensaje() {
         return Mensaje;

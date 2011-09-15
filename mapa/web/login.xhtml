@@ -28,7 +28,7 @@
                 <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
             </p:dialog>
         </h:panelGroup>
-        <p:dialog id="resultadoLoginDialog" header="Iniciar Sesion" widgetVar="resultadoLoginDlg" modal="true" resizable="false" draggable="false">
+        <p:dialog id="resultadoLoginDialog" header="Iniciar Sesion" widgetVar="resultadoLoginDlg" modal="true" resizable="false" draggable="false" closable="false">
             <h:panelGrid id="datosResultadoLogin" style="text-align: center;" width="100%">
                 <h:outputText id="mensajeLogin" style="color:red" value="#{inicioBean.mensaje}" escape="false"/>
                 <p:button value="Aceptar"/>

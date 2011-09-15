@@ -18,12 +18,13 @@
             <ui:include src="header.xhtml"/>
             <ui:include src="menu.xhtml"/>
         </div>
+        <h:panelGroup id="pagina">
         <!-- Barra título -->
         <div id="titulo">
             <div style="float: right;" border="1">
                 
-                    <ui:include src="#{ConfiguracionBean.rutaContexto}login.xhtml"/>  
-                
+                <ui:include src="#{ConfiguracionBean.rutaContexto}login.xhtml"/>
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/controlSesion.xhtml"/>
 
                 <h:panelGroup rendered="#{UserBean.login}">
                     <h:panelGrid columns="2">
@@ -37,7 +38,6 @@
             <div><ui:insert name="titulo">Titulo</ui:insert></div>
         </div>
         <!-- Centro -->
-        <h:panelGroup id="pagina">
         <div id="container">
             <!-- Derecha -->
             <div id="right" >
