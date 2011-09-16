@@ -35,11 +35,11 @@ public class main {
         facade fachada = new facade();
        
         //----INICIO TRANSFERENCIA DE ----
-        boolean transferencia = false;
+        /*boolean transferencia = false;
         
         transferencia = fachada.transferirRecursos("017E", "1D", false, true, false, false);
         
-        System.out.println("Transferencia= "+transferencia);
+        System.out.println("Transferencia= "+transferencia);*/
         //----FIN TRANSFERENCIA DE RECURSOS----
         
         /*//----  CODIGOS LD
@@ -109,7 +109,7 @@ public class main {
         //-------------------------------------
         
         //----  USUARIO
-        /*UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
+        UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
         
         if (usuario != null){
             if (usuario.getUsnEstado() == 1){
@@ -119,7 +119,7 @@ public class main {
             }
         } else {
             System.out.println("Usuario o contraseña incorrectos");
-        }*/
+        }
         //-------------------------------------
         /*Class itemClass = null;
         itemClass = usuario.getClass();
