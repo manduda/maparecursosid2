@@ -7,6 +7,7 @@ package inicio;
 import facade.facade;
 import java.io.IOException;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -21,7 +22,7 @@ import vo.UsUsuariosVO;
  * @author miguel.duran
  */
 @ManagedBean(name = "inicioBean")
-@RequestScoped
+@ApplicationScoped
 public class InicioBean {
     private String user;
     private String password;
@@ -33,17 +34,21 @@ public class InicioBean {
         ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
         rutaContexto = configuracion.getRutaContexto();
         // --------------------------------
+        user = "";
+        password = "";
     }
 
     public String validarUsuario() {
         if((user.equals("")) || (password.equals(""))){
-            Mensaje = "<br>Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios<br><br>";
+            Mensaje = "<br><font color=\"red\">Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios</font><br><br>";
             return rutaContexto+"resultadoLogin"; 
         }
         
         facade fachada = new facade();
         UsUsuariosVO userVO = null;
         userVO = fachada.iniciarSesion(user, password);
+        user = "";
+        password = "";
 
         if (userVO != null){
             userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
@@ -92,6 +97,7 @@ public class InicioBean {
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
         String path = servletContext.getContextPath()+rutaContexto;
         facesContext.getExternalContext().redirect(path+"resultadoLogin.xhtml");
+        Mensaje = "<br>Sesión cerrada automáticamente por inactividad<br><br>";
     }  
     
     public String getMensaje() {

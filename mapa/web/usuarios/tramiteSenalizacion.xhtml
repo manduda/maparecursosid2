@@ -14,74 +14,33 @@
                 </h:panelGrid>
                 <p:dataTable value="#{TramiteBean.selectedTramite.tsTramiteSenalizacionCollection}"
                              var="tramiteSenalizacion" style="font-size:7px" styleClass="order-table">
-                    <p:columnGroup type="header">  
-                        <p:row>  
-                            <p:column colspan="6" headerText="RECURSO" style="font-weight: bold; font-size:8px;"/>  
-                            <p:column colspan="9" headerText="TRÁMITE" style="font-weight: bold; font-size:8px;"/>  
-                        </p:row>
-                        <p:row>
-                            <p:column headerText="SEÑALIZACION" />
-                            <p:column headerText="MUNICIPIO" />
-                            <p:column headerText="OPERADOR" />
-                            <p:column headerText="NOMBRE NODO" />
-                            <p:column headerText="MARCA/MODELO" />
-                            <p:column headerText="DIRECCIÓN" />
-                            <p:column headerText="ACCIÓN" />
-                            <p:column headerText="RADICADO" />
-                            <p:column headerText="MUNICIPIO" />
-                            <p:column headerText="OPERADOR" />
-                            <p:column headerText="NOMBRE NODO" />
-                            <p:column headerText="MARCA/MODELO" />
-                            <p:column headerText="DIRECCIÓN" />
-                            <p:column headerText="OBSERVACIONES" />
-                            <p:column headerText="" />
-                        </p:row>
-                    </p:columnGroup>
-
-                    <p:column>
+                    <p:column style="width:16px">  
+                        <p:rowToggler />  
+                    </p:column>
+                    <p:column headerText="SEÑALIZACION">
                         <h:outputText value="#{tramiteSenalizacion.senCodigo.renCodigo.retNombre} - #{tramiteSenalizacion.senCodigo.senZona} - #{tramiteSenalizacion.senCodigo.senPs}"/>
                     </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.senCodigo.codigoMunicipio.nombreMunicipio}"/>
-                        <br/>
-                        <h:outputText value="(#{tramiteSenalizacion.senCodigo.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.senCodigo.emrCodigo.emtNombre}"/>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.senCodigo.setNombreNodo}"/>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.senCodigo.setMarcaModelo}"/>
-                    </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.senCodigo.setDireccion}"/>
-                    </p:column>
-                    <p:column>
+                    <p:column headerText="ACCIÓN">
                         <h:outputText value="#{tramiteSenalizacion.acnCodigo.actNombre}" style="font-weight: bold;"/>
                     </p:column>
-                    <p:column>
+                    <p:column headerText="RADICADO">
                         <h:outputText value="#{tramiteSenalizacion.tsnRadicado}"/>
                     </p:column>
-                    <p:column>
+                    <p:column headerText="MUNICIPIO">
                         <h:outputText value="#{tramiteSenalizacion.codigoMunicipio.nombreMunicipio}"/>
                         <br/>
                         <h:outputText value="(#{tramiteSenalizacion.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
                     </p:column>
-                    <p:column>
-                        <h:outputText value="#{tramiteSenalizacion.emrCodigo.emtNombre}"/>
-                    </p:column>
-                    <p:column>
+                    <p:column headerText="NOMBRE NODO">
                         <h:outputText value="#{tramiteSenalizacion.tstNombreNodo}"/>
                     </p:column>
-                    <p:column>
+                    <p:column headerText="MARCA/MODELO">
                         <h:outputText value="#{tramiteSenalizacion.tstMarcaModelo}"/>
                     </p:column>
-                    <p:column>
+                    <p:column headerText="DIRECCIÓN">
                         <h:outputText value="#{tramiteSenalizacion.tstDireccion}"/>
                     </p:column>
-                    <p:column>
+                    <p:column headerText="OBSERVACIONES">
                         <h:outputText value="#{tramiteSenalizacion.tstObservaciones}"/>
                     </p:column>
                     <p:column>
@@ -90,6 +49,30 @@
                             <h:graphicImage url="/resources/images/eliminar.png" style="border:0px"/>
                         </p:commandLink>
                     </p:column>
+                    <p:rowExpansion>
+                        <br/>
+                        <h:panelGrid columns="2" style="width:50%;" styleClass="ui-widget-content">
+                            <f:facet name="header">  
+                                <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="ESTADO" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.esnCodigo.estNombre}"/>
+                            <h:outputText value="MUNICIPIO" style="font-weight: bold;"/>
+                            <h:panelGroup>
+                                <h:outputText value="#{tramiteSenalizacion.senCodigo.codigoMunicipio.nombreMunicipio}"/>
+                                <h:outputText value=" (#{tramiteSenalizacion.senCodigo.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
+                            </h:panelGroup>
+                            <h:outputText value="OPERADOR" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.emrCodigo.emtNombre}"/>
+                            <h:outputText value="NOMBRE NODO" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.setNombreNodo}"/>
+                            <h:outputText value="MARCA/MODELO" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.setMarcaModelo}"/>
+                            <h:outputText value="DIRECCIÓN" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.setDireccion}"/>
+                        </h:panelGrid>
+                        <br/>
+                    </p:rowExpansion>
                 </p:dataTable>
             </h:panelGrid>
         </h:panelGroup>

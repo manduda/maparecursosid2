@@ -51,8 +51,8 @@ public class TramiteBean {
     private Collection<SelectItem> listaTramites;
     private Collection<SelectItem> listaDepartamento;
     private Collection<SelectItem> listaMunicipio;
-    private String departamento;
-    private String municipio;
+    private String seleccionDepartamento;
+    private String seleccionMunicipio;
     private Integer tramiteAgregarRecurso;
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
@@ -73,6 +73,7 @@ public class TramiteBean {
     private Boolean opcionIin;
     private Boolean opcionMnc;
     boolean tramiteTieneDetalle;
+    private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
 
 
     /** Creates a new instance of TramiteBean */
@@ -96,7 +97,7 @@ public class TramiteBean {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorSenalizacion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
-            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
         }
@@ -353,17 +354,29 @@ public class TramiteBean {
             String nombreNodo = "";
             String marcaModelo = "";
             String direccion = "";
-            String observaciones = "";
+            String observaciones = this.observacionesAgregarRecurso;
             Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
 
             switch(codigoAccion){
+                case 2: //Preasignar
+                    municipio.setCodigoMunicipio(tramiteSenalizacionVO.getCodigoMunicipio().getCodigoMunicipio());
+                    for (TrTramitesVO detalleVO : tramites) {
+                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                            break;
+                        }
+                    }
+                    nombreNodo = tramiteSenalizacionVO.getTstNombreNodo();
+                    marcaModelo = tramiteSenalizacionVO.getTstMarcaModelo();
+                    direccion = tramiteSenalizacionVO.getTstObservaciones();
+                    break;
                 case 5: //Recuperar
                     municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
                     operador.setEmrCodigo(operadorNinguno);
                     nombreNodo = "";
                     marcaModelo = "";
                     direccion = "";
-                    observaciones = this.observacionesAgregarRecurso;
+                    
                     break;
             }
 
@@ -379,7 +392,7 @@ public class TramiteBean {
             vo.setTstObservaciones(observaciones);
             
             resultado = fachada.agregarRecurso(vo);
-            
+            tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
         }
         
         switch(resultado){
@@ -398,6 +411,12 @@ public class TramiteBean {
                 break;
             case 4:
                 mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>El recurso ya tiene un trámite asociado.<br><br>";
+                break;
+            case 5:
+                mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>El recurso debe tener estado \"ASIGNADO\".<br><br>";
+                break;
+            case 6:
+                mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>El recurso debe tener estado \"LIBRE\".<br><br>";
                 break;
         }
         
@@ -470,16 +489,34 @@ public class TramiteBean {
         }
     }
     
-    public void cambiarDepartamento() {
-        facade fachada = new facade();
+    public void opcionesPreasignar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        String codigoDepartamento = facesContext.getExternalContext().getRequestParameterValuesMap().get("departamento")[0].toString();
+        
+        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
+        
+        if(tipoRecurso.equals("senalizacion")){
+            SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+            seleccionDepartamento = sen.getSelectedSen().getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
+            cambiarDepartamento();
+            MunicipiosVO municipio = new MunicipiosVO();
+            municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
+            tramiteSenalizacionVO.setCodigoMunicipio(municipio);
+        }
+
+        
+    }
+    
+    public void cambiarDepartamento() {
+        facade fachada = new facade();
+        //FacesContext facesContext = FacesContext.getCurrentInstance();
+        //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        //String codigoDepartamento = facesContext.getExternalContext().getRequestParameterValuesMap().get("departamento")[0].toString();
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(codigoDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
         } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
            
     }
@@ -506,17 +543,15 @@ public class TramiteBean {
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Transferencia de recursos", e);
         }
-        return "/usuarios/transferenciaRecursos";
+        return rutaContexto+"usuarios/transferenciaRecursos";
     }
    
     public String transferirRecursos() {
         boolean transferencia;
-        if(operadorOrigen.equals("-1") || operadorDestino.equals("-1"))
-        {
+        if(operadorOrigen.equals("-1") || operadorDestino.equals("-1")) {
             mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>Debes seleccionar operador origen y operador destino<br><br>";
             return null;
         }
-
 
         if(operadorOrigen.equals(operadorDestino)){
             mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>El operador origen y el operador destino deben ser diferentes<br><br>";
@@ -533,13 +568,6 @@ public class TramiteBean {
         mensajeTransferirRecursos = "";
         
         transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc);
-        
-        /*System.out.println(
-                "numeración: "+numeracion+
-                "Señalización: "+senalizacion+
-                "IIN: "+iin+
-                "MNC: "+mnc
-                );*/
        
         if (transferencia){
             mensajeTransferirRecursos = "<br><b>Recursos transferidos exitosamente.</b><br>";
@@ -790,12 +818,6 @@ public class TramiteBean {
         this.opcionSenalizacion = opcionSenalizacion;
     }
 
-
-
-
-    
-    
-    
     public Collection<SelectItem> getListaDepartamento() {
         return listaDepartamento;
     }
@@ -812,20 +834,28 @@ public class TramiteBean {
         this.listaMunicipio = listaMunicipio;
     }
 
-    public String getDepartamento() {
-        return departamento;
+    public String getSeleccionDepartamento() {
+        return seleccionDepartamento;
     }
 
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
+    public void setSeleccionDepartamento(String seleccionDepartamento) {
+        this.seleccionDepartamento = seleccionDepartamento;
     }
 
-    public String getMunicipio() {
-        return municipio;
+    public String getSeleccionMunicipio() {
+        return seleccionMunicipio;
     }
 
-    public void setMunicipio(String municipio) {
-        this.municipio = municipio;
+    public void setSeleccionMunicipio(String seleccionMunicipio) {
+        this.seleccionMunicipio = seleccionMunicipio;
     }
-    
+
+    public TsTramiteSenalizacionVO getTramiteSenalizacionVO() {
+        return tramiteSenalizacionVO;
+    }
+
+    public void setTramiteSenalizacionVO(TsTramiteSenalizacionVO tramiteSenalizacionVO) {
+        this.tramiteSenalizacionVO = tramiteSenalizacionVO;
+    }
+
 }
