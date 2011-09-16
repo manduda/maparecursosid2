@@ -10,16 +10,15 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGroup>
+        <h:panelGroup rendered="#{!empty inicioBean.mensaje}">
             <h:panelGrid width="100%">
                 <br/><br/><br/>
-                <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto; min-width: 300px;" cellspacing="0" cellpadding="0">
                     <h:panelGrid style="border-bottom: 1px solid; background:#acbece" width="100%">
                         <h:outputText value="Resultado" style="font-weight: bold;"/>
                     </h:panelGrid>
                     <h:panelGrid width="100%">
-                        <h:outputText value="Sesión cerrada" escape="false" rendered="#{!UserBean.login}"/>
-                        <h:outputText value="Sesión iniciada" escape="false" rendered="#{UserBean.login}"/>
+                        <h:outputText value="#{inicioBean.mensaje}" escape="false"/>
                     </h:panelGrid>
                 </h:panelGrid>
                 <br/><br/><br/>

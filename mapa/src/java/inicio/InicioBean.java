@@ -36,6 +36,11 @@ public class InicioBean {
     }
 
     public String validarUsuario() {
+        if((user.equals("")) || (password.equals(""))){
+            Mensaje = "<br>Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios<br><br>";
+            return rutaContexto+"resultadoLogin"; 
+        }
+        
         facade fachada = new facade();
         UsUsuariosVO userVO = null;
         userVO = fachada.iniciarSesion(user, password);
@@ -50,19 +55,21 @@ public class InicioBean {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
                 HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
                 facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
-                Mensaje = "<br>Sesión iniciada<br><br>";
-                return null;
+                Mensaje = "<br>Sesión iniciada<br><br>"
+                        + "Bienvenido " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
+                        + "Tipo de usuario: <b>" + userVO.getTunCodigo().getTutNombre() + "</b><br><br>";
+                //return "cerrar";
             } else {
                 //Usuario está deshabilitado
                 Mensaje = "<br>Usuario " + userVO.getCodigoSIUST().getLogin() + " está deshabilitado<br><br>";
-                return null;
+                //return null;
             }
         } else {
             //Usuario o contraseña incorrectos
             Mensaje = "<br>Nombre de usuario o contraseña incorrectos<br><br>";
-            return null;
+            //return null;
         }
-        
+        return rutaContexto+"resultadoLogin";
     }
 
     public String cerrarSesion() {
@@ -71,8 +78,8 @@ public class InicioBean {
 
         session.removeAttribute("UserBean");
         session.invalidate(); 
-        
-        return rutaContexto+"cerrar";
+        Mensaje = "<br>Sesión cerrada correctamente<br><br>";
+        return rutaContexto+"resultadoLogin";
     }
     
     public void idleListener(IdleEvent event) throws IOException {  
@@ -84,7 +91,7 @@ public class InicioBean {
         
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
         String path = servletContext.getContextPath()+rutaContexto;
-        facesContext.getExternalContext().redirect(path+"cerrar.xhtml");
+        facesContext.getExternalContext().redirect(path+"resultadoLogin.xhtml");
     }  
     
     public String getMensaje() {

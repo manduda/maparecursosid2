@@ -20,20 +20,20 @@
                         <h:inputText value="#{inicioBean.password}" size="15" maxlength="15"/>
                     </h:panelGrid>
                     <h:panelGrid width="100%" style="text-align: center;">
-                        <p:commandButton value="Iniciar Sesión" actionListener="#{inicioBean.validarUsuario}" update="datosResultadoLogin" oncomplete="loginDlg.hide();resultadoLoginDlg.show();statusLoginDialog.hide();" ajax="true" onclick="statusLoginDialog.show();" />
+                        <p:commandButton value="Iniciar Sesión" action="#{inicioBean.validarUsuario}" onclick="loginDlg.hide();statusLoginDialog.show();" oncomplete="statusLoginDialog.hide();" ajax="false"/>
                     </h:panelGrid>
                 </h:form>
             </p:dialog>
-            <p:dialog modal="true" widgetVar="statusLoginDialog" header="Procesando" draggable="false" closable="false">
-                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+            <p:dialog modal="true" widgetVar="statusLoginDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
             </p:dialog>
+            
         </h:panelGroup>
-        <p:dialog id="resultadoLoginDialog" header="Iniciar Sesion" widgetVar="resultadoLoginDlg" modal="true" resizable="false" draggable="false" closable="false">
-            <h:panelGrid id="datosResultadoLogin" style="text-align: center;" width="100%">
-                <h:outputText id="mensajeLogin" style="color:red" value="#{inicioBean.mensaje}" escape="false"/>
-                <p:button value="Aceptar"/>
-            </h:panelGrid>
-        </p:dialog>
+        
         
     </ui:composition>
 </html>
