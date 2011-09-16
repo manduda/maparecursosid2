@@ -220,6 +220,7 @@ public class TrTramitesService {
          * 3: El operador del recurso es diferente al del trámite
          * 4: El recurso ya tiene un tramite
          * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
         */
         
         if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getSenCodigo().getSenCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getCodigoMunicipio().getCodigoMunicipio().equals(""))||(vo.getEmrCodigo().getEmrCodigo().equals(""))){
@@ -249,6 +250,15 @@ public class TrTramitesService {
             case 1: //LIBERAR
                 break;
             case 2: //PREASIGNAR
+                if(senalizacion.getEsnCodigo().getEsnCodigo()!=1){ // El estado de la señalización no es libre
+                    return 6;
+                }
+                municipio.setCodigoMunicipio(vo.getCodigoMunicipio().getCodigoMunicipio());
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                nombreNodo = vo.getTstNombreNodo();
+                marcaModelo = vo.getTstMarcaModelo();
+                direccion = vo.getTstDireccion();
+                
                 break;
             case 3: //ASIGNAR
                 break;
