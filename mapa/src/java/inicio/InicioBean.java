@@ -61,7 +61,7 @@ public class InicioBean {
                 HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
                 facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
                 Mensaje = "<br>Sesión iniciada<br><br>"
-                        + "Bienvenido " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
+                        + "Bienvenid@ " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
                         + "Tipo de usuario: <b>" + userVO.getTunCodigo().getTutNombre() + "</b><br><br>";
                 //return "cerrar";
             } else {

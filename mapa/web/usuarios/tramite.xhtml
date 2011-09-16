@@ -49,12 +49,12 @@
                     
                     <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
                     <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
-                        <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
                     </p:dialog>
                     
                     
                     <!-- HISTORIA TRAMITE -->
-                    <ui:include src="/usuarios/tramiteHistoria.xhtml"/>
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteHistoria.xhtml"/>
                     <br/>
                     <h:panelGroup id="pgAccionTramite">
                     <h:panelGrid columns="12">
@@ -97,12 +97,35 @@
                             </p:confirmDialog>
                         </h:panelGroup>
                         
+                        <!-- TERMINAR TRAMITE --> 
+                        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+                            <p:commandButton value="Terminar trámite" onclick="dialogTerminar.show()"/>
+                            <p:dialog header="Datos de terminación del trámite" widgetVar="dialogTerminar" resizable="false" modal="true" draggable="false"
+                                width="300" showEffect="fade" hideEffect="fade" position="center">
+                                <h:panelGrid width="100%" style="font-size: 10px;" >
+                                        <h:panelGrid width="100%" cellpadding="0" cellspacing="0">
+                                            <h:panelGrid columns="2">
+                                                <h:outputText value="Número de resolución:&#160;" style="font-weight: bold;"/>
+                                                <h:inputText/>
+                                                <h:outputText value="Fecha de resolución:&#160;" style="font-weight: bold;"/>
+                                                <h:inputText/>
+                                            </h:panelGrid>
+                                        </h:panelGrid>
+                                        <br/>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Aceptar" ajax="false"/>
+                                            <p:commandButton value="Cancelar" onclick="dialogTerminar.hide();"/>
+                                        </h:panelGrid>
+                                 </h:panelGrid>
+                            </p:dialog>
+                        </h:panelGroup>
+                        
                     </h:panelGrid>
                     </h:panelGroup>
                     <br/>
-                    <ui:include src="/usuarios/tramiteSenalizacion.xhtml"/>
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteSenalizacion.xhtml"/>
                     <br/>
-                    <ui:include src="/usuarios/tramiteCodigosLd.xhtml"/>
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosLd.xhtml"/>
                 </h:panelGroup>
             </h:form>
         </h:panelGroup>
