@@ -14,7 +14,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.IdleEvent;
-import view.ConfiguracionBean;
 import vo.UsUsuariosVO;
 
 /**
@@ -22,7 +21,7 @@ import vo.UsUsuariosVO;
  * @author miguel.duran
  */
 @ManagedBean(name = "inicioBean")
-@ApplicationScoped
+@RequestScoped
 public class InicioBean {
     private String user;
     private String password;

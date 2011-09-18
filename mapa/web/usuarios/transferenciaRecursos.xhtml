@@ -12,6 +12,15 @@
     </ui:define>
 
     <ui:define name="content">
+        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo != 1}">
+            <h:panelGrid width="100%">
+                <br/><br/><br/>
+                <h:panelGrid style="text-align: center; margin: 0px auto; color: red; font-weight: bold" >
+                        <h:outputText value="No tienes permiso para acceder a esta sección"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGroup>
+        
         <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
             <h:form>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeTransferirRecursos == '')}">

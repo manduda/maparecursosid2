@@ -4,11 +4,13 @@
  */
 package view;
 
+import inicio.ConfiguracionBean;
 import entities.SeSenalizacion;
 import facade.facade;
 import helper.ConvertirListasHelper;
 import inicio.LoginFilter;
 import inicio.UserBean;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -39,7 +41,7 @@ import vo.UsUsuariosVO;
  */
 @ManagedBean(name = "TramiteBean")
 @SessionScoped
-public class TramiteBean {
+public class TramiteBean implements Serializable {
     private String rutaContexto;
     private String operadorNinguno;
     private String municipioNinguno;
@@ -56,12 +58,12 @@ public class TramiteBean {
     private Integer tramiteAgregarRecurso;
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
-    private String mensajeCrearTramite;
-    private String mensajeTramite;
-    private String mensajeRecurso;
-    private String mensajeTransferirRecursos;
-    private String radicadoAgregarRecurso;
-    private String observacionesAgregarRecurso;
+    private String mensajeCrearTramite = "";
+    private String mensajeTramite = "";
+    private String mensajeRecurso = "";
+    private String mensajeTransferirRecursos = "";
+    private String radicadoAgregarRecurso = "";
+    private String observacionesAgregarRecurso = "";
     private Integer tipoUsuario = 0;
     private Integer codigoDetalleTramite = 0;
     private Boolean seleccionNumeracion;
@@ -95,7 +97,7 @@ public class TramiteBean {
         
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaOperador = convertir.createSelectItemsList(fachada.listaOperadorSenalizacion(), "getEmrCodigo", null, "getEmtNombre", true, "");
+            listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
         } catch (Exception e) {
@@ -344,7 +346,7 @@ public class TramiteBean {
         
         if(tipoRecurso.equals("senalizacion")){
             TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
-            SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+            SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
             
             SeSenalizacionVO senalizacion = new SeSenalizacionVO();
             senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
@@ -496,7 +498,7 @@ public class TramiteBean {
         String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
         
         if(tipoRecurso.equals("senalizacion")){
-            SenalizacionBean sen = (SenalizacionBean) session.getAttribute("SenalizacionBean");
+            SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
             seleccionDepartamento = sen.getSelectedSen().getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
             cambiarDepartamento();
             MunicipiosVO municipio = new MunicipiosVO();
@@ -575,7 +577,7 @@ public class TramiteBean {
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("NumeracionBean");
             }
             if(seleccionSenalizacion){
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("SenalizacionBean");
+                //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("SenalizacionBean");
             }
             /*if(seleccionIin){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("IinBean");
@@ -610,7 +612,6 @@ public class TramiteBean {
         }
             
     }
-
 
     public boolean isTramiteTieneDetalle() {
         boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();

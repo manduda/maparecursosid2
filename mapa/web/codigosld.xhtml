@@ -18,10 +18,10 @@
                              selectionMode="single" style="font-size:10px"
                              emptyMessage="No se encontraron códigos de larga distancia" >
                     <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
-                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}">
+                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}" style="width:100px">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
                     </p:column>
-                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}"
+                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}" style="width:150px"
                               filterOptions="#{codigosLdBean.listaEstado}" filterMatchMode="exact">
                         <h:outputText value="#{ld.esnCodigo.estNombre}"/>
                     </p:column>
@@ -30,8 +30,12 @@
                     </p:column>
                 </p:dataTable>
                 <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-                <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
-                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                    <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                        <h:panelGrid width="100%">
+                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                        </h:panelGrid>
+                    </h:panelGrid>
                 </p:dialog>
             </h:panelGrid>
         </h:form>

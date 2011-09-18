@@ -8,6 +8,10 @@
         <param-name>primefaces.THEME</param-name>  
         <param-value>glass-x</param-value>
     </context-param>
+    <context-param>
+        <param-name>facelets.LIBRARIES</param-name>
+        <param-value>/WEB-INF/functions.taglib.xml</param-value>
+    </context-param>
     <filter>
         <description>Require that the user log in before accessing any page other than the entry pages</description>
         <filter-name>LoginFilter</filter-name>
@@ -29,10 +33,24 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
     <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
+        <session-timeout>10</session-timeout>
     </session-config>
+    <error-page>
+        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
+        <location>/sessionExpired.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
+        <location>/index.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/index.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.xhtml</location>
+    </error-page>
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>

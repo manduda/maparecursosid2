@@ -21,16 +21,16 @@
         <h:panelGroup id="pagina">
         <!-- Barra título -->
         <div id="titulo">
-            <div style="float: right;" border="1">
+            <div style="float: right;">
                 
                 <ui:include src="#{ConfiguracionBean.rutaContexto}login.xhtml"/>
-                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/controlSesion.xhtml"/>
 
                 <h:panelGroup rendered="#{UserBean.login}">
-                    <h:panelGrid columns="2">
-                        <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}" style="font-weight: bold"/>
+                    <h:panelGrid cellpadding="0" cellspacing="0">
                         <h:form id="cerrar">
-                            <h:commandLink value="[Cerrar sesión]" action="#{inicioBean.cerrarSesion}" />
+                            <h:commandLink action="#{inicioBean.cerrarSesion}" >
+                                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/logout.png" style="border:0px"/>
+                            </h:commandLink>
                         </h:form>
                     </h:panelGrid>
                 </h:panelGroup>
@@ -41,11 +41,8 @@
         <div id="container">
             <!-- Derecha -->
             <div id="right" >
-                
                 <h:panelGroup id="pgMenuTramite" rendered="#{UserBean.login}">
-                    <div>
-                         <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/menu_tramites.xhtml"/>
-                    </div>
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/menuDerecha.xhtml"/>
                 </h:panelGroup>
             </div>
             <!-- Contenido -->

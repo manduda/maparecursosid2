@@ -4,44 +4,49 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGrid>
-            <p:commandLink value="Ver Historia trámite" onclick="dialogHistoria.show()"/>
-            <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center">
-                <h:dataTable value="#{TramiteBean.selectedTramite.gtGetionTramiteCollection}"
-                             var="selTramite" border="1" style="font-size:9px" width="100%"
-                             styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="FECHA"/>
-                        </f:facet>
-                        <h:outputText value="#{selTramite.gtfFecha}">
-                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
-                        </h:outputText>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="ESTADO"/>
-                        </f:facet>
-                        <h:outputText value="#{selTramite.etnCodigo.ettNombre}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="USUARIO"/>
-                        </f:facet>
-                        <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="ROL"/>
-                        </f:facet>
-                        <h:outputText value="#{selTramite.usnCodigo.tunCodigo.tutNombre}"/>
-                    </h:column>
-                </h:dataTable>
-            </p:dialog>
-        </h:panelGrid>
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteHistoria.xhtml')}">
+            <h:panelGrid>
+                <h:form>
+                <p:commandLink value="Ver Historia trámite" onclick="dialogHistoria.show()"/>
+                <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
+                          width="500" showEffect="fade" hideEffect="fade" position="center">
+                    <h:dataTable value="#{TramiteBean.selectedTramite.gtGetionTramiteCollection}"
+                                 var="selTramite" border="1" style="font-size:9px" width="100%"
+                                 styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="FECHA"/>
+                            </f:facet>
+                            <h:outputText value="#{selTramite.gtfFecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="ESTADO"/>
+                            </f:facet>
+                            <h:outputText value="#{selTramite.etnCodigo.ettNombre}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="USUARIO"/>
+                            </f:facet>
+                            <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="ROL"/>
+                            </f:facet>
+                            <h:outputText value="#{selTramite.usnCodigo.tunCodigo.tutNombre}"/>
+                        </h:column>
+                    </h:dataTable>
+                </p:dialog>
+                </h:form>
+            </h:panelGrid>
+        </h:panelGroup>
     </ui:composition>
 </html>
 

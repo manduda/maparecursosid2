@@ -4,57 +4,59 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGrid id="pgTramiteCodigosLd" width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
-                     rendered="#{!empty TramiteBean.selectedTramite.tlTramiteLdCollection}">
-            <h:panelGrid width="100%" styleClass="tabla-encabezado">
-                <h:outputText value="TRÁMITE CÓDIGO LD" style="font-size:11px; font-weight: bold;"/>
-            </h:panelGrid>
-            <p:dataTable value="#{TramiteBean.selectedTramite.tlTramiteLdCollection}"
-                         var="tramiteLD" style="font-size:9px" styleClass="order-table" >
-                <p:columnGroup type="header">  
-                    <p:row>  
-                        <p:column colspan="2" headerText="RECURSO" style="font-weight: bold;"/>  
-                        <p:column colspan="4" headerText="TRÁMITE" style="font-weight: bold;"/>  
-                    </p:row>
-                    <p:row>  
-                        <p:column headerText="CÓDIGO LD" />
-                        <p:column headerText="OPERADOR" />
-                        <p:column headerText="ACCIÓN" />
-                        <p:column headerText="RADICADO" />
-                        <p:column headerText="OBSERVACIONES" />
-                        <p:column headerText="" />
-                    </p:row>
-                </p:columnGroup>
-                
-                <p:column>
-                    <h:outputText value="#{tramiteLD.clnCodigo.clnCodigoLd}"/>
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{tramiteLD.emrCodigo.emtNombre}"/>
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{tramiteLD.acnCodigo.actNombre}"/>
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{tramiteLD.tlnRadicado}"/>
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{tramiteLD.tltObservaciones}"/>
-                </p:column>
-                <p:column>
-                    <p:commandLink>
-                        <f:param name="codigoDetalleTramite" value="#{tramiteLD.clnCodigo}" />
-                        <h:graphicImage url="/resources/images/eliminar.png"/>
-                    </p:commandLink>
-                </p:column>
-                
-                
-                
-                
-                
-            </p:dataTable>
-        </h:panelGrid>
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteCodigosLd.xhtml')}">
+            <h:panelGroup id="pgTramiteCodigosLd">
+                <h:form>
+                <h:panelGrid id="pgTramiteCodigosLd" width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
+                             rendered="#{!empty TramiteBean.selectedTramite.tlTramiteLdCollection}">
+                    <h:panelGrid width="100%" styleClass="tabla-encabezado">
+                        <h:outputText value="TRÁMITE CÓDIGO LD" style="font-size:11px; font-weight: bold;"/>
+                    </h:panelGrid>
+                    <p:dataTable value="#{TramiteBean.selectedTramite.tlTramiteLdCollection}"
+                                 var="tramiteLD" style="font-size:9px" styleClass="order-table" >
+                        <p:columnGroup type="header">  
+                            <p:row>  
+                                <p:column colspan="2" headerText="RECURSO" style="font-weight: bold;"/>  
+                                <p:column colspan="4" headerText="TRÁMITE" style="font-weight: bold;"/>  
+                            </p:row>
+                            <p:row>  
+                                <p:column headerText="CÓDIGO LD" />
+                                <p:column headerText="OPERADOR" />
+                                <p:column headerText="ACCIÓN" />
+                                <p:column headerText="RADICADO" />
+                                <p:column headerText="OBSERVACIONES" />
+                                <p:column headerText="" />
+                            </p:row>
+                        </p:columnGroup>
+
+                        <p:column>
+                            <h:outputText value="#{tramiteLD.clnCodigo.clnCodigoLd}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tramiteLD.emrCodigo.emtNombre}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tramiteLD.acnCodigo.actNombre}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tramiteLD.tlnRadicado}"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tramiteLD.tltObservaciones}"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandLink>
+                                <f:param name="codigoDetalleTramite" value="#{tramiteLD.clnCodigo}" />
+                                <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                </h:form>
+            </h:panelGroup>
+        </h:panelGroup>
     </ui:composition>
 </html>

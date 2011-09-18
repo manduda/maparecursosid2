@@ -6,6 +6,7 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import vo.ClCodigosLdVO;
 import vo.EsEstadoVO;
@@ -22,8 +24,8 @@ import vo.EsEstadoVO;
  * @author juan.loaiza
  */
 @ManagedBean(name = "codigosLdBean")
-@RequestScoped
-public class CodigosLdBean {
+@ViewScoped
+public class CodigosLdBean implements Serializable {
     private List<ClCodigosLdVO> CoLD = new ArrayList<ClCodigosLdVO>();
     private SelectItem[] listaEstado;
 

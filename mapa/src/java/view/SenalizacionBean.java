@@ -6,6 +6,7 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
 import vo.DepartamentosVO;
@@ -29,8 +31,8 @@ import vo.SeSenalizacionVO;
  * @author miguel.duran
  */
 @ManagedBean(name = "SenalizacionBean")
-@SessionScoped
-public class SenalizacionBean {
+@ViewScoped
+public class SenalizacionBean implements Serializable {
     private List<SeSenalizacionVO> sen = null;//new ArrayList<NuNumeracionVO>();
     private Collection<SelectItem> listaRegionSenalizacion;
     private Collection<SelectItem> listaZona;

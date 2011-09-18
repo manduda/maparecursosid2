@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/error.css" rel="stylesheet" type="text/css" />
+        <title>Página no encontrada</title>
+    </h:head>
+    <h:body>
+        <div id="main">
+            <h:panelGrid width="100%">
+                <h:panelGrid style="margin: 0 auto;">
+                    <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/logo.png" />
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <h1>Página no encontrada.</h1>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <h:panelGroup>
+                        <h:outputText value="La página que está buscando puede que se haya eliminado, haya cambiado de nombre, o no esté disponible temporalmente.:"/>
+                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}index.xhtml">
+                            <h:outputText value=" Ir a la página de inicio"/>
+                        </h:outputLink>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:body>
+</html>
+

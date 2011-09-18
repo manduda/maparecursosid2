@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="refresh" content="3; url=#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}index.xhtml"/>
+        <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/error.css" rel="stylesheet" type="text/css" />
+        <title>Sesión expirada</title>
+    </h:head>
+
+    <h:body>
+        <div id="main">
+            <h:panelGrid width="100%">
+                <h:panelGrid style="margin: 0 auto;">
+                    <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/logo.png" />
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <h1>Sesión expirada.</h1>
+                </h:panelGrid>
+                <h:panelGrid style="margin: 0 auto;">
+                    <h:panelGroup>
+                        <h:outputText value="Tu sesión ha expirado por inactividad en el sistema. Serás redirigido a la página de inicio. Si esto no ocurre pulsa"/>
+                        <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}index.xhtml">
+                            <h:outputText value=" AQUÍ"/>
+                        </h:outputLink>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:panelGrid>
+        </div>
+    </h:body>
+</html>
+

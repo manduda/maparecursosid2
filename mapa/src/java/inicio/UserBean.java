@@ -6,6 +6,7 @@ package inicio;
 
 //import javax.faces.bean.ManagedBean;
 
+import java.io.Serializable;
 import vo.UsUsuariosVO;
 
 //import javax.faces.bean.SessionScoped;
@@ -16,7 +17,7 @@ import vo.UsUsuariosVO;
  */
 //@ManagedBean(name = "UserBean")
 //@SessionScoped
-public class UserBean {
+public class UserBean implements Serializable {
     private UsUsuariosVO userVO = null;
     private Boolean login = false;
 

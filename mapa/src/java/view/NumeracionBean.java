@@ -6,6 +6,7 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import org.primefaces.model.LazyDataModel;
@@ -29,8 +31,8 @@ import vo.NuNumeracionVO;
  * @author miguel.duran
  */
 @ManagedBean(name = "NumeracionBean")
-@SessionScoped
-public class NumeracionBean {
+@ViewScoped
+public class NumeracionBean implements Serializable {
 
 //    private List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
     private List<NuNumeracionVO> num = null;//new ArrayList<NuNumeracionVO>();

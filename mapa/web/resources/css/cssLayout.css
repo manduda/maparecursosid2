@@ -57,9 +57,9 @@
 
 #titulo {
     height: 25px;
-    
     width: 100%;
-    padding-top: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     margin: 5px auto 0px auto;
     font-weight: bold;
     border: 1px solid #acbece;

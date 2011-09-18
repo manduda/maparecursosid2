@@ -4,147 +4,147 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
-                  width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">  
-            <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;" width="100%">
-                <h:panelGrid columns="2" cellpadding="4" width="100%">
-                    <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
-                    <h:outputText value="Estado:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
-                    <h:outputText value="Operador:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
-                    <h:outputText value="Muncipio:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
-                    <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
-                    <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
-                    <h:outputText value="Dirección:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
-                    <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                    <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleSenalizacion.xhtml')}">
+            <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">  
+                <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:panelGrid columns="2" cellpadding="4" width="100%">
+                        <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
+                        <h:outputText value="Estado:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
+                        <h:outputText value="Operador:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
+                        <h:outputText value="Muncipio:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
+                        <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
+                        <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
+                        <h:outputText value="Dirección:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
+                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
+                    </h:panelGrid>
+                    <h:panelGrid width="100%" style="text-align: center;">
+                        <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
+                            <h:form>
+                            <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
+                            <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
+                                <f:param name="tipoRecurso" value="senalizacion"/>
+                            </p:commandButton>
+                            <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
+                            <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
+                            <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
+                            </h:form>
+                        </h:panelGroup>
+                    </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid width="100%" style="text-align: center;">
-                    <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
-                        <h:form>
-                        <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
-                        <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
-                            <f:param name="tipoRecurso" value="senalizacion"/>
-                        </p:commandButton>
-                        <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                        <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
-                        <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
-                        </h:form>
-                    </h:panelGroup>
+            </p:dialog>
+
+            <!-- MENÚ RECUPERAR --> 
+            <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+
+                <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
+                    <h:form>
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:outputText value="Trámite" style="font-weight: bold;"/>
+                            <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
+                                <f:selectItems value="#{TramiteBean.listaTramites}"/> 
+                            </h:selectOneMenu>
+                            <br/>
+                            <h:outputText value="Observaciones" style="font-weight: bold;"/>
+                            <h:inputTextarea value="#{TramiteBean.observacionesAgregarRecurso}" rows="5" cols="80"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="recuperarDialog.hide();resultadoAgregarDialog.show();">
+                                <f:param name="codigoAccion" value="5"/>
+                                <f:param name="tipoRecurso" value="senalizacion"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" onclick="recuperarDialog.hide();"/>
+                        </h:panelGrid>
+                    </h:form>
+                 </h:panelGrid>
+
+            </p:dialog>
+
+            <!-- MENÚ PREASIGNAR --> 
+            <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+                <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
+                    <h:form>
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:outputText value="Trámite" style="font-weight: bold;"/>
+                            <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
+                                <f:selectItems value="#{TramiteBean.listaTramites}"/> 
+                            </h:selectOneMenu>
+                            <br/>
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Departamento"/>
+                                <h:selectOneMenu value="#{TramiteBean.seleccionDepartamento}">
+                                    <f:selectItems value="#{TramiteBean.listaDepartamento}" />
+                                    <p:ajax update="tramiteMunicipio" listener="#{TramiteBean.cambiarDepartamento}" />
+                                </h:selectOneMenu>
+                                <h:outputText value="Municipio"/>
+                                <h:selectOneMenu id="tramiteMunicipio" value="#{TramiteBean.tramiteSenalizacionVO.codigoMunicipio.codigoMunicipio}">
+                                    <f:selectItems value="#{TramiteBean.listaMunicipio}" />  
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Nombre Nodo:&#160;" style="font-weight: bold;"/>
+                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstNombreNodo}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:outputText value="Observaciones" style="font-weight: bold;"/>
+                            <h:inputTextarea value="#{TramiteBean.observacionesAgregarRecurso}" rows="5" cols="80"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="preasignarDialog.hide();resultadoAgregarDialog.show();">
+                                <f:param name="codigoAccion" value="2"/>
+                                <f:param name="tipoRecurso" value="senalizacion"/>
+                            </p:commandButton>
+                            <p:commandButton value="Cancelar" onclick="preasignarDialog.hide();"/>
+                        </h:panelGrid>
+                    </h:form>
                 </h:panelGrid>
-            </h:panelGrid>
-        </p:dialog>
-        
-        <!-- MENÚ RECUPERAR --> 
-        <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                  width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
-            
-            <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
-                <h:form>
-                    <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
-                        </h:panelGrid>
-                        <br/>
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
-                            <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
-                        </h:panelGrid>
-                        <br/>
-                        <h:outputText value="Trámite" style="font-weight: bold;"/>
-                        <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
-                            <f:selectItems value="#{TramiteBean.listaTramites}"/> 
-                        </h:selectOneMenu>
-                        <br/>
-                        <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                        <h:inputTextarea value="#{TramiteBean.observacionesAgregarRecurso}" rows="5" cols="80"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="recuperarDialog.hide();resultadoAgregarDialog.show();">
-                            <f:param name="codigoAccion" value="5"/>
-                            <f:param name="tipoRecurso" value="senalizacion"/>
-                        </p:commandButton>
-                        <p:commandButton value="Cancelar" onclick="recuperarDialog.hide();"/>
-                    </h:panelGrid>
-                </h:form>
-             </h:panelGrid>
-            
-        </p:dialog>
-        
-        <!-- MENÚ PREASIGNAR --> 
-        <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                  width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
-            <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
-                <h:form>
-                    <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
-                        </h:panelGrid>
-                        <br/>
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
-                            <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
-                        </h:panelGrid>
-                        <br/>
-                        <h:outputText value="Trámite" style="font-weight: bold;"/>
-                        <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
-                            <f:selectItems value="#{TramiteBean.listaTramites}"/> 
-                        </h:selectOneMenu>
-                        <br/>
-                        <h:panelGrid columns="2">
-                            <h:outputText value="Departamento"/>
-                            <h:selectOneMenu value="#{TramiteBean.seleccionDepartamento}">
-                                <f:selectItems value="#{TramiteBean.listaDepartamento}" />
-                                <p:ajax update="tramiteMunicipio" listener="#{TramiteBean.cambiarDepartamento}" />
-                            </h:selectOneMenu>
-                            <h:outputText value="Municipio"/>
-                            <h:selectOneMenu id="tramiteMunicipio" value="#{TramiteBean.tramiteSenalizacionVO.codigoMunicipio.codigoMunicipio}">
-                                <f:selectItems value="#{TramiteBean.listaMunicipio}" />  
-                            </h:selectOneMenu>
-                        </h:panelGrid>
-                        <br/>
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputText value="Nombre Nodo:&#160;" style="font-weight: bold;"/>
-                            <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstNombreNodo}"/>
-                        </h:panelGrid>
-                        <br/>
-                        <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                        <h:inputTextarea value="#{TramiteBean.observacionesAgregarRecurso}" rows="5" cols="80"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="preasignarDialog.hide();resultadoAgregarDialog.show();">
-                            <f:param name="codigoAccion" value="2"/>
-                            <f:param name="tipoRecurso" value="senalizacion"/>
-                        </p:commandButton>
-                        <p:commandButton value="Cancelar" onclick="preasignarDialog.hide();"/>
-                    </h:panelGrid>
-                </h:form>
-            </h:panelGrid>
-        </p:dialog>
-        
-        <!-- RESULTADO AGREGAR -->
-        <p:dialog header="Resultado" widgetVar="resultadoAgregarDialog" resizable="false" modal="true" draggable="false"
-                  width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
-            <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
-                <h:form>
-                    <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                    <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgSenalizacion"/>
-                 </h:form>
-            </h:panelGrid>
-        </p:dialog>
-        
-        
-        
+            </p:dialog>
+
+            <!-- RESULTADO AGREGAR -->
+            <p:dialog header="Resultado" widgetVar="resultadoAgregarDialog" resizable="false" modal="true" draggable="false"
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
+                <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
+                    <h:form>
+                        <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
+                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgSenalizacion"/>
+                     </h:form>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
     </ui:composition>
 </html>
 
