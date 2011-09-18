@@ -10,9 +10,9 @@ package vo;
  */
 public class UsUsuariosVO {
     
-    public static final int ADMINISTRADOR = 1;
-    public static final int COORDINADOR = 2;
-    public static final int ASESOR = 3;
+    //public static final int ADMINISTRADOR = 1;
+    //public static final int COORDINADOR = 2;
+    //public static final int ASESOR = 3;
     
     private int usnCodigo;
     private UsersVO codigoSIUST;
