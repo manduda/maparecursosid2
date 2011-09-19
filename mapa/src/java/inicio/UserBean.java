@@ -20,14 +20,10 @@ import vo.UsUsuariosVO;
 @ManagedBean(name = "UserBean")
 @SessionScoped
 public class UserBean implements Serializable {
-    private UsUsuariosVO userVO = null;
+    private UsUsuariosVO userVO = new UsUsuariosVO();
     private Boolean login = false;
 
     public UserBean() {
-    }
-
-    public boolean isIsLoggedIn() {
-        return userVO.getCodigoSIUST().getLogin() != null;
     }
 
     public UsUsuariosVO getUserVO() {

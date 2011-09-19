@@ -6,6 +6,19 @@
       xmlns:p="http://primefaces.prime.com.tr/ui">
     <ui:composition>
         <h:form>
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:button value="Inicio" />
+                    <p:button value="Numeración"/>
+                    <p:button value="Señalización"/>
+                    <p:button value="Códigos LD" />
+                    <p:button value="Matriz 1XY"/>
+                    <p:button value="Código IIN"/>
+                    <p:button value="Códigos MNC"/>
+                    <p:button value="Códigos Cortos"/>
+                    <p:button value="Marcación abrebiada"/>
+                </p:toolbarGroup>
+            </p:toolbar>
             <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
                 <p:menuitem value="Inicio" url="#{ConfiguracionBean.rutaInicio}"/>
                 <p:menuitem value="Mapa de numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}"/>
@@ -14,6 +27,8 @@
                 <p:menuitem value="Matriz 1XY"/>
                 <p:menuitem value="Código IIN"/>
                 <p:menuitem value="Códigos MNC"/>
+                <p:menuitem value="Códigos Cortos SMS/MMS"/>
+                <p:menuitem value="Marcación abrebiada"/>
             </p:menubar> 
         </h:form>
     </ui:composition>

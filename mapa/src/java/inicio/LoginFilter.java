@@ -50,15 +50,17 @@ public class LoginFilter implements Filter {
         boolean isLoggedIn = false;
         
         HttpSession session = ((HttpServletRequest) request).getSession(false);
-        UserBean userSession = null;
-
-        // If there is a UserBean in the session, and it has
-        // the isLoggedIn property set to true.
-        if (null != session && (null != (userSession = (UserBean) session.getAttribute("UserBean")))) { 
-            if (userSession.isIsLoggedIn()) {
-                isLoggedIn = true;
+        if (session == null) {
+            isLoggedIn = false;
+        } else {
+            UserBean userSession = (UserBean) session.getAttribute("UserBean");
+            if (userSession != null) { 
+                if (userSession.getLogin()) {
+                    isLoggedIn = true;
+                }
             }
         }
+        
 	return isLoggedIn;
     }
 

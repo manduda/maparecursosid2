@@ -37,13 +37,11 @@
                         <f:selectItems value="#{SenalizacionBean.listaRegionSenalizacion}" />  
                     </h:selectOneMenu>
                     <h:outputText value="Zona"/>
-
                     <h:selectOneMenu value="#{SenalizacionBean.zonaSenalizacion}">
                         <f:selectItems value="#{SenalizacionBean.listaZona}" />  
                     </h:selectOneMenu>
-                    
-                    <h:outputText value="Ps"/>
-                    <h:inputText value="#{SenalizacionBean.psSenalizacion}"  maxlength="2"/>
+                    <h:outputText value="Punto"/>
+                    <h:inputText value="#{SenalizacionBean.psSenalizacion}" maxlength="2" size="2"/>
                 </h:panelGrid>
                 <h:panelGrid>
                     <h:commandButton value="Consultar" action="#{SenalizacionBean.buscar}"/>

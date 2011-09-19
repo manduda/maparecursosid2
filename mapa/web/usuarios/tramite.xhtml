@@ -10,8 +10,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGroup id="pgTramite" rendered="#{UserBean.login == true}">
-            
+        <h:panelGroup id="pgTramite" rendered="#{(UserBean.login == true)and(TramiteBean.selectedTramite.trnCodigo > 0)}">
                 <h:panelGroup rendered="#{!(TramiteBean.mensajeTramite == '')}">
                     <h:panelGrid width="100%">
                         <br/><br/><br/>

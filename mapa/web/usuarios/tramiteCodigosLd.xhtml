@@ -10,53 +10,67 @@
         <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteCodigosLd.xhtml')}">
             <h:panelGroup id="pgTramiteCodigosLd">
                 <h:form>
-                <h:panelGrid id="pgTramiteCodigosLd" width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
+                <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
                              rendered="#{!empty TramiteBean.selectedTramite.tlTramiteLdCollection}">
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
                         <h:outputText value="TRÁMITE CÓDIGO LD" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
                     <p:dataTable value="#{TramiteBean.selectedTramite.tlTramiteLdCollection}"
-                                 var="tramiteLD" style="font-size:9px" styleClass="order-table" >
-                        <p:columnGroup type="header">  
-                            <p:row>  
-                                <p:column colspan="2" headerText="RECURSO" style="font-weight: bold;"/>  
-                                <p:column colspan="4" headerText="TRÁMITE" style="font-weight: bold;"/>  
-                            </p:row>
-                            <p:row>  
-                                <p:column headerText="CÓDIGO LD" />
-                                <p:column headerText="OPERADOR" />
-                                <p:column headerText="ACCIÓN" />
-                                <p:column headerText="RADICADO" />
-                                <p:column headerText="OBSERVACIONES" />
-                                <p:column headerText="" />
-                            </p:row>
-                        </p:columnGroup>
-
-                        <p:column>
+                                 var="tramiteLD" style="font-size:9px" >
+                        <p:column styleClass="tabla-expandir">  
+                            <p:rowToggler />  
+                        </p:column>
+                        <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
                             <h:outputText value="#{tramiteLD.clnCodigo.clnCodigoLd}"/>
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{tramiteLD.emrCodigo.emtNombre}"/>
+                        <p:column headerText="ACCIÓN" styleClass="tabla-accion">
+                            <h:outputText value="#{tramiteLD.acnCodigo.actNombre}" style="font-weight: bold;"/>
                         </p:column>
-                        <p:column>
-                            <h:outputText value="#{tramiteLD.acnCodigo.actNombre}"/>
-                        </p:column>
-                        <p:column>
+                        <p:column headerText="RADICADO" styleClass="tabla-radicado">
                             <h:outputText value="#{tramiteLD.tlnRadicado}"/>
                         </p:column>
-                        <p:column>
+                        <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteLD.tltObservaciones}"/>
                         </p:column>
-                        <p:column>
-                            <p:commandLink>
-                                <f:param name="codigoDetalleTramite" value="#{tramiteLD.clnCodigo}" />
-                                <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png"/>
+                        <p:column styleClass="tabla-eliminar">
+                            <p:commandLink rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}" actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarCodigosLdDialog.show()" update="eliminarCodigosLdDialog">
+                                <f:param name="codigoDetalleTramite" value="#{tramiteLD.tlnCodigo}" />
+                                <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
                             </p:commandLink>
                         </p:column>
+                        <p:rowExpansion>
+                            <br/>
+                            <h:panelGrid columns="2" style="width:50%; text-align: left;">
+                                <f:facet name="header">
+                                        <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
+                                </f:facet>
+                                    <h:outputText value="ESTADO" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteLD.clnCodigo.esnCodigo.estNombre}"/>
+                                    <h:outputText value="OPERADOR" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteLD.clnCodigo.emrCodigo.emtNombre}"/>
+                            </h:panelGrid>
+                            <br/>
+                        </p:rowExpansion>
                     </p:dataTable>
                 </h:panelGrid>
                 </h:form>
             </h:panelGroup>
+            
+            <!-- MENÚ ELIMINAR RECURSO -->
+            <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{UserBean.login}" 
+                             showEffect="fade" hideEffect="fade" modal="true" closable="false"
+                             header="Confirmación" severity="alert" widgetVar="eliminarCodigosLdDialog">  
+                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                    <h:form>
+                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteCodigosLd,pgMenuTramite" oncomplete="eliminarCodigosLdDialog.hide();">
+                            <f:param name="tipoRecurso" value="codigosld"/>
+                        </p:commandButton>
+                    <p:commandButton value="Cancelar" onclick="eliminarCodigosLdDialog.hide();"/>
+                    </h:form>
+                </h:panelGrid>
+            </p:confirmDialog>
         </h:panelGroup>
+        
+        
     </ui:composition>
 </html>

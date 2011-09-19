@@ -15,15 +15,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import vo.AcAccionVO;
+import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.MunicipiosVO;
 import vo.SeSenalizacionVO;
+import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
@@ -35,9 +39,17 @@ import vo.UsUsuariosVO;
 @ManagedBean(name = "TramiteBean")
 @SessionScoped
 public class TramiteBean implements Serializable {
-    private String rutaContexto;
-    private String operadorNinguno;
-    private String municipioNinguno;
+    private static final long serialVersionUID = 1L;
+    
+    @ManagedProperty(value = "#{UserBean}")
+    private UserBean userSession;
+    
+    @ManagedProperty(value = "#{ConfiguracionBean}")
+    private ConfiguracionBean configuracion;
+    
+    //private String rutaContexto;
+    //private String operadorNinguno;
+    //private String municipioNinguno;
     private List<TrTramitesVO> tramites = new ArrayList<TrTramitesVO>();
     private TrTramitesVO selectedTramite;
     private Collection<SelectItem> listaOperador;
@@ -69,36 +81,12 @@ public class TramiteBean implements Serializable {
     private Boolean opcionMnc;
     boolean tramiteTieneDetalle;
     private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
+    private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
 
-
-    /** Creates a new instance of TramiteBean */
-    public TramiteBean() {
+    @PostConstruct
+    public void init() {
         facade fachada = new facade();
-        userVO = new UsUsuariosVO();
-        UserBean userSession = null;
-
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        userSession = (UserBean) session.getAttribute("UserBean");
-        
-        // ----- CARGAR CONFIGURACION -----
-        ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
-        operadorNinguno = configuracion.getOperadorNinguno();
-        municipioNinguno = configuracion.getMunicipioNinguno();
-        rutaContexto = configuracion.getRutaContexto();
-        // --------------------------------
-        
-        try {
-            ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
-            listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
-            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
-        } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
-        }
-        
-        //System.out.println("user: "+userSession);
-        if (userSession.isIsLoggedIn()) {
+        if (userSession.getLogin()) {
             userVO = userSession.getUserVO();
             switch(userVO.getTunCodigo().getTunCodigo()) {
                 case 1:
@@ -112,8 +100,50 @@ public class TramiteBean implements Serializable {
                     break;
             }
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
-            //System.out.print("user: "+userVO.getUsnCodigo());
         }
+    }
+     
+    /** Creates a new instance of TramiteBean */
+    public TramiteBean() {
+        facade fachada = new facade();
+        //userVO = new UsUsuariosVO();
+        //UserBean userSession = null;
+
+        //FacesContext facesContext = FacesContext.getCurrentInstance();
+        //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        //userSession = (UserBean) session.getAttribute("UserBean");
+        
+        // ----- CARGAR CONFIGURACION -----
+        //ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
+        //operadorNinguno = configuracion.getOperadorNinguno();
+        //municipioNinguno = configuracion.getMunicipioNinguno();
+        //rutaContexto = configuracion.getRutaContexto();
+        // --------------------------------
+        
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
+            listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
+            listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+        }
+        
+        /*if (userSession.isIsLoggedIn()) {
+            userVO = userSession.getUserVO();
+            switch(userVO.getTunCodigo().getTunCodigo()) {
+                case 1:
+                    tipoUsuario = 4;
+                    break;
+                case 2:
+                    tipoUsuario = 2;
+                    break;
+                case 3:
+                    tipoUsuario = 6;
+                    break;
+            }
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+        }*/
         
         //FacesContext facesContext = FacesContext.getCurrentInstance();
         //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
@@ -150,7 +180,7 @@ public class TramiteBean implements Serializable {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
         
-        return rutaContexto+"usuarios/crearTramite";
+        return configuracion.getRutaContexto()+"usuarios/crearTramite";
     }
     
     public String crearTramite() {
@@ -214,7 +244,7 @@ public class TramiteBean implements Serializable {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
         }
         
-        return rutaContexto+"usuarios/tramite";
+        return configuracion.getRutaContexto()+"usuarios/tramite";
     }
     // ----------------------------------------------------------
     
@@ -353,7 +383,7 @@ public class TramiteBean implements Serializable {
             String nombreNodo = "";
             String marcaModelo = "";
             String direccion = "";
-            String observaciones = this.observacionesAgregarRecurso;
+            String observaciones = tramiteSenalizacionVO.getTstObservaciones();//this.observacionesAgregarRecurso;
             Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
 
             switch(codigoAccion){
@@ -367,11 +397,11 @@ public class TramiteBean implements Serializable {
                     }
                     nombreNodo = tramiteSenalizacionVO.getTstNombreNodo();
                     marcaModelo = tramiteSenalizacionVO.getTstMarcaModelo();
-                    direccion = tramiteSenalizacionVO.getTstObservaciones();
+                    direccion = tramiteSenalizacionVO.getTstDireccion();
                     break;
                 case 5: //Recuperar
                     municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
-                    operador.setEmrCodigo(operadorNinguno);
+                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
                     nombreNodo = "";
                     marcaModelo = "";
                     direccion = "";
@@ -392,6 +422,39 @@ public class TramiteBean implements Serializable {
             
             resultado = fachada.agregarRecurso(vo);
             tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
+        } else if (tipoRecurso.equals("codigosld")) {
+            TlTramiteLdVO vo = new TlTramiteLdVO();
+            CodigosLdBean recursoBean = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);//session.getAttribute("SenalizacionBean");
+            
+            ClCodigosLdVO recurso = new ClCodigosLdVO();
+            recurso.setClnCodigo(recursoBean.getSelectedLd().getClnCodigo());
+
+            EmOperadorVO operador = new EmOperadorVO();
+            String observaciones = tramiteCodigosLdVO.getTltObservaciones();//this.observacionesAgregarRecurso;
+            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+            
+            switch(codigoAccion){
+                case 2: //Preasignar
+                    for (TrTramitesVO detalleVO : tramites) {
+                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                            break;
+                        }
+                    }
+                    break;
+                case 5: //Recuperar
+                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                    break;
+            }
+            vo.setTrnCodigo(tramite);
+            vo.setClnCodigo(recurso);
+            vo.setAcnCodigo(accion);
+            vo.setTlnRadicado(radicado);
+            vo.setEmrCodigo(operador);
+            vo.setTltObservaciones(observaciones);
+            
+            resultado = fachada.agregarRecurso(vo);
+            tramiteCodigosLdVO = new TlTramiteLdVO();
         }
         
         switch(resultado){
@@ -454,6 +517,10 @@ public class TramiteBean implements Serializable {
         if(tipoRecurso.equals("senalizacion")){
             TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
             vo.setTsnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("codigosld")) {
+            TlTramiteLdVO vo = new TlTramiteLdVO();
+            vo.setTlnCodigo(codigoDetalleTramite);
             resultado = fachada.eliminarRecurso(vo);
         }
         
@@ -545,7 +612,7 @@ public class TramiteBean implements Serializable {
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Transferencia de recursos", e);
         }
-        return rutaContexto+"usuarios/transferenciaRecursos";
+        return configuracion.getRutaContexto()+"usuarios/transferenciaRecursos";
     }
 
     public String transferirRecursos() {
@@ -868,5 +935,29 @@ public class TramiteBean implements Serializable {
     public void setTramiteSenalizacionVO(TsTramiteSenalizacionVO tramiteSenalizacionVO) {
         this.tramiteSenalizacionVO = tramiteSenalizacionVO;
     }
+    
+    public UserBean getUserSession() {
+        return userSession;
+    }
 
+    public void setUserSession(UserBean userSession) {
+        this.userSession = userSession;
+    }
+
+    public ConfiguracionBean getConfiguracion() {
+        return configuracion;
+    }
+
+    public void setConfiguracion(ConfiguracionBean configuracion) {
+        this.configuracion = configuracion;
+    }
+
+    public TlTramiteLdVO getTramiteCodigosLdVO() {
+        return tramiteCodigosLdVO;
+    }
+
+    public void setTramiteCodigosLdVO(TlTramiteLdVO tramiteCodigosLdVO) {
+        this.tramiteCodigosLdVO = tramiteCodigosLdVO;
+    }
+    
 }

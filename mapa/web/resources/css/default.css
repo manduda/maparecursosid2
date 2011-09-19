@@ -77,5 +77,6 @@ a:link:hover, a:visited:hover  {
     width: 120px;
 }
 .tabla-observaciones  { 
-    width: 200px;
+    min-width: 200px;
+    text-align: justify;
 }

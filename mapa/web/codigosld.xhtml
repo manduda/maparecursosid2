@@ -12,32 +12,58 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form>
-            <h:panelGrid width="100%">
-                <p:dataTable value="#{codigosLdBean.coLD}" var="ld" paginator="false"
-                             selectionMode="single" style="font-size:10px"
-                             emptyMessage="No se encontraron códigos de larga distancia" >
+        <h:form id="formLd">
+            <h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Operador"/>
+                    <h:selectOneMenu value="#{CodigosLdBean.operadorVO.emrCodigo}">
+                        <f:selectItems value="#{CodigosLdBean.listaOperador}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Estado"/>
+                    <h:selectOneMenu value="#{CodigosLdBean.estadoVO.esnCodigo}">
+                        <f:selectItems value="#{CodigosLdBean.listaEstado}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Código LD"/>
+                    <h:inputText value="#{CodigosLdBean.codigoLd}"  maxlength="3" size="3"/>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton value="Consultar" action="#{CodigosLdBean.buscar}"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <h:panelGrid columns="2">
+                <h:outputText value="Registros encontrados:"/>
+                <h:outputText value="#{CodigosLdBean.countCoLD}"/>
+            </h:panelGrid>
+            <h:panelGrid id="pgCodigosLd" width="100%">
+                <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false"
+                             selectionMode="single" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="display" onRowSelectComplete="ldDialog.show();" style="font-size:10px"
+                             emptyMessage="No se encontraron códigos de larga distancia" update="datos">
                     <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
-                    <p:column headerText="Código LD" filterBy="#{ld.clnCodigoLd}" style="width:100px">
+                    <p:column headerText="Código LD" style="width:100px">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
                     </p:column>
-                    <p:column headerText="Estado" filterBy="#{ld.esnCodigo.estNombre}" style="width:150px"
-                              filterOptions="#{codigosLdBean.listaEstado}" filterMatchMode="exact">
+                    <p:column headerText="Estado" style="width:150px">
                         <h:outputText value="#{ld.esnCodigo.estNombre}"/>
                     </p:column>
                     <p:column headerText="Empresa">
                         <h:outputText value="#{ld.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
-                <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-                <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
-                    <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
-                        <h:panelGrid width="100%">
-                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
-                        </h:panelGrid>
-                    </h:panelGrid>
-                </p:dialog>
             </h:panelGrid>
         </h:form>
+        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosLd.xhtml"/>
+
+        <h:panelGroup>
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+        
     </ui:define>
 </ui:composition>

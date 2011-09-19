@@ -6,6 +6,7 @@ package inicio;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,7 +21,9 @@ import javax.servlet.ServletContext;
  */
 @ManagedBean(name = "ConfiguracionBean",eager=true)
 @ApplicationScoped
-public class ConfiguracionBean {
+public class ConfiguracionBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String operadorNinguno;
     private String municipioNinguno;
     private String rutaContexto;
