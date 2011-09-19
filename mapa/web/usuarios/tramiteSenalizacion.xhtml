@@ -16,20 +16,20 @@
                         <h:outputText value="TRÁMITE SEÑALIZACIÓN" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
                     <p:dataTable value="#{TramiteBean.selectedTramite.tsTramiteSenalizacionCollection}"
-                                 var="tramiteSenalizacion" style="font-size:9px" styleClass="order-table">
-                        <p:column style="width:16px">  
+                                 var="tramiteSenalizacion" style="font-size:9px" >
+                        <p:column styleClass="tabla-expandir">  
                             <p:rowToggler />  
                         </p:column>
-                        <p:column headerText="SEÑALIZACION">
-                            <h:outputText value="#{tramiteSenalizacion.senCodigo.renCodigo.retNombre} - #{tramiteSenalizacion.senCodigo.senZona} - #{tramiteSenalizacion.senCodigo.senPs}"/>
+                        <p:column headerText="PUNTO" styleClass="tabla-recurso">
+                            <h:outputText value="#{tramiteSenalizacion.senCodigo.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(tramiteSenalizacion.senCodigo.senZona,2)} - #{fnc:rellenarCerosIzquierda(tramiteSenalizacion.senCodigo.senPs,2)}"/>
                         </p:column>
-                        <p:column headerText="ACCIÓN">
+                        <p:column headerText="ACCIÓN" styleClass="tabla-accion">
                             <h:outputText value="#{tramiteSenalizacion.acnCodigo.actNombre}" style="font-weight: bold;"/>
                         </p:column>
-                        <p:column headerText="RADICADO">
+                        <p:column headerText="RADICADO" styleClass="tabla-radicado">
                             <h:outputText value="#{tramiteSenalizacion.tsnRadicado}"/>
                         </p:column>
-                        <p:column headerText="MUNICIPIO">
+                        <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
                             <h:outputText value="#{tramiteSenalizacion.codigoMunicipio.nombreMunicipio}"/>
                             <br/>
                             <h:outputText value="(#{tramiteSenalizacion.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
@@ -43,10 +43,10 @@
                         <p:column headerText="DIRECCIÓN">
                             <h:outputText value="#{tramiteSenalizacion.tstDireccion}"/>
                         </p:column>
-                        <p:column headerText="OBSERVACIONES">
+                        <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteSenalizacion.tstObservaciones}"/>
                         </p:column>
-                        <p:column style="width:16px">
+                        <p:column styleClass="tabla-eliminar">
                             <p:commandLink rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}" actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarSenalizacionDialog.show()" update="eliminarSenalizacionDialog">
                                 <f:param name="codigoDetalleTramite" value="#{tramiteSenalizacion.tsnCodigo}" />
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
@@ -54,25 +54,25 @@
                         </p:column>
                         <p:rowExpansion>
                             <br/>
-                            <h:panelGrid columns="2" style="width:50%;" styleClass="ui-widget-content">
-                                <f:facet name="header">  
-                                    <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
+                            <h:panelGrid columns="2" style="width:50%; text-align: left;">
+                                <f:facet name="header">
+                                        <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
                                 </f:facet>
-                                <h:outputText value="ESTADO" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramiteSenalizacion.senCodigo.esnCodigo.estNombre}"/>
-                                <h:outputText value="MUNICIPIO" style="font-weight: bold;"/>
-                                <h:panelGroup>
-                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.codigoMunicipio.nombreMunicipio}"/>
-                                    <h:outputText value=" (#{tramiteSenalizacion.senCodigo.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
-                                </h:panelGroup>
-                                <h:outputText value="OPERADOR" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramiteSenalizacion.senCodigo.emrCodigo.emtNombre}"/>
-                                <h:outputText value="NOMBRE NODO" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramiteSenalizacion.senCodigo.setNombreNodo}"/>
-                                <h:outputText value="MARCA/MODELO" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramiteSenalizacion.senCodigo.setMarcaModelo}"/>
-                                <h:outputText value="DIRECCIÓN" style="font-weight: bold;"/>
-                                <h:outputText value="#{tramiteSenalizacion.senCodigo.setDireccion}"/>
+                                    <h:outputText value="ESTADO" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.esnCodigo.estNombre}"/>
+                                    <h:outputText value="MUNICIPIO" style="font-weight: bold;"/>
+                                    <h:panelGroup>
+                                        <h:outputText value="#{tramiteSenalizacion.senCodigo.codigoMunicipio.nombreMunicipio}"/>
+                                        <h:outputText value=" (#{tramiteSenalizacion.senCodigo.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
+                                    </h:panelGroup>
+                                    <h:outputText value="OPERADOR" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="NOMBRE NODO" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.setNombreNodo}"/>
+                                    <h:outputText value="MARCA/MODELO" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.setMarcaModelo}"/>
+                                    <h:outputText value="DIRECCIÓN" style="font-weight: bold;"/>
+                                    <h:outputText value="#{tramiteSenalizacion.senCodigo.setDireccion}"/>
                             </h:panelGrid>
                             <br/>
                         </p:rowExpansion>
@@ -87,7 +87,9 @@
                              header="Confirmación" severity="alert" widgetVar="eliminarSenalizacionDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                    <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
+                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();">
+                            <f:param name="tipoRecurso" value="senalizacion"/>
+                        </p:commandButton>
                     <p:commandButton value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>

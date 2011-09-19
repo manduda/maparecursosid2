@@ -6,9 +6,11 @@ package inicio;
 
 import facade.facade;
 import java.io.IOException;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
@@ -23,15 +25,27 @@ import vo.UsUsuariosVO;
 @ManagedBean(name = "inicioBean")
 @RequestScoped
 public class InicioBean {
+    
+    @ManagedProperty(value = "#{UserBean}")
+    private UserBean userBean;
+    
+    @ManagedProperty(value = "#{ConfiguracionBean}")
+    private ConfiguracionBean configuracion;
+
     private String user;
     private String password;
     private String Mensaje = "";
-    private String rutaContexto;
+    //private String rutaContexto;
+    
+    /*@PostConstruct
+    public void init() {
+        rutaContexto = configuracion.getRutaContexto();
+    }*/
     /** Creates a new instance of InicioBean */
     public InicioBean() {
         // ----- CARGAR CONFIGURACION -----
-        ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
-        rutaContexto = configuracion.getRutaContexto();
+        //ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
+        //rutaContexto = configuracion.getRutaContexto();
         // --------------------------------
         user = "";
         password = "";
@@ -40,7 +54,7 @@ public class InicioBean {
     public String validarUsuario() {
         if((user.equals("")) || (password.equals(""))){
             Mensaje = "<br><font color=\"red\">Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios</font><br><br>";
-            return rutaContexto+"resultadoLogin"; 
+            return configuracion.getRutaContexto()+"resultadoLogin"; 
         }
         
         facade fachada = new facade();
@@ -53,12 +67,14 @@ public class InicioBean {
             userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
             if (userVO.getUsnEstado() == 1){
                 //Usuario logueado
-                UserBean usuario = new UserBean();
-                usuario.setUserVO(userVO);
-                usuario.setLogin(true);
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-                facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
+                //UserBean usuario = new UserBean();
+                //usuario.setUserVO(userVO);
+                //usuario.setLogin(true);
+                userBean.setUserVO(userVO);
+                userBean.setLogin(true);
+                //FacesContext facesContext = FacesContext.getCurrentInstance();
+                //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+                //facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
                 Mensaje = "<br>Sesión iniciada<br><br>"
                         + "Bienvenid@ " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
                         + "Tipo de usuario: <b>" + userVO.getTunCodigo().getTutNombre() + "</b><br><br>";
@@ -73,7 +89,7 @@ public class InicioBean {
             Mensaje = "<br>Nombre de usuario o contraseña incorrectos<br><br>";
             //return null;
         }
-        return rutaContexto+"resultadoLogin";
+        return configuracion.getRutaContexto()+"resultadoLogin";
     }
 
     public String cerrarSesion() {
@@ -83,7 +99,7 @@ public class InicioBean {
         session.removeAttribute("UserBean");
         session.invalidate(); 
         Mensaje = "<br>Sesión cerrada correctamente<br><br>";
-        return rutaContexto+"resultadoLogin";
+        return configuracion.getRutaContexto()+"resultadoLogin";
     }
     
     public void idleListener(IdleEvent event) throws IOException {  
@@ -94,7 +110,7 @@ public class InicioBean {
         session.invalidate();
         
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-        String path = servletContext.getContextPath()+rutaContexto;
+        String path = servletContext.getContextPath()+configuracion.getRutaContexto();
         facesContext.getExternalContext().redirect(path+"resultadoLogin.xhtml");
         Mensaje = "<br>Sesión cerrada automáticamente por inactividad<br><br>";
     }  
@@ -122,5 +138,20 @@ public class InicioBean {
     public void setUser(String user) {
         this.user = user;
     }
+
+    public UserBean getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(UserBean userBean) {
+        this.userBean = userBean;
+    }
     
+    public ConfiguracionBean getConfiguracion() {
+        return configuracion;
+    }
+
+    public void setConfiguracion(ConfiguracionBean configuracion) {
+        this.configuracion = configuracion;
+    }
 }

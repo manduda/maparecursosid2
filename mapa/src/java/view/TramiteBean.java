@@ -5,10 +5,8 @@
 package view;
 
 import inicio.ConfiguracionBean;
-import entities.SeSenalizacion;
 import facade.facade;
 import helper.ConvertirListasHelper;
-import inicio.LoginFilter;
 import inicio.UserBean;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,17 +16,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import vo.AcAccionVO;
 import vo.EmOperadorVO;
-import vo.EtEstadoTramiteVO;
-import vo.GtGestionTramiteVO;
 import vo.MunicipiosVO;
 import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
@@ -145,6 +138,7 @@ public class TramiteBean implements Serializable {
         return null;
     }
     
+    // ---- Funciones para crear trámite ---
     public String opcionesCrearTramite() {
         facade fachada = new facade();
         operadorCrearTramite = "-1";
@@ -198,7 +192,9 @@ public class TramiteBean implements Serializable {
         
         return null;
     }
+    // -------------------------------------
     
+    // ---- Función para ejecutar anter de acceder al trámite ---
     public String detalleTramite() {
         FacesContext context = FacesContext.getCurrentInstance();
         Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
@@ -220,6 +216,7 @@ public class TramiteBean implements Serializable {
         
         return rutaContexto+"usuarios/tramite";
     }
+    // ----------------------------------------------------------
     
     public String archivarTramite() {
         facade fachada = new facade();
@@ -428,7 +425,8 @@ public class TramiteBean implements Serializable {
 
         return null;
     }
-    
+     
+    // ---- Función para selección detalle del trámite antes de eliminarlo ---
     public String seleccionarCodigoDetalleTramite() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
@@ -439,17 +437,25 @@ public class TramiteBean implements Serializable {
         
         return null;
     }
+    // -----------------------------------------------------------------------
     
     public String eliminarRecurso() {
         facade fachada = new facade();
-        TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        
+        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
         
         mensajeRecurso = "";
         
-        System.out.println("Codigo: "+codigoDetalleTramite);
-        vo.setTsnCodigo(codigoDetalleTramite);
-   
-        boolean resultado = fachada.eliminarRecurso(vo);
+        boolean resultado = false;
+        
+        if(tipoRecurso.equals("senalizacion")){
+            TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+            vo.setTsnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        }
         
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
@@ -481,16 +487,7 @@ public class TramiteBean implements Serializable {
         }
         return selectItemsList;
     }
-    
-    public static boolean validaNum(String Valor) {
-        try {
-            Integer.parseInt(Valor);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
+  
     public void opcionesPreasignar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
@@ -509,6 +506,7 @@ public class TramiteBean implements Serializable {
         
     }
     
+    // --- Función para escoger municipio cuando se está agregando un recurso a un trámite ---
     public void cambiarDepartamento() {
         facade fachada = new facade();
         //FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -522,7 +520,9 @@ public class TramiteBean implements Serializable {
         }
            
     }
+    // ---------------------------------------------------------------------------------------
     
+    // --- Funiones para tranferir recursos ---
     public String opcionesTransferirRecursos() {
         facade fachada = new facade();
        
@@ -547,7 +547,7 @@ public class TramiteBean implements Serializable {
         }
         return rutaContexto+"usuarios/transferenciaRecursos";
     }
-   
+
     public String transferirRecursos() {
         boolean transferencia;
         if(operadorOrigen.equals("-1") || operadorDestino.equals("-1")) {
@@ -612,7 +612,17 @@ public class TramiteBean implements Serializable {
         }
             
     }
-
+    // ----------------------------------------
+    
+    public static boolean validaNum(String Valor) {
+        try {
+            Integer.parseInt(Valor);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+     
     public boolean isTramiteTieneDetalle() {
         boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
         boolean hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
@@ -621,11 +631,11 @@ public class TramiteBean implements Serializable {
         }
         return false;
     }
-
+    
+    // Funciones GET y SET
     public void setTramiteTieneDetalle(boolean tramiteTieneDetalle) {
         this.tramiteTieneDetalle = tramiteTieneDetalle;
     }
-
 
     public List<TrTramitesVO> getTramites() {
         return tramites;

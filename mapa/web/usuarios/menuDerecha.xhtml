@@ -8,17 +8,33 @@
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
         <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/menuDerecha.xhtml')}">
-            <!-- MENU ASESOR -->
-            <p:panel header="Menu Asesor" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+            <!-- MENU -->
+            <p:panel header="Menu" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+                <h:panelGrid columns="2" style="font-size:9px;" >
+                    <h:outputText value="Usuario:" style="font-weight: bold;"/>
+                    <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}"/>
+                    <h:outputText value="Tipo:" style="font-weight: bold;"/>
+                    <h:outputText value="#{UserBean.userVO.tunCodigo.tutNombre}"/>
+                </h:panelGrid>
+                <br/>
+                <h:panelGrid style="font-size:10px; margin: 0px auto;">
+                    <h:outputText value="OPCIONES" style="font-weight: bold;"/>
+                </h:panelGrid>
                 <h:form style="font-size:10px">
-                    <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}"/>
-                </h:form>
-            </p:panel>
-            
-            <!-- MENU ADMINISTRADOR -->
-            <p:panel header="Menu Administrador" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
-                <h:form style="font-size:10px">
-                    <h:commandLink value="* Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}"/>
+                    <!-- ASESOR -->
+                    <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="&#8226;" style="color: #045491;"/>
+                            <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    <!-- ADMINISTRADOR -->
+                    <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="&#8226;" style="color: #045491;"/>
+                            <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
                 </h:form>
             </p:panel>
             
@@ -52,8 +68,8 @@
                                                  rendered="#{(!empty tramite.tsTramiteSenalizacionCollection) or (!empty tramite.tlTramiteLdCollection)}">
                                         <h:outputText value="Recursos del trámite" style="font-weight: bold"/>
                                     </h:panelGrid>
-                                    <h:outputText value="Señalización" rendered="#{!empty tramite.tsTramiteSenalizacionCollection}"/>
-                                    <h:outputText value="Código LD" rendered="#{!empty tramite.tlTramiteLdCollection}"/>
+                                    <h:outputText value="&#8226; Señalización" rendered="#{!empty tramite.tsTramiteSenalizacionCollection}"/>
+                                    <h:outputText value="&#8226; Código LD" rendered="#{!empty tramite.tlTramiteLdCollection}"/>
                                     <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection)}"
                                              cellpadding="0" cellspacing="0" style="text-align: center;">
                                         <h:outputText value="No hay recursos en el trámite" style="font-weight: bold; color: #D20005"/>

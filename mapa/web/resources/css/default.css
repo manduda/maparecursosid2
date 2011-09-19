@@ -58,15 +58,24 @@ a:link:hover, a:visited:hover  {
     border-bottom: 0px;
     color: #ffffff;
 }
+.tabla-expandir  { 
+    width: 16px;
+}
 .tabla-eliminar { 
-    width: 50px;
+    width: 16px;
 }
 .tabla-radicado { 
-    width: 100px;
+    width: 50px;
 }
 .tabla-accion { 
-    width: 100px;
+    width: 50px;
 }
 .tabla-recurso { 
-    width: 150px;
+    width: 100px;
+}
+.tabla-municipio { 
+    width: 120px;
+}
+.tabla-observaciones  { 
+    width: 200px;
 }

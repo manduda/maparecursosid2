@@ -7,6 +7,8 @@ package inicio;
 //import javax.faces.bean.ManagedBean;
 
 import java.io.Serializable;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import vo.UsUsuariosVO;
 
 //import javax.faces.bean.SessionScoped;
@@ -15,8 +17,8 @@ import vo.UsUsuariosVO;
  *
  * @author MADD
  */
-//@ManagedBean(name = "UserBean")
-//@SessionScoped
+@ManagedBean(name = "UserBean")
+@SessionScoped
 public class UserBean implements Serializable {
     private UsUsuariosVO userVO = null;
     private Boolean login = false;
