@@ -27,6 +27,7 @@ import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 import vo.ReRegionVO;
 import vo.SeSenalizacionVO;
+import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
@@ -397,6 +398,82 @@ public class facade {
         return vo;
     }
     
+    public List<ClCodigosLdVO> cargarCodigosLd(int first, int max, String operador, int codigoLd, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<ClCodigosLdVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosld.cargarCodigosLd(first, max, operador, codigoLd, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarCodigosLd(String operador, int codigoLd, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = codigosld.countCargarCodigosLd(operador, codigoLd, estado,  em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<EmOperadorVO> listaOperadorCodigosLd() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosld.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    
     //-------- TRAMITES --------
     public boolean crearTramite(TrTramitesVO vo){
         EntityManagerFactory emf = null;
@@ -513,6 +590,8 @@ public class facade {
          * 2: Falta un dato del VO
          * 3: El operador del recurso es diferente al del trámite
          * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
         */
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -526,6 +605,8 @@ public class facade {
             String nombre = Recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+            } else if (nombre.equals("TlTramiteLdVO")){
+                resultado = tramites.agregarRecurso((TlTramiteLdVO) Recurso, em);
             } else {
                 resultado = 0;
             }
@@ -558,6 +639,8 @@ public class facade {
             String nombre = Recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.eliminarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+            } else if(nombre.equals("TlTramiteLdVO")) {
+                resultado = tramites.eliminarRecurso((TlTramiteLdVO) Recurso, em);
             } else {
                 resultado = false;
             }

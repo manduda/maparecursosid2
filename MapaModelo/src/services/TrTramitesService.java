@@ -4,18 +4,22 @@
  */
 package services;
 
+import daos.ClCodigosLdDAO;
 import daos.CoConfiguracionDAO;
 import daos.EmOperadorDAO;
 import daos.GtGestionTramiteDAO;
 import daos.SeSenalizacionDAO;
+import daos.TlTramiteLdDAO;
 import daos.TrTramitesDAO;
 import daos.TsTramiteSenalizacionDAO;
 import entities.AcAccion;
+import entities.ClCodigosLd;
 import entities.EmOperador;
 import entities.EtEstadoTramite;
 import entities.GtGestionTramite;
 import entities.Municipios;
 import entities.SeSenalizacion;
+import entities.TlTramiteLd;
 import entities.TrTramites;
 import entities.TsTramiteSenalizacion;
 import entities.UsUsuarios;
@@ -23,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import vo.EmOperadorVO;
+import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 
@@ -301,12 +306,92 @@ public class TrTramitesService {
         
     }
     
+    public Integer agregarRecurso(TlTramiteLdVO vo, EntityManager em){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+        */
+        
+        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getClnCodigo().getClnCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getEmrCodigo().getEmrCodigo().equals(""))){
+            return 2;
+        }
+        
+        if (TlTramiteLdDAO.findIdCodigosLd(vo.getClnCodigo().getClnCodigo(), em)) {
+            return 4;
+        }
+        
+        TlTramiteLd entity = new TlTramiteLd();
+        
+        TrTramites tramite = TrTramitesDAO.findbyId(vo.getTrnCodigo().getTrnCodigo(), em);
+        String operadorTramite = tramite.getEmrCodigo().getEmrCodigo();
+        
+        ClCodigosLd codigosld = ClCodigosLdDAO.findbyId(vo.getClnCodigo().getClnCodigo(), em);
+        String operadorRecurso = codigosld.getEmrCodigo().getEmrCodigo();
+        
+        EmOperador operador = new EmOperador();
+        AcAccion accion = new AcAccion();
+        
+        switch(vo.getAcnCodigo().getAcnCodigo()){
+            case 1: //LIBERAR
+                break;
+            case 2: //PREASIGNAR
+                if(codigosld.getEsnCodigo().getEsnCodigo()!=1){ // El estado del recurso no es libre
+                    return 6;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                break;
+            case 3: //ASIGNAR
+                break;
+            case 4: //RESERVAR
+                break;
+            case 5: //RECUPERAR
+                if(codigosld.getEsnCodigo().getEsnCodigo()!=3){ // El estado del recurso no es asignado
+                    return 5;
+                }
+                
+                if(!operadorTramite.equals(operadorRecurso)){ // El operador del trámite es diferente al del recurso
+                    return 3;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                break;
+        }
+        
+        accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
+        
+        entity.setTlnCodigo(TlTramiteLdDAO.getMaxId(em)+1);
+        entity.setTrnCodigo(tramite);
+        entity.setClnCodigo(codigosld);
+        entity.setAcnCodigo(accion);
+        entity.setTlnRadicado(vo.getTlnRadicado());
+        entity.setEmrCodigo(operador);
+        entity.setTltObservaciones(vo.getTltObservaciones());
+        
+        TlTramiteLdDAO.persist(entity, em);
+        
+        return 1;
+        
+    }
+    
     public boolean eliminarRecurso(TsTramiteSenalizacionVO vo, EntityManager em){
         TsTramiteSenalizacion entity = new TsTramiteSenalizacion();
         
         entity = TsTramiteSenalizacionDAO.findbyId(vo.getTsnCodigo(), em);
 
         TsTramiteSenalizacionDAO.delete(entity, em);
+        
+        return true;
+    }
+    
+    public boolean eliminarRecurso(TlTramiteLdVO vo, EntityManager em){
+        TlTramiteLd entity = new TlTramiteLd();
+        
+        entity = TlTramiteLdDAO.findbyId(vo.getTlnCodigo(), em);
+
+        TlTramiteLdDAO.delete(entity, em);
         
         return true;
     }

@@ -29,18 +29,22 @@ public class ClCodigosLd implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "CLN_CODIGO")
-    private BigDecimal clnCodigo;
+    private int clnCodigo;
     
     @JoinColumn(name = "SK_EMPRESA_CODE", referencedColumnName = "SK_EMPRESA_CODE")
     @ManyToOne(optional = false)
     private EmOperador emrCodigo;
     
     @Column(name = "CLN_CODIGO_LD")
-    private BigInteger clnCodigoLd;
+    @Basic(optional = false)
+    private int clnCodigoLd;
     
     @JoinColumn(name = "ESN_CODIGO", referencedColumnName = "ESN_CODIGO")
     @ManyToOne(optional = false)
     private EsEstado esnCodigo;
+    
+    @Column(name = "CLT_OBSERVACIONES")
+    private String cltObservaciones;
 
     public ClCodigosLd() {
     }
@@ -51,15 +55,32 @@ public class ClCodigosLd implements Serializable {
         vo.setEmrCodigo(this.getEmrCodigo().toVO());
         vo.setEsnCodigo(this.getEsnCodigo().toVO());
         vo.setClnCodigoLd(this.getClnCodigoLd());
+        vo.setCltObservaciones(this.getCltObservaciones());
         return vo;
     }
 
-    public BigDecimal getClnCodigo() {
+    public int getClnCodigo() {
         return clnCodigo;
     }
 
-    public void setClnCodigo(BigDecimal clnCodigo) {
+    public void setClnCodigo(int clnCodigo) {
         this.clnCodigo = clnCodigo;
+    }
+
+    public int getClnCodigoLd() {
+        return clnCodigoLd;
+    }
+
+    public void setClnCodigoLd(int clnCodigoLd) {
+        this.clnCodigoLd = clnCodigoLd;
+    }
+
+    public String getCltObservaciones() {
+        return cltObservaciones;
+    }
+
+    public void setCltObservaciones(String cltObservaciones) {
+        this.cltObservaciones = cltObservaciones;
     }
 
     public EmOperador getEmrCodigo() {
@@ -68,14 +89,6 @@ public class ClCodigosLd implements Serializable {
 
     public void setEmrCodigo(EmOperador emrCodigo) {
         this.emrCodigo = emrCodigo;
-    }
-
-    public BigInteger getClnCodigoLd() {
-        return clnCodigoLd;
-    }
-
-    public void setClnCodigoLd(BigInteger clnCodigoLd) {
-        this.clnCodigoLd = clnCodigoLd;
     }
 
     public EsEstado getEsnCodigo() {

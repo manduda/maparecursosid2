@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class EmOperadorVO {
+public class EmOperadorVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String emrCodigo;
     private String emtNombre;
 

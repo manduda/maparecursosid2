@@ -12,20 +12,37 @@ import java.math.BigInteger;
  * @author miguel.duran
  */
 public class ClCodigosLdVO {
-    private BigDecimal clnCodigo;
+    private int clnCodigo;
     private EmOperadorVO emrCodigo;
-    private BigInteger clnCodigoLd;
+    private int clnCodigoLd;
     private EsEstadoVO esnCodigo;
+    private String cltObservaciones;
 
     public ClCodigosLdVO() {
     }
 
-    public BigDecimal getClnCodigo() {
+    public int getClnCodigo() {
         return clnCodigo;
     }
 
-    public void setClnCodigo(BigDecimal clnCodigo) {
+    public void setClnCodigo(int clnCodigo) {
         this.clnCodigo = clnCodigo;
+    }
+
+    public int getClnCodigoLd() {
+        return clnCodigoLd;
+    }
+
+    public void setClnCodigoLd(int clnCodigoLd) {
+        this.clnCodigoLd = clnCodigoLd;
+    }
+
+    public String getCltObservaciones() {
+        return cltObservaciones;
+    }
+
+    public void setCltObservaciones(String cltObservaciones) {
+        this.cltObservaciones = cltObservaciones;
     }
 
     public EmOperadorVO getEmrCodigo() {
@@ -34,14 +51,6 @@ public class ClCodigosLdVO {
 
     public void setEmrCodigo(EmOperadorVO emrCodigo) {
         this.emrCodigo = emrCodigo;
-    }
-
-    public BigInteger getClnCodigoLd() {
-        return clnCodigoLd;
-    }
-
-    public void setClnCodigoLd(BigInteger clnCodigoLd) {
-        this.clnCodigoLd = clnCodigoLd;
     }
 
     public EsEstadoVO getEsnCodigo() {

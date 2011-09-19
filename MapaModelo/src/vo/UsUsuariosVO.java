@@ -4,11 +4,14 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class UsUsuariosVO {
+public class UsUsuariosVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     //public static final int ADMINISTRADOR = 1;
     //public static final int COORDINADOR = 2;

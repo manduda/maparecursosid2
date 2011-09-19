@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author miguel.duran
  */
-public class TuTipoUsuarioVO {
+public class TuTipoUsuarioVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int tunCodigo;
     private String tutNombre;
     private Collection<UsUsuariosVO> usUsuariosCollection;

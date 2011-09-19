@@ -6,6 +6,7 @@ package services;
 
 import daos.ClCodigosLdDAO;
 import entities.ClCodigosLd;
+import entities.EmOperador;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +36,12 @@ public class ClCodigosLdService {
         //------------------------------------
         vo.setClnCodigo(entity.getClnCodigo());
         vo.setClnCodigoLd(entity.getClnCodigoLd());
+        vo.setCltObservaciones(entity.getCltObservaciones());
 
         return vo;
     }
     
-    public ClCodigosLdVO getById(BigDecimal id, EntityManager em){
+    public ClCodigosLdVO getById(int id, EntityManager em){
         ClCodigosLd entity = ClCodigosLdDAO.findbyId(id, em);
         return getVOFromEntity(entity);
     }
@@ -54,5 +56,31 @@ public class ClCodigosLdService {
             codigosldVO.add(vo);
         }
         return codigosldVO;
+    }
+    
+    public List<ClCodigosLdVO> cargarCodigosLd(int first, int max, String operador, int codigoLd, int estado, EntityManager em){
+        List<ClCodigosLd> codigosld = ClCodigosLdDAO.cargarCodigosLd(first, max, operador, codigoLd, estado, em);
+        List<ClCodigosLdVO> codigosldVO = new ArrayList<ClCodigosLdVO>();        
+        ClCodigosLdVO vo = new ClCodigosLdVO();
+        int size = codigosld.size();
+        for (int i = 0; i < size; i++) {
+            vo = getVOFromEntity(codigosld.get(i));
+            codigosldVO.add(vo);
+        }
+        return codigosldVO;
+    }
+    
+    public int countCargarCodigosLd(String operador, int codigoLd, int estado, EntityManager em){
+        int codigosld = ClCodigosLdDAO.countCargarCodigosLd(operador, codigoLd, estado, em);
+        return codigosld;
+    }
+    
+    public List<EmOperadorVO> getListOperadores(EntityManager em){
+        List<EmOperador> operador = ClCodigosLdDAO.getListOperadores(em);
+        List<EmOperadorVO> operadorVO = new ArrayList<EmOperadorVO>();        
+        for (EmOperador o : operador) {
+            operadorVO.add(o.toVO());
+        }
+        return operadorVO;
     }
 }

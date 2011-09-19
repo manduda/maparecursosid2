@@ -4,6 +4,7 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 
@@ -11,7 +12,9 @@ import java.util.Date;
  *
  * @author miguel.duran
  */
-public class TrTramitesVO {
+public class TrTramitesVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int trnCodigo;
     private UsUsuariosVO usnCodigo;
     private EmOperadorVO emrCodigo;

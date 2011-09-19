@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author miguel.duran
  */
-public class UsersVO {
+public class UsersVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int userCode;
     private String name;
     private String lastName;
