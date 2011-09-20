@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author miguel.duran
  */
-public class EtEstadoTramiteVO {
+public class EtEstadoTramiteVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int etnCodigo;
     private String ettNombre;
     private Collection<TrTramitesVO> trTramitesCollection;

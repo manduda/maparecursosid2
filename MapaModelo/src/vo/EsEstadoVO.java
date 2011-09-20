@@ -4,13 +4,15 @@
  */
 package vo;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 
 /**
  *
  * @author miguel.duran
  */
-public class EsEstadoVO {
+public class EsEstadoVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int esnCodigo;
     private String estNombre;
 

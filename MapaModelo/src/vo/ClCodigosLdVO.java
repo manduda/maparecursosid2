@@ -4,6 +4,7 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -11,7 +12,9 @@ import java.math.BigInteger;
  *
  * @author miguel.duran
  */
-public class ClCodigosLdVO {
+public class ClCodigosLdVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int clnCodigo;
     private EmOperadorVO emrCodigo;
     private int clnCodigoLd;

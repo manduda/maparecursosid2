@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author MADD
  */
-public class AcAccionVO {
+public class AcAccionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int acnCodigo;
     private String actNombre;
     

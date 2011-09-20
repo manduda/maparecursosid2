@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author MADD
  */
-public class TsTramiteSenalizacionVO {
+public class TsTramiteSenalizacionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int tsnCodigo;
     private TrTramitesVO trnCodigo;
     private SeSenalizacionVO senCodigo;
