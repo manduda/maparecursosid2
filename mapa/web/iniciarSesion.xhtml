@@ -1,0 +1,46 @@
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Inciar Sesión"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{!UserBean.login}">
+            <h:panelGrid>
+                <h:form id="frmLogin">
+                    <h:panelGrid columns="2" width="100%">
+                        <h:outputText value="Usuario"/>
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                            <h:inputText id="user" value="#{inicioBean.user}" maxlength="15" size="15" required="true" style="width: 120px;"/>
+                            <p:message for="user" />
+                        </h:panelGrid>
+                        <h:outputText value="Contraseña"/>
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                            <h:inputSecret id="pass" value="#{inicioBean.password}" maxlength="15" size="15" required="true" style="width: 120px;"/>
+                            <p:message for="pass" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <br/>
+                    <h:panelGrid>
+                        <p:commandButton value="Iniciar Sesión" action="#{inicioBean.validarUsuario}" onclick="statusLoginDialog.show();"
+                                         oncomplete="statusLoginDialog.hide();" ajax="false"/>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGrid>
+            <h:outputText value="#{inicioBean.mensaje}" escape="false" style="color: red; font-weight: bold;"/>
+            <p:dialog modal="true" widgetVar="statusLoginDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

@@ -13,8 +13,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.IdleEvent;
 import vo.UsUsuariosVO;
 
@@ -52,10 +54,10 @@ public class InicioBean {
     }
 
     public String validarUsuario() {
-        if((user.equals("")) || (password.equals(""))){
+        /*if((user.equals("")) || (password.equals(""))){
             Mensaje = "<br><font color=\"red\">Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios</font><br><br>";
             return configuracion.getRutaContexto()+"resultadoLogin"; 
-        }
+        }*/
         
         facade fachada = new facade();
         UsUsuariosVO userVO = null;
@@ -78,19 +80,60 @@ public class InicioBean {
                 Mensaje = "<br>Sesión iniciada<br><br>"
                         + "Bienvenid@ " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
                         + "Tipo de usuario: <b>" + userVO.getTunCodigo().getTutNombre() + "</b><br><br>";
-                //return "cerrar";
+                return configuracion.getRutaContexto()+"resultadoLogin";
             } else {
                 //Usuario está deshabilitado
                 Mensaje = "<br>Usuario " + userVO.getCodigoSIUST().getLogin() + " está deshabilitado<br><br>";
-                //return null;
+                return null;
             }
         } else {
             //Usuario o contraseña incorrectos
             Mensaje = "<br>Nombre de usuario o contraseña incorrectos<br><br>";
-            //return null;
+            return null;
         }
-        return configuracion.getRutaContexto()+"resultadoLogin";
+        //return configuracion.getRutaContexto()+"resultadoLogin";
     }
+    
+    public void login(ActionEvent actionEvent) {
+        RequestContext context = RequestContext.getCurrentInstance();
+        FacesMessage msg = null;
+        boolean loggedIn = false; // Esta variable controla el cierre el dialogo de inicio de sesión si es "true"
+        
+        if((user.equals("")) || (password.equals(""))){
+            Mensaje = "<br><font color=\"red\">Los campos de <b>Usuario</b> y <b>Contraseña</b> son obligatorios</font><br><br>";
+            msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login error", "Los campos de Usuario y Contraseña son obligatorios");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+            context.addCallbackParam("loggedIn", loggedIn);
+            return;
+        }
+          
+        facade fachada = new facade();
+        UsUsuariosVO userVO = null;
+        userVO = fachada.iniciarSesion(user, password);
+        user = "";
+        password = "";
+
+        if (userVO != null){
+            userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
+            if (userVO.getUsnEstado() == 1){
+                userBean.setUserVO(userVO);
+                userBean.setLogin(true);
+                loggedIn = true;
+            } else {
+                loggedIn = false;
+                msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "El usuario "+userVO.getCodigoSIUST().getLogin()+"está deshabilitado");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+            }
+        } else {
+            loggedIn = false;
+            msg = new FacesMessage(FacesMessage.SEVERITY_WARN, "Login Error", "Nombre de usuario o contraseña incorrectos");
+            FacesContext.getCurrentInstance().addMessage(null, msg);
+        }
+        
+        context.addCallbackParam("loggedIn", loggedIn);
+        
+    } 
+    
 
     public String cerrarSesion() {
         FacesContext facesContext = FacesContext.getCurrentInstance();

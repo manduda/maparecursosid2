@@ -23,8 +23,16 @@
         <!-- Barra título -->
         <div id="titulo">
             <div style="float: right;">
-                
-                <ui:include src="#{ConfiguracionBean.rutaContexto}login.xhtml"/>
+
+                <h:panelGroup rendered="#{!UserBean.login}">
+                    <h:panelGrid cellpadding="0" cellspacing="0">
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}iniciarSesion.xhtml">     
+                                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/login.png" style="border:0px"/>
+                            </h:outputLink>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGroup>
 
                 <h:panelGroup rendered="#{UserBean.login}">
                     <h:panelGrid cellpadding="0" cellspacing="0">

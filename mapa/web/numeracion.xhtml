@@ -37,14 +37,23 @@
                         <f:selectItems value="#{NumeracionBean.listaNDC}" />  
                     </h:selectOneMenu>
                     <h:outputText value="Número inicio"/>
-                    <h:inputText value="#{NumeracionBean.numInicio}" maxlength="7"/>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:inputText id="numeroInicio" value="#{NumeracionBean.numInicio}" maxlength="7" size="7" converter="javax.faces.Integer"
+                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                        <p:message for="numeroInicio" />
+                    </h:panelGrid>
                     <h:outputText value="Número Fin"/>
-                    <h:inputText value="#{NumeracionBean.numFin}"  maxlength="7"/>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:inputText id="numeroFin" value="#{NumeracionBean.numFin}" maxlength="7" size="7" converter="javax.faces.Integer"
+                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                        <p:message for="numeroFin" />
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:commandButton value="Consultar" action="#{NumeracionBean.buscar}"/>
+                    <p:commandButton value="Consultar" action="#{NumeracionBean.buscar}" ajax="false"/>
                 </h:panelGrid>
             </h:panelGrid>
+            <p:separator/>
             <h:panelGrid columns="2">
                 <h:outputText value="Registros encontrados:"/>
                 <h:outputText value="#{NumeracionBean.lazyModel.rowCount}"/>

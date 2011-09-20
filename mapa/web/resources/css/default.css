@@ -80,3 +80,21 @@ a:link:hover, a:visited:hover  {
     min-width: 200px;
     text-align: justify;
 }
+.mensaje-error {
+    border: 1px solid;margin: 10px 0px;padding:10px 10px 10px 10px;
+    margin-left:5px;
+    color: #D8000C;background-color: #FFBABA;
+    border: 1px solid;margin: 0px 5px;padding:2px 5px;
+}
+
+.mensaje-error-icon {background: url("#{resource['primefaces:messages/messages.png']}") no-repeat;display:block;float:left;margin:0;padding:0;position: relative;}
+.mensaje-error-icon {height:16px;width:16px;}
+.mensaje-error-summary {margin-left:10px;font-weight:bold;}
+.mensaje-error-detail {margin-left:5px;}
+.mensaje-error {color: #D8000C;background-color: #FFBABA;}
+.mensaje-error {border: 1px solid;margin: 0px 5px;padding:2px 5px;}
+.mensaje-error-icon {background-position: 0px -136px;}
+
+.ui-growl {
+
+}

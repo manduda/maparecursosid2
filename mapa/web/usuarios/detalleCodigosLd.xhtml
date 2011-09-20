@@ -63,7 +63,7 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="recuperarDialog.hide();resultadoAgregarDialog.show();">
+                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:param name="codigoAccion" value="5"/>
                                 <f:param name="tipoRecurso" value="codigosld"/>
                             </p:commandButton>
@@ -99,7 +99,7 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="preasignarDialog.hide();resultadoAgregarDialog.show();">
+                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:param name="codigoAccion" value="2"/>
                                 <f:param name="tipoRecurso" value="codigosld"/>
                             </p:commandButton>
@@ -119,6 +119,16 @@
                      </h:form>
                 </h:panelGrid>
             </p:dialog>
+            
+            <script type="text/javascript">  
+                function cerrarDialogos(xhr, status, args) {
+                    if(args.cerrarDialog) {
+                        recuperarDialog.hide();
+                        preasignarDialog.hide();
+                    }
+                }
+            </script>
+            
         </h:panelGroup>
     </ui:composition>
 </html>

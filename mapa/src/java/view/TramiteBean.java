@@ -22,6 +22,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
+import org.primefaces.context.RequestContext;
 import vo.AcAccionVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
@@ -338,6 +339,7 @@ public class TramiteBean implements Serializable {
     }
     
     public String agregarRecurso() {
+        boolean cerrarDialog = false;
         if(radicadoAgregarRecurso.equals("")){
             mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar un número de radicado<br><br>";
             return null;
@@ -388,6 +390,18 @@ public class TramiteBean implements Serializable {
 
             switch(codigoAccion){
                 case 2: //Preasignar
+                    if(tramiteSenalizacionVO.getTstNombreNodo().equals("")){
+                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar el nombre del nodo<br><br>";
+                        return null;
+                    }
+                    if(tramiteSenalizacionVO.getTstMarcaModelo().equals("")){
+                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la marca/modelo del nodo<br><br>";
+                        return null;
+                    }
+                    if(tramiteSenalizacionVO.getTstDireccion().equals("")){
+                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la dirección de ubicación del nodo<br><br>";
+                        return null;
+                    }
                     municipio.setCodigoMunicipio(tramiteSenalizacionVO.getCodigoMunicipio().getCodigoMunicipio());
                     for (TrTramitesVO detalleVO : tramites) {
                         if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
@@ -482,6 +496,10 @@ public class TramiteBean implements Serializable {
                 break;
         }
         
+        cerrarDialog = true;
+        
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.addCallbackParam("cerrarDialog", cerrarDialog);
         //this.setTramiteAgregarRecurso(-1);
         //this.radicadoAgregarRecurso = "";
         //this.observacionesAgregarRecurso = "";
