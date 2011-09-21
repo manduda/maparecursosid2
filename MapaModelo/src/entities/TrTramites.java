@@ -73,6 +73,7 @@ public class TrTramites implements Serializable {
     private String trtObservaciones;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    @OrderBy
     private Collection<GtGestionTramite> gtGetionTramiteCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")

@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class MunicipiosVO {
+public class MunicipiosVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String codigoMunicipio;
     private String nombreMunicipio;
     private DepartamentosVO codigoDepartamento;

@@ -15,6 +15,7 @@ import daos.TsTramiteSenalizacionDAO;
 import entities.AcAccion;
 import entities.ClCodigosLd;
 import entities.EmOperador;
+import entities.EsEstado;
 import entities.EtEstadoTramite;
 import entities.GtGestionTramite;
 import entities.Municipios;
@@ -24,6 +25,7 @@ import entities.TrTramites;
 import entities.TsTramiteSenalizacion;
 import entities.UsUsuarios;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import vo.EmOperadorVO;
@@ -59,6 +61,7 @@ public class TrTramitesService {
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
         gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
         gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
         gestionTramite.setUsnCodigo(usuario);
         gestionTramite.setTrnCodigo(entity);
@@ -87,6 +90,7 @@ public class TrTramitesService {
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
         gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
         gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
         gestionTramite.setUsnCodigo(usuario);
         gestionTramite.setTrnCodigo(entity);
@@ -115,6 +119,7 @@ public class TrTramitesService {
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
         gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
         gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
         gestionTramite.setUsnCodigo(usuario);
         gestionTramite.setTrnCodigo(entity);
@@ -143,11 +148,79 @@ public class TrTramitesService {
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
         gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
         gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
         gestionTramite.setUsnCodigo(usuario);
         gestionTramite.setTrnCodigo(entity);
         
         GtGestionTramiteDAO.persist(gestionTramite, em);
+    }
+    
+    public void aprobarTramite(TrTramitesVO vo, EntityManager em){
+        TrTramites entity = new TrTramites();
+        
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
+        
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(4);
+        
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        
+        //entity.setTrnCodigo(vo.getTrnCodigo());
+        entity.setEtnCodigo(estado);
+        //entity.setUsnCodigo(usuario);
+        entity.setTrfFecha(vo.getTrfFecha());
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
+        
+        if (!entity.getTsTramiteSenalizacionCollection().isEmpty()) {
+            Collection<TsTramiteSenalizacion> recursos = entity.getTsTramiteSenalizacionCollection();
+            for (TsTramiteSenalizacion t : recursos) {
+                if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    SeSenalizacion senalizacion = SeSenalizacionDAO.findbyId(t.getSenCodigo().getSenCodigo(), em);
+                    senalizacion.setCodigoMunicipio(t.getCodigoMunicipio());
+                    senalizacion.setEmrCodigo(t.getEmrCodigo());
+                    EsEstado estadoRecurso = new EsEstado();
+                    estadoRecurso.setEsnCodigo(2);
+                    senalizacion.setEsnCodigo(estadoRecurso);
+                    senalizacion.setSetNombreNodo(t.getTstNombreNodo());
+                    senalizacion.setSetMarcaModelo(t.getTstMarcaModelo());
+                    senalizacion.setSetDireccion(t.getTstDireccion());
+                    senalizacion.setSetObservaciones(t.getTstObservaciones());
+                    SeSenalizacionDAO.merge(senalizacion, em);
+                }
+            }
+        }
+        
+        if (!entity.getTlTramiteldCollection().isEmpty()) {
+            Collection<TlTramiteLd> recursos = entity.getTlTramiteldCollection();
+            for (TlTramiteLd t : recursos) {
+                if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    ClCodigosLd codigoLd = ClCodigosLdDAO.findbyId(t.getClnCodigo().getClnCodigo(), em);
+                    codigoLd.setEmrCodigo(t.getEmrCodigo());
+                    EsEstado estadoRecurso = new EsEstado();
+                    estadoRecurso.setEsnCodigo(2);
+                    codigoLd.setEsnCodigo(estadoRecurso);
+                    codigoLd.setCltObservaciones(t.getTltObservaciones());
+                    ClCodigosLdDAO.merge(codigoLd, em);
+                }
+            }
+        }
+
+        
+        
+        
     }
     
     public TrTramitesVO getById(int id, EntityManager em){

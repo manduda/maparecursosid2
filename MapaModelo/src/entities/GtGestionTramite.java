@@ -49,6 +49,10 @@ public class GtGestionTramite implements Serializable {
     @Column(name = "GTF_FECHA")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date gtfFecha;
+    
+    @Column(name = "GTT_OBSERVACIONES")
+    @Basic(optional = true)
+    private String gttObservaciones;
         
     public GtGestionTramite() {
     }
@@ -70,6 +74,7 @@ public class GtGestionTramite implements Serializable {
         //vo.setTrnCodigo(tramiteVO);
         vo.setEtnCodigo(estadoTramiteVO);
         vo.setGtfFecha(this.getGtfFecha());
+        vo.setGttObservaciones(this.getGttObservaciones());
         
         return vo;
     }
@@ -113,6 +118,14 @@ public class GtGestionTramite implements Serializable {
 
     public void setUsnCodigo(UsUsuarios usnCodigo) {
         this.usnCodigo = usnCodigo;
+    }
+
+    public String getGttObservaciones() {
+        return gttObservaciones;
+    }
+
+    public void setGttObservaciones(String gttObservaciones) {
+        this.gttObservaciones = gttObservaciones;
     }
 
 }

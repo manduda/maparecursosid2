@@ -19,6 +19,7 @@ public class GtGestionTramiteVO implements Serializable {
     private TrTramitesVO trnCodigo;
     private EtEstadoTramiteVO etnCodigo;
     private Date gtfFecha;
+    private String gttObservaciones;
         
     public GtGestionTramiteVO() {
     }
@@ -61,6 +62,14 @@ public class GtGestionTramiteVO implements Serializable {
 
     public void setUsnCodigo(UsUsuariosVO usnCodigo) {
         this.usnCodigo = usnCodigo;
+    }
+
+    public String getGttObservaciones() {
+        return gttObservaciones;
+    }
+
+    public void setGttObservaciones(String gttObservaciones) {
+        this.gttObservaciones = gttObservaciones;
     }
 
 }

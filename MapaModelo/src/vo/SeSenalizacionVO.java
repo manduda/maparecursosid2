@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class SeSenalizacionVO {
+public class SeSenalizacionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int senCodigo;
     private MunicipiosVO codigoMunicipio;
     private EmOperadorVO emrCodigo;
