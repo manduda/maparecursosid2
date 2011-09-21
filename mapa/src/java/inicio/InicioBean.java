@@ -68,15 +68,63 @@ public class InicioBean {
         if (userVO != null){
             userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
             if (userVO.getUsnEstado() == 1){
-                //Usuario logueado
-                //UserBean usuario = new UserBean();
-                //usuario.setUserVO(userVO);
-                //usuario.setLogin(true);
                 userBean.setUserVO(userVO);
                 userBean.setLogin(true);
-                //FacesContext facesContext = FacesContext.getCurrentInstance();
-                //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-                //facesContext.getExternalContext().getSessionMap().put("UserBean", usuario);
+                int tipoUsuario = userBean.getUserVO().getTunCodigo().getTunCodigo();
+                switch(tipoUsuario) {
+                    case 1: // ADMINISTADOR
+                        userBean.setRecuperar(false);
+                        userBean.setPreasignar(false);
+                        userBean.setReservar(true);
+                        userBean.setLiberar(true);
+                        userBean.setEliminarRecurso(false);
+                        userBean.setCrearTramite(false);
+                        userBean.setEnviarTramite(false);
+                        userBean.setArchivarTramite(false);
+                        userBean.setDevolverTramite(false);
+                        userBean.setAprobarTramite(false);
+                        userBean.setTerminarTramite(true);
+                        userBean.setCambiarOperadorTramite(false);
+                        userBean.setConsultarTramite(true);
+                        userBean.setTransferirRecursos(true);
+                        userBean.setAdministrarUsuarios(true);
+                        break;
+                    case 2: // CORRDINADOR
+                        userBean.setRecuperar(false);
+                        userBean.setPreasignar(false);
+                        userBean.setReservar(false);
+                        userBean.setLiberar(false);
+                        userBean.setEliminarRecurso(false);
+                        userBean.setCrearTramite(false);
+                        userBean.setEnviarTramite(false);
+                        userBean.setArchivarTramite(true);
+                        userBean.setDevolverTramite(true);
+                        userBean.setAprobarTramite(true);
+                        userBean.setTerminarTramite(false);
+                        userBean.setCambiarOperadorTramite(false);
+                        userBean.setConsultarTramite(true);
+                        userBean.setTransferirRecursos(false);
+                        userBean.setAdministrarUsuarios(false);
+                        break;
+                    case 3: // ASESOR
+                        userBean.setRecuperar(true);
+                        userBean.setPreasignar(true);
+                        userBean.setReservar(false);
+                        userBean.setLiberar(false);
+                        userBean.setEliminarRecurso(true);
+                        userBean.setCrearTramite(true);
+                        userBean.setEnviarTramite(true);
+                        userBean.setArchivarTramite(false);
+                        userBean.setDevolverTramite(false);
+                        userBean.setAprobarTramite(false);
+                        userBean.setTerminarTramite(false);
+                        userBean.setCambiarOperadorTramite(true);
+                        userBean.setConsultarTramite(true);
+                        userBean.setTransferirRecursos(false);
+                        userBean.setAdministrarUsuarios(false);
+                        break;
+                }
+                
                 Mensaje = "<br>Sesión iniciada<br><br>"
                         + "Bienvenid@ " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
                         + "Tipo de usuario: <b>" + userVO.getTunCodigo().getTutNombre() + "</b><br><br>";

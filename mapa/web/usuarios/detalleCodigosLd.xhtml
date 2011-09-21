@@ -22,15 +22,15 @@
                         <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
                     </h:panelGrid>
                     <h:panelGrid width="100%" style="text-align: center;">
-                        <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
+                        <h:panelGroup rendered="#{UserBean.login}">
                             <h:form>
-                            <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}"/>
-                            <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
+                            <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                            <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
                                 <f:param name="tipoRecurso" value="codigosld"/>
                             </p:commandButton>
-                            <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
-                            <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ldDialog.hide();"/>
-                            <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)}" oncomplete="ldDialog.hide();"/>
+                            <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
+                            <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ldDialog.hide();"/>
+                            <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" oncomplete="ldDialog.hide();"/>
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>
@@ -39,7 +39,7 @@
 
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
@@ -76,7 +76,7 @@
 
             <!-- MENÚ PREASIGNAR --> 
             <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">

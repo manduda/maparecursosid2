@@ -30,15 +30,15 @@
                         <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
                     </h:panelGrid>
                     <h:panelGrid width="100%" style="text-align: center;">
-                        <h:panelGroup rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}">
+                        <h:panelGroup rendered="#{UserBean.login}">
                             <h:form>
-                            <h:outputText value="Los bloques en reserva solo pueden ser liberados por el administrador" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo != 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}"/>
-                            <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
+                            <h:outputText value="Los bloques en reserva solo pueden manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                            <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
                                 <f:param name="tipoRecurso" value="senalizacion"/>
                             </p:commandButton>
-                            <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                            <p:commandButton value="Liberar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
-                            <p:commandButton value="Reservar" rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 1) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
+                            <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
+                            <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
+                            <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>
@@ -47,7 +47,7 @@
 
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
@@ -84,7 +84,7 @@
 
             <!-- MENÚ PREASIGNAR --> 
             <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">

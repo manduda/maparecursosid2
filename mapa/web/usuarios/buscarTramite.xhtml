@@ -1,0 +1,129 @@
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Buscar trámite"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="formBuscarTramites">
+            <h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Trámite ID"/>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:inputText id="tramiteID" value="#{TramiteBean.tramiteIdBuscarTramite}" maxlength="10" size="10" converter="javax.faces.Integer"
+                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                        <p:message for="tramiteID" />
+                    </h:panelGrid>
+                    <h:outputText value="Usuario"/>
+                    <h:inputText id="usuario" value="#{TramiteBean.usuarioBuscarTramite}" maxlength="10" size="10"/>
+                    <h:outputText value="Operador"/>
+                    <h:selectOneMenu value="#{TramiteBean.operadorBuscarTramite}">
+                        <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Estado"/>
+                    <h:selectOneMenu value="#{TramiteBean.estadoBuscarTramite}">
+                        <f:selectItems value="#{TramiteBean.listaEstadoTramite}" />  
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="pgBustarTramites,formBuscarTramites"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:separator/>
+            
+            <h:panelGrid id="pgBustarTramites" width="100%">
+                <h:panelGrid columns="2">
+                    <h:outputText value="Registros encontrados:"/>
+                    <h:outputText value=""/>
+                </h:panelGrid>
+                <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true" selectionMode="single"
+                             selection="#{TramiteBean.seleccionBuscarTramite}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             style="font-size:10px" rowSelectListener="#{TramiteBean.detalleTramiteSeleccionado}" rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50" emptyMessage="No se encontraron trámites" dblClickSelect="true"
+                             paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <f:facet name="header">Trámites</f:facet>
+                    <p:column styleClass="tabla-expandir">  
+                        <p:rowToggler />  
+                    </p:column>
+                    <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:100px">
+                        <h:outputText value="#{tr.trnCodigo}"/>
+                    </p:column>
+                    <p:column headerText="Fecha" sortBy="#{tr.emrCodigo.emtNombre}">
+                        <h:outputText value="#{tr.trfFecha}">
+                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{tr.etnCodigo.ettNombre}" style="width:150px">
+                        <h:outputText value="#{tr.etnCodigo.ettNombre}"/>
+                    </p:column>
+                    <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.login}">
+                        <h:outputText value="#{tr.usnCodigo.codigoSIUST.login}"/>
+                    </p:column>
+                    <p:column headerText="Operador" sortBy="#{tr.emrCodigo.emtNombre}">
+                        <h:outputText value="#{tr.emrCodigo.emtNombre}"/>
+                    </p:column>
+                    <p:column headerText="Recursos">
+                        <h:outputText value="Señalización" rendered="#{not empty tr.tsTramiteSenalizacionCollection}"/>
+                        <br/>
+                        <h:outputText value="Códigos LD" rendered="#{not empty tr.tlTramiteLdCollection}"/>
+                    </p:column>
+                    <p:rowExpansion>
+                        <h:dataTable value="#{tr.gtGetionTramiteCollection}"
+                                     var="selTramite" border="1" style="font-size:9px" width="100%"
+                                     styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="FECHA"/>
+                                </f:facet>
+                                <h:outputText value="#{selTramite.gtfFecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                                </h:outputText>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="ESTADO"/>
+                                </f:facet>
+                                <h:outputText value="#{selTramite.etnCodigo.ettNombre}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="USUARIO"/>
+                                </f:facet>
+                                <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.login}"/>
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">
+                                    <h:outputText value="ROL"/>
+                                </f:facet>
+                                <h:outputText value="#{selTramite.usnCodigo.tunCodigo.tutNombre}"/>
+                            </h:column>
+                            <h:column >
+                                <f:facet name="header">
+                                    <h:outputText value="OBSERVACIONES"/>
+                                </f:facet>
+                                <h:outputText value="#{selTramite.gttObservaciones}"/>
+                            </h:column>
+                        </h:dataTable>
+                    </p:rowExpansion>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+
+        <h:panelGroup>
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+        
+    </ui:define>
+</ui:composition>

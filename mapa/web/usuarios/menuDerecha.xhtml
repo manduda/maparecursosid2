@@ -9,7 +9,7 @@
     <ui:composition>
         <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/menuDerecha.xhtml')}">
             <!-- MENU -->
-            <p:panel header="Menu" rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+            <p:panel header="Menu" rendered="#{UserBean.login}">
                 <h:panelGrid columns="2" style="font-size:9px;" >
                     <h:outputText value="Usuario:" style="font-weight: bold;"/>
                     <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}"/>
@@ -21,20 +21,20 @@
                     <h:outputText value="OPCIONES" style="font-weight: bold;"/>
                 </h:panelGrid>
                 <h:form style="font-size:10px">
-                    <!-- ASESOR -->
-                    <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
                         <h:panelGrid columns="2">
-                            <h:outputText value="&#8226;" style="color: #045491;"/>
-                            <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}"/>
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.crearTramite}"/>
+                            <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}" rendered="#{UserBean.crearTramite}"/>
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.transferirRecursos}"/>
+                            <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}" rendered="#{UserBean.transferirRecursos}"/>
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarUsuarios}"/>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
+                                <h:outputText value="Administrar usuarios"/>
+                            </h:outputLink>
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarTramite}"/>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/buscarTramite.xhtml" rendered="#{UserBean.consultarTramite}">
+                                <h:outputText value="Buscar trámite"/>
+                            </h:outputLink>
                         </h:panelGrid>
-                    </h:panelGroup>
-                    <!-- ADMINISTRADOR -->
-                    <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
-                        <h:panelGrid columns="2">
-                            <h:outputText value="&#8226;" style="color: #045491;"/>
-                            <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}"/>
-                        </h:panelGrid>
-                    </h:panelGroup>
                 </h:form>
             </p:panel>
             

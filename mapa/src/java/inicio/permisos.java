@@ -4,24 +4,11 @@
  */
 package inicio;
 
-//import javax.faces.bean.ManagedBean;
-
-import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import vo.UsUsuariosVO;
-
-//import javax.faces.bean.SessionScoped;
-
 /**
  *
- * @author MADD
+ * @author miguel.duran
  */
-@ManagedBean(name = "UserBean")
-@SessionScoped
-public class UserBean implements Serializable {
-    private UsUsuariosVO userVO = new UsUsuariosVO();
-    private Boolean login = false;
+public class permisos {
     
     // --- OPCIONES AGREGAR RECURSOS DE UN TRAMITE
     private boolean recuperar = false;
@@ -40,29 +27,10 @@ public class UserBean implements Serializable {
     private boolean aprobarTramite = false;
     private boolean terminarTramite = false;
     private boolean cambiarOperadorTramite = false;
-    
-    private boolean consultarTramite = false;
         
     private boolean transferirRecursos = false;
-    private boolean administrarUsuarios = false;
-
-    public UserBean() {
-    }
-
-    public UsUsuariosVO getUserVO() {
-        return userVO;
-    }
-
-    public void setUserVO(UsUsuariosVO userVO) {
-        this.userVO = userVO;
-    }
-
-    public Boolean getLogin() {
-        return login;
-    }
-
-    public void setLogin(Boolean login) {
-        this.login = login;
+        
+    public permisos() {
     }
 
     public boolean isAprobarTramite() {
@@ -167,22 +135,6 @@ public class UserBean implements Serializable {
 
     public void setTransferirRecursos(boolean transferirRecursos) {
         this.transferirRecursos = transferirRecursos;
-    }
-
-    public boolean isAdministrarUsuarios() {
-        return administrarUsuarios;
-    }
-
-    public void setAdministrarUsuarios(boolean administrarUsuarios) {
-        this.administrarUsuarios = administrarUsuarios;
-    }
-
-    public boolean isConsultarTramite() {
-        return consultarTramite;
-    }
-
-    public void setConsultarTramite(boolean consultarTramite) {
-        this.consultarTramite = consultarTramite;
     }
     
 }

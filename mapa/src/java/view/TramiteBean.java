@@ -23,6 +23,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.SelectEvent;
 import vo.AcAccionVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
@@ -59,6 +60,16 @@ public class TramiteBean implements Serializable {
     private Collection<SelectItem> listaTramites;
     private Collection<SelectItem> listaDepartamento;
     private Collection<SelectItem> listaMunicipio;
+    
+    private Collection<SelectItem> listaEstadoTramite;
+    private String tramiteIdBuscarTramite;
+    private String usuarioBuscarTramite;
+    private int estadoBuscarTramite;
+    private String operadorBuscarTramite;
+    private List<TrTramitesVO> listaBuscarTramite = new ArrayList<TrTramitesVO>();
+    private int countListaBuscarTramite;
+    private TrTramitesVO seleccionBuscarTramite = new TrTramitesVO();
+    
     private String seleccionDepartamento;
     private String seleccionMunicipio;
     private Integer tramiteAgregarRecurso;
@@ -126,6 +137,7 @@ public class TramiteBean implements Serializable {
             listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+            listaEstadoTramite = convertir.createSelectItemsList(fachada.listaEstadoTramites(), null, "getEtnCodigo", "getEttNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
         }
@@ -247,6 +259,15 @@ public class TramiteBean implements Serializable {
         
         return configuracion.getRutaContexto()+"usuarios/tramite";
     }
+    
+    public String detalleTramiteSeleccionado(SelectEvent event) {
+        mensajeTramite = "";
+        selectedTramite = seleccionBuscarTramite;
+        seleccionBuscarTramite = null;
+        
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedTramite", event.getObject());  
+        return configuracion.getRutaContexto()+"usuarios/tramite?faces-redirect=true";
+    }
     // ----------------------------------------------------------
     
     public String archivarTramite() {
@@ -335,6 +356,51 @@ public class TramiteBean implements Serializable {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
+        return null;
+    }
+    
+    public String aprobarTramite() {
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+   
+        boolean resultado = fachada.aprobarTramite(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        } else {
+            mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        return null;
+    }
+    
+    public String buscarTramite() {
+        List<SeSenalizacionVO> senalizacion = new ArrayList<SeSenalizacionVO>();
+        facade fachada = new facade();
+
+        final Integer id;
+        
+        if (tramiteIdBuscarTramite.equals("")) {
+            id = -1;
+        } else {
+            id = Integer.parseInt(tramiteIdBuscarTramite);
+        }
+
+        listaBuscarTramite = fachada.cargarTramites(0, -1, id, usuarioBuscarTramite, operadorBuscarTramite, estadoBuscarTramite);
+        //countListaBuscarTramite = fachada.countCargarCodigosLd(operadorVO.getEmrCodigo(), ld, estadoVO.getEsnCodigo());
+
         return null;
     }
     
@@ -976,6 +1042,70 @@ public class TramiteBean implements Serializable {
 
     public void setTramiteCodigosLdVO(TlTramiteLdVO tramiteCodigosLdVO) {
         this.tramiteCodigosLdVO = tramiteCodigosLdVO;
+    }
+
+    public Collection<SelectItem> getListaEstadoTramite() {
+        return listaEstadoTramite;
+    }
+
+    public void setListaEstadoTramite(Collection<SelectItem> listaEstadoTramite) {
+        this.listaEstadoTramite = listaEstadoTramite;
+    }
+
+    public int getEstadoBuscarTramite() {
+        return estadoBuscarTramite;
+    }
+
+    public void setEstadoBuscarTramite(int estadoBuscarTramite) {
+        this.estadoBuscarTramite = estadoBuscarTramite;
+    }
+
+    public String getOperadorBuscarTramite() {
+        return operadorBuscarTramite;
+    }
+
+    public void setOperadorBuscarTramite(String operadorBuscarTramite) {
+        this.operadorBuscarTramite = operadorBuscarTramite;
+    }
+
+    public String getTramiteIdBuscarTramite() {
+        return tramiteIdBuscarTramite;
+    }
+
+    public void setTramiteIdBuscarTramite(String tramiteIdBuscarTramite) {
+        this.tramiteIdBuscarTramite = tramiteIdBuscarTramite;
+    }
+
+    public String getUsuarioBuscarTramite() {
+        return usuarioBuscarTramite;
+    }
+
+    public void setUsuarioBuscarTramite(String usuarioBuscarTramite) {
+        this.usuarioBuscarTramite = usuarioBuscarTramite;
+    }
+
+    public int getCountListaBuscarTramite() {
+        return countListaBuscarTramite;
+    }
+
+    public void setCountListaBuscarTramite(int countListaBuscarTramite) {
+        this.countListaBuscarTramite = countListaBuscarTramite;
+    }
+
+    public List<TrTramitesVO> getListaBuscarTramite() {
+        return listaBuscarTramite;
+    }
+
+    public void setListaBuscarTramite(List<TrTramitesVO> listaBuscarTramite) {
+        this.listaBuscarTramite = listaBuscarTramite;
+    }
+
+    public TrTramitesVO getSeleccionBuscarTramite() {
+        return seleccionBuscarTramite;
+    }
+
+    public void setSeleccionBuscarTramite(TrTramitesVO seleccionBuscarTramite) {
+        this.seleccionBuscarTramite = seleccionBuscarTramite;
     }
     
 }

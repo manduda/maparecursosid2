@@ -32,8 +32,8 @@
                         <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteLD.tltObservaciones}"/>
                         </p:column>
-                        <p:column styleClass="tabla-eliminar">
-                            <p:commandLink rendered="#{(UserBean.userVO.tunCodigo.tunCodigo == 3)}" actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarCodigosLdDialog.show()" update="eliminarCodigosLdDialog">
+                        <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}">
+                            <p:commandLink actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarCodigosLdDialog.show()" update="eliminarCodigosLdDialog">
                                 <f:param name="codigoDetalleTramite" value="#{tramiteLD.tlnCodigo}" />
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
                             </p:commandLink>
@@ -57,7 +57,7 @@
             </h:panelGroup>
             
             <!-- MENÚ ELIMINAR RECURSO -->
-            <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{UserBean.login}" 
+            <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{(UserBean.login)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}" 
                              showEffect="fade" hideEffect="fade" modal="true" closable="false"
                              header="Confirmación" severity="alert" widgetVar="eliminarCodigosLdDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
