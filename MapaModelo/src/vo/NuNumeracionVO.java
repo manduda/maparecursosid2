@@ -4,6 +4,7 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -11,7 +12,9 @@ import java.math.BigInteger;
  *
  * @author miguel.duran
  */
-public class NuNumeracionVO {
+public class NuNumeracionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private BigDecimal nunCodigo;
     private MunicipiosVO codigoMunicipio;
     private EmOperadorVO emrCodigo;

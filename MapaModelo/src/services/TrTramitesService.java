@@ -7,6 +7,7 @@ package services;
 import daos.ClCodigosLdDAO;
 import daos.CoConfiguracionDAO;
 import daos.EmOperadorDAO;
+import daos.EtEstadoTramiteDAO;
 import daos.GtGestionTramiteDAO;
 import daos.SeSenalizacionDAO;
 import daos.TlTramiteLdDAO;
@@ -29,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import vo.EmOperadorVO;
+import vo.EtEstadoTramiteVO;
 import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -223,6 +225,15 @@ public class TrTramitesService {
         
     }
     
+    public List<EtEstadoTramiteVO> getListaEstadoTramites(EntityManager em){
+        List<EtEstadoTramite> estado = EtEstadoTramiteDAO.getList(em);
+        List<EtEstadoTramiteVO> estadoVO = new ArrayList<EtEstadoTramiteVO>();
+        for (EtEstadoTramite t: estado){
+            estadoVO.add(t.toVO());
+        }
+        return estadoVO;
+    }
+    
     public TrTramitesVO getById(int id, EntityManager em){
         TrTramites entity = TrTramitesDAO.findbyId(id, em);
         return entity.toVO();
@@ -275,6 +286,15 @@ public class TrTramitesService {
     
     public List<TrTramitesVO> getTramitesTerminados(EntityManager em){
         List<TrTramites> tramites = TrTramitesDAO.getTramitesTerminados(em);
+        List<TrTramitesVO> tramitesVO = new ArrayList<TrTramitesVO>();        
+        for (TrTramites t : tramites) {
+            tramitesVO.add(t.toVO());
+        }
+        return tramitesVO;
+    }
+    
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, EntityManager em){
+        List<TrTramites> tramites = TrTramitesDAO.cargarTramites(first, max, tramiteId, usuario, operador, estado, em);
         List<TrTramitesVO> tramitesVO = new ArrayList<TrTramitesVO>();        
         for (TrTramites t : tramites) {
             tramitesVO.add(t.toVO());

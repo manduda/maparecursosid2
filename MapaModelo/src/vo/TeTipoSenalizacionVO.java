@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author miguel.duran
  */
-public class TeTipoSenalizacionVO {
+public class TeTipoSenalizacionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int tenCodigo;
     private String tetNombre;
     private Collection<SeSenalizacionVO> seSenalizacionCollection;

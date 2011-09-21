@@ -5,6 +5,7 @@
 package daos;
 
 import entities.TrTramites;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -75,4 +76,48 @@ public class TrTramitesDAO {
         return query.getResultList();
     }
     
+    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, EntityManager em){
+        List<TrTramites> tramites = new ArrayList<TrTramites>();
+
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT t FROM TrTramites t " +
+                "WHERE 1=1 ");
+
+        if(!operador.equals("-1")) {
+            searchQuery.append("AND t.emrCodigo.emrCodigo = ?1 ");
+        }
+        if(tramiteId != -1) {
+            searchQuery.append("AND t.trnCodigo = ?2 ");
+        }
+        if(estado != -1) {
+            searchQuery.append("AND t.etnCodigo.etnCodigo = ?3 ");
+        }
+        if(!usuario.equals("")) {
+            searchQuery.append("AND t.usnCodigo.codigoSIUST.login = ?4 ");
+        }
+        
+        searchQuery.append("ORDER BY t.trnCodigo ASC");
+        
+        Query query = em.createQuery(searchQuery.toString());
+        
+        if(!operador.equals("-1")) {
+            query.setParameter(1, operador);
+        }
+        if(tramiteId != -1) {
+            query.setParameter(2, tramiteId);
+        }
+        if(estado != -1) {
+            query.setParameter(3, estado);
+        }
+        if(!usuario.equals("")) {
+            query.setParameter(4, usuario);
+        }
+        
+        query.setFirstResult(first);
+        if(max != -1) {
+            query.setMaxResults(max);
+        }
+        tramites = query.getResultList();        
+        return tramites;
+    }
 }

@@ -4,11 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class ReRegionVO {
+public class ReRegionVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int renCodigo;
     private String retNombre;
     private RtTipoRegionVO rtnCodigo;

@@ -109,7 +109,7 @@ public class main {
         //-------------------------------------
         
         //----  USUARIO
-        UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
+        /*UsUsuariosVO usuario = fachada.iniciarSesion("MDURAN", "MIGUEL01");
         
         if (usuario != null){
             if (usuario.getUsnEstado() == 1){
@@ -119,7 +119,7 @@ public class main {
             }
         } else {
             System.out.println("Usuario o contraseña incorrectos");
-        }
+        }*/
         //-------------------------------------
         /*Class itemClass = null;
         itemClass = usuario.getClass();
@@ -245,6 +245,19 @@ public class main {
             String operador = vo.get(i).getEmtNombre();
             System.out.println(codigo+"-"+operador);
 	}*/
+        //-------------------------------------
+        
+        //----  BUSCAR TRAMITES
+        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        int cantidad = 0;
+        vo = fachada.cargarTramites(0, -1, -1, "", "-1", -1);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getTrnCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEtnCodigo().getEttNombre();
+            String usuario = vo.get(i).getUsnCodigo().getCodigoSIUST().getLogin();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+usuario);
+	}
         //-------------------------------------
         
     }

@@ -22,6 +22,7 @@ import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
+import vo.EtEstadoTramiteVO;
 import vo.MunicipiosVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
@@ -196,6 +197,31 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = estado.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<EtEstadoTramiteVO> listaEstadoTramites() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EtEstadoTramiteVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.getListaEstadoTramites(em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -717,6 +743,31 @@ public class facade {
                     vo = tramites.getTramitesAsesor(usnCodigo, em);
                     break;
             }
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TrTramitesVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.cargarTramites(first, max, tramiteId, usuario, operador, estado, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
