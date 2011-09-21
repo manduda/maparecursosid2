@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author miguel.duran
  */
-public class DepartamentosVO {
+public class DepartamentosVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String codigoDepartamento;
     private String nombreDepartamento;
     private Collection<MunicipiosVO> municipiosCollection;
