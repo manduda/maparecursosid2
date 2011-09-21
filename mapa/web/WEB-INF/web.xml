@@ -37,7 +37,7 @@
     </session-config>
     <error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/sessionExpired.xhtml</location>
+        <location>/error/sessionExpired.xhtml</location>
     </error-page>
     <error-page>
         <exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
@@ -49,7 +49,7 @@
     </error-page>
     <error-page>
         <error-code>404</error-code>
-        <location>/404.xhtml</location>
+        <location>/error/404.xhtml</location>
     </error-page>
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
