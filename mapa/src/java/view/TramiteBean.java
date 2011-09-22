@@ -106,21 +106,27 @@ public class TramiteBean implements Serializable {
             userVO = userSession.getUserVO();
             switch(userVO.getTunCodigo().getTunCodigo()) {
                 case 1:
+                    //tramites = fachada.cargarTramites(0,-1,-1,"","-1",4);
                     tipoUsuario = 4;
                     break;
                 case 2:
+                    //tramites = fachada.cargarTramites(0,-1,-1,"","-1",2);
                     tipoUsuario = 2;
                     break;
                 case 3:
+                    //tramites = fachada.cargarTramites(0,-1,-1,userVO.getCodigoSIUST().getLogin(),"-1",1);
+                    //for (TrTramitesVO t : fachada.cargarTramites(0,-1,-1,userVO.getCodigoSIUST().getLogin(),"-1",3)){
+                    //    tramites.add(t);
+                    //}
                     tipoUsuario = 6;
                     break;
             }
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
         }
     }
      
     /** Creates a new instance of TramiteBean */
-    public TramiteBean() {
+    public TramiteBean()    {
         facade fachada = new facade();
         //userVO = new UsUsuariosVO();
         //UserBean userSession = null;
@@ -239,7 +245,7 @@ public class TramiteBean implements Serializable {
         System.out.println("resultado: "+resultado);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeCrearTramite = "<br><b>Trámite creado.</b><br><br>Código del trámite: "+tramites.get(0).getTrnCodigo()+"<br><br>";
         } else {
             mensajeCrearTramite = "<br><b>Error al crear el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -261,13 +267,13 @@ public class TramiteBean implements Serializable {
                 break;
             }
         }
-        facade fachada = new facade();
+        /*facade fachada = new facade();
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaOperador = convertir.createSelectItemsList(fachada.cargarOperadores(), "getEmrCodigo", null, "getEmtNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Trámites", e);
-        }
+        }*/
         
         return configuracion.getRutaContexto()+"usuarios/tramite";
     }
@@ -304,7 +310,7 @@ public class TramiteBean implements Serializable {
         boolean resultado = fachada.archivarTramite(vo);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite borrado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
             mensajeTramite = "<br><b>Error al borrar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -335,7 +341,7 @@ public class TramiteBean implements Serializable {
         boolean resultado = fachada.enviarTramite(vo);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
             mensajeTramite = "<br><b>Error al enviar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -362,7 +368,7 @@ public class TramiteBean implements Serializable {
         boolean resultado = fachada.devolverTramite(vo);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -389,7 +395,7 @@ public class TramiteBean implements Serializable {
         boolean resultado = fachada.aprobarTramite(vo);
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -568,7 +574,7 @@ public class TramiteBean implements Serializable {
                 mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
-                tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 mensajeRecurso = "<br><b>Recurso agregado correctamente al trámite.</b><br><br>Código del trámite: "+tramiteAgregarRecurso+"<br><br>";
                 break;
             case 2:
@@ -635,7 +641,7 @@ public class TramiteBean implements Serializable {
         }
         
         if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             for (TrTramitesVO detalleVO : tramites) {
                 if (detalleVO.getTrnCodigo() == selectedTramite.getTrnCodigo()){
                     selectedTramite = detalleVO;

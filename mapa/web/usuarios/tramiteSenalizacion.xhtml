@@ -46,7 +46,7 @@
                         <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteSenalizacion.tstObservaciones}"/>
                         </p:column>
-                        <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}">
+                        <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                             <p:commandLink actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarSenalizacionDialog.show()" update="eliminarSenalizacionDialog">
                                 <f:param name="codigoDetalleTramite" value="#{tramiteSenalizacion.tsnCodigo}" />
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
@@ -90,7 +90,7 @@
                         <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();">
                             <f:param name="tipoRecurso" value="senalizacion"/>
                         </p:commandButton>
-                    <p:commandButton value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
+                    <p:commandButton type="button" value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>
             </p:confirmDialog>

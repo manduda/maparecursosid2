@@ -9,10 +9,12 @@
     <ui:composition>
         <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteHistoria.xhtml')}">
             <h:panelGrid>
-                <h:form>
-                <p:commandLink value="Ver Historia trámite" onclick="dialogHistoria.show()"/>
+                <h:outputLink value="javascript:void(0)" onclick="dialogHistoria.show();">     
+                    <h:outputText value="Ver Historia trámite"/>
+                </h:outputLink>
                 <p:dialog header="Detalle" widgetVar="dialogHistoria" resizable="false" modal="true" draggable="false"
                           width="500" showEffect="fade" hideEffect="fade" position="center">
+                    <h:form>
                     <h:dataTable value="#{TramiteBean.selectedTramite.gtGetionTramiteCollection}"
                                  var="selTramite" border="1" style="font-size:9px" width="100%"
                                  styleClass="order-table" headerClass="order-table-header" rowClasses="order-table-odd-row,order-table-even-row">
@@ -49,8 +51,9 @@
                             <h:outputText value="#{selTramite.gttObservaciones}"/>
                         </h:column>
                     </h:dataTable>
+                    </h:form>
                 </p:dialog>
-                </h:form>
+                
             </h:panelGrid>
         </h:panelGroup>
     </ui:composition>
