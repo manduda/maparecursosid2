@@ -499,6 +499,30 @@ public class facade {
         return vo;
     }
     
+    public List<UsUsuariosVO> listaUsuariosAplicacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<UsUsuariosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
     
     //-------- TRAMITES --------
     public boolean crearTramite(TrTramitesVO vo){

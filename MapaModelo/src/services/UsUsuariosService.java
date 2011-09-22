@@ -6,6 +6,8 @@ package services;
 
 import daos.UsUsuariosDAO;
 import entities.UsUsuarios;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import vo.TuTipoUsuarioVO;
 import vo.UsUsuariosVO;
@@ -49,5 +51,14 @@ public class UsUsuariosService {
             return uVO;
         }
         return null;         
+    }
+    
+    public List<UsUsuariosVO> getList(EntityManager em){
+        List<UsUsuarios> usuarios = UsUsuariosDAO.getList(em);
+        List<UsUsuariosVO> usuariosVO = new ArrayList<UsUsuariosVO>();
+        for (UsUsuarios u : usuarios) {
+            usuariosVO.add(u.toVO());
+        }
+        return usuariosVO;
     }
 }

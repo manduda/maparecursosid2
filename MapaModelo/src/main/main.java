@@ -247,8 +247,8 @@ public class main {
 	}*/
         //-------------------------------------
         
-        //----  BUSCAR TRAMITES
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        //---- BUSCAR TRAMITES
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         int cantidad = 0;
         vo = fachada.cargarTramites(0, -1, -1, "", "-1", -1);
         for(int i=0; i < vo.size();i++) {
@@ -257,6 +257,17 @@ public class main {
             String estado = vo.get(i).getEtnCodigo().getEttNombre();
             String usuario = vo.get(i).getUsnCodigo().getCodigoSIUST().getLogin();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+usuario);
+	}*/
+        //-------------------------------------
+        
+        //---- LISTA USUARIOS
+        List<UsUsuariosVO> vo = new ArrayList<UsUsuariosVO>();
+        int cantidad = 0;
+        vo = fachada.listaUsuariosAplicacion();
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getUsnCodigo();
+            String login = vo.get(i).getCodigoSIUST().getLogin();
+            System.out.println(codigo+"-"+login);
 	}
         //-------------------------------------
         

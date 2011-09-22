@@ -32,4 +32,9 @@ public class UsUsuariosDAO {
         return u;
     }
     
+    public static List<UsUsuarios> getList(EntityManager em){
+        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1");
+        return query.getResultList();
+    }
+    
 }
