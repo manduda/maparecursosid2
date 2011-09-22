@@ -40,10 +40,10 @@ public class TrTramitesDAO {
         return n;
     }
     
-    public static List<TrTramites> getTramitesAsesor(int usnCodigo, EntityManager em){
-        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.usnCodigo = :usuario "
+    public static List<TrTramites> getTramitesAsesor(int userCode, EntityManager em){
+        Query query = em.createQuery("SELECT e FROM TrTramites e WHERE e.usnCodigo.codigoSIUST.userCode = :usuario "
                 + "AND e.etnCodigo.etnCodigo IN (1,3) ORDER BY e.trfFecha DESC");
-        query.setParameter("usuario", usnCodigo);
+        query.setParameter("usuario", userCode);
         return query.getResultList();
     }
     

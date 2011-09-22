@@ -239,8 +239,8 @@ public class TrTramitesService {
         return entity.toVO();
     }
     
-    public List<TrTramitesVO> getTramitesAsesor(int usnCodigo, EntityManager em){
-        List<TrTramites> tramites = TrTramitesDAO.getTramitesAsesor(usnCodigo, em);
+    public List<TrTramitesVO> getTramitesAsesor(int userCode, EntityManager em){
+        List<TrTramites> tramites = TrTramitesDAO.getTramitesAsesor(userCode, em);
         List<TrTramitesVO> tramitesVO = new ArrayList<TrTramitesVO>();        
         for (TrTramites t : tramites) {
             tramitesVO.add(t.toVO());

@@ -126,26 +126,27 @@ public class main {
         System.out.println("Clase: " + itemClass.getName());*/
         
         //---- GET TRAMITES
-        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
-        vo = fachada.cargarTramites(2, 1);
+        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        vo = fachada.cargarTramites(6, 1);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
             String estado = t.getEtnCodigo().getEttNombre();
             String operador = t.getEmrCodigo().getEmtNombre();
+            String codigoOperador = t.getEmrCodigo().getEmrCodigo();
             String usuario = t.getUsnCodigo().getCodigoSIUST().getLogin();
             Date fecha = t.getTrfFecha();
             System.out.println("* * * * * *");
-            System.out.println(codigo+"-"+estado+"-"+operador+"-"+usuario+"-"+fecha);
+            System.out.println(codigo+"-"+estado+"-"+codigoOperador+"-"+operador+"-"+usuario+"-"+fecha);
             System.out.println("- - - - - -");
             Collection<GtGestionTramiteVO> gestionVO = t.getGtGetionTramiteCollection();
-            for (GtGestionTramiteVO gt : gestionVO) {
+            /*for (GtGestionTramiteVO gt : gestionVO) {
                 int codigoGT = gt.getGtnCodigo();
                 String usuarioGT = gt.getUsnCodigo().getCodigoSIUST().getLogin();
                 String estadoGT = gt.getEtnCodigo().getEttNombre();
                 Date fechaGT = gt.getGtfFecha();
                 System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
-            }
-        }*/
+            }*/
+        }
         //-------------------------------------
         
         //---- CREAR TRAMITES
@@ -261,14 +262,14 @@ public class main {
         //-------------------------------------
         
         //---- LISTA USUARIOS
-        List<UsUsuariosVO> vo = new ArrayList<UsUsuariosVO>();
+        /*List<UsUsuariosVO> vo = new ArrayList<UsUsuariosVO>();
         int cantidad = 0;
         vo = fachada.listaUsuariosAplicacion();
         for(int i=0; i < vo.size();i++) {
             int codigo = vo.get(i).getUsnCodigo();
             String login = vo.get(i).getCodigoSIUST().getLogin();
             System.out.println(codigo+"-"+login);
-	}
+	}*/
         //-------------------------------------
         
     }

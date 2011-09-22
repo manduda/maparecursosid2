@@ -737,7 +737,7 @@ public class facade {
         return resultado;
     }
     
-    public List<TrTramitesVO> cargarTramites(int tipo, int usnCodigo){
+    public List<TrTramitesVO> cargarTramites(int tipo, int userCode){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -749,13 +749,13 @@ public class facade {
             tx.begin();
             switch(tipo) {
                 case 1:
-                    vo = tramites.getTramitesCreados(usnCodigo, em);
+                    vo = tramites.getTramitesCreados(userCode, em);
                     break;
                 case 2:
                     vo = tramites.getTramitesEnviados(em);
                     break;
                 case 3:
-                    vo = tramites.getTramitesDevueltos(usnCodigo, em);
+                    vo = tramites.getTramitesDevueltos(userCode, em);
                     break;
                 case 4:
                     vo = tramites.getTramitesAprobados(em);
@@ -764,7 +764,7 @@ public class facade {
                     vo = tramites.getTramitesTerminados(em);
                     break;
                 case 6:
-                    vo = tramites.getTramitesAsesor(usnCodigo, em);
+                    vo = tramites.getTramitesAsesor(userCode, em);
                     break;
             }
             tx.commit();
