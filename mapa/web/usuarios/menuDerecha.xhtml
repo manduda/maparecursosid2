@@ -31,9 +31,7 @@
                                 <h:outputText value="Administrar usuarios"/>
                             </h:outputLink>
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarTramite}"/>
-                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/buscarTramite.xhtml" rendered="#{UserBean.consultarTramite}">
-                                <h:outputText value="Buscar trámite"/>
-                            </h:outputLink>
+                            <h:commandLink value="Buscar trámite" action="#{TramiteBean.opcionesBuscarTramite}" rendered="#{UserBean.consultarTramite}"/>
                         </h:panelGrid>
                 </h:form>
             </p:panel>

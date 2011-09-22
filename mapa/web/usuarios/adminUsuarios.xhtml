@@ -1,0 +1,81 @@
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Buscar trámite"/>
+    </ui:define>
+
+    <ui:define name="content">
+            <h:form id="formAdminUsuarios">
+            <h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:outputText value="Trámite ID"/>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:inputText id="tramiteID" value="#{TramiteBean.tramiteIdBuscarTramite}" maxlength="10" size="10" converter="javax.faces.Integer"
+                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                        <p:message for="tramiteID" />
+                    </h:panelGrid>
+                    <h:outputText value="Usuario"/>
+                    <h:selectOneMenu value="">
+                        <f:selectItems value="#{TramiteBean.listaUsuariosAplicacion}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Operador"/>
+                    <h:selectOneMenu value="#{TramiteBean.operadorBuscarTramite}">
+                        <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                    </h:selectOneMenu>
+                    <h:outputText value="Estado"/>
+                    <h:selectOneMenu value="#{TramiteBean.estadoBuscarTramite}">
+                        <f:selectItems value="#{TramiteBean.listaEstadoTramite}" />  
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="pgBustarTramites,formBuscarTramites"/>
+                </h:panelGrid>
+            </h:panelGrid>
+            <p:separator/>
+            
+            <h:panelGrid id="pgAdminUsuarios" width="100%">
+                <h:panelGrid columns="2">
+                    <h:outputText value="Registros encontrados:"/>
+                    <h:outputText value=""/>
+                </h:panelGrid>
+                <p:dataTable id="datos" value="#{TramiteBean.usuariosAplicacion}" var="us" paginator="true" selectionMode="single"
+                             selection="#{TramiteBean.seleccionBuscarTramite}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             style="font-size:10px" rowSelectListener="#{TramiteBean.detalleTramiteSeleccionado}" rows="10"
+                             rowsPerPageTemplate="10,20,30,40,50" emptyMessage="No se encontraron trámites" dblClickSelect="true"
+                             paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <f:facet name="header">Trámites</f:facet>
+                    <p:column headerText="USUARIO ID" sortBy="#{us.codigoSIUST.userCode}" style="width:80px; text-align: center;">
+                        <h:outputText value="#{us.codigoSIUST.userCode}"/>
+                    </p:column>
+                    <p:column headerText="LOGIN" sortBy="#{us.codigoSIUST.userCode}" style="width:80px; text-align: center;">
+                        <h:outputText value="#{us.codigoSIUST.login}"/>
+                    </p:column>
+                    <p:column headerText="TIPO" sortBy="#{us.tunCodigo.tutNombre}" style="width:80px">
+                        <h:outputText value="#{us.tunCodigo.tutNombre}"/>
+                    </p:column>
+                    <p:column headerText="NOMBRE" sortBy="#{us.tunCodigo.tutNombre}" style="width:80px">
+                        <h:outputText value="#{us.codigoSIUST.name} #{us.codigoSIUST.lastName}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+        </h:form>
+
+        <h:panelGroup>
+            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
+            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+        
+    </ui:define>
+</ui:composition>
+

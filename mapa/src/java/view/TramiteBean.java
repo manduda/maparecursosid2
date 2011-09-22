@@ -33,6 +33,7 @@ import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
+import vo.UsersVO;
 
 /**
  *
@@ -69,6 +70,9 @@ public class TramiteBean implements Serializable {
     private List<TrTramitesVO> listaBuscarTramite = new ArrayList<TrTramitesVO>();
     private int countListaBuscarTramite;
     private TrTramitesVO seleccionBuscarTramite = new TrTramitesVO();
+    
+    private Collection<SelectItem> listaUsuariosAplicacion;
+    private List<UsUsuariosVO> usuariosAplicacion = new ArrayList<UsUsuariosVO>();
     
     private String seleccionDepartamento;
     private String seleccionMunicipio;
@@ -138,6 +142,14 @@ public class TramiteBean implements Serializable {
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
             listaEstadoTramite = convertir.createSelectItemsList(fachada.listaEstadoTramites(), null, "getEtnCodigo", "getEttNombre", true, "");
+            usuariosAplicacion = fachada.listaUsuariosAplicacion();
+            List<UsersVO> usr = new ArrayList<UsersVO>();
+            for (UsUsuariosVO u : usuariosAplicacion){
+                usr.add(u.getCodigoSIUST());
+            }
+            
+            listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
+            
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
         }
@@ -386,6 +398,19 @@ public class TramiteBean implements Serializable {
         return null;
     }
     
+    // --- Funiones para buscar recursos ---
+    public String opcionesBuscarTramite() {
+        facade fachada = new facade();
+        tramiteIdBuscarTramite = "";
+        usuarioBuscarTramite = "";
+        operadorBuscarTramite = "-1";
+        estadoBuscarTramite = -1;
+        seleccionBuscarTramite = null;
+        listaBuscarTramite = null;
+        
+        return configuracion.getRutaContexto()+"usuarios/buscarTramite";
+    }
+    
     public String buscarTramite() {
         List<SeSenalizacionVO> senalizacion = new ArrayList<SeSenalizacionVO>();
         facade fachada = new facade();
@@ -403,6 +428,7 @@ public class TramiteBean implements Serializable {
 
         return null;
     }
+    // -------------------------------------
     
     public String agregarRecurso() {
         boolean cerrarDialog = false;
@@ -1106,6 +1132,22 @@ public class TramiteBean implements Serializable {
 
     public void setSeleccionBuscarTramite(TrTramitesVO seleccionBuscarTramite) {
         this.seleccionBuscarTramite = seleccionBuscarTramite;
+    }
+
+    public Collection<SelectItem> getListaUsuariosAplicacion() {
+        return listaUsuariosAplicacion;
+    }
+
+    public void setListaUsuariosAplicacion(Collection<SelectItem> listaUsuariosAplicacion) {
+        this.listaUsuariosAplicacion = listaUsuariosAplicacion;
+    }
+
+    public List<UsUsuariosVO> getUsuariosAplicacion() {
+        return usuariosAplicacion;
+    }
+
+    public void setUsuariosAplicacion(List<UsUsuariosVO> usuariosAplicacion) {
+        this.usuariosAplicacion = usuariosAplicacion;
     }
     
 }

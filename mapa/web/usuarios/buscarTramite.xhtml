@@ -31,7 +31,7 @@
                     </h:selectOneMenu>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="pgBustarTramites,formBuscarTramites"/>
+                    <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites"/>
                 </h:panelGrid>
             </h:panelGrid>
             <p:separator/>
@@ -50,26 +50,25 @@
                     <p:column styleClass="tabla-expandir">  
                         <p:rowToggler />  
                     </p:column>
-                    <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:100px">
+                    <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:80px; text-align: center;">
                         <h:outputText value="#{tr.trnCodigo}"/>
                     </p:column>
-                    <p:column headerText="Fecha" sortBy="#{tr.emrCodigo.emtNombre}">
+                    <p:column headerText="Fecha" sortBy="#{tr.emrCodigo.emtNombre}" style="width:70px">
                         <h:outputText value="#{tr.trfFecha}">
                             <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="Estado" sortBy="#{tr.etnCodigo.ettNombre}" style="width:150px">
+                    <p:column headerText="Estado" sortBy="#{tr.etnCodigo.ettNombre}" style="width:80px">
                         <h:outputText value="#{tr.etnCodigo.ettNombre}"/>
                     </p:column>
-                    <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.login}">
+                    <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.login}" style="width:80px">
                         <h:outputText value="#{tr.usnCodigo.codigoSIUST.login}"/>
                     </p:column>
                     <p:column headerText="Operador" sortBy="#{tr.emrCodigo.emtNombre}">
                         <h:outputText value="#{tr.emrCodigo.emtNombre}"/>
                     </p:column>
-                    <p:column headerText="Recursos">
-                        <h:outputText value="Señalización" rendered="#{not empty tr.tsTramiteSenalizacionCollection}"/>
-                        <br/>
+                    <p:column headerText="Recursos" style="width:70px">
+                        <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
                         <h:outputText value="Códigos LD" rendered="#{not empty tr.tlTramiteLdCollection}"/>
                     </p:column>
                     <p:rowExpansion>

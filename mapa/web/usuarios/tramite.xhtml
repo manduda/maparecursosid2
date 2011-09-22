@@ -64,10 +64,11 @@
                     <!-- HISTORIA TRAMITE -->
                     <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteHistoria.xhtml"/>
                     <br/>
-                    <h:panelGroup id="pgAccionTramite" rendered="#{UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode}">
+                    <h:panelGroup id="pgAccionTramite">
                     <h:panelGrid columns="12">
-                        <!-- ENVIAR TRAMITE -->
-                        <h:panelGroup rendered="#{UserBean.enviarTramite}">
+                        
+                        <h:panelGroup rendered="#{(UserBean.enviarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
+                            <!-- ENVIAR TRAMITE -->
                             <h:form>
                             <p:commandButton value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty TramiteBean.selectedTramite.tlTramiteLdCollection)}"/>
                             <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
@@ -81,8 +82,8 @@
                             </h:form>
                         </h:panelGroup>
                         
-                        <!-- APROBAR TRAMITE -->
-                        <h:panelGroup rendered="#{UserBean.aprobarTramite}">
+                        <h:panelGroup rendered="#{(UserBean.aprobarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
+                            <!-- APROBAR TRAMITE -->
                             <h:form>
                             <p:commandButton value="Aprobar" onclick="confirmarAprobar.show()"/>
                             <p:confirmDialog message="Deseas aprobar el trámite?"  
@@ -96,8 +97,8 @@
                             </h:form>
                         </h:panelGroup>
                         
-                        <!-- DEVOLVER TRAMITE -->
-                        <h:panelGroup rendered="#{UserBean.devolverTramite}">
+                        <h:panelGroup rendered="#{(UserBean.devolverTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
+                            <!-- DEVOLVER TRAMITE -->
                             <h:form>
                             <p:commandButton value="Devolver" onclick="confirmarDevolver.show()"/>
                             <p:confirmDialog message="Deseas devolver el trámite al Asesor?"  
@@ -111,8 +112,8 @@
                             </h:form>
                         </h:panelGroup>
                         
-                        <!-- ARCHIVAR TRAMITE -->
-                        <h:panelGroup rendered="#{UserBean.archivarTramite}">
+                        <h:panelGroup rendered="#{(UserBean.archivarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
+                            <!-- ARCHIVAR TRAMITE -->
                             <h:form>
                             <p:commandButton value="Archivar" onclick="confirmarArchivar.show()"/>
                             <p:confirmDialog message="Deseas archivar el trámite?"  
@@ -126,8 +127,8 @@
                             </h:form>
                         </h:panelGroup>
                         
-                        <!-- TERMINAR TRAMITE --> 
-                        <h:panelGroup rendered="#{UserBean.terminarTramite}">
+                        <h:panelGroup rendered="#{(UserBean.terminarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4)}">
+                            <!-- TERMINAR TRAMITE -->
                             <h:form>
                             <p:commandButton value="Terminar trámite" onclick="dialogTerminar.show()"/>
                             <p:dialog header="Datos de terminación del trámite" widgetVar="dialogTerminar" resizable="false" modal="true" draggable="false"
