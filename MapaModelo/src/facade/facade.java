@@ -781,7 +781,7 @@ public class facade {
         return vo;
     }
     
-    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado){
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, int radicado){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -791,7 +791,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = tramites.cargarTramites(first, max, tramiteId, usuario, operador, estado, em);
+            vo = tramites.cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

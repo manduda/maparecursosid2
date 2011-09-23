@@ -126,7 +126,7 @@ public class main {
         System.out.println("Clase: " + itemClass.getName());*/
         
         //---- GET TRAMITES
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         vo = fachada.cargarTramites(6, 1);
         for (TrTramitesVO t : vo) {
             int codigo = t.getTrnCodigo();
@@ -139,14 +139,14 @@ public class main {
             System.out.println(codigo+"-"+estado+"-"+codigoOperador+"-"+operador+"-"+usuario+"-"+fecha);
             System.out.println("- - - - - -");
             Collection<GtGestionTramiteVO> gestionVO = t.getGtGetionTramiteCollection();
-            /*for (GtGestionTramiteVO gt : gestionVO) {
+            for (GtGestionTramiteVO gt : gestionVO) {
                 int codigoGT = gt.getGtnCodigo();
                 String usuarioGT = gt.getUsnCodigo().getCodigoSIUST().getLogin();
                 String estadoGT = gt.getEtnCodigo().getEttNombre();
                 Date fechaGT = gt.getGtfFecha();
                 System.out.println(codigoGT+"-"+estadoGT+"-"+usuarioGT+"-"+fechaGT);
-            }*/
-        }
+            }
+        }*/
         //-------------------------------------
         
         //---- CREAR TRAMITES
@@ -249,16 +249,16 @@ public class main {
         //-------------------------------------
         
         //---- BUSCAR TRAMITES
-        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         int cantidad = 0;
-        vo = fachada.cargarTramites(0, -1, -1, "", "-1", -1);
+        vo = fachada.cargarTramites(0, -1, -1, "", "-1", -1, -1);
         for(int i=0; i < vo.size();i++) {
             int codigo = vo.get(i).getTrnCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEtnCodigo().getEttNombre();
             String usuario = vo.get(i).getUsnCodigo().getCodigoSIUST().getLogin();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+usuario);
-	}*/
+	}
         //-------------------------------------
         
         //---- LISTA USUARIOS

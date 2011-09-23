@@ -76,13 +76,17 @@ public class TrTramitesDAO {
         return query.getResultList();
     }
     
-    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, EntityManager em){
+    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, int radicado, EntityManager em){
         List<TrTramites> tramites = new ArrayList<TrTramites>();
 
         StringBuilder searchQuery = new StringBuilder(
-                "SELECT t FROM TrTramites t " +
-                "WHERE 1=1 ");
-
+                "SELECT t FROM TrTramites t ");
+        /*if(radicado != -1) {
+            searchQuery.append(", IN(t.tsTramiteSenalizacionCollection) ts, "
+                    + "IN(t.tlTramiteldCollection) tld ");
+        }*/
+        searchQuery.append("WHERE 1=1 ");
+        
         if(!operador.equals("-1")) {
             searchQuery.append("AND t.emrCodigo.emrCodigo = ?1 ");
         }
@@ -94,6 +98,13 @@ public class TrTramitesDAO {
         }
         if(!usuario.equals("")) {
             searchQuery.append("AND t.usnCodigo.codigoSIUST.login = ?4 ");
+        }
+        if(radicado != -1) {
+            searchQuery.append("AND ("
+                    + "(t.trnCodigo IN (SELECT DISTINCT ts.trnCodigo.trnCodigo FROM TsTramiteSenalizacion ts where ts.tsnRadicado = ?5)) "
+                    + "OR "
+                    + "(t.trnCodigo IN (SELECT DISTINCT tld.trnCodigo.trnCodigo FROM TlTramiteLd tld where tld.tlnRadicado = ?5))"
+                    + ") ");
         }
         
         searchQuery.append("ORDER BY t.trnCodigo ASC");
@@ -111,6 +122,9 @@ public class TrTramitesDAO {
         }
         if(!usuario.equals("")) {
             query.setParameter(4, usuario);
+        }
+        if(radicado != -1) {
+            query.setParameter(5, radicado);
         }
         
         query.setFirstResult(first);
