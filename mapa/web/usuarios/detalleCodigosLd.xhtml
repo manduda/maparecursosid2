@@ -25,8 +25,8 @@
                         <h:panelGroup rendered="#{UserBean.login}">
                             <h:form>
                             <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                            <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" actionListener="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
-                                <f:param name="tipoRecurso" value="codigosld"/>
+                            <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                             </p:commandButton>
                             <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
                             <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ldDialog.hide();"/>
@@ -63,9 +63,9 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
-                                <f:param name="codigoAccion" value="5"/>
-                                <f:param name="tipoRecurso" value="codigosld"/>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
                         </h:panelGrid>
@@ -99,9 +99,9 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" actionListener="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
-                                <f:param name="codigoAccion" value="2"/>
-                                <f:param name="tipoRecurso" value="codigosld"/>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
                         </h:panelGrid>

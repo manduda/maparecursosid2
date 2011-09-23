@@ -29,6 +29,12 @@
                     <h:selectOneMenu value="#{TramiteBean.estadoBuscarTramite}">
                         <f:selectItems value="#{TramiteBean.listaEstadoTramite}" />  
                     </h:selectOneMenu>
+                    <h:outputText value="Radicado"/>
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:inputText id="radicado" value="#{TramiteBean.radicadoBuscarTramite}" maxlength="9" size="9" converter="javax.faces.Integer"
+                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                        <p:message for="radicado" />
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
                     <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites"/>

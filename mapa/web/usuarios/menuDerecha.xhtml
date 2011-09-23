@@ -76,7 +76,7 @@
                                 <h:form>
                                     <h:panelGrid style="text-align: center;" width="100%">
                                         <h:commandLink value="Ver trámite" action="#{TramiteBean.detalleTramite}">
-                                            <f:param name="codigoTramite" value="#{tramite.trnCodigo}"/>
+                                            <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tramite}"/>
                                         </h:commandLink>
                                     </h:panelGrid>
                                 </h:form>

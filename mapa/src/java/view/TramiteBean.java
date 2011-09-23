@@ -63,10 +63,11 @@ public class TramiteBean implements Serializable {
     private Collection<SelectItem> listaMunicipio;
     
     private Collection<SelectItem> listaEstadoTramite;
-    private String tramiteIdBuscarTramite;
-    private String usuarioBuscarTramite;
-    private int estadoBuscarTramite;
-    private String operadorBuscarTramite;
+    private String tramiteIdBuscarTramite = "";
+    private String usuarioBuscarTramite = "";
+    private int estadoBuscarTramite = -1;
+    private String operadorBuscarTramite = "-1";
+    private String radicadoBuscarTramite = "";
     private List<TrTramitesVO> listaBuscarTramite = new ArrayList<TrTramitesVO>();
     private int countListaBuscarTramite;
     private TrTramitesVO seleccionBuscarTramite = new TrTramitesVO();
@@ -86,7 +87,11 @@ public class TramiteBean implements Serializable {
     private String radicadoAgregarRecurso = "";
     private String observacionesAgregarRecurso = "";
     private Integer tipoUsuario = 0;
+    
     private Integer codigoDetalleTramite = 0;
+    private String tipoRecurso = "";
+    private int codigoAccion = 0;
+    
     private Boolean seleccionNumeracion;
     private Boolean seleccionSenalizacion;
     private Boolean seleccionIin;
@@ -184,7 +189,7 @@ public class TramiteBean implements Serializable {
         //tramites = fachada.cargarTramites(6, 1);
     }
     
-    public String historiaTramite() {
+    /*public String historiaTramite() {
         FacesContext context = FacesContext.getCurrentInstance();
         Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
         //System.out.println("Codigo: "+codigoTramite);
@@ -197,7 +202,7 @@ public class TramiteBean implements Serializable {
         }
 
         return null;
-    }
+    }*/
     
     // ---- Funciones para crear trámite ---
     public String opcionesCrearTramite() {
@@ -257,16 +262,16 @@ public class TramiteBean implements Serializable {
     
     // ---- Función para ejecutar anter de acceder al trámite ---
     public String detalleTramite() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
+        //FacesContext context = FacesContext.getCurrentInstance();
+        //Integer codigoTramite = Integer.parseInt(context.getExternalContext().getRequestParameterValuesMap().get("codigoTramite")[0]);
         mensajeTramite = "";
 
-        for (TrTramitesVO detalleVO : tramites) {
+        /*for (TrTramitesVO detalleVO : tramites) {
             if (detalleVO.getTrnCodigo() == codigoTramite){
                 selectedTramite = detalleVO;
                 break;
             }
-        }
+        }*/
         /*facade fachada = new facade();
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
@@ -413,7 +418,7 @@ public class TramiteBean implements Serializable {
         estadoBuscarTramite = -1;
         seleccionBuscarTramite = null;
         listaBuscarTramite = null;
-        
+        //String a = buscarTramite();
         return configuracion.getRutaContexto()+"usuarios/buscarTramite";
     }
     
@@ -422,14 +427,21 @@ public class TramiteBean implements Serializable {
         facade fachada = new facade();
 
         final Integer id;
+        final Integer rad;
         
         if (tramiteIdBuscarTramite.equals("")) {
             id = -1;
         } else {
             id = Integer.parseInt(tramiteIdBuscarTramite);
         }
+        
+        if (radicadoBuscarTramite.equals("")) {
+            rad = -1;
+        } else {
+            rad = Integer.parseInt(radicadoBuscarTramite);
+        }
 
-        listaBuscarTramite = fachada.cargarTramites(0, -1, id, usuarioBuscarTramite, operadorBuscarTramite, estadoBuscarTramite);
+        listaBuscarTramite = fachada.cargarTramites(0, -1, id, usuarioBuscarTramite, operadorBuscarTramite, estadoBuscarTramite, rad);
         //countListaBuscarTramite = fachada.countCargarCodigosLd(operadorVO.getEmrCodigo(), ld, estadoVO.getEsnCodigo());
 
         return null;
@@ -438,6 +450,10 @@ public class TramiteBean implements Serializable {
     
     public String agregarRecurso() {
         boolean cerrarDialog = false;
+        if ((codigoAccion <= 0)||(tipoRecurso.equals(""))){
+            mensajeRecurso = "<br><b>Error al agregar recurso al trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
         if(radicadoAgregarRecurso.equals("")){
             mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar un número de radicado<br><br>";
             return null;
@@ -456,10 +472,10 @@ public class TramiteBean implements Serializable {
         mensajeRecurso = "";
         
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        /*HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         
         String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
-        Integer codigoAccion = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoAccion")[0]);
+        Integer codigoAccion = Integer.parseInt(facesContext.getExternalContext().getRequestParameterValuesMap().get("codigoAccion")[0]);*/
         
         TrTramitesVO tramite = new TrTramitesVO();
         tramite.setTrnCodigo(tramiteAgregarRecurso);
@@ -619,12 +635,16 @@ public class TramiteBean implements Serializable {
     // -----------------------------------------------------------------------
     
     public String eliminarRecurso() {
+        if ((codigoDetalleTramite <= 0)||(tipoRecurso.equals(""))){
+            mensajeRecurso = "<br><b>Error al eliminar recurso del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
         facade fachada = new facade();
         
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        /*FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         
-        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
+        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();*/
         
         mensajeRecurso = "";
         
@@ -673,9 +693,9 @@ public class TramiteBean implements Serializable {
   
     public void opcionesPreasignar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        /*HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
         
-        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();
+        String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();*/
         
         if(tipoRecurso.equals("senalizacion")){
             SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
@@ -1155,5 +1175,29 @@ public class TramiteBean implements Serializable {
     public void setUsuariosAplicacion(List<UsUsuariosVO> usuariosAplicacion) {
         this.usuariosAplicacion = usuariosAplicacion;
     }
-    
+
+    public String getTipoRecurso() {
+        return tipoRecurso;
+    }
+
+    public void setTipoRecurso(String tipoRecurso) {
+        this.tipoRecurso = tipoRecurso;
+    }
+
+    public int getCodigoAccion() {
+        return codigoAccion;
+    }
+
+    public void setCodigoAccion(int codigoAccion) {
+        this.codigoAccion = codigoAccion;
+    }
+
+    public String getRadicadoBuscarTramite() {
+        return radicadoBuscarTramite;
+    }
+
+    public void setRadicadoBuscarTramite(String radicadoBuscarTramite) {
+        this.radicadoBuscarTramite = radicadoBuscarTramite;
+    }
+
 }

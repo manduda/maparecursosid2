@@ -33,8 +33,9 @@
                             <h:outputText value="#{tramiteLD.tltObservaciones}"/>
                         </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
-                            <p:commandLink actionListener="#{TramiteBean.seleccionarCodigoDetalleTramite}" oncomplete="eliminarCodigosLdDialog.show()" update="eliminarCodigosLdDialog">
-                                <f:param name="codigoDetalleTramite" value="#{tramiteLD.tlnCodigo}" />
+                            <p:commandLink oncomplete="eliminarCodigosLdDialog.show()" update="eliminarCodigosLdDialog">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteLD.tlnCodigo}"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
                             </p:commandLink>
                         </p:column>
@@ -62,10 +63,8 @@
                              header="Confirmación" severity="alert" widgetVar="eliminarCodigosLdDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteCodigosLd,pgMenuTramite" oncomplete="eliminarCodigosLdDialog.hide();">
-                            <f:param name="tipoRecurso" value="codigosld"/>
-                        </p:commandButton>
-                    <p:commandButton type="button" value="Cancelar" onclick="eliminarCodigosLdDialog.hide();"/>
+                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteCodigosLd,pgMenuTramite" oncomplete="eliminarCodigosLdDialog.hide();"/>
+                        <p:commandButton type="button" value="Cancelar" onclick="eliminarCodigosLdDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>
             </p:confirmDialog>
