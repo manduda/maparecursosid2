@@ -12,7 +12,7 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo != 1}">
+        <h:panelGroup rendered="#{!UserBean.transferirRecursos}">
             <h:panelGrid width="100%">
                 <br/><br/><br/>
                 <h:panelGrid style="text-align: center; margin: 0px auto; color: red; font-weight: bold" >
@@ -21,7 +21,7 @@
             </h:panelGrid>
         </h:panelGroup>
         
-        <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+        <h:panelGroup rendered="#{UserBean.transferirRecursos}">
             <h:form>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeTransferirRecursos == '')}">
                     <h:panelGrid>

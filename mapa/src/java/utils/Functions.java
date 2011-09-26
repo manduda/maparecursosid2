@@ -4,6 +4,8 @@
  */
 package utils;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author MADD
@@ -27,5 +29,17 @@ public class Functions {
         }
         
         return resultado;
+    }
+    
+    public static int countLista(ArrayList lista) {
+        if(lista == null){
+            return 0;
+        }
+        if (lista.isEmpty()){
+            return 0;
+        } else {
+            return lista.size();
+        }
+        
     }
 }

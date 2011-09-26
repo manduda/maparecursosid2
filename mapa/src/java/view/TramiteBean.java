@@ -64,7 +64,7 @@ public class TramiteBean implements Serializable {
     
     private Collection<SelectItem> listaEstadoTramite;
     private String tramiteIdBuscarTramite = "";
-    private String usuarioBuscarTramite = "";
+    private int usuarioBuscarTramite = -1;
     private int estadoBuscarTramite = -1;
     private String operadorBuscarTramite = "-1";
     private String radicadoBuscarTramite = "";
@@ -74,6 +74,13 @@ public class TramiteBean implements Serializable {
     
     private Collection<SelectItem> listaUsuariosAplicacion;
     private List<UsUsuariosVO> usuariosAplicacion = new ArrayList<UsUsuariosVO>();
+    
+    private Collection<SelectItem> listaUsuariosNoAplicacion;
+    
+    private Collection<SelectItem> listaUsuariosSIUST;
+    private int usuariosBuscar = 0;
+    private UsUsuariosVO usuariosEncontrado = new UsUsuariosVO();
+    private String mensajeAdminUsuario = "";
     
     private String seleccionDepartamento;
     private String seleccionMunicipio;
@@ -87,8 +94,10 @@ public class TramiteBean implements Serializable {
     private String radicadoAgregarRecurso = "";
     private String observacionesAgregarRecurso = "";
     private Integer tipoUsuario = 0;
+    private Integer nuevoUsuarioTramite = 0;
+    private String mensajeCambiarUsuarioTramite = "";
     
-    private Integer codigoDetalleTramite = 0;
+    private Integer codigoDetalleTramite = -1;
     private String tipoRecurso = "";
     private int codigoAccion = 0;
     
@@ -133,19 +142,6 @@ public class TramiteBean implements Serializable {
     /** Creates a new instance of TramiteBean */
     public TramiteBean()    {
         facade fachada = new facade();
-        //userVO = new UsUsuariosVO();
-        //UserBean userSession = null;
-
-        //FacesContext facesContext = FacesContext.getCurrentInstance();
-        //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
-        //userSession = (UserBean) session.getAttribute("UserBean");
-        
-        // ----- CARGAR CONFIGURACION -----
-        //ConfiguracionBean configuracion = (ConfiguracionBean) FacesContext.getCurrentInstance().getExternalContext().getApplicationMap().get("ConfiguracionBean");
-        //operadorNinguno = configuracion.getOperadorNinguno();
-        //municipioNinguno = configuracion.getMunicipioNinguno();
-        //rutaContexto = configuracion.getRutaContexto();
-        // --------------------------------
         
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
@@ -161,32 +157,14 @@ public class TramiteBean implements Serializable {
             
             listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
             
+            listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
+            
+            listaUsuariosSIUST = convertir.createSelectItemsList(fachada.listaUsuariosSIUST(), null, "getUserCode", "getLogin", true, "");
+            
         } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Tramites", e);
         }
         
-        /*if (userSession.isIsLoggedIn()) {
-            userVO = userSession.getUserVO();
-            switch(userVO.getTunCodigo().getTunCodigo()) {
-                case 1:
-                    tipoUsuario = 4;
-                    break;
-                case 2:
-                    tipoUsuario = 2;
-                    break;
-                case 3:
-                    tipoUsuario = 6;
-                    break;
-            }
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
-        }*/
-        
-        //FacesContext facesContext = FacesContext.getCurrentInstance();
-        //HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
-        //userVO = (UsUsuariosVO)facesContext.getExternalContext().getSessionMap().get("UserBean");
-        //System.out.print("user: "+userVO);
-        //tramites = fachada.cargarTramites(1, userVO.getUsnCodigo());
-        //tramites = fachada.cargarTramites(6, 1);
     }
     
     /*public String historiaTramite() {
@@ -203,6 +181,52 @@ public class TramiteBean implements Serializable {
 
         return null;
     }*/
+    
+    // ---- Funciones para administrar usuarios ---
+    public String buscarUsuario() {
+        facade fachada = new facade();
+
+        final Integer id;
+        final Integer rad;
+        
+        if (usuariosBuscar == -1) {
+            usuariosEncontrado = new UsUsuariosVO();
+            return null;
+        }
+        
+        usuariosEncontrado = fachada.buscarUsuario(usuariosBuscar);
+
+        return null;
+    }
+    
+    public String cambiarPerfil() {
+        if (usuariosEncontrado.getCodigoSIUST().getUserCode() == 0){
+            mensajeAdminUsuario = "<br><b>Error al cambiar el perfil al usuario.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        int perfil = usuariosEncontrado.getTunCodigo().getTunCodigo();
+        Integer resultado = fachada.cambiarPerfil(usuariosEncontrado,perfil);
+        
+        switch(resultado){
+            case 0:
+                mensajeAdminUsuario = "<br><b>Error al cambiar el perfil.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                usuariosAplicacion = fachada.listaUsuariosAplicacion();
+                usuariosEncontrado = fachada.buscarUsuario(usuariosEncontrado.getCodigoSIUST().getUserCode());
+                mensajeAdminUsuario  = "<br><b>Perfil cambiado correctamente al usuario "
+                        + usuariosEncontrado.getCodigoSIUST().getLogin() + ".</b><br><br>";
+                break;
+            case 2:
+                mensajeAdminUsuario = "<br><b>El perfil a asignar no puede ser igual al que tiene actualmente del usuario.</b><br><br>";
+                break;
+        }
+
+        return null;
+    }
+    // -------------------------------------------
     
     // ---- Funciones para crear trámite ---
     public String opcionesCrearTramite() {
@@ -246,8 +270,6 @@ public class TramiteBean implements Serializable {
         vo.setTrfFecha(fecha);
    
         boolean resultado = fachada.crearTramite(vo);
-        
-        System.out.println("resultado: "+resultado);
         
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
@@ -409,15 +431,64 @@ public class TramiteBean implements Serializable {
         return null;
     }
     
+    public String cambiarUsuarioTramite() {
+        if(nuevoUsuarioTramite == -1){
+            mensajeCambiarUsuarioTramite = "<br><b>Error al cambiar el usuario del trámite.</b><br><br>Debes escoger un usuario<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeCambiarUsuarioTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        vo.setTrtObservaciones("Usuario anterior: " + selectedTramite.getUsnCodigo().getCodigoSIUST().getLogin()
+                + ". Nuevo usuario: " + fachada.buscarUsuario(nuevoUsuarioTramite).getCodigoSIUST().getLogin()+".");
+   
+        Integer resultado = fachada.cambiarUsuarioTramite(vo, nuevoUsuarioTramite);
+        
+        switch(resultado){
+            case 0:
+                mensajeCambiarUsuarioTramite = "<br><b>Error al cambiar el usuario del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
+                for (TrTramitesVO detalleVO : tramites) {
+                    if (detalleVO.getTrnCodigo() == selectedTramite.getTrnCodigo()){
+                        selectedTramite = detalleVO;
+                        break;
+                    }
+                }
+                mensajeCambiarUsuarioTramite  = "<br><b>Usuario cambiado correctamente al trámite.</b><br><br>";
+                break;
+            case 2:
+                mensajeCambiarUsuarioTramite = "<br><b>El usuario a asignar no puede ser igual al que tiene actualmente el trámite.</b><br><br>";
+                break;
+        }
+        
+        nuevoUsuarioTramite = -1;
+        
+        return null;
+    }
+    
     // --- Funiones para buscar recursos ---
     public String opcionesBuscarTramite() {
         facade fachada = new facade();
         tramiteIdBuscarTramite = "";
-        usuarioBuscarTramite = "";
+        usuarioBuscarTramite = -1;
         operadorBuscarTramite = "-1";
         estadoBuscarTramite = -1;
         seleccionBuscarTramite = null;
         listaBuscarTramite = null;
+        radicadoBuscarTramite = "";
         //String a = buscarTramite();
         return configuracion.getRutaContexto()+"usuarios/buscarTramite";
     }
@@ -1128,11 +1199,11 @@ public class TramiteBean implements Serializable {
         this.tramiteIdBuscarTramite = tramiteIdBuscarTramite;
     }
 
-    public String getUsuarioBuscarTramite() {
+    public int getUsuarioBuscarTramite() {
         return usuarioBuscarTramite;
     }
 
-    public void setUsuarioBuscarTramite(String usuarioBuscarTramite) {
+    public void setUsuarioBuscarTramite(int usuarioBuscarTramite) {
         this.usuarioBuscarTramite = usuarioBuscarTramite;
     }
 
@@ -1198,6 +1269,62 @@ public class TramiteBean implements Serializable {
 
     public void setRadicadoBuscarTramite(String radicadoBuscarTramite) {
         this.radicadoBuscarTramite = radicadoBuscarTramite;
+    }
+
+    public Collection<SelectItem> getListaUsuariosNoAplicacion() {
+        return listaUsuariosNoAplicacion;
+    }
+
+    public void setListaUsuariosNoAplicacion(Collection<SelectItem> listaUsuariosNoAplicacion) {
+        this.listaUsuariosNoAplicacion = listaUsuariosNoAplicacion;
+    }
+
+    public Collection<SelectItem> getListaUsuariosSIUST() {
+        return listaUsuariosSIUST;
+    }
+
+    public void setListaUsuariosSIUST(Collection<SelectItem> listaUsuariosSIUST) {
+        this.listaUsuariosSIUST = listaUsuariosSIUST;
+    }
+
+    public int getUsuariosBuscar() {
+        return usuariosBuscar;
+    }
+
+    public void setUsuariosBuscar(int usuariosBuscar) {
+        this.usuariosBuscar = usuariosBuscar;
+    }
+
+    public UsUsuariosVO getUsuariosEncontrado() {
+        return usuariosEncontrado;
+    }
+
+    public void setUsuariosEncontrado(UsUsuariosVO usuariosEncontrado) {
+        this.usuariosEncontrado = usuariosEncontrado;
+    }
+
+    public String getMensajeAdminUsuario() {
+        return mensajeAdminUsuario;
+    }
+
+    public void setMensajeAdminUsuario(String mensajeAdminUsuario) {
+        this.mensajeAdminUsuario = mensajeAdminUsuario;
+    }
+
+    public Integer getNuevoUsuarioTramite() {
+        return nuevoUsuarioTramite;
+    }
+
+    public void setNuevoUsuarioTramite(Integer nuevoUsuarioTramite) {
+        this.nuevoUsuarioTramite = nuevoUsuarioTramite;
+    }
+
+    public String getMensajeCambiarUsuarioTramite() {
+        return mensajeCambiarUsuarioTramite;
+    }
+
+    public void setMensajeCambiarUsuarioTramite(String mensajeCambiarUsuarioTramite) {
+        this.mensajeCambiarUsuarioTramite = mensajeCambiarUsuarioTramite;
     }
 
 }

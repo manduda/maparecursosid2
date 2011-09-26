@@ -14,5 +14,10 @@
         <function-class>utils.Functions</function-class>
         <function-signature>java.lang.String rellenarCerosIzquierda(java.lang.String, java.lang.Integer)</function-signature>
     </function>
+    <function>
+        <function-name>countLista</function-name>
+        <function-class>utils.Functions</function-class>
+        <function-signature>java.lang.Integer countLista(java.util.ArrayList)</function-signature>
+    </function>
 </facelet-taglib>
 

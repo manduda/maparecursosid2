@@ -89,16 +89,5 @@
         </h:form>
         <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleSenalizacion.xhtml"/>
         
-        <h:panelGroup>
-            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
-                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
-                    <h:panelGrid width="100%">
-                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-        </h:panelGroup>
-        
     </ui:define>
 </ui:composition>

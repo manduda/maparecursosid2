@@ -63,16 +63,6 @@
                     </h:panelGrid>
                     <br/>
                     
-                    <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-                    <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
-                        <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
-                            <h:panelGrid width="100%">
-                                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
-                            </h:panelGrid>
-                        </h:panelGrid>
-                    </p:dialog>
-                    
-                    
                     <!-- HISTORIA TRAMITE -->
                     <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteHistoria.xhtml"/>
                     <br/>
@@ -124,25 +114,10 @@
                             </h:form>
                         </h:panelGroup>
                         
-                        <h:panelGroup rendered="#{(UserBean.archivarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
-                            <!-- ARCHIVAR TRAMITE -->
-                            <h:form>
-                            <p:commandButton type="button" value="Archivar" onclick="confirmarArchivar.show()"/>
-                            <p:confirmDialog message="Deseas archivar el trámite?"  
-                                        showEffect="fade" hideEffect="fade" modal="true" draggable="false"
-                                        header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
-                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                    <p:commandButton value="Si" action="#{TramiteBean.archivarTramite}" ajax="false"/>
-                                    <p:commandButton type="button" value="No" onclick="confirmarArchivar.hide()" />
-                                </h:panelGrid>
-                            </p:confirmDialog>
-                            </h:form>
-                        </h:panelGroup>
-                        
                         <h:panelGroup rendered="#{(UserBean.terminarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4)}">
                             <!-- TERMINAR TRAMITE -->
                             <h:form>
-                            <p:commandButton type="button" value="Terminar trámite" onclick="dialogTerminar.show()"/>
+                            <p:commandButton type="button" value="Terminar" onclick="dialogTerminar.show()"/>
                             <p:dialog header="Datos de terminación del trámite" widgetVar="dialogTerminar" resizable="false" modal="true" draggable="false"
                                 width="300" showEffect="fade" hideEffect="fade" position="center">
                                 <h:panelGrid width="100%" style="font-size: 10px;" >
@@ -162,6 +137,52 @@
                                  </h:panelGrid>
                             </p:dialog>
                             </h:form>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup rendered="#{(UserBean.archivarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 6)}">
+                            <!-- ARCHIVAR TRAMITE -->
+                            <h:form>
+                            <p:commandButton type="button" value="Archivar" onclick="confirmarArchivar.show()"/>
+                            <p:confirmDialog message="Deseas archivar el trámite?"  
+                                        showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                        header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Si" action="#{TramiteBean.archivarTramite}" ajax="false"/>
+                                    <p:commandButton type="button" value="No" onclick="confirmarArchivar.hide()" />
+                                </h:panelGrid>
+                            </p:confirmDialog>
+                            </h:form>
+                        </h:panelGroup>
+                        
+                        <h:panelGroup rendered="#{(UserBean.cambiarUsuarioTramite)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
+                            <!-- CAMBIAR USUARIO TRAMITE -->
+                            <h:form>
+                                <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()"/>
+                                <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
+                                            header="Cambiar usuario" widgetVar="confirmarCambiarUsuario">
+                                    <h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0">
+                                        <h:outputText value="Usuario:" style="font-weight: bold;"/>
+                                        <h:selectOneMenu value="#{TramiteBean.nuevoUsuarioTramite}">
+                                            <f:selectItems value="#{TramiteBean.listaUsuariosAplicacion}"/>
+                                        </h:selectOneMenu>
+                                    </h:panelGrid>
+                                    <br/>
+                                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                        <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
+                                        <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
+                                    </h:panelGrid>
+                                </p:dialog>
+                            </h:form>
+                            <p:dialog header="Resultado" widgetVar="resultadoCambiarUsuarioDialog" resizable="false" modal="true" draggable="false"
+                                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
+                                <h:panelGrid id="datosResultadoCambiarUsuario" style="text-align: center; " width="100%">
+                                    <h:form>
+                                        <h:outputText value="#{TramiteBean.mensajeCambiarUsuarioTramite}" escape="false"/>
+                                        <p:commandButton type="button" value="Aceptar" onclick="resultadoCambiarUsuarioDialog.hide();"/>
+                                     </h:form>
+                                </h:panelGrid>
+                            </p:dialog>
+                            
                         </h:panelGroup>
                         
                     </h:panelGrid>

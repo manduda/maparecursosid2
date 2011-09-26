@@ -40,6 +40,7 @@ public class UserBean implements Serializable {
     private boolean aprobarTramite = false;
     private boolean terminarTramite = false;
     private boolean cambiarOperadorTramite = false;
+    private boolean cambiarUsuarioTramite = false;
     
     private boolean consultarTramite = false;
         
@@ -183,6 +184,14 @@ public class UserBean implements Serializable {
 
     public void setConsultarTramite(boolean consultarTramite) {
         this.consultarTramite = consultarTramite;
+    }
+
+    public boolean isCambiarUsuarioTramite() {
+        return cambiarUsuarioTramite;
+    }
+
+    public void setCambiarUsuarioTramite(boolean cambiarUsuarioTramite) {
+        this.cambiarUsuarioTramite = cambiarUsuarioTramite;
     }
     
 }

@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
         <h:outputText value="Buscar trámite"/>
@@ -20,7 +21,9 @@
                         <p:message for="tramiteID" />
                     </h:panelGrid>
                     <h:outputText value="Usuario"/>
-                    <h:inputText id="usuario" value="#{TramiteBean.usuarioBuscarTramite}" maxlength="10" size="10"/>
+                    <h:selectOneMenu value="#{TramiteBean.usuarioBuscarTramite}">
+                        <f:selectItems value="#{TramiteBean.listaUsuariosAplicacion}" />  
+                    </h:selectOneMenu>
                     <h:outputText value="Operador"/>
                     <h:selectOneMenu value="#{TramiteBean.operadorBuscarTramite}">
                         <f:selectItems value="#{TramiteBean.listaOperador}" />  
@@ -37,7 +40,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" action="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites"/>
+                    <p:commandButton value="Consultar" actionListener="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites,pgBustarTramites"/>
                 </h:panelGrid>
             </h:panelGrid>
             <p:separator/>
@@ -45,7 +48,7 @@
             <h:panelGrid id="pgBustarTramites" width="100%">
                 <h:panelGrid columns="2">
                     <h:outputText value="Registros encontrados:"/>
-                    <h:outputText value=""/>
+                    <h:outputText value="#{fnc:countLista(TramiteBean.listaBuscarTramite)}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true" selectionMode="single"
                              selection="#{TramiteBean.seleccionBuscarTramite}" rowIndexVar="rowIndex" widgetVar="datatableVar"
@@ -119,16 +122,5 @@
             </h:panelGrid>
         </h:form>
 
-        <h:panelGroup>
-            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
-                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
-                    <h:panelGrid width="100%">
-                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-        </h:panelGroup>
-        
     </ui:define>
 </ui:composition>

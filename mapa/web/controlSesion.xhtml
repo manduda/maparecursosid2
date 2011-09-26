@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fnc="http://yournamespace.com/fnc">
+    <ui:composition>
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'controlSesion.xhtml')}">
+            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false" resizable="false">
+                <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                    <h:panelGrid width="100%">
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/ajaxloadingbar.gif" />
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <h:panelGroup rendered="#{!UserBean.login}">
+                <p:ajaxStatus onstart="statusDialog.show();" oncomplete="statusDialog.hide();"/>
+            </h:panelGroup>
+            <h:panelGroup rendered="#{UserBean.login}">
+                <p:ajaxStatus onstart="poll.stop();statusDialog.show();" oncomplete="statusDialog.hide();poll.start();"/>
+                <h:form>
+                    <p:poll onstart="poll.stop();sessionTimeOutDialog.show();" interval="#{session.maxInactiveInterval}" widgetVar="poll"/>
+                </h:form>
+                <p:dialog header="Sesión expirada?" widgetVar="sessionTimeOutDialog" draggable="false"
+                          modal="true" closable="false" width="400" visible="false" resizable="false">
+                    <h:panelGrid style="font-weight: normal; text-align: center;">
+                        <h:outputText value="Tu sesión ha expirado por inactividad en el sistema. Pulsa en Aceptar para ir a la página de inicio" />
+                        <br/>
+                        <p:commandButton type="button" value="Aceptar" onclick="window.location='#{facesContext.externalContext.requestContextPath}/index.xhtml';" />
+                    </h:panelGrid>
+                </p:dialog>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:composition>
+</html>
+

@@ -80,16 +80,17 @@ public class InicioBean {
                         userBean.setEliminarRecurso(false);
                         userBean.setCrearTramite(false);
                         userBean.setEnviarTramite(false);
-                        userBean.setArchivarTramite(false);
+                        userBean.setArchivarTramite(true);
                         userBean.setDevolverTramite(false);
                         userBean.setAprobarTramite(false);
                         userBean.setTerminarTramite(true);
                         userBean.setCambiarOperadorTramite(false);
+                        userBean.setCambiarUsuarioTramite(true);
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(true);
                         userBean.setAdministrarUsuarios(true);
                         break;
-                    case 2: // CORRDINADOR
+                    case 2: // COORDINADOR
                         userBean.setRecuperar(false);
                         userBean.setPreasignar(false);
                         userBean.setReservar(false);
@@ -102,6 +103,7 @@ public class InicioBean {
                         userBean.setAprobarTramite(true);
                         userBean.setTerminarTramite(false);
                         userBean.setCambiarOperadorTramite(false);
+                        userBean.setCambiarUsuarioTramite(true);
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
@@ -119,6 +121,7 @@ public class InicioBean {
                         userBean.setAprobarTramite(false);
                         userBean.setTerminarTramite(false);
                         userBean.setCambiarOperadorTramite(true);
+                        userBean.setCambiarUsuarioTramite(false);
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
