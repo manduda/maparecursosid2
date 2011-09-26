@@ -109,6 +109,10 @@ public class TramiteBean implements Serializable {
     private Boolean opcionSenalizacion;
     private Boolean opcionIin;
     private Boolean opcionMnc;
+    private String observacionesTramite;
+    private String resolucionTerminarTramite;
+    private Date fechaResolucionTerminarTramite;
+        
     boolean tramiteTieneDetalle;
     private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
     private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
@@ -426,6 +430,49 @@ public class TramiteBean implements Serializable {
             mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+        }
+        
+        return null;
+    }
+    
+    public String terminarTramite(){
+        
+        //inicio validaciones
+        //valida si lo ingresado en el campo de resolución es un número
+        boolean validares;
+        boolean cerrarDialog = false;
+        
+        validares=validaNum(resolucionTerminarTramite);
+        if(!validares) {
+            mensajeTramite = "<br><b>Error al terminar el trámite.</b><br><br>Debes ingresar un número en el campo de resolución<br><br>";
+            return null;
+        }
+        
+                
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        vo.setTrtObservaciones(observacionesTramite);
+        vo.setTrnResolucion(resolucionTerminarTramite);
+        vo.setTrfFechaResolucion(fechaResolucionTerminarTramite);
+   
+        boolean resultado = fachada.terminarTramite(vo);
+        
+        if (resultado == true){
+            tramites = fachada.cargarTramites(tipoUsuario, userVO.getUsnCodigo());
+            mensajeTramite = "<br><b>Trámite terminado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        } else {
+            mensajeTramite = "<br><b>Error al terminar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
@@ -1325,4 +1372,28 @@ public class TramiteBean implements Serializable {
         this.mensajeCambiarUsuarioTramite = mensajeCambiarUsuarioTramite;
     }
 
+    public Date getFechaResolucionTerminarTramite() {
+        return fechaResolucionTerminarTramite;
+    }
+
+    public void setFechaResolucionTerminarTramite(Date fechaResolucionTerminarTramite) {
+        this.fechaResolucionTerminarTramite = fechaResolucionTerminarTramite;
+    }
+
+    public String getObservacionesTramite() {
+        return observacionesTramite;
+    }
+
+    public void setObservacionesTramite(String observacionesTramite) {
+        this.observacionesTramite = observacionesTramite;
+    }
+
+    public String getResolucionTerminarTramite() {
+        return resolucionTerminarTramite;
+    }
+
+    public void setResolucionTerminarTramite(String resolucionTerminarTramite) {
+        this.resolucionTerminarTramite = resolucionTerminarTramite;
+    }
+    
 }
