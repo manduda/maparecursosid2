@@ -58,7 +58,7 @@
                     <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
-                             selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             selectionMode="#{UserBean.login ? 'single' : null}" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                              onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">

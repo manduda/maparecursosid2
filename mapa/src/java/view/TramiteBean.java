@@ -74,6 +74,9 @@ public class TramiteBean implements Serializable {
     
     private Collection<SelectItem> listaUsuariosAplicacion;
     private List<UsUsuariosVO> usuariosAplicacion = new ArrayList<UsUsuariosVO>();
+
+    private Collection<SelectItem> listaAsesores;
+    private List<UsUsuariosVO> usuariosAsesores = new ArrayList<UsUsuariosVO>();
     
     private Collection<SelectItem> listaUsuariosNoAplicacion;
     
@@ -158,8 +161,14 @@ public class TramiteBean implements Serializable {
             for (UsUsuariosVO u : usuariosAplicacion){
                 usr.add(u.getCodigoSIUST());
             }
-            
             listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
+
+            usuariosAsesores = fachada.listaAsesores();
+            List<UsersVO> usrAsesores = new ArrayList<UsersVO>();
+            for (UsUsuariosVO u : usuariosAsesores){
+                usrAsesores.add(u.getCodigoSIUST());
+            }
+            listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
             
             listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
             
@@ -218,7 +227,28 @@ public class TramiteBean implements Serializable {
                 mensajeAdminUsuario = "<br><b>Error al cambiar el perfil.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
-                usuariosAplicacion = fachada.listaUsuariosAplicacion();
+                try {
+                    ConvertirListasHelper convertir = new ConvertirListasHelper();
+                    usuariosAplicacion = fachada.listaUsuariosAplicacion();
+                    List<UsersVO> usr = new ArrayList<UsersVO>();
+                    for (UsUsuariosVO u : usuariosAplicacion){
+                        usr.add(u.getCodigoSIUST());
+                    }
+                    listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
+
+                    usuariosAsesores = fachada.listaAsesores();
+                    List<UsersVO> usrAsesores = new ArrayList<UsersVO>();
+                    for (UsUsuariosVO u : usuariosAsesores){
+                        usrAsesores.add(u.getCodigoSIUST());
+                    }
+                    listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
+
+                    listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
+
+                } catch (Exception e) {
+                    Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Tramites", e);
+                }
+                
                 usuariosEncontrado = fachada.buscarUsuario(usuariosEncontrado.getCodigoSIUST().getUserCode());
                 mensajeAdminUsuario  = "<br><b>Perfil cambiado correctamente al usuario "
                         + usuariosEncontrado.getCodigoSIUST().getLogin() + ".</b><br><br>";
@@ -507,13 +537,8 @@ public class TramiteBean implements Serializable {
                 mensajeCambiarUsuarioTramite = "<br><b>Error al cambiar el usuario del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
-                for (TrTramitesVO detalleVO : tramites) {
-                    if (detalleVO.getTrnCodigo() == selectedTramite.getTrnCodigo()){
-                        selectedTramite = detalleVO;
-                        break;
-                    }
-                }
                 mensajeCambiarUsuarioTramite  = "<br><b>Usuario cambiado correctamente al trámite.</b><br><br>";
                 break;
             case 2:
@@ -1394,6 +1419,22 @@ public class TramiteBean implements Serializable {
 
     public void setResolucionTerminarTramite(String resolucionTerminarTramite) {
         this.resolucionTerminarTramite = resolucionTerminarTramite;
+    }
+
+    public Collection<SelectItem> getListaAsesores() {
+        return listaAsesores;
+    }
+
+    public void setListaAsesores(Collection<SelectItem> listaAsesores) {
+        this.listaAsesores = listaAsesores;
+    }
+
+    public List<UsUsuariosVO> getUsuariosAsesores() {
+        return usuariosAsesores;
+    }
+
+    public void setUsuariosAsesores(List<UsUsuariosVO> usuariosAsesores) {
+        this.usuariosAsesores = usuariosAsesores;
     }
     
 }

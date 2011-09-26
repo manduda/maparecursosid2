@@ -25,6 +25,7 @@ import vo.EsEstadoVO;
 import vo.MunicipiosVO;
 import vo.ReRegionVO;
 import vo.SeSenalizacionVO;
+import vo.TsTramiteSenalizacionVO;
 
 /**
  *
@@ -49,6 +50,7 @@ public class SenalizacionBean implements Serializable {
     private String psSenalizacion;
     private LazyDataModel<SeSenalizacionVO> lazyModel;
     private SeSenalizacionVO selectedSen;
+    private List<TsTramiteSenalizacionVO> tramiteSenalizacion = null;
     
     
     /** Creates a new instance of SenalizacionBean */
@@ -245,6 +247,8 @@ public class SenalizacionBean implements Serializable {
 
     public void setSelectedSen(SeSenalizacionVO selectedSen) {
         this.selectedSen = selectedSen;
+        facade fachada = new facade();
+        this.tramiteSenalizacion = fachada.buscarTramitePorSenalizacion(selectedSen.getSenCodigo(), 5);
     }
 
     public DepartamentosVO getDepartamentoVO() {
@@ -286,5 +290,13 @@ public class SenalizacionBean implements Serializable {
     public void setListaZona(Collection<SelectItem> listaZona) {
         this.listaZona = listaZona;
     }
-    
+
+    public List<TsTramiteSenalizacionVO> getTramiteSenalizacion() {
+        return tramiteSenalizacion;
+    }
+
+    public void setTramiteSenalizacion(List<TsTramiteSenalizacionVO> tramiteSenalizacion) {
+        this.tramiteSenalizacion = tramiteSenalizacion;
+    }
+
 }
