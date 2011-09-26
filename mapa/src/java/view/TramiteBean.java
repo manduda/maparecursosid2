@@ -474,8 +474,6 @@ public class TramiteBean implements Serializable {
                 break;
         }
         
-        nuevoUsuarioTramite = -1;
-        
         return null;
     }
     

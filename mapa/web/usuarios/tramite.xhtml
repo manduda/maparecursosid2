@@ -157,22 +157,27 @@
                         <h:panelGroup rendered="#{(UserBean.cambiarUsuarioTramite)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                             <!-- CAMBIAR USUARIO TRAMITE -->
                             <h:form>
-                                <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()"/>
-                                <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
-                                            header="Cambiar usuario" widgetVar="confirmarCambiarUsuario">
-                                    <h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0">
-                                        <h:outputText value="Usuario:" style="font-weight: bold;"/>
-                                        <h:selectOneMenu value="#{TramiteBean.nuevoUsuarioTramite}">
-                                            <f:selectItems value="#{TramiteBean.listaUsuariosAplicacion}"/>
-                                        </h:selectOneMenu>
-                                    </h:panelGrid>
-                                    <br/>
-                                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
-                                        <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
-                                    </h:panelGrid>
-                                </p:dialog>
+                                <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()" update="datosCambiarUsuario"/>
                             </h:form>
+                            <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
+                                        header="Cambiar usuario" widgetVar="confirmarCambiarUsuario">
+                                <h:panelGrid id="datosCambiarUsuario" style="text-align: center; " width="100%">
+                                    <h:form>
+                                        <h:panelGrid columns="2" width="100%" cellpadding="0" cellspacing="0">
+                                            <h:outputText value="Usuario:" style="font-weight: bold;"/>
+                                            <h:selectOneMenu value="#{TramiteBean.nuevoUsuarioTramite}">
+                                                <f:selectItems value="#{TramiteBean.listaUsuariosAplicacion}"/>
+                                            </h:selectOneMenu>
+                                        </h:panelGrid>
+                                        <br/>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
+                                            <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
+                                        </h:panelGrid>
+                                    </h:form>
+                                </h:panelGrid>
+                            </p:dialog>
+
                             <p:dialog header="Resultado" widgetVar="resultadoCambiarUsuarioDialog" resizable="false" modal="true" draggable="false"
                                       width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
                                 <h:panelGrid id="datosResultadoCambiarUsuario" style="text-align: center; " width="100%">
