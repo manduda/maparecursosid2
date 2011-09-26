@@ -254,5 +254,5 @@ public class NuNumeracionDAO {
         query.executeUpdate();
         
     }
-
+    
 }

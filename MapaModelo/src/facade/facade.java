@@ -767,6 +767,33 @@ public class facade {
         return resultado;
     }
     
+    public boolean terminarTramite(TrTramitesVO vo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            tramites.terminarTramite(vo, em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
     public Integer cambiarUsuarioTramite(TrTramitesVO vo, int codigoNuevoUsuario){
         /*
          * 0: Error al cambiar el usuario

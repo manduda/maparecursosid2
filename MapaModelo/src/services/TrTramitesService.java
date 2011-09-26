@@ -221,10 +221,109 @@ public class TrTramitesService {
                 }
             }
         }
+    }
+    
+    public void terminarTramite(TrTramitesVO vo, EntityManager em){
+        
+        //actualizamos la información del trámite
+        TrTramites entity = new TrTramites();
+        
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
+        
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(5);
+        entity.setEtnCodigo(estado);
+        
+        entity.setTrfFecha(vo.getTrfFecha());
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        //insertamos registro en el historial
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
 
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
         
+        GtGestionTramiteDAO.persist(gestionTramite, em);
         
+        //actualizamos la información de los registros de señalización
+        if (!entity.getTsTramiteSenalizacionCollection().isEmpty()) {
+            Collection<TsTramiteSenalizacion> recursos = entity.getTsTramiteSenalizacionCollection();
+            for (TsTramiteSenalizacion t : recursos) {
+                
+                SeSenalizacion senalizacion = SeSenalizacionDAO.findbyId(t.getSenCodigo().getSenCodigo(), em);
+                
+                senalizacion.setCodigoMunicipio(t.getCodigoMunicipio());
+                senalizacion.setEmrCodigo(t.getEmrCodigo());
+                senalizacion.setSetNombreNodo(t.getTstNombreNodo());
+                senalizacion.setSetMarcaModelo(t.getTstMarcaModelo());
+                senalizacion.setSetDireccion(t.getTstDireccion());
+                senalizacion.setSetObservaciones(t.getTstObservaciones());
+                
+                EsEstado estadoRecurso = new EsEstado();
+
+                switch(t.getAcnCodigo().getAcnCodigo()){
+                    case 1:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                    case 2:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 3:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 4:
+                        estadoRecurso.setEsnCodigo(4);
+                        break;
+                    case 5:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                } 
+                senalizacion.setEsnCodigo(estadoRecurso);
+                SeSenalizacionDAO.merge(senalizacion, em);
+            }
+        }
         
+        //actualizamos la información de los registros de codigos LD
+        if (!entity.getTlTramiteldCollection().isEmpty()) {
+            Collection<TlTramiteLd> recursos = entity.getTlTramiteldCollection();
+            for (TlTramiteLd t : recursos) {
+               
+                ClCodigosLd codigoLd = ClCodigosLdDAO.findbyId(t.getClnCodigo().getClnCodigo(), em);
+                
+                codigoLd.setEmrCodigo(t.getEmrCodigo());
+                codigoLd.setCltObservaciones(t.getTltObservaciones());
+
+                EsEstado estadoRecurso = new EsEstado();
+                
+                switch(t.getAcnCodigo().getAcnCodigo()){
+                    case 1:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                    case 2:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 3:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 4:
+                        estadoRecurso.setEsnCodigo(4);
+                        break;
+                    case 5:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                }
+                codigoLd.setEsnCodigo(estadoRecurso);
+                ClCodigosLdDAO.merge(codigoLd, em);
+            }
+        }
     }
     
     public Integer cambiarUsuarioTramite(TrTramitesVO vo, int codigoNuevoUsuarioSIUST, EntityManager em){
