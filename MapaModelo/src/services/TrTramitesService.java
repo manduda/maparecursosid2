@@ -233,8 +233,10 @@ public class TrTramitesService {
         EtEstadoTramite estado = new EtEstadoTramite();
         estado.setEtnCodigo(5);
         entity.setEtnCodigo(estado);
-        
         entity.setTrfFecha(vo.getTrfFecha());
+        entity.setTrnResolucion(vo.getTrnResolucion());
+        entity.setTrfFechaResolucion(vo.getTrfFechaResolucion());
+        entity.setTrtObservaciones(vo.getTrtObservaciones());
         
         TrTramitesDAO.merge(entity, em);
         
@@ -634,6 +636,15 @@ public class TrTramitesService {
         TlTramiteLdDAO.delete(entity, em);
         
         return true;
+    }
+    
+    public List<TsTramiteSenalizacionVO> buscarTramiteSenalizacion(int senCodigo, int acnCodigo, EntityManager em){
+        List<TsTramiteSenalizacion> tramiteSenalizacion = TsTramiteSenalizacionDAO.findTramiteSenalizacion(senCodigo, acnCodigo, em);
+        List<TsTramiteSenalizacionVO> tramiteSenalizacionVO = new ArrayList<TsTramiteSenalizacionVO>();        
+        for (TsTramiteSenalizacion t : tramiteSenalizacion) {
+            tramiteSenalizacionVO.add(t.toVO());
+        }
+        return tramiteSenalizacionVO;
     }
     
 }

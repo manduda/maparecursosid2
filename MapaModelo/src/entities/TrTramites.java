@@ -127,6 +127,36 @@ public class TrTramites implements Serializable {
         return vo;
     }
     
+    public TrTramitesVO toVOsinDetalleTramites(){
+        TrTramitesVO vo = new TrTramitesVO();
+        // Datos Usuario
+        UsUsuariosVO userVO = new UsUsuariosVO();
+        userVO = this.getUsnCodigo().toVO();
+        // Operador
+        EmOperadorVO operadorVO = new EmOperadorVO();
+        operadorVO = this.getEmrCodigo().toVO();
+        // Estado trámite
+        EtEstadoTramiteVO estadoTramiteVO = new EtEstadoTramiteVO();
+        estadoTramiteVO = this.getEtnCodigo().toVO();
+        // Gestion trámite
+        Collection<GtGestionTramiteVO> getionTramitesVO = new ArrayList<GtGestionTramiteVO>();        
+        for (GtGestionTramite gt : this.gtGetionTramiteCollection) {
+            getionTramitesVO.add(gt.toVO());
+        }
+        
+        vo.setTrnCodigo(this.getTrnCodigo());
+        vo.setUsnCodigo(userVO);
+        vo.setEmrCodigo(operadorVO);
+        vo.setEtnCodigo(estadoTramiteVO);
+        vo.setTrfFecha(this.getTrfFecha());
+        vo.setTrnResolucion(this.getTrnResolucion());
+        vo.setTrfFechaResolucion(this.getTrfFechaResolucion());
+        vo.setTrtObservaciones(this.getTrtObservaciones());
+        vo.setGtGetionTramiteCollection(getionTramitesVO);
+        
+        return vo;
+    }
+    
     public EmOperador getEmrCodigo() {
         return emrCodigo;
     }

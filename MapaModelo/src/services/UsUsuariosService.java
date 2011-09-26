@@ -66,6 +66,15 @@ public class UsUsuariosService {
         return usuariosVO;
     }
     
+    public List<UsUsuariosVO> getAsesores(EntityManager em){
+        List<UsUsuarios> usuarios = UsUsuariosDAO.getAsesores(em);
+        List<UsUsuariosVO> usuariosVO = new ArrayList<UsUsuariosVO>();
+        for (UsUsuarios u : usuarios) {
+            usuariosVO.add(u.toVO());
+        }
+        return usuariosVO;
+    }
+    
     public List<UsersVO> getUsuariosNoAplicacion(EntityManager em){
         List<Users> usuarios = UsUsuariosDAO.getUsuariosNoAplicacion(em);
         List<UsersVO> usuariosVO = new ArrayList<UsersVO>();

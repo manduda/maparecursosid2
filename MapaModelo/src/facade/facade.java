@@ -581,6 +581,31 @@ public class facade {
         return vo;
     }
     
+    public List<UsUsuariosVO> listaAsesores() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<UsUsuariosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.getAsesores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
     public List<UsersVO> listaUsuariosSIUST() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -958,6 +983,31 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = tramites.cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<TsTramiteSenalizacionVO> buscarTramitePorSenalizacion(int senCodigo, int acnCodigo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TsTramiteSenalizacionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarTramiteSenalizacion(senCodigo, acnCodigo, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

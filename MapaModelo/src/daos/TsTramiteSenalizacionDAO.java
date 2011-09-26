@@ -51,4 +51,16 @@ public class TsTramiteSenalizacionDAO {
         }
         return n;
     }
+    
+    public static List<TsTramiteSenalizacion> findTramiteSenalizacion(int senCodigo, int etnCodigo, EntityManager em){
+        String searchQuery = "SELECT ts FROM TsTramiteSenalizacion ts where ts.senCodigo.senCodigo = ?1 AND ts.acnCodigo.acnCodigo = ?2 "
+                + "ORDER BY ts.trnCodigo.trfFechaResolucion DESC";
+        
+        Query query = em.createQuery(searchQuery);
+        query.setParameter(1, senCodigo);
+        query.setParameter(2, etnCodigo);
+        
+        return query.getResultList();
+    }
+    
 }

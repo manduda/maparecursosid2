@@ -109,4 +109,9 @@ public class UsUsuariosDAO {
 
     }
     
+    public static List<UsUsuarios> getAsesores(EntityManager em){
+        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1 AND u.tunCodigo.tunCodigo = 3");
+        return query.getResultList();
+    }
+    
 }

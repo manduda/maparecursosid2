@@ -262,6 +262,19 @@ public class main {
 	}*/
         //-------------------------------------
         
+        //---- BUSCAR TRAMITES
+        List<TsTramiteSenalizacionVO> vo = new ArrayList<TsTramiteSenalizacionVO>();
+        vo = fachada.buscarTramitePorSenalizacion(1, 5);
+        for(TsTramiteSenalizacionVO ts : vo) {
+            String punto = ts.getSenCodigo().getRenCodigo().getRetNombre() +"-"+ ts.getSenCodigo().getSenZona() +"-"+ ts.getSenCodigo().getSenPs();
+            String accion = ts.getAcnCodigo().getActNombre();
+            String operador = ts.getTrnCodigo().getEmrCodigo().getEmtNombre();
+            int codigoTramite = ts.getTrnCodigo().getTrnCodigo();
+            System.out.println(punto+"-"+accion+"-"+operador+"-"+codigoTramite);
+            
+	}
+        //-------------------------------------
+        
         //---- LISTA USUARIOS
         /*List<UsUsuariosVO> vo = new ArrayList<UsUsuariosVO>();
         int cantidad = 0;
@@ -285,11 +298,11 @@ public class main {
         //-------------------------------------
         
         //---- BUSCAR USUARIO
-        UsUsuariosVO vo = new UsUsuariosVO();
+        /*UsUsuariosVO vo = new UsUsuariosVO();
         vo = fachada.buscarUsuario(2981);
         int codigo = vo.getCodigoSIUST().getUserCode();
         String login = vo.getCodigoSIUST().getLogin();
-        System.out.println(codigo+"-"+login);
+        System.out.println(codigo+"-"+login);*/
         //-------------------------------------
         
     }

@@ -77,7 +77,7 @@ public class TsTramiteSenalizacion implements Serializable {
     public TsTramiteSenalizacionVO toVO(){
         TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
         vo.setTsnCodigo(this.getTsnCodigo());
-        //vo.setTrnCodigo(this.getTrnCodigo().toVO());
+        vo.setTrnCodigo(this.getTrnCodigo().toVOsinDetalleTramites());
         vo.setSenCodigo(this.getSenCodigo().toVO());
         vo.setAcnCodigo(this.getAcnCodigo().toVO());
         vo.setTsnRadicado(this.getTsnRadicado());
