@@ -5,8 +5,11 @@
 package services;
 
 import daos.UsUsuariosDAO;
+import entities.TuTipoUsuario;
 import entities.UsUsuarios;
+import entities.Users;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import vo.TuTipoUsuarioVO;
@@ -38,6 +41,7 @@ public class UsUsuariosService {
         //------------------------------------
         vo.setUsnCodigo(entity.getUsnCodigo());
         vo.setUsnEstado(entity.getUsnEstado());
+        vo.setUsfFecha(entity.getUsfFecha());
 
         return vo;
     }
@@ -61,4 +65,60 @@ public class UsUsuariosService {
         }
         return usuariosVO;
     }
+    
+    public List<UsersVO> getUsuariosNoAplicacion(EntityManager em){
+        List<Users> usuarios = UsUsuariosDAO.getUsuariosNoAplicacion(em);
+        List<UsersVO> usuariosVO = new ArrayList<UsersVO>();
+        for (Users u : usuarios) {
+            usuariosVO.add(u.toVO());
+        }
+        return usuariosVO;
+    }
+    
+    public List<UsersVO> getUsuariosSIUST(EntityManager em){
+        List<Users> usuarios = UsUsuariosDAO.getUsuariosSIUST(em);
+        List<UsersVO> usuariosVO = new ArrayList<UsersVO>();
+        for (Users u : usuarios) {
+            usuariosVO.add(u.toVO());
+        }
+        return usuariosVO;
+    }
+    
+    public UsUsuariosVO buscarUsuario(int userCode, EntityManager em){
+        UsUsuarios usuario = UsUsuariosDAO.buscarUsuario(userCode, em);
+        return usuario.toVO();
+    }
+    
+    public Integer cambiarPerfil(UsUsuariosVO user, int perfil, EntityManager em){
+        /*
+         * 1: Perfil cambiado correctamente
+         * 2: El perfil actual y el nuevo son iguales
+        */
+        UsUsuarios entity = new UsUsuarios();
+        
+        entity = UsUsuariosDAO.findbyId(user.getUsnCodigo(), em);
+        if(entity != null){
+            if(entity.getTunCodigo().getTunCodigo() == perfil){
+                return 2;
+            }
+            entity.setUsnEstado(0);
+            UsUsuariosDAO.merge(entity, em);
+        }
+        
+        if(perfil != 0){
+            UsUsuarios newEntity = new UsUsuarios();
+            newEntity.setUsnEstado(1);
+            Users userSIUST = new Users();
+            userSIUST.setUserCode(user.getCodigoSIUST().getUserCode());
+            newEntity.setCodigoSIUST(userSIUST);
+            TuTipoUsuario tipousuario = new TuTipoUsuario();
+            tipousuario.setTunCodigo(perfil);
+            newEntity.setTunCodigo(tipousuario);
+            newEntity.setUsnCodigo(UsUsuariosDAO.getMaxId(em)+1);
+            newEntity.setUsfFecha(new Date());
+            UsUsuariosDAO.persist(newEntity, em);
+        }
+        return 1;
+    }
+    
 }

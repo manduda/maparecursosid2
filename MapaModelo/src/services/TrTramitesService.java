@@ -13,6 +13,7 @@ import daos.SeSenalizacionDAO;
 import daos.TlTramiteLdDAO;
 import daos.TrTramitesDAO;
 import daos.TsTramiteSenalizacionDAO;
+import daos.UsUsuariosDAO;
 import entities.AcAccion;
 import entities.ClCodigosLd;
 import entities.EmOperador;
@@ -27,6 +28,7 @@ import entities.TsTramiteSenalizacion;
 import entities.UsUsuarios;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import vo.EmOperadorVO;
@@ -225,6 +227,52 @@ public class TrTramitesService {
         
     }
     
+    public Integer cambiarUsuarioTramite(TrTramitesVO vo, int codigoNuevoUsuarioSIUST, EntityManager em){
+        /*
+         * 1: Usuario cambiado correctamente
+         * 2: El ususario actual y el nuevo son iguales
+        */
+        
+        TrTramites entity = new TrTramites();
+        
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
+        
+        int codigoUsuarioSIUST = entity.getUsnCodigo().getCodigoSIUST().getUserCode();
+        //int codigoNuevoUsuarioSIUST = UsUsuariosDAO.findbyId(codigoNuevoUsuario, em).getCodigoSIUST().getUserCode();
+        
+        if(codigoUsuarioSIUST == codigoNuevoUsuarioSIUST){
+            return 2;
+        }
+        
+        UsUsuarios nuevoUsuario = UsUsuariosDAO.buscarUsuario(codigoNuevoUsuarioSIUST, em);
+        entity.setUsnCodigo(nuevoUsuario);
+        
+        Date fecha = new Date();
+        entity.setTrfFecha(fecha);
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(7);
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(fecha);
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        gestionTramite.setUsnCodigo(usuario);
+        
+        TrTramites tramite = new TrTramites();
+        tramite.setTrnCodigo(vo.getTrnCodigo());
+        gestionTramite.setTrnCodigo(tramite);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
+        
+        return 1;
+
+    }
+    
     public List<EtEstadoTramiteVO> getListaEstadoTramites(EntityManager em){
         List<EtEstadoTramite> estado = EtEstadoTramiteDAO.getList(em);
         List<EtEstadoTramiteVO> estadoVO = new ArrayList<EtEstadoTramiteVO>();
@@ -293,7 +341,7 @@ public class TrTramitesService {
         return tramitesVO;
     }
     
-    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, int radicado, EntityManager em){
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, EntityManager em){
         List<TrTramites> tramites = TrTramitesDAO.cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, em);
         List<TrTramitesVO> tramitesVO = new ArrayList<TrTramitesVO>();        
         for (TrTramites t : tramites) {

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.UsersVO;
 
 /**
  *
@@ -51,6 +52,22 @@ public class Users implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSIUST")
     private Collection<UsUsuarios> usUsuariosCollection;
 
+    public Users(){
+    }
+
+    public UsersVO toVO(){
+        UsersVO vo = new UsersVO();
+        // Datos Usuario
+        vo.setUserCode(this.getUserCode());
+        vo.setName(this.getName());
+        vo.setLastName(this.getLastName());
+        vo.setEmail(this.getEmail());
+        vo.setLogin(this.getLogin());
+        //vo.setPassword(this.getPassword());
+        
+        return vo;
+    }
+    
     public String getEmail() {
         return email;
     }

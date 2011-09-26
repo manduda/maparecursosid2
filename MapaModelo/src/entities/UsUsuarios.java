@@ -5,6 +5,7 @@
 package entities;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 import vo.TuTipoUsuarioVO;
 import vo.UsUsuariosVO;
 import vo.UsersVO;
@@ -41,6 +43,11 @@ public class UsUsuarios implements Serializable {
     @Basic(optional = false)
     @Column(name = "USN_ESTADO")
     private int usnEstado;
+    
+    @Basic(optional = false)
+    @Column(name = "USF_FECHA")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date usfFecha;
 
     public UsUsuarios(){
     }
@@ -54,7 +61,7 @@ public class UsUsuarios implements Serializable {
         datosusuario.setLastName(this.getCodigoSIUST().getLastName());
         datosusuario.setEmail(this.getCodigoSIUST().getEmail());
         datosusuario.setLogin(this.getCodigoSIUST().getLogin());
-        datosusuario.setPassword(this.getCodigoSIUST().getPassword());
+        //datosusuario.setPassword(this.getCodigoSIUST().getPassword());
         vo.setCodigoSIUST(datosusuario);
         //------------------------------------
         // Tipo Usuario
@@ -65,6 +72,7 @@ public class UsUsuarios implements Serializable {
         //------------------------------------
         vo.setUsnCodigo(this.getUsnCodigo());
         vo.setUsnEstado(this.getUsnEstado());
+        vo.setUsfFecha(this.getUsfFecha());
         
         return vo;
     }
@@ -99,6 +107,14 @@ public class UsUsuarios implements Serializable {
 
     public void setUsnEstado(int usnEstado) {
         this.usnEstado = usnEstado;
+    }
+
+    public Date getUsfFecha() {
+        return usfFecha;
+    }
+
+    public void setUsfFecha(Date usfFecha) {
+        this.usfFecha = usfFecha;
     }
     
 }

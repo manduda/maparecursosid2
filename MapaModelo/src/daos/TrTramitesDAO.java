@@ -76,7 +76,7 @@ public class TrTramitesDAO {
         return query.getResultList();
     }
     
-    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, int radicado, EntityManager em){
+    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, EntityManager em){
         List<TrTramites> tramites = new ArrayList<TrTramites>();
 
         StringBuilder searchQuery = new StringBuilder(
@@ -96,8 +96,8 @@ public class TrTramitesDAO {
         if(estado != -1) {
             searchQuery.append("AND t.etnCodigo.etnCodigo = ?3 ");
         }
-        if(!usuario.equals("")) {
-            searchQuery.append("AND t.usnCodigo.codigoSIUST.login = ?4 ");
+        if(usuario != -1) {
+            searchQuery.append("AND t.usnCodigo.codigoSIUST.userCode = ?4 ");
         }
         if(radicado != -1) {
             searchQuery.append("AND ("
@@ -120,7 +120,7 @@ public class TrTramitesDAO {
         if(estado != -1) {
             query.setParameter(3, estado);
         }
-        if(!usuario.equals("")) {
+        if(usuario != -1) {
             query.setParameter(4, usuario);
         }
         if(radicado != -1) {

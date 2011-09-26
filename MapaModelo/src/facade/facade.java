@@ -32,6 +32,7 @@ import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
+import vo.UsersVO;
 
 /**
  *
@@ -424,6 +425,37 @@ public class facade {
         return vo;
     }
     
+    public Integer cambiarPerfil(UsUsuariosVO user, int perfil){
+        /*
+         * 0: Error al cambiar el perfil
+         * 1: Perfil cambiado correctamente
+         * 2: El perfil actual y el nuevo son iguales
+        */
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            resultado = usuario.cambiarPerfil(user, perfil, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
     public List<ClCodigosLdVO> cargarCodigosLd(int first, int max, String operador, int codigoLd, int estado){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -510,6 +542,81 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = usuario.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<UsersVO> listaUsuariosNoAplicacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<UsersVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.getUsuariosNoAplicacion(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<UsersVO> listaUsuariosSIUST() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<UsersVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.getUsuariosSIUST(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public UsUsuariosVO buscarUsuario(int userCode) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        UsUsuariosVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = usuario.buscarUsuario(userCode, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -660,6 +767,38 @@ public class facade {
         return resultado;
     }
     
+    public Integer cambiarUsuarioTramite(TrTramitesVO vo, int codigoNuevoUsuario){
+        /*
+         * 0: Error al cambiar el usuario
+         * 1: Usuario cambiado correctamente
+         * 2: El ususario actual y el nuevo son iguales
+        */
+        
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            resultado = tramites.cambiarUsuarioTramite(vo, codigoNuevoUsuario, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
     public Integer agregarRecurso(Object Recurso){
         /*
          * 0: Error al agregar el recurso
@@ -781,7 +920,7 @@ public class facade {
         return vo;
     }
     
-    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, String usuario, String operador, int estado, int radicado){
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;

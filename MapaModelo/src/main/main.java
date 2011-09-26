@@ -25,6 +25,7 @@ import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
+import vo.UsersVO;
 
 /**
  *
@@ -249,16 +250,16 @@ public class main {
         //-------------------------------------
         
         //---- BUSCAR TRAMITES
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         int cantidad = 0;
-        vo = fachada.cargarTramites(0, -1, -1, "", "-1", -1, -1);
+        vo = fachada.cargarTramites(0, -1, -1, -1, "-1", -1, -1);
         for(int i=0; i < vo.size();i++) {
             int codigo = vo.get(i).getTrnCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEtnCodigo().getEttNombre();
             String usuario = vo.get(i).getUsnCodigo().getCodigoSIUST().getLogin();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+usuario);
-	}
+	}*/
         //-------------------------------------
         
         //---- LISTA USUARIOS
@@ -270,6 +271,25 @@ public class main {
             String login = vo.get(i).getCodigoSIUST().getLogin();
             System.out.println(codigo+"-"+login);
 	}*/
+        //-------------------------------------
+        
+        //---- LISTA USUARIOS NO APLICACION
+        /*List<UsersVO> vo = new ArrayList<UsersVO>();
+        int cantidad = 0;
+        vo = fachada.listaUsuariosNoAplicacion();
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getUserCode();
+            String login = vo.get(i).getLogin();
+            System.out.println(codigo+"-"+login);
+	}*/
+        //-------------------------------------
+        
+        //---- BUSCAR USUARIO
+        UsUsuariosVO vo = new UsUsuariosVO();
+        vo = fachada.buscarUsuario(2981);
+        int codigo = vo.getCodigoSIUST().getUserCode();
+        String login = vo.getCodigoSIUST().getLogin();
+        System.out.println(codigo+"-"+login);
         //-------------------------------------
         
     }

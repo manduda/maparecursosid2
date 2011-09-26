@@ -5,6 +5,7 @@
 package vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -21,6 +22,7 @@ public class UsUsuariosVO implements Serializable {
     private UsersVO codigoSIUST;
     private TuTipoUsuarioVO tunCodigo;
     private int usnEstado;
+    private Date usfFecha;
 
     public UsUsuariosVO() {
     }
@@ -56,5 +58,13 @@ public class UsUsuariosVO implements Serializable {
     public void setUsnEstado(int usnEstado) {
         this.usnEstado = usnEstado;
     }
-        
+
+    public Date getUsfFecha() {
+        return usfFecha;
+    }
+
+    public void setUsfFecha(Date usfFecha) {
+        this.usfFecha = usfFecha;
+    }
+    
 }
