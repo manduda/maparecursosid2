@@ -34,6 +34,14 @@
                         <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
                         <h:outputText value="Operador:"/>
                         <h:outputText id="operador" value="#{TramiteBean.selectedTramite.emrCodigo.emtNombre}" style="font-weight: bold;"/>
+                        <h:outputText value="Resolución:" rendered="#{TramiteBean.selectedTramite.etnCodigo.etnCodigo == 5}"/>
+                        <h:panelGroup rendered="#{TramiteBean.selectedTramite.etnCodigo.etnCodigo == 5}">
+                            <h:outputText value="#{TramiteBean.selectedTramite.trnResolucion} del " style="font-weight: bold;"/>
+                            <h:outputText value="#{TramiteBean.selectedTramite.trfFechaResolucion}" style="font-weight: bold;">
+                                <f:convertDateTime pattern="d MMMMM yyyy" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </h:panelGroup>
+                        
                         <br/>
                         <h:panelGroup id="pgOperadorTramite" rendered="#{(UserBean.cambiarOperadorTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}">
                             <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)and(!TramiteBean.tramiteTieneDetalle)}">
@@ -121,14 +129,16 @@
                                     <p:dialog header="Datos de terminación del trámite" widgetVar="dialogTerminar" resizable="false" modal="true" draggable="false"
                                         width="300" showEffect="fade" hideEffect="fade" position="center">
                                         <h:panelGrid width="100%" style="font-size: 10px;" >
-                                                <h:panelGrid width="100%" cellpadding="0" cellspacing="0">
-                                                    <h:panelGrid columns="2">
+                                                <h:panelGrid id="datosTerminar" width="100%" cellpadding="0" cellspacing="0">
+                                                    <h:panelGrid columns="3">
                                                         <h:outputText value="Número de resolución:&#160;" style="font-weight: bold;"/>
-                                                        <h:inputText value="#{TramiteBean.resolucionTerminarTramite}"/>
+                                                        <h:inputText id="resolucion" value="#{TramiteBean.resolucionTerminarTramite}" maxlength="4" size="10"/>
+                                                        <h:message for="resolucion" />
                                                         <h:outputText value="Fecha de resolución:&#160;" style="font-weight: bold;"/>
-                                                        <p:calendar pattern="dd/MM/yyyy" timeZone="EST" locale="es" maxlength="10" size="20" value="#{TramiteBean.fechaResolucionTerminarTramite}"> 
+                                                        <p:calendar id="fechaResolucion" value="#{TramiteBean.fechaResolucionTerminarTramite}" pattern="dd/MM/yyyy" timeZone="EST" locale="es" maxlength="10" size="10"> 
                                                             <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
                                                         </p:calendar>
+                                                        <h:message for="fechaResolucion" />
                                                     </h:panelGrid>
                                                     <br/>
                                                     <h:outputText value="Comentarios:" style="font-weight: bold;"/>

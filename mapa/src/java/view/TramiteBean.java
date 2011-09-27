@@ -469,11 +469,11 @@ public class TramiteBean implements Serializable {
         
         //inicio validaciones
         //valida si lo ingresado en el campo de resolución es un número
-        boolean validares;
+        boolean validaRes;
         boolean cerrarDialog = false;
         
-        validares=validaNum(resolucionTerminarTramite);
-        if(!validares) {
+        validaRes=validaNum(resolucionTerminarTramite);
+        if(!validaRes) {
             mensajeTramite = "<br><b>Error al terminar el trámite.</b><br><br>Debes ingresar un número en el campo de resolución<br><br>";
             return null;
         }
@@ -504,6 +504,10 @@ public class TramiteBean implements Serializable {
         } else {
             mensajeTramite = "<br><b>Error al terminar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
+        
+        resolucionTerminarTramite = "";
+        fechaResolucionTerminarTramite = null;
+        observacionesTramite = "";
         
         return null;
     }
