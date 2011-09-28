@@ -25,7 +25,7 @@
                     </h:panelGrid>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{(TramiteBean.mensajeTramite == '')}">
-                    <h:panelGrid columns="2">
+                    <h:panelGrid id="pgDatosTramite" columns="2">
                         <h:outputText value="Trámite ID:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.trnCodigo}" style="font-weight: bold;"/>
                         <h:outputText value="Usuario:"/>
@@ -80,7 +80,7 @@
                             <h:panelGroup rendered="#{(UserBean.enviarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ENVIAR TRAMITE -->
                                 <h:form>
-                                <p:commandButton type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty TramiteBean.selectedTramite.tlTramiteLdCollection)}"/>
+                                <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty TramiteBean.selectedTramite.tlTramiteLdCollection)}"/>
                                 <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
@@ -186,7 +186,7 @@
                                             </h:panelGrid>
                                             <br/>
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
+                                                <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgDatosTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
                                             </h:panelGrid>
                                         </h:form>

@@ -63,7 +63,7 @@
                              header="Confirmación" severity="alert" widgetVar="eliminarCodigosLdDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteCodigosLd,pgMenuTramite" oncomplete="eliminarCodigosLdDialog.hide();"/>
+                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteCodigosLd,pgMenuTramite" oncomplete="eliminarCodigosLdDialog.hide();"/>
                         <p:commandButton type="button" value="Cancelar" onclick="eliminarCodigosLdDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>

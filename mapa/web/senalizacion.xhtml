@@ -48,7 +48,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="true" update="pgSenalizacion,formSen"/>
+                    <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="false" update="pgSenalizacion,formSen"/>
                 </h:panelGrid>
             </h:panelGrid>
             <p:separator/>
@@ -58,8 +58,8 @@
                     <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
-                             selectionMode="#{UserBean.login ? 'single' : null}" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display" onRowSelectComplete="senDialog.show();"
+                             selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="senDialog.show();"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de señalización</f:facet>
@@ -87,6 +87,83 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+        
+        
+        <!-- DETALLE RECURSO -->
+        <h:panelGroup id="datosRecurso">
+            <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center">
+                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:panelGrid columns="2" cellpadding="4" width="100%">
+                        <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
+                        <h:outputText value="Estado:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
+                        <h:outputText value="Operador:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
+                        <h:outputText value="Muncipio:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
+                        <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
+                        <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
+                        <h:outputText value="Dirección:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
+                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
+
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                        <h:panelGroup rendered="#{UserBean.login}">
+                            <h:form>
+                                <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
+                                <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
+                            </h:form>
+
+                        </h:panelGroup>
+
+                        <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
+                      width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
+                <h:form>
+                    <p:dataTable var="ts" value="#{SenalizacionBean.tramiteSenalizacion}" style="font-size: 10px;"
+                                 emptyMessage="No se encontró historia registrada para este recurso">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{ts.trnCodigo.trnResolucion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{ts.trnCodigo.trfFechaResolucion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Acción" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{ts.acnCodigo.actNombre}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+        </h:panelGroup>
+        
         <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleSenalizacion.xhtml"/>
         
     </ui:define>

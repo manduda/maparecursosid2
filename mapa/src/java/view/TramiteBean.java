@@ -24,6 +24,7 @@ import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import utils.Correo;
 import vo.AcAccionVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
@@ -404,11 +405,30 @@ public class TramiteBean implements Serializable {
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            
+            List<UsUsuariosVO> coordinadores = fachada.getUsuarios(2);
+            
+            for(UsUsuariosVO u: coordinadores){
+                enviarCorreo(u.getCodigoSIUST().getEmail(), userVO.getCodigoSIUST().getLogin());
+            }
+            
         } else {
             mensajeTramite = "<br><b>Error al enviar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         return null;
+    }
+    
+    public void enviarCorreo(String usuarioTo, String usuarioRemitente){
+        Correo correo = new Correo();
+        correo.setServidor(configuracion.getServidorCorreo());
+        correo.setPuerto(configuracion.getPuertoServidor());
+        correo.setCorreoFrom(configuracion.getCorreoAplicacion());
+        correo.setPassword(configuracion.getPasswordCorreo());
+        correo.setAsunto("MAPA DE RECURSOS");
+        correo.setMensaje("Tienes un trámite en tu cola, enviado por el usuario "+usuarioRemitente);
+        correo.setCorreoTo(usuarioTo);
+        correo.send();
     }
     
     public String devolverTramite() {

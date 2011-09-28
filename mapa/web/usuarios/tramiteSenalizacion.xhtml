@@ -88,7 +88,7 @@
                              header="Confirmación" severity="alert" widgetVar="eliminarSenalizacionDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" actionListener="#{TramiteBean.eliminarRecurso}" update="pgAccionTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
+                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
                         <p:commandButton type="button" value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>

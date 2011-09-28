@@ -42,8 +42,8 @@
                     <h:outputText value="#{CodigosLdBean.countCoLD}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false"
-                             selectionMode="#{UserBean.login ? 'single' : null}" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display" onRowSelectComplete="ldDialog.show();" style="font-size:10px"
+                             selectionMode="single" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();" style="font-size:10px"
                              emptyMessage="No se encontraron códigos de larga distancia" update="datos">
                     <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
                     <p:column headerText="Código LD" style="width:100px">
@@ -58,6 +58,39 @@
                 </p:dataTable>
             </h:panelGrid>
         </h:form>
+        
+        <!-- DETALLE RECURSO -->
+        <h:panelGroup id="datosRecurso">
+            <p:dialog header="Detalle" widgetVar="ldDialog" resizable="false" modal="true" draggable="false"
+                      width="400" showEffect="fade" hideEffect="fade" position="center">  
+                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:panelGrid columns="2" cellpadding="4" width="100%">
+                        <h:outputText value="Código LD:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}" />
+                        <h:outputText value="Estado:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.esnCodigo.estNombre}" />
+                        <h:outputText value="Operador:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.emrCodigo.emtNombre}" />
+                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
+                    </h:panelGrid>
+                    <h:panelGrid width="100%" style="text-align: center;">
+                        <h:panelGroup rendered="#{UserBean.login}">
+                            <h:form>
+                                <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ldDialog.hide();"/>
+                                <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" oncomplete="ldDialog.hide();"/>
+                            </h:form>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+        
         <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosLd.xhtml"/>
 
     </ui:define>

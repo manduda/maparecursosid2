@@ -14,11 +14,7 @@
     <ui:define name="content">
         <h:panelGrid>
             <br/>
-            <h:outputText value="En el Mapa de Recursos de Identificación podrá realizar consultas sobre el estado de los mismos, gestionados por la CRC."/>
-            <br/>
-            <h:outputText value="Para ello tendrá que realizar búsquedas seleccionando, en primer lugar, el tipo de recurso."/>
-            <h:outputText value="En segundo lugar, se deberá elegir un criterio específico de búsqueda entre los incluidos en una lista desplegable."/>
-            <h:outputText value="Finalmente, se deberá indicar el valor que debe ser objeto de búsqueda."/>
+            <h:outputText value="#{ConfiguracionBean.mensajeBienvenida}" escape="false"/>
             <br/>
         </h:panelGrid>
     </ui:define>

@@ -7,66 +7,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleSenalizacion.xhtml')}">
-            <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}">  
-                <h:panelGrid id="display" cellpadding="1" style="font-size: 10px;" width="100%">
-                    <h:panelGrid columns="2" cellpadding="4" width="100%">
-                        <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
-                        <h:outputText value="Estado:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
-                        <h:outputText value="Operador:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
-                        <h:outputText value="Muncipio:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
-                        <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
-                        <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
-                        <h:outputText value="Dirección:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
-                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
-                        <h:dataTable var="ts" value="#{SenalizacionBean.tramiteSenalizacion}">
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Resolución"/>
-                                </f:facet>
-                                <h:outputText value="#{ts.trnCodigo.trnResolucion}"/>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Fecha Resolución"/>
-                                </f:facet>
-                                <h:outputText value="#{ts.trnCodigo.trfFechaResolucion}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
-                                </h:outputText>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Acción"/>
-                                </f:facet>
-                                <h:outputText value="#{ts.acnCodigo.actNombre}"/>
-                            </h:column>
-                        </h:dataTable>
-                    </h:panelGrid>
-                    <h:panelGrid width="100%" style="text-align: center;">
-                        <h:panelGroup rendered="#{UserBean.login}">
-                            <h:form>
-                            <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                            <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
-                            </p:commandButton>
-                            <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                            <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
-                            <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
-                            </h:form>
-                        </h:panelGroup>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-
+        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleSenalizacion.xhtml')}">
+            
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
                       width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">

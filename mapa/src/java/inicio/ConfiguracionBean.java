@@ -29,7 +29,13 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMapaSenalizacion;
     private String rutaMapaNumeracion;
     private String rutaCodigosLd;
+    private String mensajeBienvenida;
     private String tiempoSesion;
+    
+    private String servidorCorreo;
+    private String correoAplicacion;
+    private String passwordCorreo;
+    private String puertoServidor;
     /** Creates a new instance of ConfiguracionBean */
     public ConfiguracionBean() {
         
@@ -42,6 +48,7 @@ public class ConfiguracionBean implements Serializable {
             operadorNinguno = properties.getProperty("operadorNinguno");
             municipioNinguno = properties.getProperty("municipioNinguno");
             rutaContexto = properties.getProperty("rutaContexto");
+            mensajeBienvenida = properties.getProperty("mensajeBienvenida");
             tiempoSesion = properties.getProperty("tiempoSesion");
             
             rutaInicio = rutaContexto + "index.xhtml";
@@ -53,6 +60,23 @@ public class ConfiguracionBean implements Serializable {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo parametros.properties no encontrado", e);
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros", e);
+        }
+        
+        Properties Correo = new Properties();
+        try {
+            InputStream input = ConfiguracionBean.class.getResourceAsStream("../properties/Correo.properties");
+            properties.load(input);
+            input.close();
+            
+            servidorCorreo = properties.getProperty("servidorCorreo");
+            correoAplicacion = properties.getProperty("correoAplicacion");
+            passwordCorreo = properties.getProperty("passwordCorreo");
+            puertoServidor = properties.getProperty("puertoServidor");
+            
+        } catch (IOException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo Correo.properties no encontrado", e);
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros del correo", e);
         }
 
 
@@ -92,6 +116,46 @@ public class ConfiguracionBean implements Serializable {
 
     public void setTiempoSesion(String tiempoSesion) {
         this.tiempoSesion = tiempoSesion;
+    }
+
+    public String getMensajeBienvenida() {
+        return mensajeBienvenida;
+    }
+
+    public void setMensajeBienvenida(String mensajeBienvenida) {
+        this.mensajeBienvenida = mensajeBienvenida;
+    }
+
+    public String getCorreoAplicacion() {
+        return correoAplicacion;
+    }
+
+    public void setCorreoAplicacion(String correoAplicacion) {
+        this.correoAplicacion = correoAplicacion;
+    }
+
+    public String getPasswordCorreo() {
+        return passwordCorreo;
+    }
+
+    public void setPasswordCorreo(String passwordCorreo) {
+        this.passwordCorreo = passwordCorreo;
+    }
+
+    public String getServidorCorreo() {
+        return servidorCorreo;
+    }
+
+    public void setServidorCorreo(String servidorCorreo) {
+        this.servidorCorreo = servidorCorreo;
+    }
+
+    public String getPuertoServidor() {
+        return puertoServidor;
+    }
+
+    public void setPuertoServidor(String puertoServidor) {
+        this.puertoServidor = puertoServidor;
     }
 
 }
