@@ -53,7 +53,7 @@ public class TsTramiteSenalizacionDAO {
     }
     
     public static List<TsTramiteSenalizacion> findTramiteSenalizacion(int senCodigo, int etnCodigo, EntityManager em){
-        String searchQuery = "SELECT ts FROM TsTramiteSenalizacion ts where ts.senCodigo.senCodigo = ?1 AND ts.acnCodigo.acnCodigo = ?2 "
+        String searchQuery = "SELECT ts FROM TsTramiteSenalizacion ts where ts.senCodigo.senCodigo = ?1 AND ts.trnCodigo.etnCodigo.etnCodigo = ?2 "
                 + "ORDER BY ts.trnCodigo.trfFechaResolucion DESC";
         
         Query query = em.createQuery(searchQuery);

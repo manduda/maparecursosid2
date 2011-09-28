@@ -114,4 +114,10 @@ public class UsUsuariosDAO {
         return query.getResultList();
     }
     
+    public static List<UsUsuarios> getUsuarios(int tipousuario, EntityManager em){
+        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1 AND u.tunCodigo.tunCodigo = :usuario");
+        query.setParameter("usuario", tipousuario);
+        return query.getResultList();
+    }
+    
 }

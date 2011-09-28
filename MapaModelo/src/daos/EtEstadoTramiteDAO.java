@@ -19,7 +19,7 @@ public class EtEstadoTramiteDAO {
     }
     
     public static List<EtEstadoTramite> getList(EntityManager em){
-        Query query = em.createQuery("SELECT e FROM EtEstadoTramite e");
+        Query query = em.createQuery("SELECT e FROM EtEstadoTramite e WHERE e.etnCodigo != 7");
         return query.getResultList();
     }
 

@@ -4,13 +4,16 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
  *
  * @author miguel.duran
  */
-public class NdNdcVO {
+public class NdNdcVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private int ndnCodigo;
     private String ndtNombre;
     private NtTipondcVO ntnCodigo;

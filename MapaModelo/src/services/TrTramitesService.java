@@ -192,6 +192,11 @@ public class TrTramitesService {
             Collection<TsTramiteSenalizacion> recursos = entity.getTsTramiteSenalizacionCollection();
             for (TsTramiteSenalizacion t : recursos) {
                 if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    AcAccion accion = new AcAccion();
+                    accion.setAcnCodigo(3);
+                    t.setAcnCodigo(accion);
+                    TsTramiteSenalizacionDAO.merge(t, em);
+                    
                     SeSenalizacion senalizacion = SeSenalizacionDAO.findbyId(t.getSenCodigo().getSenCodigo(), em);
                     senalizacion.setCodigoMunicipio(t.getCodigoMunicipio());
                     senalizacion.setEmrCodigo(t.getEmrCodigo());
@@ -211,6 +216,11 @@ public class TrTramitesService {
             Collection<TlTramiteLd> recursos = entity.getTlTramiteldCollection();
             for (TlTramiteLd t : recursos) {
                 if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    AcAccion accion = new AcAccion();
+                    accion.setAcnCodigo(3);
+                    t.setAcnCodigo(accion);
+                    TlTramiteLdDAO.merge(t, em);
+                    
                     ClCodigosLd codigoLd = ClCodigosLdDAO.findbyId(t.getClnCodigo().getClnCodigo(), em);
                     codigoLd.setEmrCodigo(t.getEmrCodigo());
                     EsEstado estadoRecurso = new EsEstado();

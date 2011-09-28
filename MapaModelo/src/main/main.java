@@ -262,8 +262,8 @@ public class main {
 	}*/
         //-------------------------------------
         
-        //---- BUSCAR TRAMITES
-        List<TsTramiteSenalizacionVO> vo = new ArrayList<TsTramiteSenalizacionVO>();
+        //---- HISTORIAL RECURSO
+        /*List<TsTramiteSenalizacionVO> vo = new ArrayList<TsTramiteSenalizacionVO>();
         vo = fachada.buscarTramitePorSenalizacion(1, 5);
         for(TsTramiteSenalizacionVO ts : vo) {
             String punto = ts.getSenCodigo().getRenCodigo().getRetNombre() +"-"+ ts.getSenCodigo().getSenZona() +"-"+ ts.getSenCodigo().getSenPs();
@@ -272,7 +272,7 @@ public class main {
             int codigoTramite = ts.getTrnCodigo().getTrnCodigo();
             System.out.println(punto+"-"+accion+"-"+operador+"-"+codigoTramite);
             
-	}
+	}*/
         //-------------------------------------
         
         //---- LISTA USUARIOS
