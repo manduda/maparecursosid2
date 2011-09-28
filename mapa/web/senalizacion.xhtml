@@ -51,12 +51,16 @@
                     <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="false" update="pgSenalizacion,formSen"/>
                 </h:panelGrid>
             </h:panelGrid>
-            <p:separator/>
-            <h:panelGrid id="pgSenalizacion" width="100%">
-                <h:panelGrid columns="2">
-                    <h:outputText value="Registros encontrados:"/>
-                    <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
-                </h:panelGrid>
+        </h:form>
+        
+        <p:separator/>
+        
+        <h:panelGrid id="pgSenalizacion" width="100%">
+            <h:panelGrid columns="2">
+                <h:outputText value="Registros encontrados:"/>
+                <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
+            </h:panelGrid>
+            <h:form>
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
                              selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                              onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="senDialog.show();"
@@ -85,8 +89,9 @@
                         <h:outputText value="#{sen.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
-            </h:panelGrid>
-        </h:form>
+            </h:form>
+        </h:panelGrid>
+
         
         
         <!-- DETALLE RECURSO -->

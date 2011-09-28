@@ -34,13 +34,16 @@
                     <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd"/>
                 </h:panelGrid>
             </h:panelGrid>
-            <p:separator/>
-            
-            <h:panelGrid id="pgCodigosLd" width="100%">
-                <h:panelGrid columns="2">
-                    <h:outputText value="Registros encontrados:"/>
-                    <h:outputText value="#{CodigosLdBean.countCoLD}"/>
-                </h:panelGrid>
+        </h:form>
+        
+        <p:separator/>
+        
+        <h:panelGrid id="pgCodigosLd" width="100%">
+            <h:panelGrid columns="2">
+                <h:outputText value="Registros encontrados:"/>
+                <h:outputText value="#{CodigosLdBean.countCoLD}"/>
+            </h:panelGrid>
+            <h:form>
                 <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false"
                              selectionMode="single" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                              onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();" style="font-size:10px"
@@ -56,8 +59,9 @@
                         <h:outputText value="#{ld.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
-            </h:panelGrid>
-        </h:form>
+            </h:form>
+        </h:panelGrid>
+        
         
         <!-- DETALLE RECURSO -->
         <h:panelGroup id="datosRecurso">
