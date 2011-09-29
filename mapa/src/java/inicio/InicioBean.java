@@ -4,6 +4,7 @@
  */
 package inicio;
 
+import com.sun.faces.context.SessionMap;
 import facade.facade;
 import java.io.IOException;
 import javax.annotation.PostConstruct;
@@ -28,8 +29,8 @@ import vo.UsUsuariosVO;
 @RequestScoped
 public class InicioBean {
     
-    @ManagedProperty(value = "#{UserBean}")
-    private UserBean userBean;
+    //@ManagedProperty(value = "#{UserBean}")
+    private UserBean userBean = new UserBean();
     
     @ManagedProperty(value = "#{ConfiguracionBean}")
     private ConfiguracionBean configuracion;
@@ -68,8 +69,11 @@ public class InicioBean {
         if (userVO != null){
             userVO.getCodigoSIUST().setPassword("");//se quita la contraseña para que no quede en sesion
             if (userVO.getUsnEstado() == 1){
+                //UserBean userBean = new UserBean();
+
                 userBean.setUserVO(userVO);
                 userBean.setLogin(true);
+                
                 int tipoUsuario = userBean.getUserVO().getTunCodigo().getTunCodigo();
                 switch(tipoUsuario) {
                     case 1: // ADMINISTADOR
@@ -127,6 +131,11 @@ public class InicioBean {
                         userBean.setAdministrarUsuarios(false);
                         break;
                 }
+                
+                FacesContext facesContext = FacesContext.getCurrentInstance();
+                SessionMap sessionMap = (SessionMap) facesContext.getExternalContext().getSessionMap();
+                sessionMap.put("UserBean", userBean);
+
                 
                 Mensaje = "<br>Sesión iniciada<br><br>"
                         + "Bienvenid@ " + userVO.getCodigoSIUST().getName() + " " + userVO.getCodigoSIUST().getLastName() + "<br><br>"
@@ -189,8 +198,12 @@ public class InicioBean {
     public String cerrarSesion() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
+        
+        SessionMap sessionMap = (SessionMap) facesContext.getExternalContext().getSessionMap();
 
-        session.removeAttribute("UserBean");
+        sessionMap.remove("UserBean");
+
+        //session.removeAttribute("UserBean");
         session.invalidate(); 
         Mensaje = "<br>Sesión cerrada correctamente<br><br>";
         return configuracion.getRutaContexto()+"resultadoLogin";

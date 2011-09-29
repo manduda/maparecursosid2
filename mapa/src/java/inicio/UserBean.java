@@ -6,9 +6,20 @@ package inicio;
 
 //import javax.faces.bean.ManagedBean;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 import vo.UsUsuariosVO;
 
 //import javax.faces.bean.SessionScoped;
@@ -17,9 +28,13 @@ import vo.UsUsuariosVO;
  *
  * @author MADD
  */
-@ManagedBean(name = "UserBean")
-@SessionScoped
-public class UserBean implements Serializable {
+//@ManagedBean(name = "UserBean")
+//@SessionScoped
+public class UserBean implements Serializable, HttpSessionBindingListener {
+    
+    // All logins.
+    private static Map<UserBean, HttpSession> logins = new HashMap<UserBean, HttpSession>();
+    
     private UsUsuariosVO userVO = new UsUsuariosVO();
     private Boolean login = false;
     
@@ -48,6 +63,30 @@ public class UserBean implements Serializable {
     private boolean administrarUsuarios = false;
 
     public UserBean() {
+    }
+
+    @Override
+    public void valueBound(HttpSessionBindingEvent event) {
+        HttpSession session = logins.remove(this);
+        if (session != null) {
+            session.invalidate();
+        }
+        logins.put(this, event.getSession());
+    }
+
+    @Override
+    public void valueUnbound(HttpSessionBindingEvent event) {
+        logins.remove(this);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        return (other instanceof UserBean) && (userVO.getCodigoSIUST() != null) ? userVO.getCodigoSIUST().getLogin().equals(((UserBean) other).getUserVO().getCodigoSIUST().getLogin()) : (other == this);
+    }
+
+    @Override
+    public int hashCode() {
+        return (userVO.getCodigoSIUST() != null) ? (this.getClass().hashCode() + userVO.getCodigoSIUST().getLogin().hashCode()) : super.hashCode();
     }
 
     public UsUsuariosVO getUserVO() {
@@ -192,6 +231,14 @@ public class UserBean implements Serializable {
 
     public void setCambiarUsuarioTramite(boolean cambiarUsuarioTramite) {
         this.cambiarUsuarioTramite = cambiarUsuarioTramite;
+    }
+
+    public static Map<UserBean, HttpSession> getLogins() {
+        return logins;
+    }
+
+    public static void setLogins(Map<UserBean, HttpSession> logins) {
+        UserBean.logins = logins;
     }
     
 }
