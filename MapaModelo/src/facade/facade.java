@@ -1113,4 +1113,48 @@ public class facade {
         }
         return resultado;
     }
+    
+    public int reservarRecurso(Object recurso){
+        /*
+         * 0: Error al agregar el recurso
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+        */
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            String nombre = recurso.getClass().getSimpleName();
+            if (nombre.equals("SeSenalizacionVO")){
+                resultado = senalizacion.reservarSenalizacion((SeSenalizacionVO)recurso, em);
+            } //else if (nombre.equals("ClCodigosLdVO")){
+               // resultado = codigosld.agregarRecurso((ClCodigosLdVO) recurso, em);
+            //} 
+            else {
+                resultado = 0;
+            }
+
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
 }

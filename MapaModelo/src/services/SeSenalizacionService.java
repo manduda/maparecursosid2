@@ -6,6 +6,7 @@ package services;
 
 import daos.SeSenalizacionDAO;
 import entities.EmOperador;
+import entities.EsEstado;
 import entities.SeSenalizacion;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,5 +124,24 @@ public class SeSenalizacionService {
     
     public void transferirSenalizacion (String operadorOrigen, String operadorDestino, EntityManager em){
         SeSenalizacionDAO.transferirSenalizacionDAO(operadorOrigen, operadorDestino, em);
+    }
+    
+    public int reservarSenalizacion (SeSenalizacionVO vo, EntityManager em){
+        
+        SeSenalizacion entity = new SeSenalizacion();
+        
+        entity = SeSenalizacionDAO.findbyId(vo.getSenCodigo(), em);
+        
+        if (entity.getSenCodigo() == 1){
+            EsEstado estado = new EsEstado();
+            estado.setEsnCodigo(4);
+            entity.setEsnCodigo(estado);
+            SeSenalizacionDAO.merge(entity, em); 
+            return 1;
+        }
+        else{
+            return 2;
+        }
+        
     }
 }

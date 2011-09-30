@@ -29,7 +29,7 @@ public class NuNumeracionDAO {
         em.merge(entity);
     }
 
-    public static NuNumeracion findbyId(BigDecimal nunCodigo, EntityManager em){
+    public static NuNumeracion findbyId(int nunCodigo, EntityManager em){
         return em.find(NuNumeracion.class, nunCodigo);
     }
     

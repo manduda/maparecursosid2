@@ -63,7 +63,7 @@ public class NuNumeracionService {
         return vo;
     }
     
-    public NuNumeracionVO getById(BigDecimal id, EntityManager em){
+    public NuNumeracionVO getById(int id, EntityManager em){
         NuNumeracion entity = NuNumeracionDAO.findbyId(id, em);
         return getVOFromEntity(entity);
     }
@@ -119,5 +119,5 @@ public class NuNumeracionService {
    
     public void transferirNumeracion (String operadorOrigen, String operadorDestino, EntityManager em){
         NuNumeracionDAO.transferirNumeracionDAO(operadorOrigen, operadorDestino, em);
-    }
+    }          
 }

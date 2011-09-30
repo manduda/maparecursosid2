@@ -15,7 +15,7 @@ import java.math.BigInteger;
 public class NuNumeracionVO implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    private BigDecimal nunCodigo;
+    private int nunCodigo;
     private MunicipiosVO codigoMunicipio;
     private EmOperadorVO emrCodigo;
     private int nunInicio;
@@ -43,11 +43,11 @@ public class NuNumeracionVO implements Serializable {
         this.ndnCodigo = ndnCodigo;
     }
 
-    public BigDecimal getNunCodigo() {
+    public int getNunCodigo() {
         return nunCodigo;
     }
 
-    public void setNunCodigo(BigDecimal nunCodigo) {
+    public void setNunCodigo(int nunCodigo) {
         this.nunCodigo = nunCodigo;
     }
 

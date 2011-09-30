@@ -28,7 +28,7 @@ public class NuNumeracion implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "NUN_CODIGO")
-    private BigDecimal nunCodigo;
+    private int nunCodigo;
     
     @JoinColumn(name = "SK_REGION_CODE", referencedColumnName = "CODIGO_MUNICIPIO")
     @ManyToOne(optional = false)
@@ -60,11 +60,11 @@ public class NuNumeracion implements Serializable {
     public NuNumeracion() {
     }
 
-    public BigDecimal getNunCodigo() {
+    public int getNunCodigo() {
         return nunCodigo;
     }
 
-    public void setNunCodigo(BigDecimal nunCodigo) {
+    public void setNunCodigo(int nunCodigo) {
         this.nunCodigo = nunCodigo;
     }
 
