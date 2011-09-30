@@ -36,6 +36,8 @@ public class ConfiguracionBean implements Serializable {
     private String correoAplicacion;
     private String passwordCorreo;
     private String puertoServidor;
+    private String firmaCorreo;
+    private String logoCorreo;
     /** Creates a new instance of ConfiguracionBean */
     public ConfiguracionBean() {
         
@@ -72,6 +74,8 @@ public class ConfiguracionBean implements Serializable {
             correoAplicacion = properties.getProperty("correoAplicacion");
             passwordCorreo = properties.getProperty("passwordCorreo");
             puertoServidor = properties.getProperty("puertoServidor");
+            firmaCorreo = properties.getProperty("firmaCorreo");
+            logoCorreo = properties.getProperty("logoCorreo");
             
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo Correo.properties no encontrado", e);
@@ -156,6 +160,22 @@ public class ConfiguracionBean implements Serializable {
 
     public void setPuertoServidor(String puertoServidor) {
         this.puertoServidor = puertoServidor;
+    }
+
+    public String getFirmaCorreo() {
+        return firmaCorreo;
+    }
+
+    public void setFirmaCorreo(String firmaCorreo) {
+        this.firmaCorreo = firmaCorreo;
+    }
+
+    public String getLogoCorreo() {
+        return logoCorreo;
+    }
+
+    public void setLogoCorreo(String logoCorreo) {
+        this.logoCorreo = logoCorreo;
     }
 
 }

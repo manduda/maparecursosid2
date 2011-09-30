@@ -5,11 +5,20 @@
 package utils;
 
 import java.util.Properties;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.faces.context.FacesContext;
+import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.servlet.ServletContext;
 
 /**
  *
@@ -23,6 +32,8 @@ public class Correo {
     private String puerto;
     private String asunto;
     private String password;
+    private String firma;
+    private String rutaLogo; 
     
     public Correo() {
     }
@@ -48,7 +59,39 @@ public class Correo {
                 Message.RecipientType.TO,
                 new InternetAddress(this.correoTo));
             message.setSubject(this.asunto);
-            message.setText(this.mensaje);
+            //message.setContent(this.mensaje, "text/html");
+            //message.setText(this.mensaje);
+            
+            Multipart multipart = new MimeMultipart("related");
+            
+            // The HTML
+            BodyPart htmlPart = new MimeBodyPart();
+            String firma = "<p><strong><b>MAPA DE RECURSOS DE IDENTIFICACIÓN</b></strong><br/>"
+                    + "Comisión de Regulación de Comunicaciones<br/>"
+                    + "Cra 7 No 77-07 Piso 9 Bogotá, Colombia<br/>"
+                    + "Teléfono: +57(1)3198300<br/>"
+                    + "Bogotá, Colombia<br/>"
+                    + "Página web: <a href=\"http://www.crcom.gov.co\" title=\"http://www.crom.gov.co\" target=\"_blank\">http://www.crcom.gov.co</a></p>";
+
+            htmlPart.setContent("<html><body><p>" + this.mensaje + "</p>" + firma
+                    + "<img src=\"cid:imgPart\"/><br/></body></html>", "text/html");
+            multipart.addBodyPart(htmlPart);
+            
+            // The Images
+            BodyPart imgPart=new MimeBodyPart();
+
+            // Loading the image
+            DataSource ds=new FileDataSource(this.rutaLogo);
+            imgPart.setDataHandler(new DataHandler(ds));
+
+            //Setting the header
+            imgPart.setHeader("Content-ID","<imgPart>");
+
+            multipart.addBodyPart(imgPart);
+
+            // attaching the multi-part to the message
+            message.setContent(multipart);
+            
 
             // Lo enviamos.
             Transport t = session.getTransport("smtp");
@@ -119,5 +162,20 @@ public class Correo {
         this.servidor = servidor;
     }
 
+    public String getRutaLogo() {
+        return rutaLogo;
+    }
+
+    public void setRutaLogo(String rutaLogo) {
+        this.rutaLogo = rutaLogo;
+    }
+
+    public String getFirma() {
+        return firma;
+    }
+
+    public void setFirma(String firma) {
+        this.firma = firma;
+    }
 
 }

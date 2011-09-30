@@ -21,6 +21,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -407,8 +408,7 @@ public class TramiteBean implements Serializable {
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
             List<UsUsuariosVO> coordinadores = fachada.getUsuarios(2);
-            
-            for(UsUsuariosVO u: coordinadores){
+            for(UsUsuariosVO u: coordinadores){    
                 enviarCorreo(u.getCodigoSIUST().getEmail(), userVO.getCodigoSIUST().getLogin());
             }
             
@@ -425,9 +425,14 @@ public class TramiteBean implements Serializable {
         correo.setPuerto(configuracion.getPuertoServidor());
         correo.setCorreoFrom(configuracion.getCorreoAplicacion());
         correo.setPassword(configuracion.getPasswordCorreo());
-        correo.setAsunto("MAPA DE RECURSOS");
-        correo.setMensaje("Tienes un trámite en tu cola, enviado por el usuario "+usuarioRemitente);
+        correo.setAsunto("Mapa de Recursos de Identificación");
+        String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin()+" te ha enviado un trámite.";
+        correo.setMensaje(mensaje);
         correo.setCorreoTo(usuarioTo);
+        correo.setFirma(configuracion.getFirmaCorreo());
+        ServletContext ctx = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        String deploymentDirectoryPath = ctx.getRealPath("/");
+        correo.setRutaLogo(deploymentDirectoryPath+configuracion.getRutaContexto()+configuracion.getLogoCorreo());
         correo.send();
     }
     
@@ -451,6 +456,10 @@ public class TramiteBean implements Serializable {
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            
+            String email = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0).getUsnCodigo().getCodigoSIUST().getEmail();
+            enviarCorreo(email, userVO.getCodigoSIUST().getLogin());
+            
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
@@ -478,6 +487,12 @@ public class TramiteBean implements Serializable {
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            
+            List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
+            for(UsUsuariosVO u: administradores){    
+                enviarCorreo(u.getCodigoSIUST().getEmail(), userVO.getCodigoSIUST().getLogin());
+            }
+            
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
