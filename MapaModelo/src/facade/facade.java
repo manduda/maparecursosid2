@@ -1114,8 +1114,9 @@ public class facade {
         return resultado;
     }
     
-    public int reservarRecurso(Object recurso){
-        /*
+    public int reservarLiberarRecurso(Object recurso, int accion){
+        /*la acción 0 es liberación y la accion 1 es reserva
+         * 
          * 0: Error al agregar el recurso
          * 1: Recurso agregado correctamente
          * 2: Falta un dato del VO
@@ -1135,14 +1136,13 @@ public class facade {
             tx.begin();
             String nombre = recurso.getClass().getSimpleName();
             if (nombre.equals("SeSenalizacionVO")){
-                resultado = senalizacion.reservarSenalizacion((SeSenalizacionVO)recurso, em);
-            } //else if (nombre.equals("ClCodigosLdVO")){
-               // resultado = codigosld.agregarRecurso((ClCodigosLdVO) recurso, em);
-            //} 
+                resultado = senalizacion.reservarLiberarSenalizacion((SeSenalizacionVO)recurso, em, accion);
+            } else if (nombre.equals("ClCodigosLdVO")){
+                resultado = codigosld.reservarLiberarCodigoLd((ClCodigosLdVO) recurso, em, accion);
+            } 
             else {
                 resultado = 0;
             }
-
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){

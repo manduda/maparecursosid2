@@ -7,6 +7,7 @@ package services;
 import daos.ClCodigosLdDAO;
 import entities.ClCodigosLd;
 import entities.EmOperador;
+import entities.EsEstado;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,4 +84,34 @@ public class ClCodigosLdService {
         }
         return operadorVO;
     }
+
+    public int reservarLiberarCodigoLd (ClCodigosLdVO vo, EntityManager em,int accion){
+        //si la accion es 0 se libera
+        //si la accion es 1 se reserva
+        
+        ClCodigosLd entity = new ClCodigosLd();
+        
+        entity = ClCodigosLdDAO.findbyId(vo.getClnCodigo(), em);
+        if (accion == 1 && entity.getEsnCodigo().getEsnCodigo() == 1){
+            EsEstado estado = new EsEstado();
+            estado.setEsnCodigo(4);
+            entity.setEsnCodigo(estado);
+            ClCodigosLdDAO.merge(entity, em); 
+            return 1;
+        }
+        else if(accion==0 && entity.getEsnCodigo().getEsnCodigo() == 4){
+            
+                EsEstado estado = new EsEstado();
+                estado.setEsnCodigo(1);
+                entity.setEsnCodigo(estado);
+                ClCodigosLdDAO.merge(entity, em); 
+                return 1;
+        }
+            else{
+                return 2;
+            }
+        }
+
+        
+        
 }

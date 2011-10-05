@@ -126,15 +126,21 @@ public class SeSenalizacionService {
         SeSenalizacionDAO.transferirSenalizacionDAO(operadorOrigen, operadorDestino, em);
     }
     
-    public int reservarSenalizacion (SeSenalizacionVO vo, EntityManager em){
+    public int reservarLiberarSenalizacion (SeSenalizacionVO vo, EntityManager em, int accion){
         
         SeSenalizacion entity = new SeSenalizacion();
         
         entity = SeSenalizacionDAO.findbyId(vo.getSenCodigo(), em);
         
-        if (entity.getSenCodigo() == 1){
+        if (accion==1 && entity.getEsnCodigo().getEsnCodigo() == 1){
             EsEstado estado = new EsEstado();
             estado.setEsnCodigo(4);
+            entity.setEsnCodigo(estado);
+            SeSenalizacionDAO.merge(entity, em); 
+            return 1;
+        }else if (accion==0 && entity.getEsnCodigo().getEsnCodigo() == 4){
+            EsEstado estado = new EsEstado();
+            estado.setEsnCodigo(1);
             entity.setEsnCodigo(estado);
             SeSenalizacionDAO.merge(entity, em); 
             return 1;

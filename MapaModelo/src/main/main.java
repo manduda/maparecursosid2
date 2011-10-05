@@ -35,6 +35,16 @@ public class main {
     public static void main(String[] args) {
         facade fachada = new facade();
        
+        //--INICIO RESERVA DE SEÑALIZACIÓN--
+        /*int operacion;
+        
+        SeSenalizacionVO vo = new SeSenalizacionVO();
+        vo.setSenCodigo(1);
+
+        operacion = fachada.reservarRecurso(vo);
+        System.out.println("Resultado:"+operacion);*/
+        //--FIN RESERVA DE SEÑALIZACIÓN--
+        
         //----INICIO TRANSFERENCIA DE ----
         /*boolean transferencia = false;
         
