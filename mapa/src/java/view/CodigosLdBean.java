@@ -33,7 +33,7 @@ public class CodigosLdBean implements Serializable {
     private ClCodigosLdVO selectedLd;
     private EmOperadorVO operadorVO = new EmOperadorVO();
     private EsEstadoVO estadoVO = new EsEstadoVO();
-    private String codigoLd;
+    private String codigoLd="";
     private Collection<SelectItem> listaOperador;
     private Collection<SelectItem> listaEstado;
 
@@ -62,6 +62,8 @@ public class CodigosLdBean implements Serializable {
         
         CoLD = fachada.cargarCodigosLd(0, -1, "-1", -1, -1);
         countCoLD = fachada.countCargarCodigosLd("-1", -1, -1);
+        operadorVO.setEmrCodigo("-1");
+        estadoVO.setEsnCodigo(-1);
     }
     
     public String buscar() {
@@ -82,7 +84,6 @@ public class CodigosLdBean implements Serializable {
         return null;
     }
     
-    
     private SelectItem[] createFilterOptions(String[] data)  {  
         SelectItem[] options = new SelectItem[data.length + 1];  
   
@@ -94,6 +95,33 @@ public class CodigosLdBean implements Serializable {
         return options;  
     }
     
+    public String reservar() {
+
+        int operacion;
+        facade fachada = new facade();
+        operacion = fachada.reservarLiberarRecurso(selectedLd,1);
+        
+        if(operacion == 1){
+            buscar();
+            return "Reserva de código exitosa";
+        }else{
+         return "Error en el bean de Códigos LD";   
+        }
+    }
+
+    public String liberar() {
+
+        int operacion;
+        facade fachada = new facade();
+        operacion = fachada.reservarLiberarRecurso(selectedLd,0);
+        
+        if(operacion == 1){
+            buscar();
+            return "Liberación de código exitosa";
+        }else{
+         return "Error en el bean de Códigos LD";   
+        }
+    }
 
     public List<ClCodigosLdVO> getCoLD() {
         return CoLD;

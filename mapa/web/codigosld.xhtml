@@ -44,10 +44,10 @@
                 <h:outputText value="#{CodigosLdBean.countCoLD}"/>
             </h:panelGrid>
             <h:form>
-                <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false"
+                <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false" 
                              selectionMode="single" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();" style="font-size:10px"
-                             emptyMessage="No se encontraron códigos de larga distancia" update="datos">
+                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();"
+                             emptyMessage="No se encontraron registros" style="font-size:10px">
                     <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
                     <p:column headerText="Código LD" style="width:100px">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
@@ -86,8 +86,8 @@
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                                 </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ldDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" oncomplete="ldDialog.hide();"/>
+                                <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}"  actionListener="#{CodigosLdBean.liberar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
+                                <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{CodigosLdBean.reservar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
                             </h:form>
                         </h:panelGroup>
                     </h:panelGrid>

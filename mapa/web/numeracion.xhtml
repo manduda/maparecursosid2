@@ -90,7 +90,11 @@
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>
+            <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 1}">
+                <h:panelGrid>
+                    <p:commandButton value="Reservar" ajax="false"/>
+                </h:panelGrid>
+            </h:panelGroup>
         </h:form>
-        
     </ui:define>
 </ui:composition>

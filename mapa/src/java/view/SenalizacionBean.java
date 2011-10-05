@@ -100,7 +100,14 @@ public class SenalizacionBean implements Serializable {
                 return lazySenalizacion;
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarSenalizacion("-1", -1, -1, -1, -1, "-1", "-1")); 
+        lazyModel.setRowCount(fachada.countCargarSenalizacion("-1", -1, -1, -1, -1, "-1", "-1"));
+        
+        operadorVO.setEmrCodigo("-1");
+        estadoVO.setEsnCodigo(-1);
+        regionSenalizacionVO.setRenCodigo(-1);
+        psSenalizacion="";
+        zonaSenalizacion="";
+        
     }
     
     public LazyDataModel<SeSenalizacionVO> getLazyModel() {  
@@ -169,6 +176,34 @@ public class SenalizacionBean implements Serializable {
         selectedSen = null;
         return null;
     }
+    
+    public String reservar() {
+        int operacion;
+        facade fachada = new facade();
+        operacion = fachada.reservarLiberarRecurso(selectedSen,1);
+        
+        if(operacion == 1){
+            buscar();
+            return "Reserva de señalización exitosa";
+        }else{
+            return "Error en el bean de Señalización";   
+        }
+        
+    }
+    
+    public String liberar() {
+        int operacion;
+        facade fachada = new facade();
+        operacion = fachada.reservarLiberarRecurso(selectedSen,0);
+        
+        if(operacion == 1){
+            buscar();
+            return "Liberación de señalización exitosa";
+        }else{
+         return "Error en el bean de Señalización";   
+        }
+    }
+    
     public String getPsSenalizacion() {
         return psSenalizacion;
     }

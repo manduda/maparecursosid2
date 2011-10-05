@@ -127,8 +127,8 @@
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
                                 </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="senDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{SenalizacionBean.recuperar}" oncomplete="senDialog.hide();"/>
+                                <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{SenalizacionBean.liberar}" update="pgSenalizacion" oncomplete="senDialog.hide();"/>
+                                <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{SenalizacionBean.reservar}" update="pgSenalizacion" oncomplete="senDialog.hide();"/>
                             </h:form>
 
                         </h:panelGroup>
