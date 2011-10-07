@@ -11,7 +11,7 @@
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
@@ -23,7 +23,7 @@
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}" size="9" maxlength="9"/>
                             </h:panelGrid>
                             <br/>
                             <h:outputText value="Trámite" style="font-weight: bold;"/>
@@ -48,7 +48,7 @@
 
             <!-- MENÚ PREASIGNAR --> 
             <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
@@ -59,7 +59,7 @@
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}" size="9" maxlength="9"/>
                             </h:panelGrid>
                             <br/>
                             <h:outputText value="Trámite" style="font-weight: bold;"/>

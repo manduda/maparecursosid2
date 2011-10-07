@@ -49,11 +49,15 @@
                              onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();"
                              emptyMessage="No se encontraron registros" style="font-size:10px">
                     <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
-                    <p:column headerText="Código LD" style="width:100px">
+                    <p:column headerText="Código LD" style="width:100px; text-align: center">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
                     </p:column>
-                    <p:column headerText="Estado" style="width:150px">
-                        <h:outputText value="#{ld.esnCodigo.estNombre}"/>
+                    <p:column headerText="Estado" style="width:100px">
+                        <div style="width: 100%; text-align: center;#{ld.esnCodigo.esnCodigo == '3' ? 'background-color: olivedrab; color: #ffffff;' : 
+                                                                      ld.esnCodigo.esnCodigo == '4' ? 'background-color: gray; color: #ffffff' : 
+                                                                      ld.esnCodigo.esnCodigo == '2' ? 'background-color: yellow; ' : null}">
+                            <h:outputText value="#{ld.esnCodigo.estNombre}"/>
+                        </div>
                     </p:column>
                     <p:column headerText="Empresa">
                         <h:outputText value="#{ld.emrCodigo.emtNombre}"/>

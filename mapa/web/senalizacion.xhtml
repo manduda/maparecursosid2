@@ -5,7 +5,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
         <h:outputText value="Señalización"/>
@@ -67,25 +68,23 @@
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Mapa de señalización</f:facet>
-                    <p:column headerText="REGION" >
-                        <h:outputText value="#{sen.renCodigo.retNombre}"/>
-                    </p:column>
-                    <p:column headerText="ZONA" >
-                        <h:outputText value="#{sen.senZona}"/>
-                    </p:column>
-                    <p:column headerText="PS" >
-                        <h:outputText value="#{sen.senPs}"/>
+                    <p:column headerText="CÓDIGO SEÑALIZACION&lt;br/&gt;(Región-Zona-Punto)" style="text-align: center; width: 120px;">
+                            <h:outputText value="#{sen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(sen.senZona,2)} - #{fnc:rellenarCerosIzquierda(sen.senPs,2)}"/>
                     </p:column>
                     <p:column headerText="DEPARTAMENTO" >
                         <h:outputText value="#{sen.codigoMunicipio.codigoDepartamento.nombreDepartamento}"/>
                     </p:column>
-                    <p:column headerText="MUNICIPIO" >
+                    <p:column headerText="MUNICIPIO">
                         <h:outputText value="#{sen.codigoMunicipio.nombreMunicipio}"/>
                     </p:column>
-                    <p:column headerText="ESTADO" >
-                        <h:outputText value="#{sen.esnCodigo.estNombre}"/>
+                    <p:column headerText="ESTADO" style="width: 100px">
+                        <div style="width: 100%; text-align: center;#{sen.esnCodigo.esnCodigo == '3' ? 'background-color: olivedrab; color: #ffffff;' : 
+                                                                      sen.esnCodigo.esnCodigo == '4' ? 'background-color: gray; color: #ffffff' : 
+                                                                      sen.esnCodigo.esnCodigo == '2' ? 'background-color: yellow; ' : null}">
+                            <h:outputText value="#{sen.esnCodigo.estNombre}"/>
+                        </div>
                     </p:column>
-                    <p:column headerText="EMPRESA" >
+                    <p:column headerText="EMPRESA" style="min-width: 250px">
                         <h:outputText value="#{sen.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>

@@ -79,17 +79,17 @@
 
                             <h:panelGroup rendered="#{(UserBean.enviarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ENVIAR TRAMITE -->
-                                <h:form>
-                                <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{(empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection) and (empty TramiteBean.selectedTramite.tlTramiteLdCollection)}"/>
+                                <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{!TramiteBean.tramiteTieneDetalle}"/>  
                                 <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
                                     <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <p:commandButton value="Si" action="#{TramiteBean.enviarTramite}" ajax="false"/>
+                                        <h:form>
+                                            <p:commandButton value="Si" action="#{TramiteBean.enviarTramite}" ajax="false"/>
+                                        </h:form>
                                         <p:commandButton type="button" value="No" onclick="confirmarEnviar.hide()" />
                                     </h:panelGrid>
                                 </p:confirmDialog>
-                                </h:form>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{(UserBean.aprobarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
@@ -213,6 +213,9 @@
                     
                     <br/>
                     <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosLd.xhtml"/>
+                    
+                    <br/>
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosCortos.xhtml"/>
                 </h:panelGroup>
 
         </h:panelGroup>

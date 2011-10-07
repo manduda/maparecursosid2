@@ -13,5 +13,4 @@
         </locale-config>
         <message-bundle>properties.MyMessages</message-bundle>
     </application>
-
 </faces-config>

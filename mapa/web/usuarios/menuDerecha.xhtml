@@ -42,7 +42,7 @@
                 <h:panelGroup rendered="#{empty TramiteBean.tramites}">
                     <h:outputText value="No tienes trámites"/>
                 </h:panelGroup>
-                <h:dataTable id="datosTramites" value="#{TramiteBean.tramites}" var="tramite" style="font-size:9px">
+                <h:dataTable id="datosTramites" value="#{TramiteBean.tramites}" var="tramite" style="font-size:9px" width="100%">
                     <h:column>
 
                         <h:panelGroup>
@@ -65,12 +65,13 @@
                                 </h:panelGrid>
                                 <h:panelGrid width="100%"  style="border-top: 1px solid; border-bottom: 1px solid;">
                                     <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
-                                                 rendered="#{(!empty tramite.tsTramiteSenalizacionCollection) or (!empty tramite.tlTramiteLdCollection)}">
+                                                 rendered="#{(!empty tramite.tsTramiteSenalizacionCollection) or (!empty tramite.tlTramiteLdCollection) or (!empty tramite.tcTramiteCcCollection)}">
                                         <h:outputText value="Recursos del trámite" style="font-weight: bold"/>
                                     </h:panelGrid>
                                     <h:outputText value="&#8226; Señalización" rendered="#{!empty tramite.tsTramiteSenalizacionCollection}"/>
                                     <h:outputText value="&#8226; Código LD" rendered="#{!empty tramite.tlTramiteLdCollection}"/>
-                                    <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection)}"
+                                    <h:outputText value="&#8226; Código Corto" rendered="#{!empty tramite.tcTramiteCcCollection}"/>
+                                    <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection) and (empty tramite.tcTramiteCcCollection)}"
                                              cellpadding="0" cellspacing="0" style="text-align: center;">
                                         <h:outputText value="No hay recursos en el trámite" style="font-weight: bold; color: #D20005"/>
                                     </h:panelGrid>

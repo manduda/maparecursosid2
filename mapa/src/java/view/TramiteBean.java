@@ -27,10 +27,12 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import utils.Correo;
 import vo.AcAccionVO;
+import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.MunicipiosVO;
 import vo.SeSenalizacionVO;
+import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -121,6 +123,7 @@ public class TramiteBean implements Serializable {
     boolean tramiteTieneDetalle;
     private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
     private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
+    private TcTramiteCcVO tramiteCodigosCortosVO = new TcTramiteCcVO();
 
     @PostConstruct
     public void init() {
@@ -763,6 +766,39 @@ public class TramiteBean implements Serializable {
             
             resultado = fachada.agregarRecurso(vo);
             tramiteCodigosLdVO = new TlTramiteLdVO();
+        } else if (tipoRecurso.equals("codigosCortos")) {
+            TcTramiteCcVO vo = new TcTramiteCcVO();
+            CodigosCortosBean recursoBean = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);//session.getAttribute("SenalizacionBean");
+            
+            CcCodigosCortosVO recurso = new CcCodigosCortosVO();
+            recurso.setCcnCodigo(recursoBean.getSelectedCodigoCorto().getCcnCodigo());
+
+            EmOperadorVO operador = new EmOperadorVO();
+            String observaciones = tramiteCodigosCortosVO.getTctObservaciones();//this.observacionesAgregarRecurso;
+            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+            
+            switch(codigoAccion){
+                case 2: //Preasignar
+                    for (TrTramitesVO detalleVO : tramites) {
+                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                            break;
+                        }
+                    }
+                    break;
+                case 5: //Recuperar
+                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                    break;
+            }
+            vo.setTrnCodigo(tramite);
+            vo.setCcnCodigo(recurso);
+            vo.setAcnCodigo(accion);
+            vo.setTcnRadicado(radicado);
+            vo.setEmrCodigo(operador);
+            vo.setTctObservaciones(observaciones);
+            
+            resultado = fachada.agregarRecurso(vo);
+            tramiteCodigosCortosVO = new TcTramiteCcVO();
         }
         
         switch(resultado){
@@ -837,6 +873,10 @@ public class TramiteBean implements Serializable {
         } else if(tipoRecurso.equals("codigosld")) {
             TlTramiteLdVO vo = new TlTramiteLdVO();
             vo.setTlnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("codigosCortos")) {
+            TcTramiteCcVO vo = new TcTramiteCcVO();
+            vo.setTcnCodigo(codigoDetalleTramite);
             resultado = fachada.eliminarRecurso(vo);
         }
         
@@ -1009,7 +1049,8 @@ public class TramiteBean implements Serializable {
     public boolean isTramiteTieneDetalle() {
         boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
         boolean hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
-        if (haySenalizacion || hayCodigosLd){
+        boolean hayCodigosCortos = !selectedTramite.getTcTramiteCcCollection().isEmpty();
+        if (haySenalizacion || hayCodigosLd || hayCodigosCortos){
             return true;
         }
         return false;
@@ -1474,6 +1515,14 @@ public class TramiteBean implements Serializable {
 
     public void setUsuariosAsesores(List<UsUsuariosVO> usuariosAsesores) {
         this.usuariosAsesores = usuariosAsesores;
+    }
+
+    public TcTramiteCcVO getTramiteCodigosCortosVO() {
+        return tramiteCodigosCortosVO;
+    }
+
+    public void setTramiteCodigosCortosVO(TcTramiteCcVO tramiteCodigosCortosVO) {
+        this.tramiteCodigosCortosVO = tramiteCodigosCortosVO;
     }
     
 }

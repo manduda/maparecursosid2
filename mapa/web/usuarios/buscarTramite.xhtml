@@ -79,6 +79,7 @@
                     <p:column headerText="Recursos" style="width:70px">
                         <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
                         <h:outputText value="Códigos LD" rendered="#{not empty tr.tlTramiteLdCollection}"/>
+                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}"/>
                     </p:column>
                     <p:rowExpansion>
                         <h:dataTable value="#{tr.gtGetionTramiteCollection}"

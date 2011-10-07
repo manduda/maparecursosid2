@@ -7,7 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleSenalizacion.xhtml')}">
+        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleCodigosCortos.xhtml')}">
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
@@ -17,8 +17,13 @@
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
+                                <h:outputText value="Código Corto:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.ccnCodigoCorto}"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Modalidad:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.mdnCodigo.mdtNombre}"/>
                             </h:panelGrid>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
@@ -32,12 +37,12 @@
                             </h:selectOneMenu>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteSenalizacionVO.tstObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteCodigosCortosVO.tctObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
                         </h:panelGrid>
@@ -53,8 +58,8 @@
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Punto señalización:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}"/>
+                                <h:outputText value="Código Corto:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.ccnCodigoCorto}"/>
                             </h:panelGrid>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
@@ -67,34 +72,13 @@
                                 <f:selectItems value="#{TramiteBean.listaTramites}"/> 
                             </h:selectOneMenu>
                             <br/>
-                            <h:panelGrid columns="2">
-                                <h:outputText value="Departamento" style="font-weight: bold;"/>
-                                <h:selectOneMenu value="#{TramiteBean.seleccionDepartamento}">
-                                    <f:selectItems value="#{TramiteBean.listaDepartamento}" />
-                                    <p:ajax update="tramiteMunicipio" listener="#{TramiteBean.cambiarDepartamento}" />
-                                </h:selectOneMenu>
-                                <h:outputText value="Municipio" style="font-weight: bold;"/>
-                                <h:selectOneMenu id="tramiteMunicipio" value="#{TramiteBean.tramiteSenalizacionVO.codigoMunicipio.codigoMunicipio}">
-                                    <f:selectItems value="#{TramiteBean.listaMunicipio}" />  
-                                </h:selectOneMenu>
-                            </h:panelGrid>
-                            <br/>
-                            <h:panelGrid columns="2" >
-                                <h:outputText value="Nombre Nodo:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstNombreNodo}" size="25" maxlength="20"/>
-                                <h:outputText value="Marca/Modelo:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstMarcaModelo}" size="25" maxlength="20"/>
-                                <h:outputText value="Dirección:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstDireccion}" size="25" maxlength="20"/>
-                            </h:panelGrid>
-                            <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
                             <h:inputTextarea value="#{TramiteBean.tramiteSenalizacionVO.tstObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
                         </h:panelGrid>

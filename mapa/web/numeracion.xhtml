@@ -82,8 +82,12 @@
                     <p:column headerText="MUNICIPIO" >
                         <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
                     </p:column>
-                    <p:column headerText="ESTADO" >
-                        <h:outputText value="#{num.esnCodigo.estNombre}"/>
+                    <p:column headerText="ESTADO" style="width:100px">
+                        <div style="width: 100%; text-align: center;#{num.esnCodigo.esnCodigo == '3' ? 'background-color: olivedrab; color: #ffffff;' : 
+                                                                      num.esnCodigo.esnCodigo == '4' ? 'background-color: gray; color: #ffffff' : 
+                                                                      num.esnCodigo.esnCodigo == '2' ? 'background-color: yellow; ' : null}">
+                            <h:outputText value="#{num.esnCodigo.estNombre}"/>
+                        </div>
                     </p:column>
                     <p:column headerText="EMPRESA" >
                         <h:outputText value="#{num.emrCodigo.emtNombre}"/>

@@ -8,14 +8,24 @@
         <h:form>
             <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
                 <p:menuitem value="Inicio" url="#{ConfiguracionBean.rutaInicio}"/>
-                <p:menuitem value="Numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}"/>
-                <p:menuitem value="Señalización" url="#{ConfiguracionBean.rutaMapaSenalizacion}"/>
-                <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}"/>
-                <p:menuitem value="Matriz 1XY"/>
-                <p:menuitem value="Código IIN"/>
-                <p:menuitem value="Códigos MNC"/>
-                <p:menuitem value="Códigos Cortos SMS/MMS"/>
-                <p:menuitem value="Marcación abreviada"/>
+                <p:menuitem value="Numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Señalización" url="#{ConfiguracionBean.rutaMapaSenalizacion}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Matriz 1XY" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos IIN" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos MNC" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaCodigosCortos}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Marcación abreviada" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:submenu label="Normatividad" icon="ui-icon ui-icon-document">
+                    <p:menuitem value="Numeración"/>
+                    <p:menuitem value="Señalización"/>
+                    <p:menuitem value="Códigos LD"/>
+                    <p:menuitem value="Matriz 1XY"/>
+                    <p:menuitem value="Códigos IIN"/>
+                    <p:menuitem value="Códigos MNC"/>
+                    <p:menuitem value="Códigos Cortos SMS/MMS"/>
+                    <p:menuitem value="Marcación abreviada"/>
+                </p:submenu>
             </p:menubar> 
         </h:form>
     </ui:composition>

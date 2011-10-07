@@ -29,6 +29,7 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMapaSenalizacion;
     private String rutaMapaNumeracion;
     private String rutaCodigosLd;
+    private String rutaCodigosCortos;
     private String mensajeBienvenida;
     private String tiempoSesion;
     
@@ -57,6 +58,7 @@ public class ConfiguracionBean implements Serializable {
             rutaMapaSenalizacion = rutaContexto + "senalizacion.xhtml";
             rutaMapaNumeracion = rutaContexto + "numeracion.xhtml";
             rutaCodigosLd = rutaContexto + "codigosld.xhtml";
+            rutaCodigosCortos = rutaContexto + "codigosCortos.xhtml";
 
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo parametros.properties no encontrado", e);
@@ -176,6 +178,14 @@ public class ConfiguracionBean implements Serializable {
 
     public void setLogoCorreo(String logoCorreo) {
         this.logoCorreo = logoCorreo;
+    }
+
+    public String getRutaCodigosCortos() {
+        return rutaCodigosCortos;
+    }
+
+    public void setRutaCodigosCortos(String rutaCodigosCortos) {
+        this.rutaCodigosCortos = rutaCodigosCortos;
     }
 
 }
