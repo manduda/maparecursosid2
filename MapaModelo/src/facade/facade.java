@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import services.CcCodigosCortosService;
 import services.ClCodigosLdService;
 import services.EsEstadoService;
 import services.MunicipiosService;
@@ -18,16 +19,19 @@ import services.ReRegionService;
 import services.SeSenalizacionService;
 import services.TrTramitesService;
 import services.UsUsuariosService;
+import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.EtEstadoTramiteVO;
+import vo.MdModalidadCcVO;
 import vo.MunicipiosVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 import vo.ReRegionVO;
 import vo.SeSenalizacionVO;
+import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -42,6 +46,7 @@ public class facade {
     private ClCodigosLdService codigosld;
     private NuNumeracionService numeracion;
     private SeSenalizacionService senalizacion;
+    private CcCodigosCortosService codigosCortos;
     private NdNdcService ndc;
     private MunicipiosService municipios;
     private ReRegionService regionSenalizacion;
@@ -53,6 +58,7 @@ public class facade {
         codigosld = new ClCodigosLdService();
         numeracion = new NuNumeracionService();
         senalizacion = new SeSenalizacionService();
+        codigosCortos = new CcCodigosCortosService();
         ndc = new NdNdcService();
         municipios = new MunicipiosService();
         regionSenalizacion = new ReRegionService();
@@ -531,6 +537,111 @@ public class facade {
         return vo;
     }
     
+    //-------- CODIGOS CORTOS --------
+    
+    public List<CcCodigosCortosVO> cargarCodigosCortos(int first, int max, String operador, int modalidad, int codigo, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<CcCodigosCortosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosCortos.cargarCodigosCortos(first, max, operador, modalidad, codigo, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarCodigosCortos(String operador, int modalidad, int codigo, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = codigosCortos.countCargarCodigosCortos(operador, modalidad, codigo, estado,  em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<EmOperadorVO> listaOperadorCodigosCortos() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosCortos.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<MdModalidadCcVO> listaModalidadCc() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<MdModalidadCcVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosCortos.getListaModalidadCc(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    //--------------------------------
+    
+    
     public List<UsUsuariosVO> listaUsuariosAplicacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -876,7 +987,7 @@ public class facade {
         return resultado;
     }
     
-    public Integer agregarRecurso(Object Recurso){
+    public Integer agregarRecurso(Object recurso){
         /*
          * 0: Error al agregar el recurso
          * 1: Recurso agregado correctamente
@@ -895,11 +1006,13 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            String nombre = Recurso.getClass().getSimpleName();
+            String nombre = recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
-                resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+                resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) recurso, em);
             } else if (nombre.equals("TlTramiteLdVO")){
-                resultado = tramites.agregarRecurso((TlTramiteLdVO) Recurso, em);
+                resultado = tramites.agregarRecurso((TlTramiteLdVO) recurso, em);
+            } else if (nombre.equals("TcTramiteCcVO")){
+                resultado = tramites.agregarRecurso((TcTramiteCcVO) recurso, em);
             } else {
                 resultado = 0;
             }
@@ -919,7 +1032,7 @@ public class facade {
         return resultado;
     }
     
-    public boolean eliminarRecurso(Object Recurso){
+    public boolean eliminarRecurso(Object recurso){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -929,11 +1042,13 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            String nombre = Recurso.getClass().getSimpleName();
+            String nombre = recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
-                resultado = tramites.eliminarRecurso((TsTramiteSenalizacionVO) Recurso, em);
+                resultado = tramites.eliminarRecurso((TsTramiteSenalizacionVO) recurso, em);
             } else if(nombre.equals("TlTramiteLdVO")) {
-                resultado = tramites.eliminarRecurso((TlTramiteLdVO) Recurso, em);
+                resultado = tramites.eliminarRecurso((TlTramiteLdVO) recurso, em);
+            } else if(nombre.equals("TcTramiteCcVO")) {
+                resultado = tramites.eliminarRecurso((TcTramiteCcVO) recurso, em);
             } else {
                 resultado = false;
             }

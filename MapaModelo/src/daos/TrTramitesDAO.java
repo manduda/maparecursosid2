@@ -104,6 +104,8 @@ public class TrTramitesDAO {
                     + "(t.trnCodigo IN (SELECT DISTINCT ts.trnCodigo.trnCodigo FROM TsTramiteSenalizacion ts where ts.tsnRadicado = ?5)) "
                     + "OR "
                     + "(t.trnCodigo IN (SELECT DISTINCT tld.trnCodigo.trnCodigo FROM TlTramiteLd tld where tld.tlnRadicado = ?5))"
+                    + "OR "
+                    + "(t.trnCodigo IN (SELECT DISTINCT tc.trnCodigo.trnCodigo FROM TcTramiteCc tc where tc.tcnRadicado = ?5))"
                     + ") ");
         }
         

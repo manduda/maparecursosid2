@@ -26,6 +26,7 @@ public class TrTramitesVO implements Serializable {
     private Collection<GtGestionTramiteVO> gtGetionTramiteCollection;
     private Collection<TsTramiteSenalizacionVO> tsTramiteSenalizacionCollection;
     private Collection<TlTramiteLdVO> tlTramiteLdCollection;
+    private Collection<TcTramiteCcVO> tcTramiteCcCollection;
     
     public TrTramitesVO() {
     }
@@ -116,6 +117,14 @@ public class TrTramitesVO implements Serializable {
 
     public void setTlTramiteLdCollection(Collection<TlTramiteLdVO> tlTramiteLdCollection) {
         this.tlTramiteLdCollection = tlTramiteLdCollection;
+    }
+
+    public Collection<TcTramiteCcVO> getTcTramiteCcCollection() {
+        return tcTramiteCcCollection;
+    }
+
+    public void setTcTramiteCcCollection(Collection<TcTramiteCcVO> tcTramiteCcCollection) {
+        this.tcTramiteCcCollection = tcTramiteCcCollection;
     }
 
 }

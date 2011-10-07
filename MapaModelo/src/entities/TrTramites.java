@@ -23,6 +23,7 @@ import javax.persistence.Temporal;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
+import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -81,6 +82,9 @@ public class TrTramites implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<TlTramiteLd> tlTramiteldCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TcTramiteCc> tcTramiteCcCollection;
         
     public TrTramites() {
     }
@@ -111,6 +115,11 @@ public class TrTramites implements Serializable {
         for (TlTramiteLd tld : this.tlTramiteldCollection) {
             tramiteLdVO.add(tld.toVO());
         }
+        // Tramite Códigos Cortos
+        Collection<TcTramiteCcVO> tramiteCcVO = new ArrayList<TcTramiteCcVO>();        
+        for (TcTramiteCc tcc : this.tcTramiteCcCollection) {
+            tramiteCcVO.add(tcc.toVO());
+        }
         
         vo.setTrnCodigo(this.getTrnCodigo());
         vo.setUsnCodigo(userVO);
@@ -123,6 +132,7 @@ public class TrTramites implements Serializable {
         vo.setGtGetionTramiteCollection(getionTramitesVO);
         vo.setTsTramiteSenalizacionCollection(tramiteSenalizacionVO);
         vo.setTlTramiteLdCollection(tramiteLdVO);
+        vo.setTcTramiteCcCollection(tramiteCcVO);
         
         return vo;
     }
@@ -243,6 +253,14 @@ public class TrTramites implements Serializable {
 
     public void setTlTramiteldCollection(Collection<TlTramiteLd> tlTramiteldCollection) {
         this.tlTramiteldCollection = tlTramiteldCollection;
+    }
+
+    public Collection<TcTramiteCc> getTcTramiteCcCollection() {
+        return tcTramiteCcCollection;
+    }
+
+    public void setTcTramiteCcCollection(Collection<TcTramiteCc> tcTramiteCcCollection) {
+        this.tcTramiteCcCollection = tcTramiteCcCollection;
     }
 
  }

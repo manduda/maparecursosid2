@@ -24,6 +24,9 @@
     <class>entities.TlTramiteLd</class>
     <class>entities.TsTramiteSenalizacion</class>
     <class>entities.CoConfiguracion</class>
+    <class>entities.MdModalidadCc</class>
+    <class>entities.CcCodigosCortos</class>
+    <class>entities.TcTramiteCc</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>

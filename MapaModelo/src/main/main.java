@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import vo.AcAccionVO;
+import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
@@ -96,6 +97,22 @@ public class main {
             int ps = vo.get(i).getSenPs();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+municipio+"-"+regionSenalizacion+"-"+zona+"-"+ps);
 	}*/
+        //-------------------------------------
+        
+        //----  CODIGOS CORTOS
+        List<CcCodigosCortosVO> vo = new ArrayList<CcCodigosCortosVO>();
+        int cantidad = 0;
+        vo = fachada.cargarCodigosCortos(0,-1,"-1",-1,-1,-1);
+        cantidad = fachada.countCargarCodigosCortos("-1",-1,-1,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getCcnCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            String modalidad = vo.get(i).getMdnCodigo().getMdtNombre();
+            int codigoCorto = vo.get(i).getCcnCodigoCorto();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+modalidad+"-"+codigoCorto);
+	}
         //-------------------------------------
         
         //----  MUNICIPIOS
