@@ -71,6 +71,12 @@ public class TsTramiteSenalizacion implements Serializable {
     @Column(name = "TST_OBSERVACIONES")
     private String tstObservaciones;
 
+    @Column(name = "TST_RESERVA_TEMPORAL")
+    private char tstReservaTemporal;
+    
+    @Column(name = "TSN_MESES_LIBERACION")
+    private int tsnMesesLiberacion;
+
     public TsTramiteSenalizacion() {
     }
     
@@ -87,7 +93,8 @@ public class TsTramiteSenalizacion implements Serializable {
         vo.setTstMarcaModelo(this.getTstMarcaModelo());
         vo.setTstDireccion(this.getTstDireccion());
         vo.setTstObservaciones(this.getTstObservaciones());
-        
+        vo.setTsnMesesLiberacion(this.getTsnMesesLiberacion());
+        vo.setTstReservaTemporal(this.getTstReservaTemporal());
         
         return vo;
     }
@@ -179,5 +186,22 @@ public class TsTramiteSenalizacion implements Serializable {
     public void setEmrCodigo(EmOperador emrCodigo) {
         this.emrCodigo = emrCodigo;
     }
+
+    public int getTsnMesesLiberacion() {
+        return tsnMesesLiberacion;
+    }
+
+    public void setTsnMesesLiberacion(int tsnMesesLiberacion) {
+        this.tsnMesesLiberacion = tsnMesesLiberacion;
+    }
+
+    public char getTstReservaTemporal() {
+        return tstReservaTemporal;
+    }
+
+    public void setTstReservaTemporal(char tstReservaTemporal) {
+        this.tstReservaTemporal = tstReservaTemporal;
+    }
+    
 
 }

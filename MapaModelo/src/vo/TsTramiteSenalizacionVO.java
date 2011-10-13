@@ -24,6 +24,8 @@ public class TsTramiteSenalizacionVO implements Serializable {
     private String tstMarcaModelo;
     private String tstDireccion;
     private String tstObservaciones;
+    private char tstReservaTemporal;
+    private int tsnMesesLiberacion;
     
     public TsTramiteSenalizacionVO(){
     }
@@ -114,6 +116,22 @@ public class TsTramiteSenalizacionVO implements Serializable {
 
     public void setEmrCodigo(EmOperadorVO emrCodigo) {
         this.emrCodigo = emrCodigo;
+    }
+
+    public int getTsnMesesLiberacion() {
+        return tsnMesesLiberacion;
+    }
+
+    public void setTsnMesesLiberacion(int tsnMesesLiberacion) {
+        this.tsnMesesLiberacion = tsnMesesLiberacion;
+    }
+
+    public char getTstReservaTemporal() {
+        return tstReservaTemporal;
+    }
+
+    public void setTstReservaTemporal(char tstReservaTemporal) {
+        this.tstReservaTemporal = tstReservaTemporal;
     }
     
 }

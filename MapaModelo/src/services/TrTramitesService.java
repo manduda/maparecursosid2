@@ -10,6 +10,7 @@ import daos.CoConfiguracionDAO;
 import daos.EmOperadorDAO;
 import daos.EtEstadoTramiteDAO;
 import daos.GtGestionTramiteDAO;
+import daos.RsReservasTemporalesDAO;
 import daos.SeSenalizacionDAO;
 import daos.TcTramiteCcDAO;
 import daos.TlTramiteLdDAO;
@@ -24,13 +25,16 @@ import entities.EsEstado;
 import entities.EtEstadoTramite;
 import entities.GtGestionTramite;
 import entities.Municipios;
+import entities.RsReservasTemporales;
 import entities.SeSenalizacion;
 import entities.TcTramiteCc;
 import entities.TlTramiteLd;
 import entities.TrTramites;
 import entities.TsTramiteSenalizacion;
 import entities.UsUsuarios;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -321,8 +325,34 @@ public class TrTramitesService {
                         estadoRecurso.setEsnCodigo(4);
                         break;
                     case 5:
-                        estadoRecurso.setEsnCodigo(1);
-                        break;
+                        if(t.getTstReservaTemporal()=='S'){
+                           Date fecha; 
+                           //Cálculo de la fecha de liberación
+                            Calendar ahoraCal = Calendar.getInstance();//instancia una clase de calendario
+                            ahoraCal.setTime(vo.getTrfFechaResolucion());//se le asigna la fecha de la resolución
+                            ahoraCal.add(Calendar.MONTH, t.getTsnMesesLiberacion());//se le suman los meses escogidos a la fecha de la resolución
+                            fecha=ahoraCal.getTime();
+                            //instanciamiento del entity
+                            RsReservasTemporales resTemp = new RsReservasTemporales();
+                            
+                            //cargue del entity
+                            resTemp.setTrnCodigo(entity);
+                            resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
+                            resTemp.setRsnCodigoRecurso(t.getSenCodigo().getSenCodigo());
+                            resTemp.setRsnEstado('S');
+                            resTemp.setRstTipoRecurso("Senalizacion");
+                            resTemp.setRsfFechaLiberacion(fecha);
+                            
+                            //Guardado del entity
+                            RsReservasTemporalesDAO.persist(resTemp, em);
+
+                            //Modificación del estado del recurso a reserva
+                            estadoRecurso.setEsnCodigo(4);
+                            
+                        }else{
+                            estadoRecurso.setEsnCodigo(1);   
+                        }
+                         break;
                 } 
                 senalizacion.setEsnCodigo(estadoRecurso);
                 SeSenalizacionDAO.merge(senalizacion, em);
@@ -563,6 +593,8 @@ public class TrTramitesService {
         String nombreNodo = "";
         String marcaModelo = "";
         String direccion = "";
+        char reservaTemporal='N';
+        int mesesLiberacion =0;
         
         switch(vo.getAcnCodigo().getAcnCodigo()){
             case 1: //LIBERAR
@@ -595,6 +627,11 @@ public class TrTramitesService {
                 nombreNodo = "";
                 marcaModelo = "";
                 direccion = "";
+                
+                if(vo.getTstReservaTemporal()== 'S'){
+                    reservaTemporal='S';
+                    mesesLiberacion=vo.getTsnMesesLiberacion();
+                }
 
                 break;
         }
@@ -612,6 +649,8 @@ public class TrTramitesService {
         entity.setTstMarcaModelo(marcaModelo);
         entity.setTstDireccion(direccion);
         entity.setTstObservaciones(vo.getTstObservaciones());
+        entity.setTstReservaTemporal(reservaTemporal);
+        entity.setTsnMesesLiberacion(mesesLiberacion);
         
         TsTramiteSenalizacionDAO.persist(entity, em);
         
