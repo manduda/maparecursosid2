@@ -188,7 +188,6 @@ public class SenalizacionBean implements Serializable {
         }else{
             return "Error en el bean de Señalización";   
         }
-        
     }
     
     public String liberar() {

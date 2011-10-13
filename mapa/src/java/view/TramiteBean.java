@@ -91,7 +91,7 @@ public class TramiteBean implements Serializable {
     
     private String seleccionDepartamento;
     private String seleccionMunicipio;
-    private Integer tramiteAgregarRecurso;
+    private Integer tramiteAgregarRecurso=-1;
     private String operadorCrearTramite;
     private UsUsuariosVO userVO;
     private String mensajeCrearTramite = "";
@@ -124,6 +124,8 @@ public class TramiteBean implements Serializable {
     private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
     private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
     private TcTramiteCcVO tramiteCodigosCortosVO = new TcTramiteCcVO();
+    private Boolean reservaTemporal = false;
+    private int mesesReserva = 0;
 
     @PostConstruct
     public void init() {
@@ -684,6 +686,8 @@ public class TramiteBean implements Serializable {
             String direccion = "";
             String observaciones = tramiteSenalizacionVO.getTstObservaciones();//this.observacionesAgregarRecurso;
             Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+            char resTemp = 'N';
+            int mesesResTemp = 0;
 
             switch(codigoAccion){
                 case 2: //Preasignar
@@ -711,6 +715,10 @@ public class TramiteBean implements Serializable {
                     direccion = tramiteSenalizacionVO.getTstDireccion();
                     break;
                 case 5: //Recuperar
+                    if (reservaTemporal=true){
+                        resTemp='S';                    
+                        mesesResTemp=mesesReserva;
+                    }
                     municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
                     operador.setEmrCodigo(configuracion.getOperadorNinguno());
                     nombreNodo = "";
@@ -730,6 +738,8 @@ public class TramiteBean implements Serializable {
             vo.setTstMarcaModelo(marcaModelo);
             vo.setTstDireccion(direccion);
             vo.setTstObservaciones(observaciones);
+            vo.setTstReservaTemporal(resTemp);
+            vo.setTsnMesesLiberacion(mesesResTemp);
             
             resultado = fachada.agregarRecurso(vo);
             tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
@@ -1515,6 +1525,22 @@ public class TramiteBean implements Serializable {
 
     public void setUsuariosAsesores(List<UsUsuariosVO> usuariosAsesores) {
         this.usuariosAsesores = usuariosAsesores;
+    }
+
+    public int getMesesReserva() {
+        return mesesReserva;
+    }
+
+    public void setMesesReserva(int mesesReserva) {
+        this.mesesReserva = mesesReserva;
+    }
+
+    public Boolean getReservaTemporal() {
+        return reservaTemporal;
+    }
+
+    public void setReservaTemporal(Boolean reservaTemporal) {
+        this.reservaTemporal = reservaTemporal;
     }
 
     public TcTramiteCcVO getTramiteCodigosCortosVO() {

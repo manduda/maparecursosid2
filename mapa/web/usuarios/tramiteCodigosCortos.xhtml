@@ -32,6 +32,10 @@
                         <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteCodigosCortos.tctObservaciones}"/>
                         </p:column>
+                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL">
+                            <h:outputText value="#{tramiteSenalizacion.tstReservaTemporal=='S'? fnc:concat(tramiteSenalizacion.tsnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo==5}"/>
+                            <h:outputText value="N/A" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo!=5}"/>
+                        </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                             <p:commandLink oncomplete="eliminarCodigosCortosDialog.show()" update="eliminarCodigosCortosDialog">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteCodigosCortos.tcnCodigo}"/>

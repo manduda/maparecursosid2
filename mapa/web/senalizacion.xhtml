@@ -23,7 +23,7 @@
                     <h:outputText value="Departamento"/>
                     <h:selectOneMenu value="#{SenalizacionBean.departamentoVO.codigoDepartamento}">
                         <f:selectItems value="#{SenalizacionBean.listaDepartamento}" />
-                        <p:ajax update="municipios" listener="#{SenalizacionBean.cambiarDepartamento}" />
+                        <p:ajax update="municipios" listener="#{SenalizacionBean.cambiarDepartamento}"/>
                     </h:selectOneMenu>
                     <h:outputText value="Municipio"/>
                     <h:selectOneMenu id="municipios" value="#{SenalizacionBean.municipioVO.codigoMunicipio}">
