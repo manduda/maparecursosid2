@@ -27,10 +27,11 @@
     <class>entities.MdModalidadCc</class>
     <class>entities.CcCodigosCortos</class>
     <class>entities.TcTramiteCc</class>
+    <class>entities.RsReservasTemporales</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>
-      <property name="javax.persistence.jdbc.password" value="crcmayo"/>
+      <property name="javax.persistence.jdbc.password" value="10crcoct"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="javax.persistence.jdbc.user" value="mapa"/>
     </properties>
