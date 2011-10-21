@@ -53,6 +53,7 @@
     width: 100%;
     float: left;
     min-width: 1040px;
+    min-height: 300px;
 }
 
 #titulo {

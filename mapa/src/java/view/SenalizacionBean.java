@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -18,6 +19,14 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.primefaces.model.LazyDataModel;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
@@ -34,6 +43,8 @@ import vo.TsTramiteSenalizacionVO;
 @ManagedBean(name = "SenalizacionBean")
 @ViewScoped
 public class SenalizacionBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private List<SeSenalizacionVO> sen = null;//new ArrayList<NuNumeracionVO>();
     private Collection<SelectItem> listaRegionSenalizacion;
     private Collection<SelectItem> listaZona;
@@ -203,6 +214,60 @@ public class SenalizacionBean implements Serializable {
         }
     }
     
+    public void postProcessXLS(Object document) {
+	HSSFWorkbook wb = (HSSFWorkbook) document;
+	HSSFSheet sheet = wb.getSheetAt(0);
+	HSSFRow header = sheet.getRow(0);
+        
+	HSSFCellStyle cellStyle = wb.createCellStyle();
+	//cellStyle.setFillForegroundColor(HSSFColor.GREY_50_PERCENT.index);
+	//cellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+        HSSFFont cellFont = wb.createFont();
+        cellFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        cellStyle.setFont(cellFont);
+        
+        HSSFRichTextString titulo;
+        titulo = new HSSFRichTextString("CÓDIGO SEÑALIZACION");
+        header.getCell(0).setCellValue(titulo);
+        header.getCell(0).setCellStyle(cellStyle);
+        titulo = new HSSFRichTextString("DEPARTAMENTO");
+        header.getCell(1).setCellValue(titulo);
+        header.getCell(1).setCellStyle(cellStyle);
+        titulo = new HSSFRichTextString("MUNICIPIO");
+        header.getCell(2).setCellValue(titulo);
+        header.getCell(2).setCellStyle(cellStyle);
+        titulo = new HSSFRichTextString("ESTADO");
+        header.getCell(3).setCellValue(titulo);
+        header.getCell(3).setCellStyle(cellStyle);
+        titulo = new HSSFRichTextString("OPERADOR");
+        header.getCell(4).setCellValue(titulo);
+        header.getCell(4).setCellStyle(cellStyle);
+        
+        /*
+	Integer a = header.getPhysicalNumberOfCells();
+        HSSFCell headerObservaciones = header.createCell(a);
+        HSSFRichTextString text = new HSSFRichTextString("Observaciones");
+        headerObservaciones.setCellValue(text);
+        
+	for(int i=0; i <= a;i++) {
+            HSSFCell cell = header.getCell(i);
+            cell.setCellStyle(cellStyle);
+	}*/
+
+        Iterator itr = lazyModel.iterator();
+        for(int i=1; i <= lazyModel.getPageSize(); i++){
+            SeSenalizacionVO se = (SeSenalizacionVO)itr.next();
+            HSSFRow fila = sheet.getRow(i);
+            HSSFRichTextString texto = new HSSFRichTextString(se.getEsnCodigo().getEstNombre());
+            fila.getCell(3).setCellValue(texto);
+        }
+        sheet.autoSizeColumn((short) 0);
+        sheet.autoSizeColumn((short) 1);
+        sheet.autoSizeColumn((short) 2);
+        sheet.autoSizeColumn((short) 3);
+        sheet.autoSizeColumn((short) 4);
+    }
+    
     public String getPsSenalizacion() {
         return psSenalizacion;
     }
@@ -281,8 +346,10 @@ public class SenalizacionBean implements Serializable {
 
     public void setSelectedSen(SeSenalizacionVO selectedSen) {
         this.selectedSen = selectedSen;
-        facade fachada = new facade();
-        this.tramiteSenalizacion = fachada.buscarTramitePorSenalizacion(selectedSen.getSenCodigo(), 5);
+        if (selectedSen != null){
+            facade fachada = new facade();
+            this.tramiteSenalizacion = fachada.buscarTramitePorSenalizacion(selectedSen.getSenCodigo(), 5);
+        }
     }
 
     public DepartamentosVO getDepartamentoVO() {

@@ -67,9 +67,20 @@
                              onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="senDialog.show();"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-                    <f:facet name="header">Mapa de señalización</f:facet>
+                    <f:facet name="header">
+                        <h:panelGroup>
+                            <h:outputText value="MAPA DE SEÑALIZACIÓN"/>
+                            <h:panelGrid style="text-align: left;" rendered="#{UserBean.liberar or UserBean.reservar}">
+                                <p:menuButton value="Más opciones">
+                                    <p:menuitem rendered="#{UserBean.liberar}" value="Liberar" update="messages" actionListener="#{buttonBean.save}" icon="ui-icon ui-icon-unlocked"/>
+                                    <p:menuitem rendered="#{UserBean.reservar}" value="Reservar" update="messages" actionListener="#{buttonBean.update}" icon="ui-icon ui-icon-locked"/>
+                                </p:menuButton>
+                             </h:panelGrid>
+                        </h:panelGroup>
+                    </f:facet>
+                    <p:column selectionMode="multiple" rendered="#{UserBean.liberar or UserBean.reservar}"/>
                     <p:column headerText="CÓDIGO SEÑALIZACION&lt;br/&gt;(Región-Zona-Punto)" style="text-align: center; width: 120px;">
-                            <h:outputText value="#{sen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(sen.senZona,2)} - #{fnc:rellenarCerosIzquierda(sen.senPs,2)}"/>
+                        <h:outputText value="#{sen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(sen.senZona,2)} - #{fnc:rellenarCerosIzquierda(sen.senPs,2)}"/>
                     </p:column>
                     <p:column headerText="DEPARTAMENTO" >
                         <h:outputText value="#{sen.codigoMunicipio.codigoDepartamento.nombreDepartamento}"/>
@@ -88,6 +99,18 @@
                         <h:outputText value="#{sen.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
+ 
+                <p:panel header="Exportar datos">
+                    <h:commandLink >
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/excel.png" />
+                        <p:dataExporter type="XLS" target="datos" fileName="senalizacion" pageOnly="true" excludeColumns="0" postProcessor="#{SenalizacionBean.postProcessXLS}"/>
+                    </h:commandLink>
+                    <h:commandLink >
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" />
+                        <p:dataExporter type="CSV" target="datos" fileName="senalizacion" pageOnly="true" excludeColumns="0"/>
+                    </h:commandLink>
+                </p:panel>
+                
             </h:form>
         </h:panelGrid>
 
