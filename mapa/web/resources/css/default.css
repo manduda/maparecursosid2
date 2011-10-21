@@ -80,6 +80,24 @@ a:link:hover, a:visited:hover  {
     min-width: 200px;
     text-align: justify;
 }
+
+.estado-asignado {
+    background-color: olivedrab;
+    color: #ffffff;
+}
+.estado-preasignado {
+    background-color: yellow;
+    color: #000000;
+}
+.estado-reserva {
+    background-color: gray;
+    color: #ffffff;
+}
+.estado-libre {
+    background-color: white;
+    color: #000000;
+}
+
 .mensaje-error {
     border: 1px solid;margin: 10px 0px;padding:10px 10px 10px 10px;
     margin-left:5px;

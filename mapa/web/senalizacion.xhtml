@@ -89,9 +89,11 @@
                         <h:outputText value="#{sen.codigoMunicipio.nombreMunicipio}"/>
                     </p:column>
                     <p:column headerText="ESTADO" style="width: 100px">
-                        <div style="width: 100%; text-align: center;#{sen.esnCodigo.esnCodigo == '3' ? 'background-color: olivedrab; color: #ffffff;' : 
-                                                                      sen.esnCodigo.esnCodigo == '4' ? 'background-color: gray; color: #ffffff' : 
-                                                                      sen.esnCodigo.esnCodigo == '2' ? 'background-color: yellow; ' : null}">
+                        <div style="width: 100%; text-align: center;" class="#{sen.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
+                                                                               sen.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
+                                                                               sen.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
+                                                                               sen.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
+                                                                               null}">
                             <h:outputText value="#{sen.esnCodigo.estNombre}"/>
                         </div>
                     </p:column>
@@ -102,15 +104,12 @@
  
                 <p:panel header="Exportar datos">
                     <h:commandLink >
-                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/excel.png" />
+                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/excel.png" style="border:0px"/>
                         <p:dataExporter type="XLS" target="datos" fileName="senalizacion" pageOnly="true" excludeColumns="0" postProcessor="#{SenalizacionBean.postProcessXLS}"/>
                     </h:commandLink>
-                    <h:commandLink >
-                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" />
-                        <p:dataExporter type="CSV" target="datos" fileName="senalizacion" pageOnly="true" excludeColumns="0"/>
-                    </h:commandLink>
+                    <br/>
+                    <h:outputText value="Excel"/>
                 </p:panel>
-                
             </h:form>
         </h:panelGrid>
 

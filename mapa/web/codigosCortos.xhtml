@@ -62,9 +62,11 @@
                         <h:outputText value="#{cc.mdnCodigo.mdtNombre}"/>
                     </p:column>
                     <p:column headerText="ESTADO" style="width: 100px">
-                        <div style="width: 100%; text-align: center;#{cc.esnCodigo.esnCodigo == '3' ? 'background-color: olivedrab; color: #ffffff;' : 
-                                                                      cc.esnCodigo.esnCodigo == '4' ? 'background-color: gray; color: #ffffff' : 
-                                                                      cc.esnCodigo.esnCodigo == '2' ? 'background-color: yellow; ' : null}">
+                        <div style="width: 100%; text-align: center;" class="#{cc.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
+                                                                               cc.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
+                                                                               cc.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
+                                                                               cc.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
+                                                                               null}">
                             <h:outputText value="#{cc.esnCodigo.estNombre}"/>
                         </div>
                     </p:column>
