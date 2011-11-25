@@ -57,28 +57,33 @@
         <p:separator/>
         
         <h:panelGrid id="pgSenalizacion" width="100%">
-            <h:panelGrid columns="2">
-                <h:outputText value="Registros encontrados:"/>
-                <h:outputText value="#{SenalizacionBean.lazyModel.rowCount}"/>
-            </h:panelGrid>
             <h:form>
+                <h:panelGrid style="text-align: left;" rendered="#{UserBean.liberar or UserBean.reservar}">
+                    <h:panelGroup id="opciones">
+                        <p:commandButton rendered="#{UserBean.liberar}" value="Liberar" update="pgSenalizacion" actionListener="#{SenalizacionBean.liberar}" image="ui-icon ui-icon-unlocked" disabled="#{empty SenalizacionBean.selectedSens}"/>
+                        <p:commandButton rendered="#{UserBean.reservar}" value="Reservar" update="pgSenalizacion" actionListener="#{SenalizacionBean.reservar}" image="ui-icon ui-icon-locked"/>
+                    </h:panelGroup>
+                </h:panelGrid>
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
-                             selectionMode="single" selection="#{SenalizacionBean.selectedSen}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="senDialog.show();"
+                             selectionMode="#{(UserBean.liberar == true or UserBean.reservar == true) ? 'multiple' : null}"
+                             selection="#{SenalizacionBean.selectedSens}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
-                             paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                             paginatorTemplate=" #{SenalizacionBean.lazyModel.rowCount} registros encontrados {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     <f:facet name="header">
-                        <h:panelGroup>
-                            <h:outputText value="MAPA DE SEÑALIZACIÓN"/>
-                            <h:panelGrid style="text-align: left;" rendered="#{UserBean.liberar or UserBean.reservar}">
-                                <p:menuButton value="Más opciones">
-                                    <p:menuitem rendered="#{UserBean.liberar}" value="Liberar" update="messages" actionListener="#{buttonBean.save}" icon="ui-icon ui-icon-unlocked"/>
-                                    <p:menuitem rendered="#{UserBean.reservar}" value="Reservar" update="messages" actionListener="#{buttonBean.update}" icon="ui-icon ui-icon-locked"/>
-                                </p:menuButton>
-                             </h:panelGrid>
-                        </h:panelGroup>
+                        <h:panelGrid style="text-align: left;" rendered="#{UserBean.liberar or UserBean.reservar}">
+                            <h:panelGroup id="opcionesd">
+                                <p:commandButton rendered="#{UserBean.liberar}" value="Liberar" update="pgSenalizacion" actionListener="#{SenalizacionBean.liberar}" image="ui-icon ui-icon-unlocked" disabled="#{empty SenalizacionBean.selectedSens}"/>
+                                <p:commandButton rendered="#{UserBean.reservar}" value="Reservar" update="pgSenalizacion" actionListener="#{SenalizacionBean.reservar}" image="ui-icon ui-icon-locked"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
                     </f:facet>
-                    <p:column selectionMode="multiple" rendered="#{UserBean.liberar or UserBean.reservar}"/>
+
+                    <p:column style="width:25px">
+                        <p:commandButton update="display,datosRecurso" oncomplete="senDialog.show();" image="ui-icon ui-icon-search" >  
+                            <f:setPropertyActionListener target="#{SenalizacionBean.selectedSen}" value="#{sen}"/>  
+                        </p:commandButton>
+                    </p:column>
                     <p:column headerText="CÓDIGO SEÑALIZACION&lt;br/&gt;(Región-Zona-Punto)" style="text-align: center; width: 120px;">
                         <h:outputText value="#{sen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(sen.senZona,2)} - #{fnc:rellenarCerosIzquierda(sen.senPs,2)}"/>
                     </p:column>

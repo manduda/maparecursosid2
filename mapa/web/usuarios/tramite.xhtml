@@ -83,43 +83,55 @@
                                 <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
-                                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <h:form>
-                                            <p:commandButton value="Si" action="#{TramiteBean.enviarTramite}" ajax="false"/>
-                                        </h:form>
-                                        <p:commandButton type="button" value="No" onclick="confirmarEnviar.hide()" />
-                                    </h:panelGrid>
+                                    <h:form>
+                                        <h:panelGrid style="text-align: center;" width="100%">
+                                            <h:outputText value="Comentarios" style="font-weight: bold;"/>
+                                            <h:inputTextarea style="width: 250px; height: 100px" value="#{TramiteBean.observacionesTramite}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Si" action="#{TramiteBean.enviarTramite}" ajax="false" onclick="confirmarEnviar.hide();statusDialog.show();" />
+                                            <p:commandButton type="button" value="No" onclick="confirmarEnviar.hide()" />
+                                        </h:panelGrid>
+                                    </h:form>
                                 </p:confirmDialog>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{(UserBean.aprobarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
                                 <!-- APROBAR TRAMITE -->
-                                <h:form>
                                 <p:commandButton type="button" value="Aprobar" onclick="confirmarAprobar.show()"/>
                                 <p:confirmDialog message="Deseas aprobar el trámite?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarAprobar">  
-                                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <p:commandButton value="Si" action="#{TramiteBean.aprobarTramite}" ajax="false"/>
-                                        <p:commandButton type="button" value="No" onclick="confirmarAprobar.hide()" />
-                                    </h:panelGrid>
+                                    <h:form>
+                                        <h:panelGrid style="text-align: center;" width="100%">
+                                            <h:outputText value="Comentarios" style="font-weight: bold;"/>
+                                            <h:inputTextarea style="width: 250px; height: 100px" value="#{TramiteBean.observacionesTramite}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Si" action="#{TramiteBean.aprobarTramite}" ajax="false" onclick="confirmarAprobar.hide();statusDialog.show();" />
+                                            <p:commandButton type="button" value="No" onclick="confirmarAprobar.hide()" />
+                                        </h:panelGrid>
+                                    </h:form>
                                 </p:confirmDialog>
-                                </h:form>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{(UserBean.devolverTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)}">
                                 <!-- DEVOLVER TRAMITE -->
-                                <h:form>
                                 <p:commandButton type="button" value="Devolver" onclick="confirmarDevolver.show()"/>
                                 <p:confirmDialog message="Deseas devolver el trámite al Asesor?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarDevolver">  
-                                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <p:commandButton value="Si" action="#{TramiteBean.devolverTramite}" ajax="false"/>
-                                        <p:commandButton type="button" value="No" onclick="confirmarDevolver.hide()" />
-                                    </h:panelGrid>
+                                    <h:form>
+                                        <h:panelGrid style="text-align: center;" width="100%">
+                                            <h:outputText value="Comentarios" style="font-weight: bold;"/>
+                                            <h:inputTextarea style="width: 250px; height: 100px" value="#{TramiteBean.observacionesTramite}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Si" action="#{TramiteBean.devolverTramite}" ajax="false" onclick="confirmarDevolver.hide();statusDialog.show();" />
+                                            <p:commandButton type="button" value="No" onclick="confirmarDevolver.hide()" />
+                                        </h:panelGrid>
+                                    </h:form>
                                 </p:confirmDialog>
-                                </h:form>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{(UserBean.terminarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4)}">
@@ -146,7 +158,7 @@
                                                 </h:panelGrid>
                                                 <br/>
                                                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                    <p:commandButton value="Aceptar" action="#{TramiteBean.terminarTramite}" ajax="false"/>
+                                                    <p:commandButton value="Aceptar" action="#{TramiteBean.terminarTramite}" ajax="false" onclick="dialogTerminar.hide();statusDialog.show();" />
                                                     <p:commandButton type="button" value="Cancelar" onclick="dialogTerminar.hide();"/>
                                                 </h:panelGrid>
                                          </h:panelGrid>
@@ -156,17 +168,21 @@
 
                             <h:panelGroup rendered="#{(UserBean.archivarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 4)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 5)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo != 6)}">
                                 <!-- ARCHIVAR TRAMITE -->
-                                <h:form>
-                                    <p:commandButton type="button" value="Archivar" onclick="confirmarArchivar.show()"/>
-                                    <p:confirmDialog message="Deseas archivar el trámite?"  
-                                                showEffect="fade" hideEffect="fade" modal="true" draggable="false"
-                                                header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
+                                <p:commandButton type="button" value="Archivar" onclick="confirmarArchivar.show()"/>
+                                <p:confirmDialog message="Deseas archivar el trámite?"  
+                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                            header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
+                                    <h:form>
+                                        <h:panelGrid style="text-align: center;" width="100%">
+                                            <h:outputText value="Comentarios" style="font-weight: bold;"/>
+                                            <h:inputTextarea style="width: 250px; height: 100px" value="#{TramiteBean.observacionesTramite}"/>
+                                        </h:panelGrid>
                                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                            <p:commandButton value="Si" action="#{TramiteBean.archivarTramite}" ajax="false"/>
+                                            <p:commandButton value="Si" action="#{TramiteBean.archivarTramite}" ajax="false" onclick="confirmarArchivar.hide();statusDialog.show();" />
                                             <p:commandButton type="button" value="No" onclick="confirmarArchivar.hide()" />
                                         </h:panelGrid>
-                                    </p:confirmDialog>
-                                </h:form>
+                                    </h:form>
+                                </p:confirmDialog>
                             </h:panelGroup>
 
                             <h:panelGroup rendered="#{(UserBean.cambiarUsuarioTramite)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">

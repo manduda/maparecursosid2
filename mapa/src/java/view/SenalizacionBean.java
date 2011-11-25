@@ -61,6 +61,7 @@ public class SenalizacionBean implements Serializable {
     private String psSenalizacion;
     private LazyDataModel<SeSenalizacionVO> lazyModel;
     private SeSenalizacionVO selectedSen;
+    private SeSenalizacionVO[] selectedSens;
     private List<TsTramiteSenalizacionVO> tramiteSenalizacion = null;
     
     
@@ -352,6 +353,14 @@ public class SenalizacionBean implements Serializable {
         }
     }
 
+    public SeSenalizacionVO[] getSelectedSens() {
+        return selectedSens;
+    }
+
+    public void setSelectedSens(SeSenalizacionVO[] selectedSens) {
+        this.selectedSens = selectedSens;
+    }
+    
     public DepartamentosVO getDepartamentoVO() {
         return departamentoVO;
     }
