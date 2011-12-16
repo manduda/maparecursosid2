@@ -40,13 +40,17 @@
                             
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarTramite}"/>
                             <h:commandLink value="Buscar trámite" action="#{TramiteBean.opcionesBuscarTramite}" rendered="#{UserBean.consultarTramite}"/>
+
+                            <h:outputText value="&#8226;" style="color: #045491;"/>
+                            <h:commandLink value="Ver reservas temporales" action="#{TramiteBean.consultaReservasTemporales}"/>
+                            
                         </h:panelGrid>
                 </h:form>
             </p:panel>
             
             <!-- TRAMITES -->
             <br/>
-            <p:panel header="Trámites" rendered="#{UserBean.login == true}" toggleable="true" toggleSpeed="100">
+            <p:panel header="Trámites Actuales" rendered="#{UserBean.login == true}" toggleable="true" toggleSpeed="100">
                 <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/listaTramites.xhtml"/>
             </p:panel>
             

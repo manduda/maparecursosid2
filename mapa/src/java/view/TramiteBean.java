@@ -31,6 +31,7 @@ import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.MunicipiosVO;
+import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
@@ -58,6 +59,7 @@ public class TramiteBean implements Serializable {
     //private String operadorNinguno;
     //private String municipioNinguno;
     private List<TrTramitesVO> tramites = new ArrayList<TrTramitesVO>();
+    private ArrayList reservas = new ArrayList();
     private TrTramitesVO selectedTramite;
     private Collection<SelectItem> listaOperador;
     private String operadorOrigen;
@@ -939,6 +941,7 @@ public class TramiteBean implements Serializable {
         return selectItemsList;
     }
   
+  
     public void opcionesPreasignar() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         /*HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
@@ -1084,6 +1087,43 @@ public class TramiteBean implements Serializable {
         return false;
     }
     
+    public String consultaReservasTemporales() {
+
+        facade fachada = new facade();
+        reservas=new ArrayList();
+        
+        List<RsReservasTemporalesVO> reservasDetalle = new ArrayList<RsReservasTemporalesVO>();
+
+        reservasDetalle = fachada.consultaReservasTemporales();
+        int i=0;
+        for (RsReservasTemporalesVO r : reservasDetalle) {
+            
+            Object recurso =null;
+            
+            reservas.add(new ArrayList());
+              ((ArrayList)reservas.get(i)).add(r);
+              
+            recurso = fachada.consultaRecurso(r.getRstTipoRecurso(), r.getRsnCodigoRecurso());
+            
+            if(r.getRstTipoRecurso().equals("Senalizacion")){
+                SeSenalizacionVO cosa = (SeSenalizacionVO)recurso;
+               
+                String cosa2 = cosa.getRenCodigo().getRetNombre() +"-"+ cosa.getSenZona() +"-"+ cosa.getSenPs();
+                ((ArrayList)reservas.get(i)).add(cosa2);
+            }
+            
+            if(r.getRstTipoRecurso().equals("CodigosLd")){
+                ClCodigosLdVO cosa = (ClCodigosLdVO)recurso;
+               
+                int cosa2 = cosa.getClnCodigoLd();
+                ((ArrayList)reservas.get(i)).add(cosa2);
+            }
+            i++;
+        }
+
+        return configuracion.getRutaContexto()+"usuarios/consultaReservasTemporales";
+    }
+        
     // Funciones GET y SET
     public void setTramiteTieneDetalle(boolean tramiteTieneDetalle) {
         this.tramiteTieneDetalle = tramiteTieneDetalle;
@@ -1568,5 +1608,17 @@ public class TramiteBean implements Serializable {
     public void setTramiteCodigosCortosVO(TcTramiteCcVO tramiteCodigosCortosVO) {
         this.tramiteCodigosCortosVO = tramiteCodigosCortosVO;
     }
+
+    public ArrayList getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(ArrayList reservas) {
+        this.reservas = reservas;
+    }
+
+
+    
+    
     
 }

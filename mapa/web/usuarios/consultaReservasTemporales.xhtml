@@ -1,0 +1,46 @@
+<ui:composition template="/resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="RESERVAS TEMPORALES"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{UserBean.login == true}">
+            <h:panelGroup rendered="#{empty TramiteBean.reservas}">
+                <h:outputText value="No hay en el momento reservas temporales"/>
+            </h:panelGroup>
+
+            <h:form>
+                <p:dataTable value="#{TramiteBean.reservas}" var="tr" paginator="false"
+                             style="font-size:10px" emptyMessage="No se encontraron reservas temporales">
+                    <p:column headerText="Recurso" style="text-align: center;">
+                        <h:outputText value="#{tr[1]}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Recurso" sortBy="#{tr[0].rstTipoRecurso}" style="text-align: center;">
+                        <h:outputText value="#{tr[0].rstTipoRecurso}"/>
+                    </p:column>
+                    <p:column headerText="Código Trámite" sortBy="#{tr[0].trnCodigo.trnCodigo}" style="text-align: center;">
+                        <h:outputText value="#{tr[0].trnCodigo.trnCodigo}"/>
+                    </p:column>
+                    <p:column headerText="Estado Reserva" sortBy="#{tr[0].rstEstado}" style="text-align: center;">
+                        <h:outputText value="#{tr[0].rstEstado=='S' ? 'Pendiente Liberación' : 'Liberado'}"/>
+                    </p:column>
+                    <p:column headerText="Fecha liberación" sortBy="#{tr[0].rsfFechaLiberacion}" style="text-align: center;">
+                        <h:outputText value="#{tr[0].rsfFechaLiberacion}">
+                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+    
+</ui:composition>
+
+
+
