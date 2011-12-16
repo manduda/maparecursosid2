@@ -16,6 +16,7 @@ import services.MunicipiosService;
 import services.NdNdcService;
 import services.NuNumeracionService;
 import services.ReRegionService;
+import services.RsReservasTemporalesService;
 import services.SeSenalizacionService;
 import services.TrTramitesService;
 import services.UsUsuariosService;
@@ -30,6 +31,7 @@ import vo.MunicipiosVO;
 import vo.NdNdcVO;
 import vo.NuNumeracionVO;
 import vo.ReRegionVO;
+import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
@@ -53,6 +55,7 @@ public class facade {
     private EsEstadoService estado;
     private UsUsuariosService usuario;
     private TrTramitesService tramites;
+    private RsReservasTemporalesService reservasTemporales;
 
     public facade(){
         codigosld = new ClCodigosLdService();
@@ -65,6 +68,7 @@ public class facade {
         estado = new EsEstadoService();
         usuario = new UsUsuariosService();
         tramites = new TrTramitesService();
+        reservasTemporales = new RsReservasTemporalesService();
     }
 
     public List<ClCodigosLdVO> ListaCodigosLd(){
@@ -1187,6 +1191,26 @@ public class facade {
         return vo;
     }
     
+    public List<RsReservasTemporalesVO> consultaReservasTemporales() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<RsReservasTemporalesVO> vo = null;
+        
+        emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+        em = emf.createEntityManager();
+        tx = em.getTransaction();
+        tx.begin();
+        vo = reservasTemporales.getList(em);
+
+        if(em != null){
+            em.clear();
+            em.close();
+        }
+        return vo;
+    }
+
+    
     public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1272,4 +1296,30 @@ public class facade {
         }
         return resultado;
     }
+    
+    public Object consultaRecurso(String tipoRecurso, int codigoRecurso){
+        Object recurso=null;
+        
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+                
+        emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+        em = emf.createEntityManager();
+        tx = em.getTransaction();
+        tx.begin();
+        
+        if(tipoRecurso.equals("Senalizacion")){
+            recurso=senalizacion.getById(codigoRecurso, em);
+        }
+
+
+        if(em != null){
+            em.clear();
+            em.close();
+        }
+
+        
+        return recurso;
+    } 
 }

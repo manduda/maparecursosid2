@@ -16,7 +16,7 @@ public class RsReservasTemporalesVO {
     private int rsnCodigoRecurso;
     private String rstTipoRecurso;
     private TrTramitesVO trnCodigo;
-    private int rsnEstado;
+    private char rstEstado;
     private Date rsfFechaLiberacion;
         
     public RsReservasTemporalesVO() {
@@ -46,12 +46,12 @@ public class RsReservasTemporalesVO {
         this.rsnCodigoRecurso = rsnCodigoRecurso;
     }
 
-    public int getRsnEstado() {
-        return rsnEstado;
+    public char getRstEstado() {
+        return rstEstado;
     }
 
-    public void setRsnEstado(int rsnEstado) {
-        this.rsnEstado = rsnEstado;
+    public void setRstEstado(char rstEstado) {
+        this.rstEstado = rstEstado;
     }
 
     public String getRstTipoRecurso() {

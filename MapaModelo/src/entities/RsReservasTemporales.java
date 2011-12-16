@@ -5,26 +5,16 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import vo.EmOperadorVO;
-import vo.EsEstadoVO;
-import vo.GtGestionTramiteVO;
-import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
-import vo.SeSenalizacionVO;
-import vo.TeTipoSenalizacionVO;
 
 /**
  *
@@ -53,8 +43,8 @@ public class RsReservasTemporales implements Serializable {
     private TrTramites trnCodigo;
       
     @Basic(optional = false)
-    @Column(name = "RSN_ESTADO")
-    private char rsnEstado;
+    @Column(name = "RST_ESTADO")
+    private char rstEstado;
     
     @Basic(optional = false)
     @Column(name = "RSF_FECHA_LIBERACION")
@@ -71,7 +61,7 @@ public class RsReservasTemporales implements Serializable {
         vo.setRsfFechaLiberacion(this.getRsfFechaLiberacion());
         vo.setRsnCodigo(this.getRsnCodigo());
         vo.setRsnCodigoRecurso(this.getRsnCodigoRecurso());
-        vo.setRsnEstado(this.getRsnEstado());
+        vo.setRstEstado(this.getRstEstado());
         vo.setTrnCodigo(this.getTrnCodigo().toVO());
         vo.setRstTipoRecurso(this.getRstTipoRecurso());
 
@@ -102,12 +92,12 @@ public class RsReservasTemporales implements Serializable {
         this.rsnCodigoRecurso = rsnCodigoRecurso;
     }
 
-    public char getRsnEstado() {
-        return rsnEstado;
+    public char getRstEstado() {
+        return rstEstado;
     }
 
-    public void setRsnEstado(char rsnEstado) {
-        this.rsnEstado = rsnEstado;
+    public void setRstEstado(char rstEstado) {
+        this.rstEstado = rstEstado;
     }
 
     public String getRstTipoRecurso() {

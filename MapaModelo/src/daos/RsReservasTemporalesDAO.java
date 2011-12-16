@@ -39,4 +39,9 @@ public class RsReservasTemporalesDAO {
     }
     return n;
     }
+    
+    public static List<RsReservasTemporales> getList(EntityManager em){
+    Query query = em.createQuery("SELECT e FROM RsReservasTemporales e");
+    return query.getResultList();
+    }
 }

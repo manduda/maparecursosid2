@@ -6,7 +6,6 @@ package services;
 
 import daos.CcCodigosCortosDAO;
 import daos.ClCodigosLdDAO;
-import daos.CoConfiguracionDAO;
 import daos.EmOperadorDAO;
 import daos.EtEstadoTramiteDAO;
 import daos.GtGestionTramiteDAO;
@@ -32,7 +31,6 @@ import entities.TlTramiteLd;
 import entities.TrTramites;
 import entities.TsTramiteSenalizacion;
 import entities.UsUsuarios;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -339,7 +337,7 @@ public class TrTramitesService {
                             resTemp.setTrnCodigo(entity);
                             resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
                             resTemp.setRsnCodigoRecurso(t.getSenCodigo().getSenCodigo());
-                            resTemp.setRsnEstado('S');
+                            resTemp.setRstEstado('S');
                             resTemp.setRstTipoRecurso("Senalizacion");
                             resTemp.setRsfFechaLiberacion(fecha);
                             
