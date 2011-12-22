@@ -7,7 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleSenalizacion.xhtml')}">
+        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleNumeracion.xhtml')}">
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
@@ -16,18 +16,24 @@
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable value="#{SenalizacionBean.selectedSens}" var="detalleSen" paginator="false" style="font-size:10px">
-                                <f:facet name="header">Detalle señalización</f:facet>
-                                <p:column headerText="PUNTO" styleClass="tabla-recurso">
-                                    <h:outputText value="#{detalleSen.renCodigo.retNombre} - #{detalleSen.senZona} - #{detalleSen.senPs}"/>
+                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle numeración</f:facet>
+                                <p:column headerText="NDC" >
+                                    <h:outputText value="#{detalleNum.ndnCodigo.ndtNombre}"/>
+                                </p:column>
+                                <p:column headerText="BLOQUE" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleNum.nunInicio} - #{detalleNum.nunFin}"/>
+                                </p:column>
+                                <p:column headerText="CANTIDAD">
+                                    <h:outputText value="#{detalleNum.nunFin-detalleNum.nunInicio+1}"/>
                                 </p:column>
                                 <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
-                                    <h:outputText value="#{detalleSen.codigoMunicipio.nombreMunicipio}"/>
+                                    <h:outputText value="#{detalleNum.codigoMunicipio.nombreMunicipio}"/>
                                     <br/>
-                                    <h:outputText value="(#{detalleSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
+                                    <h:outputText value="(#{detalleNum.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
                                 </p:column>
                                 <p:column headerText="EMPRESA" >
-                                    <h:outputText value="#{detalleSen.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="#{detalleNum.emrCodigo.emtNombre}"/>
                                 </p:column>
                             </p:dataTable>
                             <br/>
@@ -66,12 +72,12 @@
                             </h:panelGroup>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteSenalizacionVO.tstObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteNumeracionVO.tntObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
                         </h:panelGrid>
@@ -86,18 +92,21 @@
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable value="#{SenalizacionBean.selectedSens}" var="detalleSen" paginator="false" style="font-size:10px">
-                                <f:facet name="header">Detalle señalización</f:facet>
-                                <p:column headerText="PUNTO" styleClass="tabla-recurso">
-                                    <h:outputText value="#{detalleSen.renCodigo.retNombre} - #{detalleSen.senZona} - #{detalleSen.senPs}"/>
+                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" paginator="false" style="font-size:9px">
+                                <f:facet name="header">Detalle numeración</f:facet>
+                                <p:column headerText="NDC" styleClass="tabla-expandir">
+                                    <h:outputText value="#{detalleNum.ndnCodigo.ndtNombre}"/>
+                                </p:column>
+                                <p:column headerText="BLOQUE" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleNum.nunInicio} - #{detalleNum.nunFin}"/>
+                                </p:column>
+                                <p:column headerText="CANTIDAD">
+                                    <h:outputText value="#{detalleNum.nunFin-detalleNum.nunInicio+1}"/>
                                 </p:column>
                                 <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
-                                    <h:outputText value="#{detalleSen.codigoMunicipio.nombreMunicipio}"/>
+                                    <h:outputText value="#{detalleNum.codigoMunicipio.nombreMunicipio}"/>
                                     <br/>
-                                    <h:outputText value="(#{detalleSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
-                                </p:column>
-                                <p:column headerText="EMPRESA" >
-                                    <h:outputText value="#{detalleSen.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="(#{detalleNum.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
                                 </p:column>
                             </p:dataTable>
                             <br/>
@@ -118,27 +127,18 @@
                                     <p:ajax update="tramiteMunicipio" listener="#{TramiteBean.cambiarDepartamento}" />
                                 </h:selectOneMenu>
                                 <h:outputText value="Municipio" style="font-weight: bold;"/>
-                                <h:selectOneMenu id="tramiteMunicipio" value="#{TramiteBean.tramiteSenalizacionVO.codigoMunicipio.codigoMunicipio}">
+                                <h:selectOneMenu id="tramiteMunicipio" value="#{TramiteBean.tramiteNumeracionVO.codigoMunicipio.codigoMunicipio}">
                                     <f:selectItems value="#{TramiteBean.listaMunicipio}" />  
                                 </h:selectOneMenu>
                             </h:panelGrid>
                             <br/>
-                            <h:panelGrid columns="2" >
-                                <h:outputText value="Nombre Nodo:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstNombreNodo}" size="25" maxlength="20"/>
-                                <h:outputText value="Marca/Modelo:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstMarcaModelo}" size="25" maxlength="20"/>
-                                <h:outputText value="Dirección:&#160;" style="font-weight: bold;"/>
-                                <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstDireccion}" size="25" maxlength="20"/>
-                            </h:panelGrid>
-                            <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteSenalizacionVO.tstObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteNumeracionVO.tntObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
                         </h:panelGrid>
@@ -152,7 +152,7 @@
                 <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
                     <h:form>
                         <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgSenalizacion"/>
+                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgNumeracion"/>
                      </h:form>
                 </h:panelGrid>
             </p:dialog>

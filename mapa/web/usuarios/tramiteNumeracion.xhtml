@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fnc="http://yournamespace.com/fnc">
+    <ui:composition>
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteNumeracion.xhtml')}">
+            <h:panelGroup id="pgTramiteNumeracion" >
+                <h:form>
+                <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0" 
+                             rendered="#{!empty TramiteBean.selectedTramite.tnTramiteNumeracionCollection}">
+                    <br/>
+                    <h:panelGrid width="100%" styleClass="tabla-encabezado">
+                        <h:outputText value="TRÁMITE NUMERACIÓN" style="font-size:11px; font-weight: bold;"/>
+                    </h:panelGrid>
+                    <p:dataTable value="#{TramiteBean.selectedTramite.tnTramiteNumeracionCollection}"
+                                 var="tramiteNumeracion" style="font-size:9px" >
+                        <p:column styleClass="tabla-expandir">  
+                            <p:rowToggler />  
+                        </p:column>
+                        <p:column headerText="NDC" styleClass="tabla-expandir">
+                            <h:outputText value="#{tramiteNumeracion.ndnCodigo.ndtNombre}"/>
+                        </p:column>
+                        <p:column headerText="BLOQUE" styleClass="tabla-recurso">
+                            <h:outputText value="#{tramiteNumeracion.tnnInicio} - #{tramiteNumeracion.tnnFin}"/>
+                        </p:column>
+                        <p:column headerText="CANTIDAD" styleClass="tabla-expandir">
+                            <h:outputText value="#{tramiteNumeracion.tnnFin - tramiteNumeracion.tnnInicio + 1}"/>
+                        </p:column>
+                        <p:column headerText="ACCIÓN" styleClass="tabla-accion">
+                            <h:outputText value="#{tramiteNumeracion.acnCodigo.actNombre}" style="font-weight: bold;"/>
+                        </p:column>
+                        <p:column headerText="RADICADO" styleClass="tabla-radicado">
+                            <h:outputText value="#{tramiteNumeracion.tnnRadicado}"/>
+                        </p:column>
+                        <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
+                            <h:outputText value="#{tramiteNumeracion.codigoMunicipio.nombreMunicipio}"/>
+                            <br/>
+                            <h:outputText value="(#{tramiteNumeracion.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
+                        </p:column>
+                        <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
+                            <h:outputText value="#{tramiteNumeracion.tntObservaciones}"/>
+                        </p:column>
+                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL">
+                            <h:outputText value="#{tramiteNumeracion.tntReservaTemporal=='S'? fnc:concat(tramiteNumeracion.tnnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteNumeracion.acnCodigo.acnCodigo==5}"/>
+                            <h:outputText value="N/A" rendered="#{tramiteNumeracion.acnCodigo.acnCodigo!=5}"/>
+                        </p:column>
+                        <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
+                            <p:commandLink oncomplete="eliminarNumeracionDialog.show()" update="eliminarNumeracionDialog">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteNumeracion.tnnCodigo}"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
+                                <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                </h:form>
+            </h:panelGroup>
+
+            <!-- MENÚ ELIMINAR RECURSO -->
+            <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{(UserBean.login)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}" 
+                             showEffect="fade" hideEffect="fade" modal="true" closable="false"
+                             header="Confirmación" severity="alert" widgetVar="eliminarNumeracionDialog">  
+                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                    <h:form>
+                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteNumeracion,pgMenuTramite" oncomplete="eliminarNumeracionDialog.hide();"/>
+                        <p:commandButton type="button" value="Cancelar" onclick="eliminarNumeracionDialog.hide();"/>
+                    </h:form>
+                </h:panelGrid>
+            </p:confirmDialog>
+        </h:panelGroup>
+    </ui:composition>
+</html>
+

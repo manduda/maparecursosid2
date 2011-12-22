@@ -31,10 +31,12 @@ import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.MunicipiosVO;
+import vo.NuNumeracionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
@@ -124,6 +126,7 @@ public class TramiteBean implements Serializable {
         
     boolean tramiteTieneDetalle;
     private TsTramiteSenalizacionVO tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
+    private TnTramiteNumeracionVO tramiteNumeracionVO = new TnTramiteNumeracionVO();
     private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
     private TcTramiteCcVO tramiteCodigosCortosVO = new TcTramiteCcVO();
     private Boolean reservaTemporal = false;
@@ -356,6 +359,14 @@ public class TramiteBean implements Serializable {
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedTramite", event.getObject());  
         return configuracion.getRutaContexto()+"usuarios/tramite?faces-redirect=true";
     }
+    
+    public String detalle() {
+        mensajeTramite = "";
+        selectedTramite = seleccionBuscarTramite;
+        seleccionBuscarTramite = null;
+        
+        return configuracion.getRutaContexto()+"usuarios/tramite.xhtml";
+    }
     // ----------------------------------------------------------
     
     public String archivarTramite() {
@@ -517,7 +528,7 @@ public class TramiteBean implements Serializable {
             }
             
         } else {
-            mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            mensajeTramite = "<br><b>Error al aprobar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
         }
         
         observacionesTramite = "";
@@ -693,141 +704,246 @@ public class TramiteBean implements Serializable {
         Integer resultado = 0;
         
         if(tipoRecurso.equals("senalizacion")){
-            TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
+            ArrayList vo = new ArrayList();
+            //TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
             SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
             
-            SeSenalizacionVO senalizacion = new SeSenalizacionVO();
-            senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
-
-            MunicipiosVO municipio = new MunicipiosVO();
-            EmOperadorVO operador = new EmOperadorVO();
-            String nombreNodo = "";
-            String marcaModelo = "";
-            String direccion = "";
-            String observaciones = tramiteSenalizacionVO.getTstObservaciones();//this.observacionesAgregarRecurso;
-            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
-            char resTemp = 'N';
-            int mesesResTemp = 0;
-
-            switch(codigoAccion){
-                case 2: //Preasignar
-                    if(tramiteSenalizacionVO.getTstNombreNodo().equals("")){
-                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar el nombre del nodo<br><br>";
-                        return null;
-                    }
-                    if(tramiteSenalizacionVO.getTstMarcaModelo().equals("")){
-                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la marca/modelo del nodo<br><br>";
-                        return null;
-                    }
-                    if(tramiteSenalizacionVO.getTstDireccion().equals("")){
-                        mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la dirección de ubicación del nodo<br><br>";
-                        return null;
-                    }
-                    municipio.setCodigoMunicipio(tramiteSenalizacionVO.getCodigoMunicipio().getCodigoMunicipio());
-                    for (TrTramitesVO detalleVO : tramites) {
-                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
-                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
-                            break;
-                        }
-                    }
-                    nombreNodo = tramiteSenalizacionVO.getTstNombreNodo();
-                    marcaModelo = tramiteSenalizacionVO.getTstMarcaModelo();
-                    direccion = tramiteSenalizacionVO.getTstDireccion();
-                    break;
-                case 5: //Recuperar
-                    if (reservaTemporal=true){
-                        resTemp='S';                    
-                        mesesResTemp=mesesReserva;
-                    }
-                    municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
-                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
-                    nombreNodo = "";
-                    marcaModelo = "";
-                    direccion = "";
-                    
-                    break;
-            }
-
-            vo.setTrnCodigo(tramite);
-            vo.setSenCodigo(senalizacion);
-            vo.setAcnCodigo(accion);
-            vo.setTsnRadicado(radicado);
-            vo.setCodigoMunicipio(municipio);
-            vo.setEmrCodigo(operador);
-            vo.setTstNombreNodo(nombreNodo);
-            vo.setTstMarcaModelo(marcaModelo);
-            vo.setTstDireccion(direccion);
-            vo.setTstObservaciones(observaciones);
-            vo.setTstReservaTemporal(resTemp);
-            vo.setTsnMesesLiberacion(mesesResTemp);
+            List<SeSenalizacionVO> senalizacion = new ArrayList<SeSenalizacionVO>();
             
-            resultado = fachada.agregarRecurso(vo);
+            int size = sen.getSelectedSens().length;
+            for (int i = 0; i < size; i++) {
+                senalizacion.add(sen.getSelectedSens()[i]);
+            }
+            
+            //SeSenalizacionVO senalizacion = new SeSenalizacionVO();
+            //senalizacion.setSenCodigo(sen.getSelectedSen().getSenCodigo());
+            
+            for(SeSenalizacionVO s : senalizacion){
+                //numeracion.setSenCodigo(num.getSelectedSen().getSenCodigo());
+                TsTramiteSenalizacionVO tsVO = new TsTramiteSenalizacionVO();
+            
+                MunicipiosVO municipio = new MunicipiosVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String nombreNodo = "";
+                String marcaModelo = "";
+                String direccion = "";
+                String observaciones = tramiteSenalizacionVO.getTstObservaciones();//this.observacionesAgregarRecurso;
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        if(tramiteSenalizacionVO.getTstNombreNodo().equals("")){
+                            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar el nombre del nodo<br><br>";
+                            return null;
+                        }
+                        if(tramiteSenalizacionVO.getTstMarcaModelo().equals("")){
+                            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la marca/modelo del nodo<br><br>";
+                            return null;
+                        }
+                        if(tramiteSenalizacionVO.getTstDireccion().equals("")){
+                            mensajeRecurso = "<br><b>Error al agregar el recurso al trámite.</b><br><br>Debes ingresar la dirección de ubicación del nodo<br><br>";
+                            return null;
+                        }
+                        municipio.setCodigoMunicipio(tramiteSenalizacionVO.getCodigoMunicipio().getCodigoMunicipio());
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        nombreNodo = tramiteSenalizacionVO.getTstNombreNodo();
+                        marcaModelo = tramiteSenalizacionVO.getTstMarcaModelo();
+                        direccion = tramiteSenalizacionVO.getTstDireccion();
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal == true){
+                            resTemp = 'S';                    
+                            mesesResTemp = mesesReserva;
+                        }
+                        municipio.setCodigoMunicipio(s.getCodigoMunicipio().getCodigoMunicipio());
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        nombreNodo = "";
+                        marcaModelo = "";
+                        direccion = "";
+
+                        break;
+                }
+
+                tsVO.setTrnCodigo(tramite);
+                tsVO.setSenCodigo(s);
+                tsVO.setAcnCodigo(accion);
+                tsVO.setTsnRadicado(radicado);
+                tsVO.setCodigoMunicipio(municipio);
+                tsVO.setEmrCodigo(operador);
+                tsVO.setTstNombreNodo(nombreNodo);
+                tsVO.setTstMarcaModelo(marcaModelo);
+                tsVO.setTstDireccion(direccion);
+                tsVO.setTstObservaciones(observaciones);
+                tsVO.setTstReservaTemporal(resTemp);
+                tsVO.setTsnMesesLiberacion(mesesResTemp);
+                
+                vo.add(tsVO);
+            }
+            
+            resultado = fachada.agregarRecursos(vo);
             tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
+          
+        } else if (tipoRecurso.equals("numeracion")){
+            ArrayList vo = new ArrayList();
+            NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);//session.getAttribute("SenalizacionBean");
+            
+            List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
+            
+            int size = num.getSelectedNums().length;
+            for (int i = 0; i < size; i++) {
+                numeracion.add(num.getSelectedNums()[i]);
+            }
+            
+            for(NuNumeracionVO n : numeracion){
+                //numeracion.setSenCodigo(num.getSelectedSen().getSenCodigo());
+                TnTramiteNumeracionVO tnVO = new TnTramiteNumeracionVO();
+                
+                MunicipiosVO municipio = new MunicipiosVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteNumeracionVO.getTntObservaciones();//this.observacionesAgregarRecurso;
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        municipio.setCodigoMunicipio(tramiteNumeracionVO.getCodigoMunicipio().getCodigoMunicipio());
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
+                        municipio.setCodigoMunicipio(n.getCodigoMunicipio().getCodigoMunicipio());
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+
+                tnVO.setTrnCodigo(tramite);
+                tnVO.setAcnCodigo(accion);
+                tnVO.setTnnRadicado(radicado);
+                tnVO.setCodigoMunicipio(municipio);
+                tnVO.setEmrCodigo(operador);
+                tnVO.setNdnCodigo(n.getNdnCodigo());
+                tnVO.setTnnInicio(n.getNunInicio());
+                tnVO.setTnnFin(n.getNunFin());
+                tnVO.setTntObservaciones(observaciones);
+                tnVO.setTntReservaTemporal(resTemp);
+                tnVO.setTnnMesesLiberacion(mesesResTemp);
+                
+                vo.add(tnVO);
+
+            }
+            
+            resultado = fachada.agregarRecursos(vo);
+            tramiteNumeracionVO = new TnTramiteNumeracionVO();
+            
         } else if (tipoRecurso.equals("codigosld")) {
-            TlTramiteLdVO vo = new TlTramiteLdVO();
-            CodigosLdBean recursoBean = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);//session.getAttribute("SenalizacionBean");
+            ArrayList vo = new ArrayList();
+            //TlTramiteLdVO vo = new TlTramiteLdVO();
+            CodigosLdBean ld = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);//session.getAttribute("SenalizacionBean");
             
-            ClCodigosLdVO recurso = new ClCodigosLdVO();
-            recurso.setClnCodigo(recursoBean.getSelectedLd().getClnCodigo());
-
-            EmOperadorVO operador = new EmOperadorVO();
-            String observaciones = tramiteCodigosLdVO.getTltObservaciones();//this.observacionesAgregarRecurso;
-            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+            List<ClCodigosLdVO> codigosLD = new ArrayList<ClCodigosLdVO>();
             
-            switch(codigoAccion){
-                case 2: //Preasignar
-                    for (TrTramitesVO detalleVO : tramites) {
-                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
-                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
-                            break;
-                        }
-                    }
-                    break;
-                case 5: //Recuperar
-                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
-                    break;
+            int size = ld.getSelectedLds().length;
+            for (int i = 0; i < size; i++) {
+                codigosLD.add(ld.getSelectedLds()[i]);
             }
-            vo.setTrnCodigo(tramite);
-            vo.setClnCodigo(recurso);
-            vo.setAcnCodigo(accion);
-            vo.setTlnRadicado(radicado);
-            vo.setEmrCodigo(operador);
-            vo.setTltObservaciones(observaciones);
             
-            resultado = fachada.agregarRecurso(vo);
+            //ClCodigosLdVO recurso = new ClCodigosLdVO();
+            //recurso.setClnCodigo(recursoBean.getSelectedLd().getClnCodigo());
+            
+            for(ClCodigosLdVO l : codigosLD){
+                TlTramiteLdVO tlVO = new TlTramiteLdVO();
+                
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteCodigosLdVO.getTltObservaciones();//this.observacionesAgregarRecurso;
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                tlVO.setTrnCodigo(tramite);
+                tlVO.setClnCodigo(l);
+                tlVO.setAcnCodigo(accion);
+                tlVO.setTlnRadicado(radicado);
+                tlVO.setEmrCodigo(operador);
+                tlVO.setTltObservaciones(observaciones);
+                
+                vo.add(tlVO);
+            }
+            
+            resultado = fachada.agregarRecursos(vo);
             tramiteCodigosLdVO = new TlTramiteLdVO();
+            
         } else if (tipoRecurso.equals("codigosCortos")) {
-            TcTramiteCcVO vo = new TcTramiteCcVO();
-            CodigosCortosBean recursoBean = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);//session.getAttribute("SenalizacionBean");
+            ArrayList vo = new ArrayList();
+            //TcTramiteCcVO vo = new TcTramiteCcVO();
+            CodigosCortosBean cc = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);//session.getAttribute("SenalizacionBean");
             
-            CcCodigosCortosVO recurso = new CcCodigosCortosVO();
-            recurso.setCcnCodigo(recursoBean.getSelectedCodigoCorto().getCcnCodigo());
-
-            EmOperadorVO operador = new EmOperadorVO();
-            String observaciones = tramiteCodigosCortosVO.getTctObservaciones();//this.observacionesAgregarRecurso;
-            Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+            List<CcCodigosCortosVO> codigoCorto = new ArrayList<CcCodigosCortosVO>();
             
-            switch(codigoAccion){
-                case 2: //Preasignar
-                    for (TrTramitesVO detalleVO : tramites) {
-                        if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
-                            operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
-                            break;
-                        }
-                    }
-                    break;
-                case 5: //Recuperar
-                    operador.setEmrCodigo(configuracion.getOperadorNinguno());
-                    break;
+            int size = cc.getSelectedCCs().length;
+            for (int i = 0; i < size; i++) {
+                codigoCorto.add(cc.getSelectedCCs()[i]);
             }
-            vo.setTrnCodigo(tramite);
-            vo.setCcnCodigo(recurso);
-            vo.setAcnCodigo(accion);
-            vo.setTcnRadicado(radicado);
-            vo.setEmrCodigo(operador);
-            vo.setTctObservaciones(observaciones);
             
-            resultado = fachada.agregarRecurso(vo);
+            //CcCodigosCortosVO recurso = new CcCodigosCortosVO();
+            //recurso.setCcnCodigo(recursoBean.getSelectedCodigoCorto().getCcnCodigo());
+            
+            for(CcCodigosCortosVO c : codigoCorto){
+                TcTramiteCcVO tcVO = new TcTramiteCcVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteCodigosCortosVO.getTctObservaciones();//this.observacionesAgregarRecurso;
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                tcVO.setTrnCodigo(tramite);
+                tcVO.setCcnCodigo(c);
+                tcVO.setAcnCodigo(accion);
+                tcVO.setTcnRadicado(radicado);
+                tcVO.setEmrCodigo(operador);
+                tcVO.setTctObservaciones(observaciones);
+                
+                vo.add(tcVO);
+            
+            }
+            resultado = fachada.agregarRecursos(vo);
             tramiteCodigosCortosVO = new TcTramiteCcVO();
         }
         
@@ -900,6 +1016,10 @@ public class TramiteBean implements Serializable {
             TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
             vo.setTsnCodigo(codigoDetalleTramite);
             resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("numeracion")){
+            TnTramiteNumeracionVO vo = new TnTramiteNumeracionVO();
+            vo.setTnnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
         } else if(tipoRecurso.equals("codigosld")) {
             TlTramiteLdVO vo = new TlTramiteLdVO();
             vo.setTlnCodigo(codigoDetalleTramite);
@@ -955,6 +1075,13 @@ public class TramiteBean implements Serializable {
             MunicipiosVO municipio = new MunicipiosVO();
             municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
             tramiteSenalizacionVO.setCodigoMunicipio(municipio);
+        }else if(tipoRecurso.equals("numeracion")){
+            //NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);//session.getAttribute("SenalizacionBean");
+            seleccionDepartamento = "-1";//num.getSelectedSen().getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
+            cambiarDepartamento();
+            MunicipiosVO municipio = new MunicipiosVO();
+            municipio.setCodigoMunicipio("-1");
+            tramiteNumeracionVO.setCodigoMunicipio(municipio);
         }
 
         
@@ -1055,7 +1182,7 @@ public class TramiteBean implements Serializable {
         facade fachada = new facade();
         
         // Activa el campo de numeración en transferencia de recursos        
-        countRecurso = fachada.countCargarNumeracion(operadorOrigen, -1, -1, -1, -1, "-1", "-1");
+        countRecurso = fachada.countCargarNumeracion(operadorOrigen, "-1", -1, -1, -1, -1, "-1", "-1");
         if(countRecurso > 0){
             opcionNumeracion = true;
         }
@@ -1078,10 +1205,15 @@ public class TramiteBean implements Serializable {
     }
      
     public boolean isTramiteTieneDetalle() {
-        boolean haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
-        boolean hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
-        boolean hayCodigosCortos = !selectedTramite.getTcTramiteCcCollection().isEmpty();
-        if (haySenalizacion || hayCodigosLd || hayCodigosCortos){
+        boolean haySenalizacion = false;
+        boolean hayNumeracion = false;
+        boolean hayCodigosLd = false;
+        boolean hayCodigosCortos = false;
+        haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
+        hayNumeracion = !selectedTramite.getTnTramiteNumeracionCollection().isEmpty();
+        hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
+        hayCodigosCortos = !selectedTramite.getTcTramiteCcCollection().isEmpty();
+        if (haySenalizacion || hayNumeracion || hayCodigosLd || hayCodigosCortos){
             return true;
         }
         return false;
@@ -1359,6 +1491,14 @@ public class TramiteBean implements Serializable {
 
     public void setTramiteSenalizacionVO(TsTramiteSenalizacionVO tramiteSenalizacionVO) {
         this.tramiteSenalizacionVO = tramiteSenalizacionVO;
+    }
+
+    public TnTramiteNumeracionVO getTramiteNumeracionVO() {
+        return tramiteNumeracionVO;
+    }
+
+    public void setTramiteNumeracionVO(TnTramiteNumeracionVO tramiteNumeracionVO) {
+        this.tramiteNumeracionVO = tramiteNumeracionVO;
     }
     
     public UserBean getUserSession() {

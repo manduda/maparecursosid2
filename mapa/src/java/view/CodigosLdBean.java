@@ -16,9 +16,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
+import vo.TlTramiteLdVO;
 
 /**
  *
@@ -27,15 +30,26 @@ import vo.EsEstadoVO;
 @ManagedBean(name = "CodigosLdBean")
 @ViewScoped
 public class CodigosLdBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private List<ClCodigosLdVO> CoLD = new ArrayList<ClCodigosLdVO>();
     private int countCoLD;
     //private SelectItem[] listaEstado;
-    private ClCodigosLdVO selectedLd;
     private EmOperadorVO operadorVO = new EmOperadorVO();
     private EsEstadoVO estadoVO = new EsEstadoVO();
     private String codigoLd="";
     private Collection<SelectItem> listaOperador;
     private Collection<SelectItem> listaEstado;
+    
+    private ClCodigosLdVO selectedLd;
+    private ClCodigosLdVO[] selectedLds;
+    private Boolean selectedLdsPreasignar;
+    private Boolean selectedLdsRecuperar;
+    private Boolean selectedLdsReservar;
+    private Boolean selectedLdsLiberar;
+    private Boolean selectedLdsAccion;
+    private ClCodigosLdVO[] selectedCCsDetalle;
+    private List<TlTramiteLdVO> tramiteLd = null;
 
     public CodigosLdBean(){
         facade fachada = new facade();
@@ -64,6 +78,7 @@ public class CodigosLdBean implements Serializable {
         countCoLD = fachada.countCargarCodigosLd("-1", -1, -1);
         operadorVO.setEmrCodigo("-1");
         estadoVO.setEsnCodigo(-1);
+        codigoLd = "";
     }
     
     public String buscar() {
@@ -95,31 +110,124 @@ public class CodigosLdBean implements Serializable {
         return options;  
     }
     
-    public String reservar() {
-
-        int operacion;
-        facade fachada = new facade();
-        operacion = fachada.reservarLiberarRecurso(selectedLd,1);
-        
-        if(operacion == 1){
-            buscar();
-            return "Reserva de código exitosa";
-        }else{
-         return "Error en el bean de Códigos LD";   
+    public void detalleLd(){
+        selectedLds = new ClCodigosLdVO[1];
+        selectedLds[0] = selectedLd;
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        if (selectedLds == null){
+            selectedLdsAccion = false;
+        } else if (selectedLds.length > 0) {
+            selectedLdsAccion = true;
+        } else {
+            selectedLdsAccion = false;
         }
     }
-
-    public String liberar() {
-
+    
+    public void onRowUnselect(UnselectEvent event) {
+        if (selectedLds == null){
+            selectedLdsAccion = false;
+        } else if (selectedLds.length > 0) {
+            selectedLdsAccion = true;
+        } else {
+            selectedLdsAccion = false;
+        }
+    }
+    
+    public void detalleAccionLd(){
+        if (selectedLds != null){
+            selectedLdsPreasignar = true;
+            selectedLdsRecuperar = true;
+            selectedLdsReservar = true;
+            selectedLdsLiberar = true;
+            String operador = selectedLds[0].getEmrCodigo().getEmrCodigo();
+            
+            for (ClCodigosLdVO n : selectedLds) {
+                //selectedNumsCantidad = selectedNumsCantidad + (n.getNunFin()-n.getNunInicio()+1);
+                
+                //--- Activar / desactivar botón Pre-Asignar
+                if (selectedLdsPreasignar == true) {
+                    if((n.getEsnCodigo().getEsnCodigo() == 1) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
+                        selectedLdsPreasignar = true;
+                    } else {
+                        selectedLdsPreasignar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Recuperar
+                if (selectedLdsRecuperar == true) {
+                    if((n.getEsnCodigo().getEsnCodigo() == 3) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
+                        selectedLdsRecuperar = true;
+                    } else {
+                        selectedLdsRecuperar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Reservar
+                if (selectedLdsReservar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 1) {
+                        selectedLdsReservar = true;
+                    } else {
+                        selectedLdsReservar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Liberar
+                if (selectedLdsLiberar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 4) {
+                        selectedLdsLiberar = true;
+                    } else {
+                        selectedLdsLiberar = false;
+                    }
+                }
+                
+            }
+        } else {
+            //selectedNumsCantidad = 0;
+            selectedLdsPreasignar = false;
+            selectedLdsRecuperar = false;
+            selectedLdsReservar = false;
+            selectedLdsLiberar = false;
+        }
+    }
+    
+    public String reservar() {
         int operacion;
         facade fachada = new facade();
-        operacion = fachada.reservarLiberarRecurso(selectedLd,0);
+        
+        ArrayList vo = new ArrayList();
+        int size = selectedLds.length;
+        for (int i = 0; i < size; i++) {
+            vo.add(selectedLds[i]);
+        }
+        
+        operacion = fachada.reservarLiberarRecurso(vo,1);
         
         if(operacion == 1){
             buscar();
-            return "Liberación de código exitosa";
+            selectedLdsAccion = false;
+            return "Reserva de códigos de larga distancia exitosa";
         }else{
-         return "Error en el bean de Códigos LD";   
+            return "Error en el bean de códigos cortos";   
+        }
+    }
+    
+    public String liberar() {
+        int operacion;
+        facade fachada = new facade();
+        
+        ArrayList vo = new ArrayList();
+        int size = selectedLds.length;
+        for (int i = 0; i < size; i++) {
+            vo.add(selectedLds[i]);
+        }
+        
+        operacion = fachada.reservarLiberarRecurso(vo,0);
+        
+        if(operacion == 1){
+            buscar();
+            selectedLdsAccion = false;
+            return "Liberación de códigos de larga distancia exitosa";
+        }else{
+         return "Error en el bean de códigos cortos";   
         }
     }
 
@@ -153,6 +261,10 @@ public class CodigosLdBean implements Serializable {
 
     public void setSelectedLd(ClCodigosLdVO selectedLd) {
         this.selectedLd = selectedLd;
+        if (selectedLd != null){
+            facade fachada = new facade();
+            this.tramiteLd = fachada.buscarTramitePorCodigoLd(selectedLd.getClnCodigo(), 5);
+        }
     }
 
     public String getCodigoLd() {
@@ -187,4 +299,68 @@ public class CodigosLdBean implements Serializable {
         this.countCoLD = countCoLD;
     }
 
+    public ClCodigosLdVO[] getSelectedCCsDetalle() {
+        return selectedCCsDetalle;
+    }
+
+    public void setSelectedCCsDetalle(ClCodigosLdVO[] selectedCCsDetalle) {
+        this.selectedCCsDetalle = selectedCCsDetalle;
+    }
+
+    public ClCodigosLdVO[] getSelectedLds() {
+        return selectedLds;
+    }
+
+    public void setSelectedLds(ClCodigosLdVO[] selectedLds) {
+        this.selectedLds = selectedLds;
+    }
+
+    public Boolean getSelectedLdsAccion() {
+        return selectedLdsAccion;
+    }
+
+    public void setSelectedLdsAccion(Boolean selectedLdsAccion) {
+        this.selectedLdsAccion = selectedLdsAccion;
+    }
+
+    public Boolean getSelectedLdsLiberar() {
+        return selectedLdsLiberar;
+    }
+
+    public void setSelectedLdsLiberar(Boolean selectedLdsLiberar) {
+        this.selectedLdsLiberar = selectedLdsLiberar;
+    }
+
+    public Boolean getSelectedLdsPreasignar() {
+        return selectedLdsPreasignar;
+    }
+
+    public void setSelectedLdsPreasignar(Boolean selectedLdsPreasignar) {
+        this.selectedLdsPreasignar = selectedLdsPreasignar;
+    }
+
+    public Boolean getSelectedLdsRecuperar() {
+        return selectedLdsRecuperar;
+    }
+
+    public void setSelectedLdsRecuperar(Boolean selectedLdsRecuperar) {
+        this.selectedLdsRecuperar = selectedLdsRecuperar;
+    }
+
+    public Boolean getSelectedLdsReservar() {
+        return selectedLdsReservar;
+    }
+
+    public void setSelectedLdsReservar(Boolean selectedLdsReservar) {
+        this.selectedLdsReservar = selectedLdsReservar;
+    }
+
+    public List<TlTramiteLdVO> getTramiteLd() {
+        return tramiteLd;
+    }
+
+    public void setTramiteLd(List<TlTramiteLdVO> tramiteLd) {
+        this.tramiteLd = tramiteLd;
+    }
+    
 }

@@ -12,6 +12,7 @@
                 <h:form>
                 <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0" 
                              rendered="#{!empty TramiteBean.selectedTramite.tcTramiteCcCollection}">
+                    <br/>
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
                         <h:outputText value="TRÁMITE CÓDIGOS CORTOS" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
@@ -29,12 +30,12 @@
                         <p:column headerText="RADICADO" styleClass="tabla-radicado">
                             <h:outputText value="#{tramiteCodigosCortos.tcnRadicado}"/>
                         </p:column>
-                        <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
+                        <p:column headerText="OBSERVACIONES">
                             <h:outputText value="#{tramiteCodigosCortos.tctObservaciones}"/>
                         </p:column>
-                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL">
-                            <h:outputText value="#{tramiteSenalizacion.tstReservaTemporal=='S'? fnc:concat(tramiteSenalizacion.tsnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo==5}"/>
-                            <h:outputText value="N/A" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo!=5}"/>
+                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL" styleClass="tabla-reserva">
+                            <h:outputText value="#{tramiteCodigosCortos.tctReservaTemporal=='S'? fnc:concat(tramiteCodigosCortos.tcnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteCodigosCortos.acnCodigo.acnCodigo==5}"/>
+                            <h:outputText value="N/A" rendered="#{tramiteCodigosCortos.acnCodigo.acnCodigo!=5}"/>
                         </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                             <p:commandLink oncomplete="eliminarCodigosCortosDialog.show()" update="eliminarCodigosCortosDialog">

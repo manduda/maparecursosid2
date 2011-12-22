@@ -80,6 +80,9 @@ a:link:hover, a:visited:hover  {
     min-width: 200px;
     text-align: justify;
 }
+.tabla-reserva  { 
+    width: 20px;
+}
 
 .estado-asignado {
     background-color: olivedrab;

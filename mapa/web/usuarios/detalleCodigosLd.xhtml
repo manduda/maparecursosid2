@@ -11,15 +11,23 @@
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Código LD:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}"/>
-                            </h:panelGrid>
+                            <p:dataTable id="datosAccionLd" value="#{CodigosLdBean.selectedLds}" var="detalleLd" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos de larga distancia</f:facet>
+                                <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleLd.clnCodigoLd}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalleLd.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalleLd.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
@@ -30,6 +38,32 @@
                             <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
                                 <f:selectItems value="#{TramiteBean.listaTramites}"/> 
                             </h:selectOneMenu>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Reserva temporal&#160;" style="font-weight: bold;" title="La reserva temporal se emplea cuando se recupera un recurso que ha sido usado previamente. Una vez se vence el tiempo contemplado, el recurso se libera automáticamente"/>
+                                <h:selectOneMenu value="#{TramiteBean.reservaTemporal}">
+                                  <f:selectItem itemValue="false" itemLabel="NO"/>
+                                  <f:selectItem itemValue="true" itemLabel="SI"/>
+                                  <p:ajax update="mesReserva"/>
+                                </h:selectOneMenu>                                    
+                            </h:panelGrid>
+                            <h:panelGroup id="mesReserva">
+                                <h:selectOneMenu value="#{TramiteBean.mesesReserva}" rendered="#{TramiteBean.reservaTemporal}">
+                                  <f:selectItem itemValue="1" itemLabel="1"/>
+                                  <f:selectItem itemValue="2" itemLabel="2"/>
+                                  <f:selectItem itemValue="3" itemLabel="3"/>
+                                  <f:selectItem itemValue="4" itemLabel="4"/>
+                                  <f:selectItem itemValue="5" itemLabel="5"/>
+                                  <f:selectItem itemValue="6" itemLabel="6"/>
+                                  <f:selectItem itemValue="7" itemLabel="7"/>
+                                  <f:selectItem itemValue="8" itemLabel="8"/>
+                                  <f:selectItem itemValue="9" itemLabel="9"/>
+                                  <f:selectItem itemValue="10" itemLabel="10"/>
+                                  <f:selectItem itemValue="11" itemLabel="11"/>
+                                  <f:selectItem itemValue="12" itemLabel="12"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="Meses" style="font-weight: bold;" rendered="#{TramiteBean.reservaTemporal}"/>
+                            </h:panelGroup>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
@@ -52,10 +86,18 @@
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Código LD:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}"/>
-                            </h:panelGrid>
+                            <p:dataTable id="datosAccionLd" value="#{CodigosLdBean.selectedLds}" var="detalleLd" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos de larga distancia</f:facet>
+                                <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleLd.clnCodigoLd}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalleLd.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalleLd.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>

@@ -12,47 +12,55 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form id="formLd">
-            <h:panelGrid>
-                <h:panelGrid columns="2">
-                    <h:outputText value="Operador"/>
-                    <h:selectOneMenu value="#{CodigosLdBean.operadorVO.emrCodigo}">
-                        <f:selectItems value="#{CodigosLdBean.listaOperador}" />  
-                    </h:selectOneMenu>
-                    <h:outputText value="Estado"/>
-                    <h:selectOneMenu value="#{CodigosLdBean.estadoVO.esnCodigo}">
-                        <f:selectItems value="#{CodigosLdBean.listaEstado}" />  
-                    </h:selectOneMenu>
-                    <h:outputText value="Código LD"/>
-                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                        <h:inputText id="codigoLd" value="#{CodigosLdBean.codigoLd}" maxlength="3" size="3" converter="javax.faces.Integer"
-                                     converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
-                        <p:message for="codigoLd" />
+        <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
+            <h:form id="formLd">
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Operador"/>
+                        <h:selectOneMenu value="#{CodigosLdBean.operadorVO.emrCodigo}">
+                            <f:selectItems value="#{CodigosLdBean.listaOperador}" />  
+                        </h:selectOneMenu>
+                        <h:outputText value="Estado"/>
+                        <h:selectOneMenu value="#{CodigosLdBean.estadoVO.esnCodigo}">
+                            <f:selectItems value="#{CodigosLdBean.listaEstado}" />  
+                        </h:selectOneMenu>
+                        <h:outputText value="Código LD"/>
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                            <h:inputText id="codigoLd" value="#{CodigosLdBean.codigoLd}" maxlength="3" size="3" converter="javax.faces.Integer"
+                                         converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                            <p:message for="codigoLd" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd"/>
                     </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid>
-                    <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd"/>
-                </h:panelGrid>
-            </h:panelGrid>
-        </h:form>
-        
-        <p:separator/>
+            </h:form>
+        </p:panel>
         
         <h:panelGrid id="pgCodigosLd" width="100%">
-            <h:panelGrid columns="2">
-                <h:outputText value="Registros encontrados:"/>
-                <h:outputText value="#{CodigosLdBean.countCoLD}"/>
-            </h:panelGrid>
             <h:form>
-                <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="false" 
-                             selectionMode="single" selection="#{CodigosLdBean.selectedLd}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="display,datosRecurso" onRowSelectComplete="ldDialog.show();"
-                             emptyMessage="No se encontraron registros" style="font-size:10px">
-                    <f:facet name="header">Mapa de códigos de larga distancia</f:facet>
-                    <p:column headerText="Código LD" style="width:100px; text-align: center">
+                <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
+                    <h:panelGroup id="opciones">
+                        <p:commandButton value="Acción" action="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="true" paginatorPosition="top"
+                             selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                             selection="#{CodigosLdBean.selectedLds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
+                             rowSelectListener="#{CodigosLdBean.onRowSelect}" rowUnselectListener="#{CodigosLdBean.onRowUnselect}"
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" rowsPerPageTemplate="10,20,30,40,50"
+                             paginatorTemplate=" #{CodigosLdBean.countCoLD} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <p:column style="width:25px">
+                        <p:commandButton update="display,datosRecurso" oncomplete="ldDialog.show();" image="ui-icon ui-icon-search" action="#{CodigosLdBean.detalleLd}">  
+                            <f:setPropertyActionListener target="#{CodigosLdBean.selectedLd}" value="#{ld}"/>  
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="CÓDIGO LD" style="width:100px; text-align: center">
                         <h:outputText value="#{ld.clnCodigoLd}"/>
                     </p:column>
-                    <p:column headerText="Estado" style="width:100px">
+                    <p:column headerText="ESTADO" style="width:100px">
                         <div style="width: 100%; text-align: center;" class="#{ld.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
                                                                                ld.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
                                                                                ld.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
@@ -61,7 +69,7 @@
                             <h:outputText value="#{ld.esnCodigo.estNombre}"/>
                         </div>
                     </p:column>
-                    <p:column headerText="Empresa">
+                    <p:column headerText="EMPRESA">
                         <h:outputText value="#{ld.emrCodigo.emtNombre}"/>
                     </p:column>
                 </p:dataTable>
@@ -74,29 +82,96 @@
             <p:dialog header="Detalle" widgetVar="ldDialog" resizable="false" modal="true" draggable="false"
                       width="400" showEffect="fade" hideEffect="fade" position="center">  
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
-                    <h:panelGrid columns="2" cellpadding="4" width="100%">
-                        <h:outputText value="Código LD:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}" />
-                        <h:outputText value="Estado:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosLdBean.selectedLd.esnCodigo.estNombre}" />
-                        <h:outputText value="Operador:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosLdBean.selectedLd.emrCodigo.emtNombre}" />
-                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
-                    </h:panelGrid>
-                    <h:panelGrid width="100%" style="text-align: center;">
-                        <h:panelGroup rendered="#{UserBean.login}">
-                            <h:form>
-                                <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
+                    <h:form>
+                        <h:panelGrid columns="2" cellpadding="4" width="100%">
+                            <h:outputText value="Código LD:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}" />
+                            <h:outputText value="Estado:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosLdBean.selectedLd.esnCodigo.estNombre}" />
+                            <h:outputText value="Operador:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosLdBean.selectedLd.emrCodigo.emtNombre}" />
+                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <h:panelGroup rendered="#{UserBean.login}">
+                                    <h:outputText value="Los códigos LD en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}"  actionListener="#{CodigosLdBean.liberar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
+                                    <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{CodigosLdBean.reservar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
+                            </h:panelGroup>
+
+                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </p:dialog>
+            
+            <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
+                      width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
+                <h:form>
+                    <p:dataTable var="tc" value="#{CodigosLdBean.tramiteLd}" style="font-size: 10px;"
+                                 emptyMessage="No se encontró historia registrada para este recurso">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{tc.trnCodigo.trnResolucion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{tc.trnCodigo.trfFechaResolucion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Acción" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{tc.acnCodigo.actNombre}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+        </h:panelGroup>
+        
+        <h:panelGroup id="datosAccionRecurso">
+        
+            <p:dialog header="Detalle" widgetVar="ldAccionDialog" resizable="false" modal="true" draggable="false"
+                      width="700" showEffect="fade" hideEffect="fade" position="center">
+                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:form>
+                        <p:dataTable id="datosAccionLd" value="#{CodigosLdBean.selectedLds}" var="detalleLd" paginator="false" style="font-size:10px">
+                            <f:facet name="header">Detalle códigos de larga distancia</f:facet>
+                            <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
+                                <h:outputText value="#{detalleLd.clnCodigoLd}"/>
+                            </p:column>
+                            <p:column headerText="ESTADO" >
+                                <h:outputText value="#{detalleLd.esnCodigo.estNombre}"/>
+                            </p:column>
+                            <p:column headerText="EMPRESA" >
+                                <h:outputText value="#{detalleLd.emrCodigo.emtNombre}"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <h:panelGroup rendered="#{UserBean.login}">
+                                <h:outputText value="Los códigos LD en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosLdBean.selectedLdsPreasignar)}" update="datosPreasignar" oncomplete="ldAccionDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                 </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}"  actionListener="#{CodigosLdBean.liberar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
-                                <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{CodigosLdBean.reservar}" update="pgCodigosLd" oncomplete="ldDialog.hide();" />
-                            </h:form>
-                        </h:panelGroup>
-                    </h:panelGrid>
+                                <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosLdBean.selectedLdsRecuperar)}" update="datosRecuperar" oncomplete="ldAccionDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosLdBean.selectedLdsLiberar)}" action="#{CodigosLdBean.liberar}" update="pgCodigosLd" oncomplete="ldAccionDialog.hide();"/>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosLdBean.selectedLdsReservar)}" action="#{CodigosLdBean.reservar}" update="pgCodigosLd" oncomplete="ldAccionDialog.hide();"/>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:form>
                 </h:panelGrid>
             </p:dialog>
         </h:panelGroup>

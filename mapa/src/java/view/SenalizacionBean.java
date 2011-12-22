@@ -27,6 +27,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
@@ -62,6 +64,11 @@ public class SenalizacionBean implements Serializable {
     private LazyDataModel<SeSenalizacionVO> lazyModel;
     private SeSenalizacionVO selectedSen;
     private SeSenalizacionVO[] selectedSens;
+    private Boolean selectedSensRecuperar;
+    private Boolean selectedSensReservar;
+    private Boolean selectedSensLiberar;
+    private Boolean selectedSensAccion;
+    private SeSenalizacionVO[] selectedSensDetalle;
     private List<TsTramiteSenalizacionVO> tramiteSenalizacion = null;
     
     
@@ -115,6 +122,8 @@ public class SenalizacionBean implements Serializable {
         lazyModel.setRowCount(fachada.countCargarSenalizacion("-1", -1, -1, -1, -1, "-1", "-1"));
         
         operadorVO.setEmrCodigo("-1");
+        municipioVO.setCodigoMunicipio("-1");
+        departamentoVO.setCodigoDepartamento("-1");
         estadoVO.setEsnCodigo(-1);
         regionSenalizacionVO.setRenCodigo(-1);
         psSenalizacion="";
@@ -183,19 +192,92 @@ public class SenalizacionBean implements Serializable {
         }
            
     }
-
-    public String recuperar() {
-        selectedSen = null;
-        return null;
+    
+    public void detalleSen(){
+        selectedSens = new SeSenalizacionVO[1];
+        selectedSens[0] = selectedSen;
+    }
+    
+    public void onRowSelect(SelectEvent event) {
+        if (selectedSens == null){
+            selectedSensAccion = false;
+        } else if (selectedSens.length > 0) {
+            selectedSensAccion = true;
+        } else {
+            selectedSensAccion = false;
+        }
+    }
+    
+    public void onRowUnselect(UnselectEvent event) {
+        if (selectedSens == null){
+            selectedSensAccion = false;
+        } else if (selectedSens.length > 0) {
+            selectedSensAccion = true;
+        } else {
+            selectedSensAccion = false;
+        }
+    }
+    
+    public void detalleAccionSen(){
+        if (selectedSens != null){
+            //selectedSensCantidad = 0;
+            selectedSensRecuperar = true;
+            selectedSensReservar = true;
+            selectedSensLiberar = true;
+            String operador = selectedSens[0].getEmrCodigo().getEmrCodigo();
+            
+            for (SeSenalizacionVO n : selectedSens) {
+                //selectedNumsCantidad = selectedNumsCantidad + (n.getNunFin()-n.getNunInicio()+1);
+                
+                //--- Activar / desactivar botón Recuperar
+                if (selectedSensRecuperar == true) {
+                    if((n.getEsnCodigo().getEsnCodigo() == 3) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
+                        selectedSensRecuperar = true;
+                    } else {
+                        selectedSensRecuperar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Reservar
+                if (selectedSensReservar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 1) {
+                        selectedSensReservar = true;
+                    } else {
+                        selectedSensReservar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Liberar
+                if (selectedSensLiberar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 4) {
+                        selectedSensLiberar = true;
+                    } else {
+                        selectedSensLiberar = false;
+                    }
+                }
+                
+            }
+        } else {
+            //selectedNumsCantidad = 0;
+            selectedSensRecuperar = false;
+            selectedSensReservar = false;
+            selectedSensLiberar = false;
+        }
     }
     
     public String reservar() {
         int operacion;
         facade fachada = new facade();
-        operacion = fachada.reservarLiberarRecurso(selectedSen,1);
+        
+        ArrayList vo = new ArrayList();
+        int size = selectedSens.length;
+        for (int i = 0; i < size; i++) {
+            vo.add(selectedSens[i]);
+        }
+        
+        operacion = fachada.reservarLiberarRecurso(vo,1);
         
         if(operacion == 1){
             buscar();
+            selectedSensAccion = false;
             return "Reserva de señalización exitosa";
         }else{
             return "Error en el bean de Señalización";   
@@ -205,10 +287,18 @@ public class SenalizacionBean implements Serializable {
     public String liberar() {
         int operacion;
         facade fachada = new facade();
-        operacion = fachada.reservarLiberarRecurso(selectedSen,0);
+        
+        ArrayList vo = new ArrayList();
+        int size = selectedSens.length;
+        for (int i = 0; i < size; i++) {
+            vo.add(selectedSens[i]);
+        }
+        
+        operacion = fachada.reservarLiberarRecurso(vo,0);
         
         if(operacion == 1){
             buscar();
+            selectedSensAccion = false;
             return "Liberación de señalización exitosa";
         }else{
          return "Error en el bean de Señalización";   
@@ -359,6 +449,46 @@ public class SenalizacionBean implements Serializable {
 
     public void setSelectedSens(SeSenalizacionVO[] selectedSens) {
         this.selectedSens = selectedSens;
+    }
+
+    public Boolean getSelectedSensAccion() {
+        return selectedSensAccion;
+    }
+
+    public void setSelectedSensAccion(Boolean selectedSensAccion) {
+        this.selectedSensAccion = selectedSensAccion;
+    }
+
+    public Boolean getSelectedSensLiberar() {
+        return selectedSensLiberar;
+    }
+
+    public void setSelectedSensLiberar(Boolean selectedSensLiberar) {
+        this.selectedSensLiberar = selectedSensLiberar;
+    }
+
+    public Boolean getSelectedSensRecuperar() {
+        return selectedSensRecuperar;
+    }
+
+    public void setSelectedSensRecuperar(Boolean selectedSensRecuperar) {
+        this.selectedSensRecuperar = selectedSensRecuperar;
+    }
+
+    public Boolean getSelectedSensReservar() {
+        return selectedSensReservar;
+    }
+
+    public void setSelectedSensReservar(Boolean selectedSensReservar) {
+        this.selectedSensReservar = selectedSensReservar;
+    }
+
+    public SeSenalizacionVO[] getSelectedSensDetalle() {
+        return selectedSensDetalle;
+    }
+
+    public void setSelectedSensDetalle(SeSenalizacionVO[] selectedSensDetalle) {
+        this.selectedSensDetalle = selectedSensDetalle;
     }
     
     public DepartamentosVO getDepartamentoVO() {

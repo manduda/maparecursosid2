@@ -38,9 +38,10 @@
                                     <h:outputText value="Recursos del trámite" style="font-weight: bold"/>
                                 </h:panelGrid>
                                 <h:outputText value="&#8226; Señalización" rendered="#{!empty tramite.tsTramiteSenalizacionCollection}"/>
+                                <h:outputText value="&#8226; Numeración" rendered="#{!empty tramite.tnTramiteNumeracionCollection}"/>
                                 <h:outputText value="&#8226; Código LD" rendered="#{!empty tramite.tlTramiteLdCollection}"/>
                                 <h:outputText value="&#8226; Código Corto" rendered="#{!empty tramite.tcTramiteCcCollection}"/>
-                                <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tlTramiteLdCollection) and (empty tramite.tcTramiteCcCollection)}"
+                                <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tnTramiteNumeracionCollection) and (empty tramite.tlTramiteLdCollection) and (empty tramite.tcTramiteCcCollection)}"
                                          cellpadding="0" cellspacing="0" style="text-align: center;">
                                     <h:outputText value="No hay recursos en el trámite" style="font-weight: bold; color: #D20005"/>
                                 </h:panelGrid>

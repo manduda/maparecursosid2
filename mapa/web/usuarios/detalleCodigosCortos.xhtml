@@ -11,20 +11,26 @@
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Código Corto:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.ccnCodigoCorto}"/>
-                            </h:panelGrid>
-                            <br/>
-                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Modalidad:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.mdnCodigo.mdtNombre}"/>
-                            </h:panelGrid>
+                            <p:dataTable value="#{CodigosCortosBean.selectedCCs}" var="detalleCC" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos cortos</f:facet>
+                                <p:column headerText="CÓDIGO CORTO" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleCC.ccnCodigoCorto}"/>
+                                </p:column>
+                                <p:column headerText="MODALIDAD" >
+                                    <h:outputText value="#{detalleCC.mdnCodigo.mdtNombre}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalleCC.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalleCC.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
@@ -83,10 +89,18 @@
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                                <h:outputText value="Código Corto:&#160;" style="font-weight: bold;"/>
-                                <h:outputText value="#{CodigosCortosBean.selectedCodigoCorto.ccnCodigoCorto}"/>
-                            </h:panelGrid>
+                            <p:dataTable value="#{CodigosCortosBean.selectedCCs}" var="detalleCC" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos cortos</f:facet>
+                                <p:column headerText="CÓDIGO CORTO" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleCC.ccnCodigoCorto}"/>
+                                </p:column>
+                                <p:column headerText="MODALIDAD" >
+                                    <h:outputText value="#{detalleCC.mdnCodigo.mdtNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalleCC.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
                             <br/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>

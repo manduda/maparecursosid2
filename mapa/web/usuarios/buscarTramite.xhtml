@@ -50,9 +50,8 @@
                     <h:outputText value="Registros encontrados:"/>
                     <h:outputText value="#{fnc:countLista(TramiteBean.listaBuscarTramite)}"/>
                 </h:panelGrid>
-                <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true" selectionMode="single"
-                             selection="#{TramiteBean.seleccionBuscarTramite}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             style="font-size:10px" rowSelectListener="#{TramiteBean.detalleTramiteSeleccionado}" rows="10"
+                <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true"
+                             rowIndexVar="rowIndex" widgetVar="datatableVar" style="font-size:10px" rows="10"
                              rowsPerPageTemplate="10,20,30,40,50" emptyMessage="No se encontraron trámites" dblClickSelect="true"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <f:facet name="header">Trámites</f:facet>
@@ -78,8 +77,14 @@
                     </p:column>
                     <p:column headerText="Recursos" style="width:70px">
                         <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
-                        <h:outputText value="Códigos LD" rendered="#{not empty tr.tlTramiteLdCollection}"/>
-                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}"/>
+                        <h:outputText value="Numeracion&lt;br/&gt;" rendered="#{not empty tr.tnTramiteNumeracionCollection}" escape="false"/>
+                        <h:outputText value="Códigos LD&lt;br/&gt;" rendered="#{not empty tr.tlTramiteLdCollection}" escape="false"/>
+                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
+                    </p:column>
+                    <p:column style="width:32px">  
+                        <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                            <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tr}"/>  
+                        </p:commandButton>  
                     </p:column>
                     <p:rowExpansion>
                         <h:dataTable value="#{tr.gtGetionTramiteCollection}"

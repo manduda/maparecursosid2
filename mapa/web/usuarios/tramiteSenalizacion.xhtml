@@ -12,6 +12,7 @@
                 <h:form>
                 <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0" 
                              rendered="#{!empty TramiteBean.selectedTramite.tsTramiteSenalizacionCollection}">
+                    <br/>
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
                         <h:outputText value="TRÁMITE SEÑALIZACIÓN" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
@@ -46,7 +47,7 @@
                         <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteSenalizacion.tstObservaciones}"/>
                         </p:column>
-                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL">
+                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL" styleClass="tabla-reserva">
                             <h:outputText value="#{tramiteSenalizacion.tstReservaTemporal=='S'? fnc:concat(tramiteSenalizacion.tsnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo==5}"/>
                             <h:outputText value="N/A" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo!=5}"/>
                         </p:column>
