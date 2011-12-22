@@ -63,4 +63,15 @@ public class TcTramiteCcDAO {
         return query.getResultList();
     }
     
+    public static List<TcTramiteCc> findTramiteCodigoCorto(int ccnCodigo, int etnCodigo, EntityManager em){
+        String searchQuery = "SELECT tc FROM TcTramiteCc tc where tc.ccnCodigo.ccnCodigo = ?1 AND tc.trnCodigo.etnCodigo.etnCodigo = ?2 "
+                + "ORDER BY tc.trnCodigo.trfFechaResolucion DESC";
+        
+        Query query = em.createQuery(searchQuery);
+        query.setParameter(1, ccnCodigo);
+        query.setParameter(2, etnCodigo);
+        
+        return query.getResultList();
+    }
+    
 }

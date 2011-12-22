@@ -2,32 +2,33 @@
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="MapaModeloPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>entities.AcAccion</class>
+    <class>entities.CcCodigosCortos</class>
     <class>entities.ClCodigosLd</class>
+    <class>entities.CoConfiguracion</class>
+    <class>entities.Departamentos</class>
     <class>entities.EmOperador</class>
     <class>entities.EsEstado</class>
-    <class>entities.NdNdc</class>
-    <class>entities.NtTipondc</class>
-    <class>entities.NuNumeracion</class>
-    <class>entities.AcAccion</class>
-    <class>entities.UsUsuarios</class>
-    <class>entities.TuTipoUsuario</class>
-    <class>entities.Users</class>
-    <class>entities.SeSenalizacion</class>
-    <class>entities.TeTipoSenalizacion</class>
-    <class>entities.RtTipoRegion</class>
-    <class>entities.ReRegion</class>
-    <class>entities.Departamentos</class>
-    <class>entities.Municipios</class>
-    <class>entities.TrTramites</class>
     <class>entities.EtEstadoTramite</class>
     <class>entities.GtGestionTramite</class>
-    <class>entities.TlTramiteLd</class>
-    <class>entities.TsTramiteSenalizacion</class>
-    <class>entities.CoConfiguracion</class>
     <class>entities.MdModalidadCc</class>
-    <class>entities.CcCodigosCortos</class>
-    <class>entities.TcTramiteCc</class>
+    <class>entities.Municipios</class>
+    <class>entities.NdNdc</class>
+    <class>entities.NtTipoNdc</class>
+    <class>entities.NuNumeracion</class>
+    <class>entities.ReRegion</class>
     <class>entities.RsReservasTemporales</class>
+    <class>entities.RtTipoRegion</class>
+    <class>entities.SeSenalizacion</class>
+    <class>entities.TcTramiteCc</class>
+    <class>entities.TeTipoSenalizacion</class>
+    <class>entities.TlTramiteLd</class>
+    <class>entities.TrTramites</class>
+    <class>entities.TsTramiteSenalizacion</class>
+    <class>entities.TuTipoUsuario</class>
+    <class>entities.UsUsuarios</class>
+    <class>entities.Users</class>
+    <class>entities.TnTramiteNumeracion</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>

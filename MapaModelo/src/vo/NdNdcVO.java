@@ -16,7 +16,7 @@ public class NdNdcVO implements Serializable {
     
     private int ndnCodigo;
     private String ndtNombre;
-    private NtTipondcVO ntnCodigo;
+    private NtTipoNdcVO ntnCodigo;
 
     public NdNdcVO() {
     }
@@ -37,11 +37,11 @@ public class NdNdcVO implements Serializable {
         this.ndtNombre = ndtNombre;
     }
 
-    public NtTipondcVO getNtnCodigo() {
+    public NtTipoNdcVO getNtnCodigo() {
         return ntnCodigo;
     }
 
-    public void setNtnCodigo(NtTipondcVO ntnCodigo) {
+    public void setNtnCodigo(NtTipoNdcVO ntnCodigo) {
         this.ntnCodigo = ntnCodigo;
     }
 

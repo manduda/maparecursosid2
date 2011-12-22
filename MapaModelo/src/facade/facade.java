@@ -4,6 +4,7 @@
  */
 package facade;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -29,12 +30,14 @@ import vo.EtEstadoTramiteVO;
 import vo.MdModalidadCcVO;
 import vo.MunicipiosVO;
 import vo.NdNdcVO;
+import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
 import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
@@ -97,7 +100,7 @@ public class facade {
         return vo;
     }
 
-    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento){
+    public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -107,7 +110,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = numeracion.cargarNumeracion(first, max, operador, ndc, inicio, fin, estado, municipio, departamento, em);
+            vo = numeracion.cargarNumeracion(first, max, operador, ndc, tipoNdc, inicio, fin, estado, municipio, departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -122,7 +125,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarNumeracion(String operador, int ndc, int inicio, int fin, int estado, String municipio, String departamento){
+    public int countCargarNumeracion(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -132,7 +135,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            cantidad = numeracion.countCargarNumeracion(operador, ndc, inicio, fin, estado, municipio, departamento, em);
+            cantidad = numeracion.countCargarNumeracion(operador, ndc, tipoNdc, inicio, fin, estado, municipio, departamento, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -172,6 +175,31 @@ public class facade {
         return vo;
     }
     
+    public List<NtTipoNdcVO> listaTipoNdc(String nombreNdc) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<NtTipoNdcVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = ndc.getListTipoNdc(nombreNdc, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+        
     public List<EmOperadorVO> listaOperadorNumeracion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1013,6 +1041,8 @@ public class facade {
             String nombre = recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) recurso, em);
+            } else if (nombre.equals("TnTramiteNumeracionVO")){
+                resultado = tramites.agregarRecurso((TnTramiteNumeracionVO) recurso, em);
             } else if (nombre.equals("TlTramiteLdVO")){
                 resultado = tramites.agregarRecurso((TlTramiteLdVO) recurso, em);
             } else if (nombre.equals("TcTramiteCcVO")){
@@ -1022,6 +1052,65 @@ public class facade {
             }
 
             tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    public Integer agregarRecursos(ArrayList recursos){
+        /*
+         * 0: Error al agregar el recurso
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+        */
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            
+            for(Object r : recursos){
+                String nombre = r.getClass().getSimpleName();
+                if (nombre.equals("TsTramiteSenalizacionVO")){
+                    resultado = tramites.agregarRecurso((TsTramiteSenalizacionVO) r, em);
+                } else if (nombre.equals("TnTramiteNumeracionVO")){
+                    resultado = tramites.agregarRecurso((TnTramiteNumeracionVO) r, em);
+                } else if (nombre.equals("TlTramiteLdVO")){
+                    resultado = tramites.agregarRecurso((TlTramiteLdVO) r, em);
+                } else if (nombre.equals("TcTramiteCcVO")){
+                    resultado = tramites.agregarRecurso((TcTramiteCcVO) r, em);
+                } else {
+                    resultado = 0;
+                }
+                if(resultado != 1){
+                    break;
+                }
+                
+            }
+            
+            if(resultado == 1){
+                tx.commit();
+            } else {
+                tx.rollback();
+            }
+
         } catch (Exception e) {
             if(em != null && tx != null){
                 resultado = 0;
@@ -1049,6 +1138,8 @@ public class facade {
             String nombre = recurso.getClass().getSimpleName();
             if (nombre.equals("TsTramiteSenalizacionVO")){
                 resultado = tramites.eliminarRecurso((TsTramiteSenalizacionVO) recurso, em);
+            } else if(nombre.equals("TnTramiteNumeracionVO")) {
+                resultado = tramites.eliminarRecurso((TnTramiteNumeracionVO) recurso, em);
             } else if(nombre.equals("TlTramiteLdVO")) {
                 resultado = tramites.eliminarRecurso((TlTramiteLdVO) recurso, em);
             } else if(nombre.equals("TcTramiteCcVO")) {
@@ -1166,6 +1257,56 @@ public class facade {
         return vo;
     }
     
+    public List<TcTramiteCcVO> buscarTramitePorCodigoCorto(int ccnCodigo, int acnCodigo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TcTramiteCcVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarTramiteCodigoCorto(ccnCodigo, acnCodigo, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<TlTramiteLdVO> buscarTramitePorCodigoLd(int clnCodigo, int acnCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TlTramiteLdVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarTramiteCodigoLd(clnCodigo, acnCodigo, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
     public List<EmOperadorVO> cargarOperadores() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1253,16 +1394,12 @@ public class facade {
         return resultado;
     }
     
-    public int reservarLiberarRecurso(Object recurso, int accion){
-        /*la acción 0 es liberación y la accion 1 es reserva
+    public int reservarLiberarRecurso(ArrayList recursos, int accion){
+        /* la acción 0 es liberación y la accion 1 es reserva
          * 
-         * 0: Error al agregar el recurso
-         * 1: Recurso agregado correctamente
+         * 0: Error al reservar/liberar el recurso
+         * 1: Recurso reservado/liberado correctamente
          * 2: Falta un dato del VO
-         * 3: El operador del recurso es diferente al del trámite
-         * 4: El recurso ya tiene un tramite
-         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
-         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
         */
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1273,16 +1410,31 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            String nombre = recurso.getClass().getSimpleName();
-            if (nombre.equals("SeSenalizacionVO")){
-                resultado = senalizacion.reservarLiberarSenalizacion((SeSenalizacionVO)recurso, em, accion);
-            } else if (nombre.equals("ClCodigosLdVO")){
-                resultado = codigosld.reservarLiberarCodigoLd((ClCodigosLdVO) recurso, em, accion);
-            } 
-            else {
-                resultado = 0;
+            
+            for(Object r : recursos){
+                String nombre = r.getClass().getSimpleName();
+                if (nombre.equals("SeSenalizacionVO")){
+                    resultado = senalizacion.reservarLiberarSenalizacion((SeSenalizacionVO) r, em, accion);
+                } else if (nombre.equals("NuNumeracionVO")){
+                    resultado = numeracion.reservarLiberarNumeracion((NuNumeracionVO) r, em, accion);
+                } else if (nombre.equals("ClCodigosLdVO")){
+                    resultado = codigosld.reservarLiberarCodigoLd((ClCodigosLdVO) r, em, accion);
+                } else if (nombre.equals("CcCodigosCortosVO")){
+                    resultado = codigosCortos.reservarLiberarCodigoCorto((CcCodigosCortosVO) r, em, accion);
+                } else {
+                    resultado = 0;
+                }
+                if(resultado != 1){
+                    break;
+                }
+                
             }
-            tx.commit();
+            
+            if(resultado == 1){
+                tx.commit();
+            } else {
+                tx.rollback();
+            }
         } catch (Exception e) {
             if(em != null && tx != null){
                 resultado = 0;

@@ -20,6 +20,8 @@ public class TlTramiteLdVO implements Serializable {
     private int tlnRadicado;
     private EmOperadorVO emrCodigo;
     private String tltObservaciones;
+    private char tltReservaTemporal;
+    private int tlnMesesLiberacion;
 
     public TlTramiteLdVO(){
     }
@@ -78,6 +80,22 @@ public class TlTramiteLdVO implements Serializable {
 
     public void setEmrCodigo(EmOperadorVO emrCodigo) {
         this.emrCodigo = emrCodigo;
+    }
+
+    public int getTlnMesesLiberacion() {
+        return tlnMesesLiberacion;
+    }
+
+    public void setTlnMesesLiberacion(int tlnMesesLiberacion) {
+        this.tlnMesesLiberacion = tlnMesesLiberacion;
+    }
+
+    public char getTltReservaTemporal() {
+        return tltReservaTemporal;
+    }
+
+    public void setTltReservaTemporal(char tltReservaTemporal) {
+        this.tltReservaTemporal = tltReservaTemporal;
     }
     
 }

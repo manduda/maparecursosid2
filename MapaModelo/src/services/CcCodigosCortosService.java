@@ -8,6 +8,7 @@ import daos.CcCodigosCortosDAO;
 import daos.MdModalidadCcDAO;
 import entities.CcCodigosCortos;
 import entities.EmOperador;
+import entities.EsEstado;
 import entities.MdModalidadCc;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,5 +57,28 @@ public class CcCodigosCortosService {
             modalidadVO.add(m.toVO());
         }
         return modalidadVO;
+    }
+
+    public Integer reservarLiberarCodigoCorto(CcCodigosCortosVO vo, EntityManager em, int accion) {
+        CcCodigosCortos entity = new CcCodigosCortos();
+        
+        entity = CcCodigosCortosDAO.findbyId(vo.getCcnCodigo(), em);
+        
+        if (accion==1 && entity.getEsnCodigo().getEsnCodigo() == 1){
+            EsEstado estado = new EsEstado();
+            estado.setEsnCodigo(4);
+            entity.setEsnCodigo(estado);
+            CcCodigosCortosDAO.merge(entity, em); 
+            return 1;
+        }else if (accion==0 && entity.getEsnCodigo().getEsnCodigo() == 4){
+            EsEstado estado = new EsEstado();
+            estado.setEsnCodigo(1);
+            entity.setEsnCodigo(estado);
+            CcCodigosCortosDAO.merge(entity, em); 
+            return 1;
+        }
+        else{
+            return 2;
+        }
     }
 }

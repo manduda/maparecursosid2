@@ -21,6 +21,7 @@ import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.MunicipiosVO;
+import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
 import vo.SeSenalizacionVO;
 import vo.TrTramitesVO;
@@ -66,19 +67,19 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        /*List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
         int cantidad = 0;
-        vo = fachada.cargarNumeracion(0, 20, "-1",-1,-1,-1,-1,"2AF9","0B");
-        cantidad = fachada.countCargarNumeracion("-1",-1,-1,-1,-1,"2AF9","0B");
+        vo = fachada.cargarNumeracion(0, 20, "-1","1",3,-1,-1,-1,"2AF9","0B");
+        cantidad = fachada.countCargarNumeracion("-1","1",3,-1,-1,-1,"2AF9","0B");
         System.out.println("Cantidad:"+cantidad);
         for(int i=0; i < vo.size();i++) {
-            BigDecimal codigo = vo.get(i).getNunCodigo();
+            int codigo = vo.get(i).getNunCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
             String region = vo.get(i).getCodigoMunicipio().getNombreMunicipio();
             int inicio = vo.get(i).getNunInicio();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
-	}*/
+	}
         //-------------------------------------
        
         //----  SEÑALIZACION
@@ -100,7 +101,7 @@ public class main {
         //-------------------------------------
         
         //----  CODIGOS CORTOS
-        List<CcCodigosCortosVO> vo = new ArrayList<CcCodigosCortosVO>();
+        /*List<CcCodigosCortosVO> vo = new ArrayList<CcCodigosCortosVO>();
         int cantidad = 0;
         vo = fachada.cargarCodigosCortos(0,-1,"-1",-1,-1,-1);
         cantidad = fachada.countCargarCodigosCortos("-1",-1,-1,-1);
@@ -112,7 +113,7 @@ public class main {
             String modalidad = vo.get(i).getMdnCodigo().getMdtNombre();
             int codigoCorto = vo.get(i).getCcnCodigoCorto();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+modalidad+"-"+codigoCorto);
-	}
+	}*/
         //-------------------------------------
         
         //----  MUNICIPIOS
@@ -133,6 +134,17 @@ public class main {
             String codigo = vo.get(i).getCodigoDepartamento();
             String departamento = vo.get(i).getNombreDepartamento();
             System.out.println(codigo+"-"+departamento);
+	}*/
+        //-------------------------------------
+        
+        //----  LISTA TIPO NDC
+        /*List<NtTipoNdcVO> vo = new ArrayList<NtTipoNdcVO>();
+        vo = fachada.listaTipoNdc("1");
+        for(int i=0; i < vo.size();i++) {
+            Integer codigo = vo.get(i).getNtnCodigo();
+            String nombre = vo.get(i).getNttNombre();
+            Integer codigoPadre = vo.get(i).getNtnCodigoPadre().getNtnCodigo();
+            System.out.println(codigo+"-"+nombre+"-"+codigoPadre);
 	}*/
         //-------------------------------------
         

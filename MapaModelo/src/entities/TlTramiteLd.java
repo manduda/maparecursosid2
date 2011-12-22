@@ -52,6 +52,12 @@ public class TlTramiteLd implements Serializable {
     
     @Column(name = "TLT_OBSERVACIONES")
     private String tltObservaciones;
+    
+    @Column(name = "TLT_RESERVA_TEMPORAL")
+    private char tltReservaTemporal;
+    
+    @Column(name = "TLN_MESES_LIBERACION")
+    private int tlnMesesLiberacion;
 
     public TlTramiteLd(){
     }
@@ -59,12 +65,14 @@ public class TlTramiteLd implements Serializable {
     public TlTramiteLdVO toVO(){
         TlTramiteLdVO vo = new TlTramiteLdVO();
         vo.setTlnCodigo(this.getTlnCodigo());
-        //vo.setTrnCodigo(this.getTrnCodigo().toVO());
+        vo.setTrnCodigo(this.getTrnCodigo().toVOsinDetalleTramites());
         vo.setClnCodigo(this.getClnCodigo().toVO());
         vo.setAcnCodigo(this.getAcnCodigo().toVO());
         vo.setTlnRadicado(this.getTlnRadicado());
         vo.setEmrCodigo(this.getEmrCodigo().toVO());
         vo.setTltObservaciones(this.getTltObservaciones());
+        vo.setTlnMesesLiberacion(this.getTlnMesesLiberacion());
+        vo.setTltReservaTemporal(this.getTltReservaTemporal());
         return vo;
     }
 
@@ -122,6 +130,22 @@ public class TlTramiteLd implements Serializable {
 
     public void setEmrCodigo(EmOperador emrCodigo) {
         this.emrCodigo = emrCodigo;
+    }
+
+    public int getTlnMesesLiberacion() {
+        return tlnMesesLiberacion;
+    }
+
+    public void setTlnMesesLiberacion(int tlnMesesLiberacion) {
+        this.tlnMesesLiberacion = tlnMesesLiberacion;
+    }
+
+    public char getTltReservaTemporal() {
+        return tltReservaTemporal;
+    }
+
+    public void setTltReservaTemporal(char tltReservaTemporal) {
+        this.tltReservaTemporal = tltReservaTemporal;
     }
     
 }

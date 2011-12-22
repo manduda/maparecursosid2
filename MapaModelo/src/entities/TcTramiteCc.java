@@ -53,6 +53,12 @@ public class TcTramiteCc implements Serializable {
     @Column(name = "TCT_OBSERVACIONES")
     private String tctObservaciones;
     
+    @Column(name = "TCT_RESERVA_TEMPORAL")
+    private char tctReservaTemporal;
+    
+    @Column(name = "TCN_MESES_LIBERACION")
+    private int tcnMesesLiberacion;
+    
     public TcTramiteCc() {
     }
     
@@ -65,7 +71,8 @@ public class TcTramiteCc implements Serializable {
         vo.setTcnRadicado(this.getTcnRadicado());
         vo.setEmrCodigo(this.getEmrCodigo().toVO());
         vo.setTctObservaciones(this.getTctObservaciones());
-        
+        vo.setTcnMesesLiberacion(this.getTcnMesesLiberacion());
+        vo.setTctReservaTemporal(this.getTctReservaTemporal());
         return vo;
     }
 
@@ -123,6 +130,22 @@ public class TcTramiteCc implements Serializable {
 
     public void setTrnCodigo(TrTramites trnCodigo) {
         this.trnCodigo = trnCodigo;
+    }
+
+    public int getTcnMesesLiberacion() {
+        return tcnMesesLiberacion;
+    }
+
+    public void setTcnMesesLiberacion(int tcnMesesLiberacion) {
+        this.tcnMesesLiberacion = tcnMesesLiberacion;
+    }
+
+    public char getTctReservaTemporal() {
+        return tctReservaTemporal;
+    }
+
+    public void setTctReservaTemporal(char tctReservaTemporal) {
+        this.tctReservaTemporal = tctReservaTemporal;
     }
     
 }

@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import vo.NdNdcVO;
 
 /**
  *
@@ -39,12 +40,21 @@ public class NdNdc implements Serializable {
     
     @JoinColumn(name = "NTN_CODIGO", referencedColumnName = "NTN_CODIGO")
     @ManyToOne(optional = false)
-    private NtTipondc ntnCodigo;
+    private NtTipoNdc ntnCodigo;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "ndnCodigo")
     private Collection<NuNumeracion> nuNumeracionCollection;
 
     public NdNdc() {
+    }
+    
+    public NdNdcVO toVO(){
+        NdNdcVO vo = new NdNdcVO();
+        vo.setNdnCodigo(this.getNdnCodigo());
+        vo.setNdtNombre(this.getNdtNombre());
+        vo.setNtnCodigo(this.getNtnCodigo().toVO());
+        
+        return vo;
     }
 
     public int getNdnCodigo() {
@@ -63,11 +73,11 @@ public class NdNdc implements Serializable {
         this.ndtNombre = ndtNombre;
     }
 
-    public NtTipondc getNtnCodigo() {
+    public NtTipoNdc getNtnCodigo() {
         return ntnCodigo;
     }
 
-    public void setNtnCodigo(NtTipondc ntnCodigo) {
+    public void setNtnCodigo(NtTipoNdc ntnCodigo) {
         this.ntnCodigo = ntnCodigo;
     }
 

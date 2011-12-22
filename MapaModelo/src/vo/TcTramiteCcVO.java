@@ -20,6 +20,8 @@ public class TcTramiteCcVO implements Serializable {
     private int tcnRadicado;
     private EmOperadorVO emrCodigo;
     private String tctObservaciones;
+    private char tctReservaTemporal;
+    private int tcnMesesLiberacion;
     
     public TcTramiteCcVO() {
     }
@@ -78,6 +80,22 @@ public class TcTramiteCcVO implements Serializable {
 
     public void setTrnCodigo(TrTramitesVO trnCodigo) {
         this.trnCodigo = trnCodigo;
+    }
+
+    public int getTcnMesesLiberacion() {
+        return tcnMesesLiberacion;
+    }
+
+    public void setTcnMesesLiberacion(int tcnMesesLiberacion) {
+        this.tcnMesesLiberacion = tcnMesesLiberacion;
+    }
+
+    public char getTctReservaTemporal() {
+        return tctReservaTemporal;
+    }
+
+    public void setTctReservaTemporal(char tctReservaTemporal) {
+        this.tctReservaTemporal = tctReservaTemporal;
     }
     
 }

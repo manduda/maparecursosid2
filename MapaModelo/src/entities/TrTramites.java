@@ -25,6 +25,7 @@ import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
@@ -81,6 +82,9 @@ public class TrTramites implements Serializable {
     private Collection<TsTramiteSenalizacion> tsTramiteSenalizacionCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TnTramiteNumeracion> tnTramiteNumeracionCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<TlTramiteLd> tlTramiteldCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
@@ -110,6 +114,11 @@ public class TrTramites implements Serializable {
         for (TsTramiteSenalizacion ts : this.tsTramiteSenalizacionCollection) {
             tramiteSenalizacionVO.add(ts.toVO());
         }
+        // Tramite numeracion
+        Collection<TnTramiteNumeracionVO> tramiteNumeracionVO = new ArrayList<TnTramiteNumeracionVO>();        
+        for (TnTramiteNumeracion tn : this.tnTramiteNumeracionCollection) {
+            tramiteNumeracionVO.add(tn.toVO());
+        }
         // Tramite LD
         Collection<TlTramiteLdVO> tramiteLdVO = new ArrayList<TlTramiteLdVO>();        
         for (TlTramiteLd tld : this.tlTramiteldCollection) {
@@ -131,6 +140,7 @@ public class TrTramites implements Serializable {
         vo.setTrtObservaciones(this.getTrtObservaciones());
         vo.setGtGetionTramiteCollection(getionTramitesVO);
         vo.setTsTramiteSenalizacionCollection(tramiteSenalizacionVO);
+        vo.setTnTramiteNumeracionCollection(tramiteNumeracionVO);
         vo.setTlTramiteLdCollection(tramiteLdVO);
         vo.setTcTramiteCcCollection(tramiteCcVO);
         
@@ -263,4 +273,12 @@ public class TrTramites implements Serializable {
         this.tcTramiteCcCollection = tcTramiteCcCollection;
     }
 
+    public Collection<TnTramiteNumeracion> getTnTramiteNumeracionCollection() {
+        return tnTramiteNumeracionCollection;
+    }
+
+    public void setTnTramiteNumeracionCollection(Collection<TnTramiteNumeracion> tnTramiteNumeracionCollection) {
+        this.tnTramiteNumeracionCollection = tnTramiteNumeracionCollection;
+    }
+    
  }

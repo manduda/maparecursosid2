@@ -31,8 +31,8 @@ public class NdNdcDAO {
         return em.find(NdNdc.class, ndnCodigo);
     }
     
-    public static List<NdNdc> getList(EntityManager em){
-        Query query = em.createQuery("SELECT e FROM NdNdc e ORDER BY e.ndtNombre ASC");
+    public static List<String> getList(EntityManager em){
+        Query query = em.createQuery("SELECT DISTINCT e.ndtNombre FROM NdNdc e ORDER BY e.ndtNombre ASC");
         return query.getResultList();
     }
     
