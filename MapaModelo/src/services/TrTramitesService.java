@@ -497,7 +497,7 @@ public class TrTramitesService {
                             resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
                             resTemp.setRsnCodigoRecurso(t.getClnCodigo().getClnCodigo());
                             resTemp.setRstEstado('S');
-                            resTemp.setRstTipoRecurso("CodigoLD");
+                            resTemp.setRstTipoRecurso("CodigosLd");
                             resTemp.setRsfFechaLiberacion(fecha);
                             
                             //Guardado del entity
@@ -556,7 +556,7 @@ public class TrTramitesService {
                             resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
                             resTemp.setRsnCodigoRecurso(t.getCcnCodigo().getCcnCodigo());
                             resTemp.setRstEstado('S');
-                            resTemp.setRstTipoRecurso("CodigoCorto");
+                            resTemp.setRstTipoRecurso("CodigosCortos");
                             resTemp.setRsfFechaLiberacion(fecha);
                             
                             //Guardado del entity

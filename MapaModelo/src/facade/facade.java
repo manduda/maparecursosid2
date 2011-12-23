@@ -1463,6 +1463,12 @@ public class facade {
         
         if(tipoRecurso.equals("Senalizacion")){
             recurso=senalizacion.getById(codigoRecurso, em);
+        } else if(tipoRecurso.equals("Numeracion")){
+            recurso=numeracion.getById(codigoRecurso, em);
+        } else if(tipoRecurso.equals("CodigosLd")){
+            recurso=codigosld.getById(codigoRecurso, em);
+        } else if(tipoRecurso.equals("CodigosCortos")){
+            recurso=codigosCortos.getById(codigoRecurso, em);
         }
 
 

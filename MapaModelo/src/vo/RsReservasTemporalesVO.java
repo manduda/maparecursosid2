@@ -4,13 +4,15 @@
  */
 package vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author juan.loaiza
  */
-public class RsReservasTemporalesVO {
+public class RsReservasTemporalesVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     private int rsnCodigo;
     private int rsnCodigoRecurso;
