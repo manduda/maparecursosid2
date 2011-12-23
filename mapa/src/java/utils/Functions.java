@@ -42,4 +42,8 @@ public class Functions {
         }
         
     }
+    
+    public static Integer longitud(String texto) {
+        return texto.length();
+    }
 }

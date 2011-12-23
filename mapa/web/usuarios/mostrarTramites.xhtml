@@ -38,8 +38,8 @@
                     <p:column headerText="Recursos" style="width:70px">
                         <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
                         <h:outputText value="Numeración&lt;br/&gt;" rendered="#{not empty tr.tnTramiteNumeracionCollection}" escape="false"/>
-                        <h:outputText value="Códigos LD" rendered="#{not empty tr.tlTramiteLdCollection}"/>
-                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}"/>
+                        <h:outputText value="Códigos LD&lt;br/&gt;" rendered="#{not empty tr.tlTramiteLdCollection}" escape="false"/>
+                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
                     </p:column>
                     <p:column style="width:32px">  
                         <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  

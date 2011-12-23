@@ -30,6 +30,12 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMapaNumeracion;
     private String rutaCodigosLd;
     private String rutaCodigosCortos;
+    private String rutaMatriz1xy;
+    private String rutaCodigosIIN;
+    private String rutaCodigosMNC;
+    private String rutaMarcacionAbreviada;
+    private String rutaNRN;
+    private String rutaNormatividad;
     private String mensajeBienvenida;
     private String tiempoSesion;
     
@@ -59,6 +65,12 @@ public class ConfiguracionBean implements Serializable {
             rutaMapaNumeracion = rutaContexto + "numeracion.xhtml";
             rutaCodigosLd = rutaContexto + "codigosld.xhtml";
             rutaCodigosCortos = rutaContexto + "codigosCortos.xhtml";
+            rutaMatriz1xy = rutaContexto + "matriz1xy.xhtml";
+            rutaCodigosIIN = rutaContexto + "codigosIIN.xhtml";
+            rutaCodigosMNC = rutaContexto + "codigosMNC.xhtml";
+            rutaMarcacionAbreviada = rutaContexto + "marcacionAbreviada.xhtml";
+            rutaNRN = rutaContexto + "nrn.xhtml";
+            rutaNormatividad = rutaContexto + "normatividad.xhtml";
 
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo parametros.properties no encontrado", e);
@@ -188,4 +200,52 @@ public class ConfiguracionBean implements Serializable {
         this.rutaCodigosCortos = rutaCodigosCortos;
     }
 
+    public String getRutaNormatividad() {
+        return rutaNormatividad;
+    }
+
+    public void setRutaNormatividad(String rutaNormatividad) {
+        this.rutaNormatividad = rutaNormatividad;
+    }
+
+    public String getRutaCodigosIIN() {
+        return rutaCodigosIIN;
+    }
+
+    public void setRutaCodigosIIN(String rutaCodigosIIN) {
+        this.rutaCodigosIIN = rutaCodigosIIN;
+    }
+
+    public String getRutaCodigosMNC() {
+        return rutaCodigosMNC;
+    }
+
+    public void setRutaCodigosMNC(String rutaCodigosMNC) {
+        this.rutaCodigosMNC = rutaCodigosMNC;
+    }
+
+    public String getRutaMarcacionAbreviada() {
+        return rutaMarcacionAbreviada;
+    }
+
+    public void setRutaMarcacionAbreviada(String rutaMarcacionAbreviada) {
+        this.rutaMarcacionAbreviada = rutaMarcacionAbreviada;
+    }
+
+    public String getRutaMatriz1xy() {
+        return rutaMatriz1xy;
+    }
+
+    public void setRutaMatriz1xy(String rutaMatriz1xy) {
+        this.rutaMatriz1xy = rutaMatriz1xy;
+    }
+
+    public String getRutaNRN() {
+        return rutaNRN;
+    }
+
+    public void setRutaNRN(String rutaNRN) {
+        this.rutaNRN = rutaNRN;
+    }
+    
 }

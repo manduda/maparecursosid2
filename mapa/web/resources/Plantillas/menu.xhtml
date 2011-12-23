@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.prime.com.tr/ui">
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition>
         <h:form>
             <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
@@ -11,21 +12,22 @@
                 <p:menuitem value="Numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Señalización" url="#{ConfiguracionBean.rutaMapaSenalizacion}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem value="Matriz 1XY" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem value="Códigos IIN" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem value="Códigos MNC" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaCodigosCortos}" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem value="Marcación abreviada" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem value="NRN" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Matriz 1XY" url="#{ConfiguracionBean.rutaMatriz1xy}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos IIN" url="#{ConfiguracionBean.rutaCodigosIIN}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos MNC" url="#{ConfiguracionBean.rutaCodigosMNC}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Marcación abreviada" url="#{ConfiguracionBean.rutaMarcacionAbreviada}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="NRN" url="#{ConfiguracionBean.rutaNRN}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:submenu label="Normatividad" icon="ui-icon ui-icon-document">
-                    <p:menuitem value="Numeración"/>
-                    <p:menuitem value="Señalización"/>
-                    <p:menuitem value="Códigos LD"/>
-                    <p:menuitem value="Matriz 1XY"/>
-                    <p:menuitem value="Códigos IIN"/>
-                    <p:menuitem value="Códigos MNC"/>
-                    <p:menuitem value="Códigos Cortos SMS/MMS"/>
-                    <p:menuitem value="Marcación abreviada"/>
+                    <p:menuitem value="Numeración" url="#{ConfiguracionBean.rutaNormatividad}?recurso=numeracion"/>
+                    <p:menuitem value="Señalización" url="#{ConfiguracionBean.rutaNormatividad}?recurso=senalizacion"/>
+                    <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaNormatividad}?recurso=codigosld"/>
+                    <p:menuitem value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaNormatividad}?recurso=codigosCortos"/>
+                    <p:menuitem value="Matriz 1XY" url="#{ConfiguracionBean.rutaNormatividad}?recurso=matriz1xy"/>
+                    <p:menuitem value="Códigos IIN" url="#{ConfiguracionBean.rutaNormatividad}?recurso=codigosIIN"/>
+                    <p:menuitem value="Códigos MNC" url="#{ConfiguracionBean.rutaNormatividad}?recurso=codigosMNC"/>
+                    <p:menuitem value="Marcación abreviada" url="#{ConfiguracionBean.rutaNormatividad}?recurso=marcacionAbreviada"/>
+                    <p:menuitem value="NRN" url="#{ConfiguracionBean.rutaNormatividad}?recurso=nrn"/>
                 </p:submenu>
             </p:menubar>
         </h:form>

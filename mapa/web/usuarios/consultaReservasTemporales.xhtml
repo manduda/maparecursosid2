@@ -32,7 +32,7 @@
                     </p:column>
                     <p:column headerText="Fecha liberación" sortBy="#{tr[0].rsfFechaLiberacion}" style="text-align: center;">
                         <h:outputText value="#{tr[0].rsfFechaLiberacion}">
-                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                            <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
                         </h:outputText>
                     </p:column>
                 </p:dataTable>

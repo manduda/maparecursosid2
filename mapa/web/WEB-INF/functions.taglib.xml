@@ -19,5 +19,10 @@
         <function-class>utils.Functions</function-class>
         <function-signature>java.lang.Integer countLista(java.util.ArrayList)</function-signature>
     </function>
+    <function>
+        <function-name>longitud</function-name>
+        <function-class>utils.Functions</function-class>
+        <function-signature>java.lang.Integer longitud(java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>
 

@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import utils.Correo;
+import utils.Functions;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
@@ -351,22 +352,15 @@ public class TramiteBean implements Serializable {
         return configuracion.getRutaContexto()+"usuarios/tramite";
     }
     
-    public String detalleTramiteSeleccionado(SelectEvent event) {
+    /*public String detalleTramiteSeleccionado(SelectEvent event) {
         mensajeTramite = "";
         selectedTramite = seleccionBuscarTramite;
         seleccionBuscarTramite = null;
         
         FacesContext.getCurrentInstance().getExternalContext().getFlash().put("selectedTramite", event.getObject());  
         return configuracion.getRutaContexto()+"usuarios/tramite?faces-redirect=true";
-    }
+    }*/
     
-    public String detalle() {
-        mensajeTramite = "";
-        selectedTramite = seleccionBuscarTramite;
-        seleccionBuscarTramite = null;
-        
-        return configuracion.getRutaContexto()+"usuarios/tramite.xhtml";
-    }
     // ----------------------------------------------------------
     
     public String archivarTramite() {
@@ -1233,22 +1227,35 @@ public class TramiteBean implements Serializable {
             Object recurso =null;
             
             reservas.add(new ArrayList());
-              ((ArrayList)reservas.get(i)).add(r);
               
             recurso = fachada.consultaRecurso(r.getRstTipoRecurso(), r.getRsnCodigoRecurso());
             
             if(r.getRstTipoRecurso().equals("Senalizacion")){
-                SeSenalizacionVO cosa = (SeSenalizacionVO)recurso;
-               
-                String cosa2 = cosa.getRenCodigo().getRetNombre() +"-"+ cosa.getSenZona() +"-"+ cosa.getSenPs();
-                ((ArrayList)reservas.get(i)).add(cosa2);
-            }
-            
-            if(r.getRstTipoRecurso().equals("CodigosLd")){
-                ClCodigosLdVO cosa = (ClCodigosLdVO)recurso;
-               
-                int cosa2 = cosa.getClnCodigoLd();
-                ((ArrayList)reservas.get(i)).add(cosa2);
+                SeSenalizacionVO rec = (SeSenalizacionVO)recurso;
+                r.setRstTipoRecurso("Senalización");
+                
+                Functions funciones = new Functions();
+                String recDetalle = rec.getRenCodigo().getRetNombre() +" - "+ Functions.rellenarCerosIzquierda(String.valueOf(rec.getSenZona()), 2)  +" - "+ Functions.rellenarCerosIzquierda(String.valueOf(rec.getSenPs()), 2);
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("Numeracion")){
+                NuNumeracionVO rec = (NuNumeracionVO)recurso;
+                r.setRstTipoRecurso("Numeración");
+                String recDetalle = "(" + rec.getNdnCodigo().getNdtNombre() + ") " + rec.getNunInicio() + " - " + rec.getNunFin();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("CodigosLd")){
+                ClCodigosLdVO rec = (ClCodigosLdVO)recurso;
+                r.setRstTipoRecurso("Codigo LD");
+                int recDetalle = rec.getClnCodigoLd();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("CodigosCortos")){
+                CcCodigosCortosVO rec = (CcCodigosCortosVO)recurso;
+                r.setRstTipoRecurso("Codigo Corto");
+                int recDetalle = rec.getCcnCodigoCorto();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
             }
             i++;
         }
