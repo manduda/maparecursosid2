@@ -1,23 +1,109 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/codigosCortos.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                CÓDIGOS CORTOS
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
-            
-        </h:panelGroup>
-    </ui:composition>
-</html>
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            CÓDIGOS CORTOS SMS/MMS
+        </p>
+
+        <p style="text-align: justify">
+        <b>Estructura y clasificación de códigos cortos para la prestación de contenidos y aplicaciones.</b><br/>
+        Los códigos cortos para la provisión de contenidos y aplicaciones se efectuará conforme a la siguiente estructura y clasificación:
+        </p>
+        <table style="border:1px solid; border-spacing: 0px;">
+            <tr style="text-align: center; font-weight:bold">
+                <td style="border:1px solid;">Formato de los números</td>
+                <td style="border:1px solid;">Valores de las cifras</td>
+                <td style="border:1px solid;">Longitud de los números</td>
+                <td style="border:1px solid;">Modalidad de servicio</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">25ABC</td>
+                <td style="border:1px solid;" rowspan="3">A, B, C, D = de 0 a 9</td>
+                <td style="border:1px solid;" rowspan="2">5 cifras</td>
+                <td style="border:1px solid;" rowspan="3">Modalidad de compra por única vez</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">27ABC</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">29ABCD</td>
+                <td style="border:1px solid;">Expansión a 6 cifras</td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid;">35ABC</td>
+                <td style="border:1px solid;" rowspan="3">A, B, C, D = de 0 a 9</td>
+                <td style="border:1px solid;" rowspan="2">5 cifras</td>
+                <td style="border:1px solid;" rowspan="3">Modalidad de compra por suscripción</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">37ABC</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">39ABCD</td>
+                <td style="border:1px solid;">Expansión a 6 cifras</td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid;">55ABC</td>
+                <td style="border:1px solid;" rowspan="3">A, B, C, D = de 0 a 9</td>
+                <td style="border:1px solid;" rowspan="2">5 cifras</td>
+                <td style="border:1px solid;" rowspan="3">Servicios masivos</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">57ABC</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">59ABCD</td>
+                <td style="border:1px solid;">Expansión a 6 cifras</td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid;">85ABC</td>
+                <td style="border:1px solid;" rowspan="3">A, B, C, D = de 0 a 9</td>
+                <td style="border:1px solid;" rowspan="2">5 cifras</td>
+                <td style="border:1px solid;" rowspan="3">Gratuito para el usuario</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">87ABC</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">89ABCD</td>
+                <td style="border:1px solid;">Expansión a 6 cifras</td>
+            </tr>
+
+            <tr>
+                <td style="border:1px solid;">95ABC</td>
+                <td style="border:1px solid;" rowspan="3">A, B, C, D = de 0 a 9</td>
+                <td style="border:1px solid;" rowspan="2">5 cifras</td>
+                <td style="border:1px solid;" rowspan="3">Servicios exclusivos para adultos</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">97ABC</td>
+            </tr>
+            <tr>
+                <td style="border:1px solid;">99ABCD</td>
+                <td style="border:1px solid;">Expansión a 6 cifras</td>
+            </tr>
+        </table>
+
+        <p>Los códigos cortos que no hayan sido definidos de acuerdo con la estructura establecida en el presente artículo, 
+           podrán ser utilizados por los Proveedores de Redes y Servicios de Telecomunicaciones única y exclusivamente para 
+           propósitos internos relativos a la operación de su red.
+        </p>
+        <p>Para información adicional consultar la <a href="http://www.crcom.gov.co/?idcategoria=62659" target="blank">Resolución CRC 3501 de 2011</a></p>
+
+    </ui:define>
+</ui:composition>

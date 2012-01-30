@@ -87,7 +87,7 @@ public class TramiteBean implements Serializable {
     private Collection<SelectItem> listaAsesores;
     private List<UsUsuariosVO> usuariosAsesores = new ArrayList<UsUsuariosVO>();
     
-    private Collection<SelectItem> listaUsuariosNoAplicacion;
+    //private Collection<SelectItem> listaUsuariosNoAplicacion;
     
     private Collection<SelectItem> listaUsuariosSIUST;
     private int usuariosBuscar = 0;
@@ -183,7 +183,7 @@ public class TramiteBean implements Serializable {
             }
             listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
             
-            listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
+            //listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
             
             listaUsuariosSIUST = convertir.createSelectItemsList(fachada.listaUsuariosSIUST(), null, "getUserCode", "getLogin", true, "");
             
@@ -256,7 +256,7 @@ public class TramiteBean implements Serializable {
                     }
                     listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
 
-                    listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
+                    //listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
 
                 } catch (Exception e) {
                     Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Tramites", e);
@@ -1636,13 +1636,13 @@ public class TramiteBean implements Serializable {
         this.radicadoBuscarTramite = radicadoBuscarTramite;
     }
 
-    public Collection<SelectItem> getListaUsuariosNoAplicacion() {
+    /*public Collection<SelectItem> getListaUsuariosNoAplicacion() {
         return listaUsuariosNoAplicacion;
     }
 
     public void setListaUsuariosNoAplicacion(Collection<SelectItem> listaUsuariosNoAplicacion) {
         this.listaUsuariosNoAplicacion = listaUsuariosNoAplicacion;
-    }
+    }*/
 
     public Collection<SelectItem> getListaUsuariosSIUST() {
         return listaUsuariosSIUST;

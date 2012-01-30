@@ -1,24 +1,93 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/codigosld.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
+
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
                 CÓDIGOS DE LARGA DISTANCIA
             </p>
             
             <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
+            <b>CÓDIGOS DE OPERADOR PARA OPERADORES ESTABLECIDOS DE TPBCLD.</b><br/>
+             Los códigos de operador para los operadores establecidos del servicio de TPBCLD a través del sistema de multiacceso son los siguientes: 
             </p>
-
+            <table style="border:1px solid; border-spacing: 0px;" >
+              <tr style="text-align: center; font-weight:bold">
+                <td style="border:1px solid;">OPERADOR</td>
+                <td style="border:1px solid;">CÓDIGO DE OPERADOR DE TPBCLD ESTABLECIDO</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid;">Orbitel S.A E.S.P.</td>
+                <td style="border:1px solid;text-align: center;">5</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid;">Empresa de Telecomunicaciones de Bogotá S.A. E.S.P.</td>
+                <td style="border:1px solid;text-align: center;">7</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid;">Colombia Telecomunicaciones S.A.  E.S.P.</td>
+                <td style="border:1px solid;text-align: center;">9</td>
+              </tr>
+            </table>
+            <br/>
+            <p style="text-align: justify">
+            <b>CÓDIGOS DE OPERADOR PARA NUEVOS OPERADORES DE TPBCLD.</b><br/>
+             Los códigos de operador de TPBCLD para aquellos operadores a los que se les otorgue título habilitante a partir del 1º de agosto de 2007, 
+             constarán de 3 dígitos y tendrán la estructura 4XY, donde X y Y pueden tomar los valores de 0 a 9. 
+            </p>
+            <br/>
+            <p style="text-align: justify">
+            <b>MARCACIÓN PARA LARGA DISTANCIA NACIONAL A TRAVÉS DEL SISTEMA DE MULTIACCESO</b>
+            </p>
+            <table style="border:1px solid; border-spacing: 0px;" >
+                <tr>
+                    <td style="border:1px solid;text-align: center; font-weight:bold">Prefijo UIT</td>
+                    <td style="border:1px solid;text-align: center; font-weight:bold">Código de operador de TBPCLD</td>
+                    <td style="border:1px solid;text-align: center; font-weight:bold">Número Nacional Significativo</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid;text-align: center;">0</td>
+                    <td style="border:1px solid;text-align: center;">1 dígito para operadores establecidos y 4XY nuevos operadores</td>
+                    <td style="border:1px solid;text-align: center;">N(S)N</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid;text-align: center;" colspan="2">Prefijo LDN para multiacceso</td>
+                    <td style="border:1px solid;text-align: center;">NDC + SN</td>
+                </tr>
+            </table>
+            <br/>
+            <p style="text-align: justify">
+            <b>MARCACIÓN PARA LARGA DISTANCIA INTERNACIONAL A TRAVÉS DEL SISTEMA DE MULTIACCESO</b>
+            </p>
+            <table style="border:1px solid; border-spacing: 0px;" >
+                <tr>
+                    <td style="border:1px solid;text-align: center; font-weight:bold">Prefijo UIT</td>
+                    <td style="border:1px solid;text-align: center; font-weight:bold">Código de operador de TBPCLD</td>
+                    <td style="border:1px solid;text-align: center; font-weight:bold" colspan="2">Número E.164 Internacional</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid;text-align: center;">00</td>
+                    <td style="border:1px solid;text-align: center;">1 dígito para operadores establecidos y 4XY nuevos operadores</td>
+                    <td style="border:1px solid;text-align: center;">CC</td>
+                    <td style="border:1px solid;text-align: center;">N(S)N</td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid;text-align: center;" colspan="2">Prefijo LDI para multiacceso</td>
+                    <td style="border:1px solid;text-align: center;">Código de país</td>
+                    <td style="border:1px solid;text-align: center;">NDC + SN</td>
+                </tr>
+            </table>
             
-        </h:panelGroup>
-    </ui:composition>
-</html>
-
+            <p>Para información adicional consultar la <a href="hhttp://www.crcom.gov.co/?idcategoria=45609" target="blank">Resolución CRT 1720 de 2007</a></p>
+    </ui:define>
+</ui:composition>

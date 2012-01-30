@@ -36,7 +36,6 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMarcacionAbreviada;
     private String rutaNRN;
     private String rutaNormatividad;
-    private String mensajeBienvenida;
     private String tiempoSesion;
     
     private String servidorCorreo;
@@ -57,7 +56,6 @@ public class ConfiguracionBean implements Serializable {
             operadorNinguno = properties.getProperty("operadorNinguno");
             municipioNinguno = properties.getProperty("municipioNinguno");
             rutaContexto = properties.getProperty("rutaContexto");
-            mensajeBienvenida = properties.getProperty("mensajeBienvenida");
             tiempoSesion = properties.getProperty("tiempoSesion");
             
             rutaInicio = rutaContexto + "index.xhtml";
@@ -134,14 +132,6 @@ public class ConfiguracionBean implements Serializable {
 
     public void setTiempoSesion(String tiempoSesion) {
         this.tiempoSesion = tiempoSesion;
-    }
-
-    public String getMensajeBienvenida() {
-        return mensajeBienvenida;
-    }
-
-    public void setMensajeBienvenida(String mensajeBienvenida) {
-        this.mensajeBienvenida = mensajeBienvenida;
     }
 
     public String getCorreoAplicacion() {

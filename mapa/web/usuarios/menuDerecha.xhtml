@@ -22,25 +22,25 @@
                 </h:panelGrid>
                 <h:form style="font-size:10px">
                         <h:panelGrid columns="2">
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarUsuarios}"/>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
+                                <h:outputText value="Administrar usuarios"/>
+                            </h:outputLink>
+
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.transferirRecursos}"/>
+                            <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}" rendered="#{UserBean.transferirRecursos}"/>
+                            
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.crearTramite}"/>
+                            <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}" rendered="#{UserBean.crearTramite}"/>
+                            
                             <h:outputText value="&#8226;" style="color: #045491;"/>
                             <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/mostrarTramites.xhtml">
                                 <h:outputText value="Ver trámites actuales"/>
                             </h:outputLink>
                             
-                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.crearTramite}"/>
-                            <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}" rendered="#{UserBean.crearTramite}"/>
-                            
-                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.transferirRecursos}"/>
-                            <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}" rendered="#{UserBean.transferirRecursos}"/>
-                            
-                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarUsuarios}"/>
-                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
-                                <h:outputText value="Administrar usuarios"/>
-                            </h:outputLink>
-                            
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarTramite}"/>
                             <h:commandLink value="Buscar trámite" action="#{TramiteBean.opcionesBuscarTramite}" rendered="#{UserBean.consultarTramite}"/>
-
+                            
                             <h:outputText value="&#8226;" style="color: #045491;"/>
                             <h:commandLink value="Ver reservas temporales" action="#{TramiteBean.consultaReservasTemporales}"/>
                             

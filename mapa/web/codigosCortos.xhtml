@@ -29,7 +29,7 @@
                         <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
                             <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
                         </h:selectOneMenu>
-                        <h:outputText value="Cóodigo Corto"/>
+                        <h:outputText value="Código Corto"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                             <h:inputText id="codigoCorto" value="#{CodigosCortosBean.codigoCorto}" maxlength="6" size="6" converter="javax.faces.Integer"
                                          converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>

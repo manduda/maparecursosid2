@@ -12,10 +12,16 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:panelGrid>
+        <h:panelGrid style="text-align: center;">
+            <h:graphicImage url="/resources/images/logo.png"/>
             <br/>
-            <h:outputText value="#{ConfiguracionBean.mensajeBienvenida}" escape="false"/>
-            <br/>
+            <p style="text-align: justify">
+                En el Sistema de Información y Gestión de Recursos de Identificación podrá realizar consultas sobre el estado de los recursos de 
+                identificación gestionados por la CRC. Para ello tendrá que realizar búsquedas seleccionando, en primer lugar, el tipo de recurso. 
+                En segundo lugar, se deberá elegir un criterio específico de búsqueda. Finalmente, se deberá indicar el valor que debe ser objeto 
+                de búsqueda.
+            </p>
+
         </h:panelGrid>
     </ui:define>
     
