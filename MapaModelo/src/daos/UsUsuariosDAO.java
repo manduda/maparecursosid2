@@ -7,6 +7,7 @@ package daos;
 import entities.TuTipoUsuario;
 import entities.UsUsuarios;
 import entities.Users;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -38,15 +39,14 @@ public class UsUsuariosDAO {
         return n;
     }
     
-    public static UsUsuarios cargar(String usuario, String contrasena, EntityManager em) {
+    public static UsUsuarios cargar(String usuario, EntityManager em) {
         
         Query query = em.createQuery("SELECT u FROM UsUsuarios u "
-                + "WHERE u.codigoSIUST.login = :usuario AND u.codigoSIUST.password = :contrasena "
+                + "WHERE u.codigoSIUST.login = :usuario "
                 + "ORDER BY u.usnCodigo DESC");
         
         query.setParameter("usuario", usuario);
-        query.setParameter("contrasena", contrasena);
-        query.setMaxResults(1);
+        //query.setMaxResults(1);
         
         UsUsuarios u = null;
         u = (UsUsuarios)query.getSingleResult();
@@ -69,9 +69,27 @@ public class UsUsuariosDAO {
     
     public static List<Users> getUsuariosSIUST(EntityManager em) {
         
-        Query query = em.createQuery("SELECT us FROM Users us ORDER BY us.login");
+        //Query query = em.createQuery("SELECT us FROM Users us ORDER BY us.login");
         
-        return query.getResultList();
+        Query query = em.createNativeQuery("SELECT A.USER_CODE, A.NAME, A.LAST_NAME, A.EMAIL, A.LOGIN FROM SA.USERS A, SA.TMPCOVERAGE B "
+                + "WHERE A.LOGIN = B.OBJECT_NAME "
+                + "AND   B.OBJECT_TYPE = 'USUARIOS'"
+                + "AND   B.DIMENSION_NAME = 'EMPRESA' "
+                + "AND   B.DIMENSION_CATEGORY_NAME = 'CRT'");
+        
+        List<Object[]> results = query.getResultList();
+        List<Users> usuarios = new ArrayList<Users>();
+        for(int i=0; i < results.size(); i++){
+            Users user = new Users();
+            user.setUserCode( Integer.parseInt(results.get(i)[0].toString()) );
+            user.setName((String)results.get(i)[1]);
+            user.setLastName((String)results.get(i)[2]);
+            user.setEmail((String)results.get(i)[3]);
+            user.setLogin((String)results.get(i)[4]);
+            usuarios.add(user);
+        }
+        
+        return usuarios;
     }
     
     public static UsUsuarios buscarUsuario(int userCode, EntityManager em) {

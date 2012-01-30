@@ -4,13 +4,21 @@
  */
 package services;
 
+import OID.GetAuthenticated;
+import OID.oidApoyo;
+import com.novell.ldap.LDAPConnection;
 import daos.UsUsuariosDAO;
 import entities.TuTipoUsuario;
 import entities.UsUsuarios;
 import entities.Users;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import vo.TuTipoUsuarioVO;
 import vo.UsUsuariosVO;
@@ -46,8 +54,43 @@ public class UsUsuariosService {
         return vo;
     }
     
-    public UsUsuariosVO cargarUsuario(String usuario, String contrasena, EntityManager em) {
-        UsUsuarios u = UsUsuariosDAO.cargar(usuario, contrasena, em);
+    public boolean autenticar(String usuario, String contrasena) {
+        Properties propOID = new Properties();
+        try {
+            /*InputStream input = UsUsuariosService.class.getResourceAsStream("../properties/ConnectionOID.properties");
+            properties.load(input);
+            input.close();*/
+            
+            InputStream input = UsUsuariosService.class.getResourceAsStream("/properties/ConnectionOID.properties");
+            propOID.load(input);
+            input.close();
+            
+            LDAPConnection conn = new LDAPConnection();
+            int ldapPort = Integer.parseInt((String)propOID.getProperty("puertoOID"));
+            String ldapHost = (String)propOID.getProperty("HostName");
+            String params = (String)propOID.getProperty("DnRequeridos");
+            String nomParams = (String)propOID.getProperty("parametros");
+            String loginDN = oidApoyo.getDN(usuario, params, nomParams);
+
+            String respuesta = GetAuthenticated.simpleBind1(conn, ldapHost, ldapPort, loginDN, contrasena);
+            
+            if(respuesta.equals("1")){
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (IOException e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo ConnectionOID.properties no encontrado", e);
+            return false;
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros", e);
+            return false;
+        }
+    }
+    
+    public UsUsuariosVO cargarUsuario(String usuario, EntityManager em) {
+        UsUsuarios u = UsUsuariosDAO.cargar(usuario, em);
         
         if(u!=null){
             UsUsuariosVO uVO = new UsUsuariosVO();

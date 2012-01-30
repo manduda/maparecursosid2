@@ -430,12 +430,16 @@ public class facade {
         EntityManager em = null;
         EntityTransaction tx = null;
         UsUsuariosVO vo = null;
+        boolean login = false;
         try {
             emf = Persistence.createEntityManagerFactory("MapaModeloPU");
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            vo = usuario.cargarUsuario(user, contrasena, em);
+            login = usuario.autenticar(user, contrasena);
+            if (login){
+                vo = usuario.cargarUsuario(user.toUpperCase(), em);
+            }
             tx.commit();
             
 /*            if(vo!=null){

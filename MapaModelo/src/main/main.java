@@ -4,6 +4,7 @@
  */
 package main;
 
+import OID.StringMD;
 import daos.MunicipiosDAO;
 import entities.Municipios;
 import facade.facade;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import services.UsUsuariosService;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
 import vo.ClCodigosLdVO;
@@ -67,7 +69,7 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        /*List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
         int cantidad = 0;
         vo = fachada.cargarNumeracion(0, 20, "-1","1",3,-1,-1,-1,"2AF9","0B");
         cantidad = fachada.countCargarNumeracion("-1","1",3,-1,-1,-1,"2AF9","0B");
@@ -79,7 +81,7 @@ public class main {
             String region = vo.get(i).getCodigoMunicipio().getNombreMunicipio();
             int inicio = vo.get(i).getNunInicio();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+region+"-"+inicio);
-	}
+	}*/
         //-------------------------------------
        
         //----  SEÑALIZACION
@@ -161,6 +163,30 @@ public class main {
             System.out.println("Usuario o contraseña incorrectos");
         }*/
         //-------------------------------------
+        
+        //----  USUARIO OID
+        /*UsUsuariosService usuario =  new UsUsuariosService();
+        boolean resultado = usuario.autenticar("MDURAN", "MIGUEL01");
+        
+        if (resultado){
+            System.out.println("Usuario logueado");
+        } else {
+            System.out.println("Usuario o contraseña incorrectos");
+        }*/
+        //-------------------------------------
+        
+        String mensaje = "MIGUEL01";
+        System.out.println("Mensaje = " + mensaje);
+        System.out.println("MD2 = " + StringMD.getStringMessageDigest(mensaje, StringMD.MD2));
+        System.out.println("MD5 = " + StringMD.getStringMessageDigest(mensaje, StringMD.MD5));
+        System.out.println("SHA = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA));
+        System.out.println("SHA-256 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA256));
+        System.out.println("SHA-384 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA384));
+        System.out.println("SHA-512 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA512));
+        
+        
+        
+        
         /*Class itemClass = null;
         itemClass = usuario.getClass();
         System.out.println("Clase: " + itemClass.getName());*/
