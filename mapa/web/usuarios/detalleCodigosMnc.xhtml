@@ -7,7 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleCodigosLd.xhtml')}">
+        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleCodigosMnc.xhtml')}">
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
@@ -16,16 +16,16 @@
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable id="datosAccionLd" value="#{CodigosLdBean.selectedLds}" var="detalleLd" paginator="false" style="font-size:10px">
-                                <f:facet name="header">Detalle códigos de larga distancia</f:facet>
-                                <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
-                                    <h:outputText value="#{detalleLd.clnCodigoLd}"/>
+                            <p:dataTable value="#{CodigosMncBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos MNC</f:facet>
+                                <p:column headerText="CÓDIGO MNC" styleClass="tabla-recurso">
+                                    <h:outputText value="#{fnc:rellenarCerosIzquierda(detalle.cdnMnc,3)}"/>
                                 </p:column>
                                 <p:column headerText="ESTADO" >
-                                    <h:outputText value="#{detalleLd.esnCodigo.estNombre}"/>
+                                    <h:outputText value="#{detalle.esnCodigo.estNombre}"/>
                                 </p:column>
                                 <p:column headerText="EMPRESA" >
-                                    <h:outputText value="#{detalleLd.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
                                 </p:column>
                             </p:dataTable>
                             <br/>
@@ -66,12 +66,12 @@
                             </h:panelGroup>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteMncVO.tmtObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
                         </h:panelGrid>
@@ -86,16 +86,13 @@
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable id="datosAccionLd" value="#{CodigosLdBean.selectedLds}" var="detalleLd" paginator="false" style="font-size:10px">
-                                <f:facet name="header">Detalle códigos de larga distancia</f:facet>
-                                <p:column headerText="CÓDIGO LD" styleClass="tabla-recurso">
-                                    <h:outputText value="#{detalleLd.clnCodigoLd}"/>
-                                </p:column>
-                                <p:column headerText="ESTADO" >
-                                    <h:outputText value="#{detalleLd.esnCodigo.estNombre}"/>
+                            <p:dataTable value="#{CodigosMncBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos MNC</f:facet>
+                                <p:column headerText="CÓDIGO MNC" styleClass="tabla-recurso">
+                                    <h:outputText value="#{fnc:rellenarCerosIzquierda(detalle.cdnMnc,3)}"/>
                                 </p:column>
                                 <p:column headerText="EMPRESA" >
-                                    <h:outputText value="#{detalleLd.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
                                 </p:column>
                             </p:dataTable>
                             <br/>
@@ -110,12 +107,12 @@
                             </h:selectOneMenu>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteCodigosLdVO.tltObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteMncVO.tmtObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
                         </h:panelGrid>
@@ -129,7 +126,7 @@
                 <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
                     <h:form>
                         <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgCodigosLd"/>
+                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgCodigosMnc"/>
                     </h:form>
                 </h:panelGrid>
             </p:dialog>
@@ -146,5 +143,3 @@
         </h:panelGroup>
     </ui:composition>
 </html>
-
-

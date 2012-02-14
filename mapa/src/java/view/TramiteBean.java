@@ -29,14 +29,18 @@ import utils.Correo;
 import utils.Functions;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
+import vo.CdCodigosMncVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
+import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
 import vo.NuNumeracionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
+import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -130,6 +134,8 @@ public class TramiteBean implements Serializable {
     private TnTramiteNumeracionVO tramiteNumeracionVO = new TnTramiteNumeracionVO();
     private TlTramiteLdVO tramiteCodigosLdVO = new TlTramiteLdVO();
     private TcTramiteCcVO tramiteCodigosCortosVO = new TcTramiteCcVO();
+    private TaTramiteMaVO tramiteMarcacionAbreviadaVO = new TaTramiteMaVO();
+    private TmTramiteMncVO tramiteMncVO = new TmTramiteMncVO();
     private Boolean reservaTemporal = false;
     private int mesesReserva = 0;
 
@@ -866,7 +872,8 @@ public class TramiteBean implements Serializable {
                 EmOperadorVO operador = new EmOperadorVO();
                 String observaciones = tramiteCodigosLdVO.getTltObservaciones();//this.observacionesAgregarRecurso;
                 Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
-
+                char resTemp = 'N';
+                int mesesResTemp = 0;
                 switch(codigoAccion){
                     case 2: //Preasignar
                         for (TrTramitesVO detalleVO : tramites) {
@@ -877,6 +884,10 @@ public class TramiteBean implements Serializable {
                         }
                         break;
                     case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
                         operador.setEmrCodigo(configuracion.getOperadorNinguno());
                         break;
                 }
@@ -886,6 +897,8 @@ public class TramiteBean implements Serializable {
                 tlVO.setTlnRadicado(radicado);
                 tlVO.setEmrCodigo(operador);
                 tlVO.setTltObservaciones(observaciones);
+                tlVO.setTltReservaTemporal(resTemp);
+                tlVO.setTlnMesesLiberacion(mesesResTemp);
                 
                 vo.add(tlVO);
             }
@@ -913,7 +926,8 @@ public class TramiteBean implements Serializable {
                 EmOperadorVO operador = new EmOperadorVO();
                 String observaciones = tramiteCodigosCortosVO.getTctObservaciones();//this.observacionesAgregarRecurso;
                 Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
-
+                char resTemp = 'N';
+                int mesesResTemp = 0;
                 switch(codigoAccion){
                     case 2: //Preasignar
                         for (TrTramitesVO detalleVO : tramites) {
@@ -924,6 +938,10 @@ public class TramiteBean implements Serializable {
                         }
                         break;
                     case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
                         operador.setEmrCodigo(configuracion.getOperadorNinguno());
                         break;
                 }
@@ -933,12 +951,116 @@ public class TramiteBean implements Serializable {
                 tcVO.setTcnRadicado(radicado);
                 tcVO.setEmrCodigo(operador);
                 tcVO.setTctObservaciones(observaciones);
+                tcVO.setTctReservaTemporal(resTemp);
+                tcVO.setTcnMesesLiberacion(mesesResTemp);
                 
                 vo.add(tcVO);
             
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteCodigosCortosVO = new TcTramiteCcVO();
+        } else if (tipoRecurso.equals("marcacionAbreviada")) {
+            ArrayList vo = new ArrayList();
+            //TcTramiteCcVO vo = new TcTramiteCcVO();
+            MarcacionAbreviadaBean ma = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);//session.getAttribute("SenalizacionBean");
+            
+            List<MaMarcacionAbreviadaVO> marcacionAbrevidada = new ArrayList<MaMarcacionAbreviadaVO>();
+            
+            int size = ma.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                marcacionAbrevidada.add(ma.getSelecteds()[i]);
+            }
+            
+            //CcCodigosCortosVO recurso = new CcCodigosCortosVO();
+            //recurso.setCcnCodigo(recursoBean.getSelectedCodigoCorto().getCcnCodigo());
+            
+            for(MaMarcacionAbreviadaVO c : marcacionAbrevidada){
+                TaTramiteMaVO taVO = new TaTramiteMaVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteMarcacionAbreviadaVO.getTatObservaciones();//this.observacionesAgregarRecurso;
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                taVO.setTrnCodigo(tramite);
+                taVO.setManCodigo(c);
+                taVO.setAcnCodigo(accion);
+                taVO.setTanRadicado(radicado);
+                taVO.setEmrCodigo(operador);
+                taVO.setTatObservaciones(observaciones);
+                taVO.setTatReservaTemporal(resTemp);
+                taVO.setTanMesesLiberacion(mesesResTemp);
+                
+                vo.add(taVO);
+            
+            }
+            resultado = fachada.agregarRecursos(vo);
+            tramiteMarcacionAbreviadaVO = new TaTramiteMaVO();
+        } else if (tipoRecurso.equals("codigosMnc")) {
+            ArrayList vo = new ArrayList();
+            CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);//session.getAttribute("SenalizacionBean");
+            
+            List<CdCodigosMncVO> codigosMnc = new ArrayList<CdCodigosMncVO>();
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                codigosMnc.add(bean.getSelecteds()[i]);
+            }
+            
+            for(CdCodigosMncVO c : codigosMnc){
+                TmTramiteMncVO tmVO = new TmTramiteMncVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteMncVO.getTmtObservaciones();
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                tmVO.setTrnCodigo(tramite);
+                tmVO.setCdnCodigo(c);
+                tmVO.setAcnCodigo(accion);
+                tmVO.setTmnRadicado(radicado);
+                tmVO.setEmrCodigo(operador);
+                tmVO.setTmtObservaciones(observaciones);
+                tmVO.setTmtReservaTemporal(resTemp);
+                tmVO.setTmnMesesLiberacion(mesesResTemp);
+                
+                vo.add(tmVO);
+            
+            }
+            resultado = fachada.agregarRecursos(vo);
+            tramiteMncVO = new TmTramiteMncVO();
         }
         
         switch(resultado){
@@ -976,7 +1098,99 @@ public class TramiteBean implements Serializable {
 
         return null;
     }
-     
+    
+    public String liberarReservarRecurso() {
+        if ((codigoAccion <= 0)||(tipoRecurso.equals(""))){
+            mensajeRecurso = "<br><b>Error al liberar/reservar el recurso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
+        
+        mensajeRecurso = "";
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        
+        facade fachada = new facade();
+        
+        Integer resultado = 0;
+        
+        ArrayList vo = new ArrayList();
+        if (tipoRecurso.equals("senalizacion")) {
+            SenalizacionBean bean = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);
+            
+            int size = bean.getSelectedSens().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelectedSens()[i]);
+            }
+            bean.setSelectedSensAccion(false);
+        } else if (tipoRecurso.equals("numeracion")) {
+            NumeracionBean bean = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
+            
+            int size = bean.getSelectedNums().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelectedNums()[i]);
+            }
+            bean.setSelectedNumsAccion(false);
+        } else if (tipoRecurso.equals("codigosld")) {
+            CodigosLdBean bean = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);
+            
+            int size = bean.getSelectedLds().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelectedLds()[i]);
+            }
+            bean.setSelectedLdsAccion(false);
+        } else if (tipoRecurso.equals("codigosCortos")) {
+            CodigosCortosBean bean = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);
+            
+            int size = bean.getSelectedCCs().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelectedCCs()[i]);
+            }
+            bean.setSelectedCCsAccion(false);
+        } else if (tipoRecurso.equals("marcacionAbreviada")) {
+            MarcacionAbreviadaBean bean = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelecteds()[i]);
+            }
+            bean.setSelectedsAccion(false);
+        } else if (tipoRecurso.equals("codigosMnc")) {
+            CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelecteds()[i]);
+            }
+            bean.setSelectedsAccion(false);
+        }
+        
+        String accion = "";
+        if (codigoAccion == 1) {
+            accion = "Liberación";
+            resultado = fachada.reservarLiberarRecurso(vo,0);
+        } else if (codigoAccion == 4) {
+            accion = "Reserva";
+            resultado = fachada.reservarLiberarRecurso(vo,1);
+        }
+        
+        switch(resultado){
+            case 0:
+                mensajeRecurso = "<br><b>Error de "+ accion + " del recurso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                mensajeRecurso = "<br><b>" + accion + " exitosa de recursos</b><br><br>";
+                break;
+            case 2:
+                mensajeRecurso = "<br><b>Falta diligenciar un dato.</b><br><br>";
+                break;
+            case 3:
+                mensajeRecurso = "<br><b>El recurso no se puede liberar porque está reservado temporalmente</b><br><br>";
+                break;
+        }
+
+        return null;
+    }
+    
     // ---- Función para selección detalle del trámite antes de eliminarlo ---
     public String seleccionarCodigoDetalleTramite() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -1021,6 +1235,14 @@ public class TramiteBean implements Serializable {
         } else if(tipoRecurso.equals("codigosCortos")) {
             TcTramiteCcVO vo = new TcTramiteCcVO();
             vo.setTcnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("marcacionAbreviada")) {
+            TaTramiteMaVO vo = new TaTramiteMaVO();
+            vo.setTanCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("codigosMnc")) {
+            TmTramiteMncVO vo = new TmTramiteMncVO();
+            vo.setTmnCodigo(codigoDetalleTramite);
             resultado = fachada.eliminarRecurso(vo);
         }
         
@@ -1070,11 +1292,30 @@ public class TramiteBean implements Serializable {
             municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
             tramiteSenalizacionVO.setCodigoMunicipio(municipio);
         }else if(tipoRecurso.equals("numeracion")){
-            //NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);//session.getAttribute("SenalizacionBean");
-            seleccionDepartamento = "-1";//num.getSelectedSen().getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
-            cambiarDepartamento();
+            NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
+            NuNumeracionVO[] numeracion = num.getSelectedNums();
+            
+            int size = num.getSelectedNums().length;
+            String departamento = numeracion[0].getCodigoMunicipio().getCodigoMunicipio();
+            Boolean valida = true;
+            for (int i = 1; i < size; i++) {
+                if (!departamento.equals(numeracion[i].getCodigoMunicipio().getCodigoMunicipio())) {
+                    valida = false;
+                    break;
+                }
+            }
+            
             MunicipiosVO municipio = new MunicipiosVO();
-            municipio.setCodigoMunicipio("-1");
+            
+            if (valida) {
+                seleccionDepartamento = numeracion[0].getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
+                municipio.setCodigoMunicipio(numeracion[0].getCodigoMunicipio().getCodigoMunicipio());
+            } else {
+                seleccionDepartamento = "-1";
+                municipio.setCodigoMunicipio("-1");
+            }
+            
+            cambiarDepartamento();
             tramiteNumeracionVO.setCodigoMunicipio(municipio);
         }
 
@@ -1203,11 +1444,15 @@ public class TramiteBean implements Serializable {
         boolean hayNumeracion = false;
         boolean hayCodigosLd = false;
         boolean hayCodigosCortos = false;
+        boolean hayMarcacionAbreviada = false;
+        boolean hayCodigosMnc = false;
         haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
         hayNumeracion = !selectedTramite.getTnTramiteNumeracionCollection().isEmpty();
         hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
         hayCodigosCortos = !selectedTramite.getTcTramiteCcCollection().isEmpty();
-        if (haySenalizacion || hayNumeracion || hayCodigosLd || hayCodigosCortos){
+        hayMarcacionAbreviada = !selectedTramite.getTaTramiteMaCollection().isEmpty();
+        hayCodigosMnc = !selectedTramite.getTmTramiteMncCollection().isEmpty();
+        if (haySenalizacion || hayNumeracion || hayCodigosLd || hayCodigosCortos || hayMarcacionAbreviada || hayCodigosMnc){
             return true;
         }
         return false;
@@ -1254,6 +1499,18 @@ public class TramiteBean implements Serializable {
                 CcCodigosCortosVO rec = (CcCodigosCortosVO)recurso;
                 r.setRstTipoRecurso("Codigo Corto");
                 int recDetalle = rec.getCcnCodigoCorto();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("MarcacionAbreviada")){
+                MaMarcacionAbreviadaVO rec = (MaMarcacionAbreviadaVO)recurso;
+                r.setRstTipoRecurso("Marcación Abreviada");
+                int recDetalle = rec.getManCodigoMarcacion();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("CodigosMnc")){
+                CdCodigosMncVO rec = (CdCodigosMncVO)recurso;
+                r.setRstTipoRecurso("Códigos MNC");
+                int recDetalle = rec.getCdnMnc();
                 ((ArrayList)reservas.get(i)).add(r);
                 ((ArrayList)reservas.get(i)).add(recDetalle);
             }
@@ -1764,8 +2021,20 @@ public class TramiteBean implements Serializable {
         this.reservas = reservas;
     }
 
+    public TaTramiteMaVO getTramiteMarcacionAbreviadaVO() {
+        return tramiteMarcacionAbreviadaVO;
+    }
 
-    
-    
-    
+    public void setTramiteMarcacionAbreviadaVO(TaTramiteMaVO tramiteMarcacionAbreviadaVO) {
+        this.tramiteMarcacionAbreviadaVO = tramiteMarcacionAbreviadaVO;
+    }
+
+    public TmTramiteMncVO getTramiteMncVO() {
+        return tramiteMncVO;
+    }
+
+    public void setTramiteMncVO(TmTramiteMncVO tramiteMncVO) {
+        this.tramiteMncVO = tramiteMncVO;
+    }
+
 }

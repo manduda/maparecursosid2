@@ -7,43 +7,40 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteCodigosCortos.xhtml')}">
-            <h:panelGroup id="pgTramiteCodigosCortos" >
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteCodigosMnc.xhtml')}">
+            <h:panelGroup id="pgTramiteCodigosMnc" >
                 <h:form>
                 <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0" 
-                             rendered="#{!empty TramiteBean.selectedTramite.tcTramiteCcCollection}">
+                             rendered="#{!empty TramiteBean.selectedTramite.tmTramiteMncCollection}">
                     <br/>
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
-                        <h:outputText value="CÓDIGOS CORTOS" style="font-size:11px; font-weight: bold;"/>
+                        <h:outputText value="CÓDIGOS MNC" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
-                    <p:dataTable value="#{TramiteBean.selectedTramite.tcTramiteCcCollection}"
-                                 var="tramiteCodigosCortos" style="font-size:9px" >
+                    <p:dataTable value="#{TramiteBean.selectedTramite.tmTramiteMncCollection}"
+                                 var="tramiteCodigosMnc" style="font-size:9px" >
                         <p:column styleClass="tabla-expandir">  
                             <p:rowToggler />  
                         </p:column>
-                        <p:column headerText="CÓDIGO CORTO" styleClass="tabla-recurso">
-                            <h:outputText value="#{tramiteCodigosCortos.ccnCodigo.ccnCodigoCorto}"/>
-                        </p:column>
-                        <p:column headerText="MODALIDAD" style="width: 200px;">
-                            <h:outputText value="#{tramiteCodigosCortos.ccnCodigo.mdnCodigo.mdtNombre}"/>
+                        <p:column headerText="CÓDIGO MNC" styleClass="tabla-recurso">
+                            <h:outputText value="#{fnc:rellenarCerosIzquierda(tramiteCodigosMnc.cdnCodigo.cdnMnc,3)}"/>
                         </p:column>
                         <p:column headerText="ACCIÓN" styleClass="tabla-accion">
-                            <h:outputText value="#{tramiteCodigosCortos.acnCodigo.actNombre}" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteCodigosMnc.acnCodigo.actNombre}" style="font-weight: bold;"/>
                         </p:column>
                         <p:column headerText="RADICADO" styleClass="tabla-radicado">
-                            <h:outputText value="#{tramiteCodigosCortos.tcnRadicado}"/>
+                            <h:outputText value="#{tramiteCodigosMnc.tmnRadicado}"/>
                         </p:column>
                         <p:column headerText="OBSERVACIONES">
-                            <h:outputText value="#{tramiteCodigosCortos.tctObservaciones}"/>
+                            <h:outputText value="#{tramiteCodigosMnc.tmtObservaciones}"/>
                         </p:column>
                         <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL" styleClass="tabla-reserva">
-                            <h:outputText value="#{tramiteCodigosCortos.tctReservaTemporal=='S'? fnc:concat(tramiteCodigosCortos.tcnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteCodigosCortos.acnCodigo.acnCodigo==5}"/>
-                            <h:outputText value="N/A" rendered="#{tramiteCodigosCortos.acnCodigo.acnCodigo!=5}"/>
+                            <h:outputText value="#{tramiteCodigosMnc.tmtReservaTemporal=='S'? fnc:concat(tramiteCodigosMnc.tmnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteCodigosMnc.acnCodigo.acnCodigo==5}"/>
+                            <h:outputText value="N/A" rendered="#{tramiteCodigosMnc.acnCodigo.acnCodigo!=5}"/>
                         </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
-                            <p:commandLink oncomplete="eliminarCodigosCortosDialog.show()" update="eliminarCodigosCortosDialog">
-                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteCodigosCortos.tcnCodigo}"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                            <p:commandLink oncomplete="eliminarDialog.show()" update="eliminarDialog">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteCodigosMnc.tmnCodigo}"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
                             </p:commandLink>
                         </p:column>
@@ -54,9 +51,9 @@
                                         <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
                                 </f:facet>
                                     <h:outputText value="ESTADO" style="font-weight: bold;"/>
-                                    <h:outputText value="#{tramiteCodigosCortos.ccnCodigo.esnCodigo.estNombre}"/>
+                                    <h:outputText value="#{tramiteCodigosMnc.cdnCodigo.esnCodigo.estNombre}"/>
                                     <h:outputText value="OPERADOR" style="font-weight: bold;"/>
-                                    <h:outputText value="#{tramiteCodigosCortos.ccnCodigo.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="#{tramiteCodigosMnc.cdnCodigo.emrCodigo.emtNombre}"/>
                             </h:panelGrid>
                             <br/>
                         </p:rowExpansion>
@@ -68,15 +65,14 @@
             <!-- MENÚ ELIMINAR RECURSO -->
             <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{(UserBean.login)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}" 
                              showEffect="fade" hideEffect="fade" modal="true" closable="false"
-                             header="Confirmación" severity="alert" widgetVar="eliminarCodigosCortosDialog">  
+                             header="Confirmación" severity="alert" widgetVar="eliminarDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteCodigosCortos,pgMenuTramite" oncomplete="eliminarCodigosCortosDialog.hide();"/>
-                        <p:commandButton type="button" value="Cancelar" onclick="eliminarCodigosCortosDialog.hide();"/>
+                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteCodigosMnc,pgMenuTramite" oncomplete="eliminarDialog.hide();"/>
+                        <p:commandButton type="button" value="Cancelar" onclick="eliminarDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>
             </p:confirmDialog>
         </h:panelGroup>
     </ui:composition>
 </html>
-

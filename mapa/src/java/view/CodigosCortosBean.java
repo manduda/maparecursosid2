@@ -209,48 +209,6 @@ public class CodigosCortosBean implements Serializable {
         }
     }
     
-    public String reservar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedCCs.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedCCs[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,1);
-        
-        if(operacion == 1){
-            buscar();
-            selectedCCsAccion = false;
-            return "Reserva de códigos cortos exitosa";
-        }else{
-            return "Error en el bean de códigos cortos";   
-        }
-    }
-    
-    public String liberar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedCCs.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedCCs[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,0);
-        
-        if(operacion == 1){
-            buscar();
-            selectedCCsAccion = false;
-            return "Liberación de códigos cortos exitosa";
-        }else{
-         return "Error en el bean de códigos cortos";   
-        }
-    }
-    
     public LazyDataModel<CcCodigosCortosVO> getLazyModel() {
         return lazyModel;
     }

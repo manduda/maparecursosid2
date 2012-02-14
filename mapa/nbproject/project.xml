@@ -19,10 +19,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${reference.MapaModelo.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.activation.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -32,6 +28,10 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.poi-3.2-FINAL-20081019.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${reference.MapaModelo.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">

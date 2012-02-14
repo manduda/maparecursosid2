@@ -13,6 +13,182 @@
     </ui:define>
 
     <ui:define name="content">
-        <p style="text-align: justify"><b>Página en construcción.</b></p>
+        <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
+            <h:form id="formCodigosMnc">
+                <h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Operador"/>
+                        <h:selectOneMenu value="#{CodigosMncBean.operadorVO.emrCodigo}">
+                            <f:selectItems value="#{CodigosMncBean.listaOperador}" />  
+                        </h:selectOneMenu>
+                        <h:outputText value="Estado"/>
+                        <h:selectOneMenu value="#{CodigosMncBean.estadoVO.esnCodigo}">
+                            <f:selectItems value="#{CodigosMncBean.listaEstado}" />  
+                        </h:selectOneMenu>
+                        <h:outputText value="Código MNC"/>
+                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                            <h:inputText id="codigoMnc" value="#{CodigosMncBean.codigoMnc}" maxlength="6" size="6" converter="javax.faces.Integer"
+                                         converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                            <p:message for="codigoMnc" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid>
+                        <p:commandButton value="Consultar" actionListener="#{CodigosMncBean.buscar}" ajax="false" update="pgCodigosMnc,formCodigosMnc"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+        
+        <h:panelGrid id="pgCodigosMnc" width="100%">
+            <h:form>
+                <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
+                    <h:panelGroup id="opciones">
+                        <p:commandButton value="Acción" action="#{CodigosMncBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosMncBean.selectedsAccion}"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+                <p:dataTable id="datos" value="#{CodigosMncBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
+                             selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                             selection="#{CodigosMncBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
+                             rowSelectListener="#{CodigosMncBean.onRowSelect}" rowUnselectListener="#{CodigosMncBean.onRowUnselect}"
+                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                             paginatorTemplate=" #{CodigosMncBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                    <p:column style="width:25px">
+                        <p:commandButton update="display,datosRecurso" oncomplete="Dialog.show();" image="ui-icon ui-icon-search" action="#{CodigosMncBean.detalle}">  
+                            <f:setPropertyActionListener target="#{CodigosMncBean.selected}" value="#{recurso}"/>  
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="CÓDIGO MNC" style="text-align: center; width: 100px;">
+                        <h:outputText value="#{fnc:rellenarCerosIzquierda(recurso.cdnMnc,3)}"/>
+                    </p:column>
+                    <p:column headerText="ESTADO" style="width: 100px">
+                        <div style="width: 100%; text-align: center;" class="#{recurso.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
+                                                                               recurso.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
+                                                                               recurso.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
+                                                                               recurso.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
+                                                                               null}">
+                            <h:outputText value="#{recurso.esnCodigo.estNombre}"/>
+                        </div>
+                    </p:column>
+                    <p:column headerText="EMPRESA" style="min-width: 250px">
+                        <h:outputText value="#{recurso.emrCodigo.emtNombre}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </h:panelGrid>
+
+        <!-- DETALLE RECURSO -->
+        <h:panelGroup id="datosRecurso">
+            <p:dialog header="Detalle" widgetVar="Dialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center">
+                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:form>
+                        <h:panelGrid columns="2" cellpadding="4" width="100%">
+                            <h:outputText value="Código MNC" style="font-weight: bold;"/>
+                            <h:outputText value="#{fnc:rellenarCerosIzquierda(CodigosMncBean.selected.cdnMnc,3)}" />
+                            <h:outputText value="Estado:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosMncBean.selected.esnCodigo.estNombre}" />
+                            <h:outputText value="Operador:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosMncBean.selected.emrCodigo.emtNombre}" />
+                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosMncBean.selected.cdtObservaciones}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <h:panelGroup rendered="#{UserBean.login}">
+                                <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosMncBean.selected.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(CodigosMncBean.selected.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" update="datosPreasignar" oncomplete="Dialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(CodigosMncBean.selected.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="Dialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(CodigosMncBean.selected.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosMnc" oncomplete="Dialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(CodigosMncBean.selected.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosMnc" oncomplete="Dialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
+                            </h:panelGroup>
+
+                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
+                      width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
+                <h:form>
+                    <p:dataTable var="t" value="#{CodigosMncBean.tramiteMnc}" style="font-size: 10px;"
+                                 emptyMessage="No se encontró historia registrada para este recurso">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{t.trnCodigo.trnResolucion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Fecha Resolución" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{t.trnCodigo.trfFechaResolucion}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Acción" style="font-weight: bold;"/>
+                            </f:facet>
+                            <h:outputText value="#{t.acnCodigo.actNombre}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:dialog>
+        </h:panelGroup>
+        
+        <h:panelGroup id="datosAccionRecurso">
+        
+            <p:dialog header="Detalle" widgetVar="AccionDialog" resizable="false" modal="true" draggable="false"
+                      width="700" showEffect="fade" hideEffect="fade" position="center">
+                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                    <h:form>
+                        <p:dataTable id="datosAccion" value="#{CodigosMncBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                            <f:facet name="header">Detalle codigos MNC</f:facet>
+                            <p:column headerText="CÓDIGO MNC" styleClass="tabla-recurso">
+                                <h:outputText value="#{fnc:rellenarCerosIzquierda(detalle.cdnMnc,3)}"/>
+                            </p:column>
+                            <p:column headerText="ESTADO" >
+                                <h:outputText value="#{detalle.esnCodigo.estNombre}"/>
+                            </p:column>
+                            <p:column headerText="EMPRESA" >
+                                <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <h:panelGroup rendered="#{UserBean.login}">
+                                <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosMncBean.selected.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosMncBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosMncBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosMncBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosMncBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </p:dialog>
+        </h:panelGroup>
+        
+        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosMnc.xhtml"/>
+        
     </ui:define>
 </ui:composition>

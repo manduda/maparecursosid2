@@ -157,9 +157,8 @@
                             <h:outputText value="#{NumeracionBean.selectedNum.ndnCodigo.ntnCodigo.nttNombre}" />
                         </h:panelGrid>
                         <p:dataTable id="datosNum" value="#{NumeracionBean.detalleSelectedNum}" var="detalleNum" paginator="false" style="font-size:10px"
-                                     selection="#{NumeracionBean.selectedNums}">
+                                     selection="#{NumeracionBean.selectedNums}" selectionMode="#{(UserBean.login == true) ? 'multiple' : null}">
                             <f:facet name="header">Detalle numeración</f:facet>
-                            <p:column rendered="#{UserBean.login}" selectionMode="multiple" />
                             <p:column headerText="NDC" styleClass="tabla-expandir">
                                 <h:outputText value="#{detalleNum.ndnCodigo.ndtNombre}"/>
                             </p:column>
@@ -176,9 +175,15 @@
                                 <p:commandButton value="Pre-Asignar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar,display" oncomplete="numDialog.hide();preasignarDialog.show();">
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
                                 </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar,display" oncomplete="numDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{NumeracionBean.liberar}" update="pgNumeracion" oncomplete="numDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{NumeracionBean.reservar}" update="pgNumeracion" oncomplete="numDialog.hide();"/>
+                                <p:commandButton value="Recuperar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar,display" oncomplete="numDialog.hide();recuperarDialog.show();" disabled="#{!NumeracionBean.selectedNumsAccion}"/>
+                                <p:commandButton value="Liberar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="numDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(NumeracionBean.selectedNum.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="numDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                             <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
@@ -253,12 +258,18 @@
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{UserBean.login}">
                                 <h:outputText value="Los bloques en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (NumeracionBean.selectedNum.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and NumeracionBean.selectedNumsPreasignar)}" action="#{TramiteBean.detalleSelectedNum}" update="datosPreasignar" oncomplete="numAccionDialog.hide();preasignarDialog.show();">
+                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and NumeracionBean.selectedNumsPreasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="numAccionDialog.hide();preasignarDialog.show();">
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
                                 </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and NumeracionBean.selectedNumsRecuperar)}" update="datosRecuperar" oncomplete="numAccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and NumeracionBean.selectedNumsLiberar)}" action="#{NumeracionBean.liberar}" update="pgNumeracion" oncomplete="numAccionDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and NumeracionBean.selectedNumsReservar)}" action="#{NumeracionBean.reservar}" update="pgNumeracion" oncomplete="numAccionDialog.hide();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and NumeracionBean.selectedNumsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="numAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and NumeracionBean.selectedNumsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="numAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="numeracion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                         </h:panelGrid>

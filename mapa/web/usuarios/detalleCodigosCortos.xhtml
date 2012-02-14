@@ -113,7 +113,7 @@
                             </h:selectOneMenu>
                             <br/>
                             <h:outputText value="Observaciones" style="font-weight: bold;"/>
-                            <h:inputTextarea value="#{TramiteBean.tramiteSenalizacionVO.tstObservaciones}" rows="5" cols="80"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteCodigosCortosVO.tctObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
@@ -132,8 +132,8 @@
                 <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
                     <h:form>
                         <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgSenalizacion"/>
-                     </h:form>
+                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgCodigosCortos"/>
+                    </h:form>
                 </h:panelGrid>
             </p:dialog>
             

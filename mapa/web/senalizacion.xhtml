@@ -139,13 +139,19 @@
 
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{UserBean.login}">
-                                    <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
-                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
-                                    </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                                    <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{SenalizacionBean.liberar}" update="pgSenalizacion" oncomplete="senDialog.hide();"/>
-                                    <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{SenalizacionBean.reservar}" update="pgSenalizacion" oncomplete="senDialog.hide();"/>
+                                <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                             <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
@@ -213,8 +219,14 @@
                             <h:panelGroup rendered="#{UserBean.login}">
                                 <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
                                 <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and SenalizacionBean.selectedSensRecuperar)}" update="datosRecuperar" oncomplete="senAccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and SenalizacionBean.selectedSensLiberar)}" action="#{SenalizacionBean.liberar}" update="pgSenalizacion" oncomplete="senAccionDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and SenalizacionBean.selectedSensReservar)}" action="#{SenalizacionBean.reservar}" update="pgSenalizacion" oncomplete="senAccionDialog.hide();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and SenalizacionBean.selectedSensLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and SenalizacionBean.selectedSensReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                         </h:panelGrid>

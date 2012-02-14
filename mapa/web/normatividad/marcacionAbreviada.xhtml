@@ -1,24 +1,71 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/marcacionAbreviada.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                MARCACIÓN ABREVIADA
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            MARCACIÓN ABREVIADA
+        </p>
+
+        <p style="text-align: justify">
+        <b>Numeración para el acceso al servicio suplementario de marcación abreviada.</b><br/>
+        Para el uso del servicio de marcación abreviada se utilizará el recurso numérico con las siguientes características:
+        <br/><br/>
+        <b>a)</b> Longitud de tres (3) dígitos.
+        <br/><br/>
+        <b>b)</b> Esta numeración podrá ser preprogramada por el operador de telecomunicaciones y/o prestador del servicio suplementario, 
+        pero otorgando en todo caso la posibilidad al usuario de programarla y/o reprogramarla a su entera discreción.
+        <br/><br/>
+        <b>c)</b> Cuando el operador preprograme esta numeración, solo podrá abreviar números nacionales significativos al interior de su red.
+        <br/><br/>
+        <b>d)</b> Cuando el operador preprograme esta numeración, no abreviará números de servicios, UPT o de servicios especiales y 
+        semiautomáticos con esquema de marcación 1XY.
+        <br/><br/>
+        <b>e)</b> La marcación se rige por lo dispuesto en la norma de servicios suplementarios correspondiente
+        <br/><br/>
+        En todo caso, los operadores de telecomunicaciones deberán liberar los códigos en uso, si éstos no son definidos en las 
+        normas de servicios suplementarios adoptadas por la CRT como parte del servicio de marcación abreviada.
+        <br/><br/>
+        </p>
+
+        <p style="text-align: justify">
+        <b>Marcación para el servicio suplementario de marcación abreviada.</b><br/>
+        Para el uso del servicio de marcación abreviada se marcará de acuerdo con el siguiente esquema:
+        <br/><br/>
+        <span style="font-style: italic"># ABB</span>
+        <br/><br/>
+        Donde “A” y “B” cada uno corresponde a un dígito entre 0 y 9; el (#) es el símbolo “cuadrado”, de 
+        acuerdo a la recomendación UIT-T E.161 de la Unión Internacional de Telecomunicaciones (UIT).”
+        <br/><br/>
+        </p>
+
+        <p style="text-align: justify">
+        <b>Gestión de numeración para el acceso al servicio suplementario de marcación abreviada esque #ABB.</b><br/>
+        La Comisión de Regulación de Comunicaciones (CRC) gestiona, asigna y recupera, a través del funcionario 
+        competente, la numeración dentro del rango comprendido entre #000 a #199 para la prestación de servicios 
+        suplementarios de marcación abreviada esquema #ABB.
+        <br/><br/>
+        El rango de numeración del servicio suplementario de marcación abreviada esquema #ABB comprendido entre 
+        #000 a #099, se entenderá en estado de reserva por el tiempo que determine la CRC.
+        <br/><br/>
+        El rango de numeración del servicio suplementario de marcación abreviada esquema #ABB comprendido entre 
+        #100 a #199 se asignará a las empresas del servicio público de transporte terrestre automotor de pasajeros 
+        que cumplan con los requisitos de asignación previstos por la CRC en el artículo 13.2.4.10 de la Resolución CRT 087 de 1997.
+        <br/><br/>
+        </p>
+        <p>Para información adicional consultar la <a href="http://www.crcom.gov.co/?idcategoria=53850" target="blank">Resolución CRT 087 de 1997</a> 
+        y la <a href="http://www.crcom.gov.co/?idcategoria=61420" target="blank">Resolución CRC 3054 de 2011</a></p>
             
-        </h:panelGroup>
-    </ui:composition>
-</html>
+    </ui:define>
+</ui:composition>
 

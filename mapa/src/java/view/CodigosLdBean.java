@@ -188,48 +188,6 @@ public class CodigosLdBean implements Serializable {
             selectedLdsLiberar = false;
         }
     }
-    
-    public String reservar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedLds.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedLds[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,1);
-        
-        if(operacion == 1){
-            buscar();
-            selectedLdsAccion = false;
-            return "Reserva de códigos de larga distancia exitosa";
-        }else{
-            return "Error en el bean de códigos cortos";   
-        }
-    }
-    
-    public String liberar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedLds.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedLds[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,0);
-        
-        if(operacion == 1){
-            buscar();
-            selectedLdsAccion = false;
-            return "Liberación de códigos de larga distancia exitosa";
-        }else{
-         return "Error en el bean de códigos cortos";   
-        }
-    }
 
     public List<ClCodigosLdVO> getCoLD() {
         return CoLD;

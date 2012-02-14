@@ -14,7 +14,7 @@
                              rendered="#{!empty TramiteBean.selectedTramite.tnTramiteNumeracionCollection}">
                     <br/>
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
-                        <h:outputText value="TRÁMITE NUMERACIÓN" style="font-size:11px; font-weight: bold;"/>
+                        <h:outputText value="NUMERACIÓN" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
                     <p:dataTable value="#{TramiteBean.selectedTramite.tnTramiteNumeracionCollection}"
                                  var="tramiteNumeracion" style="font-size:9px" >
@@ -44,7 +44,7 @@
                         <p:column headerText="OBSERVACIONES" styleClass="tabla-observaciones">
                             <h:outputText value="#{tramiteNumeracion.tntObservaciones}"/>
                         </p:column>
-                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL">
+                        <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL" styleClass="tabla-reserva">
                             <h:outputText value="#{tramiteNumeracion.tntReservaTemporal=='S'? fnc:concat(tramiteNumeracion.tnnMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteNumeracion.acnCodigo.acnCodigo==5}"/>
                             <h:outputText value="N/A" rendered="#{tramiteNumeracion.acnCodigo.acnCodigo!=5}"/>
                         </p:column>

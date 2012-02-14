@@ -1,24 +1,66 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/codigosMNC.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                CÓDIGOS MNC
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
-            
-        </h:panelGroup>
-    </ui:composition>
-</html>
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
 
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            CÓDIGOS MNC
+        </p>
+
+        <p style="text-align: justify">
+        El MNC (Indicativo de red para el servicio móvil) es el segundo campo de la IMSI, tiene una longitud de dos a tres cifras y es administrado 
+        por el administrador del plan de numeración nacional correspondiente. En Colomnia se adoptó el equemas de 3 cifras para el MNC.
+        <br/><br/>
+        El indicativo de país para el servicio móvil (MCC, mobile country code) es el primer campo de la IMSI, tiene una longitud de tres cifras e 
+        identifica un país.
+        <br/><br/>
+        El número de identificación de suscripción al servicio móvil (MSIN, mobile subscription identification number) es el tercer campo  de la 
+        IMSI, tiene una longitud máxima de 10 cifras.
+        <br/><br/>
+        La identidad internacional de suscripción al servicio móvil (IMSI, international mobile subscription identity) es una cadena de cifras 
+        decimales, con una longitud máxima de 15 cifras, que identifica una sola suscripción. La IMSI está formada por tres campos: el indicativo de 
+        país para el servicio móvil (MCC), el indicativo de red para el servicio móvil (MNC) y el número de identificación de suscripción al servicio 
+        móvil (MSIN).
+        <br/><br/>
+        
+        <table width="400px">
+            <tr style="text-align: center;">
+                <td>3 dígitos</td>
+                <td></td>
+                <td>3 dígitos</td>
+                <td></td>
+                <td>Máximo 10 dígitos</td>
+            </tr>
+            <tr>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>MCC</td></tr></table></td>
+                <td></td>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>MNC</td></tr></table></td>
+                <td></td>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>MSIN</td></tr></table></td>
+            </tr>
+            <tr>
+                <td colspan="5"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>IMSI</td></tr></table></td>
+            </tr>
+            <tr style="text-align: center;">
+                <td colspan="5">Máximo 15 dígitos</td>
+            </tr>
+        </table>
+        
+        <br/><br/>
+        </p>
+        <p>
+        Para información adicional consultar la <a href="http://www.itu.int/rec/T-REC-E.212/es" target="blank">Recomendación UIT-T E.212</a> 
+        </p>
+            
+    </ui:define>
+</ui:composition>

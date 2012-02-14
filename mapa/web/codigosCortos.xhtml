@@ -17,7 +17,7 @@
             <h:form id="formCodCorto">
                 <h:panelGrid>
                     <h:panelGrid columns="2">
-                        <h:outputText value="Operador"/>
+                        <h:outputText value="Proveedor"/>
                         <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
                             <f:selectItems value="#{CodigosCortosBean.listaOperador}" />  
                         </h:selectOneMenu>
@@ -97,20 +97,26 @@
                             <h:outputText value="#{CodigosCortosBean.selectedCC.mdnCodigo.mdtNombre}" />
                             <h:outputText value="Estado:" style="font-weight: bold;"/>
                             <h:outputText value="#{CodigosCortosBean.selectedCC.esnCodigo.estNombre}" />
-                            <h:outputText value="Operador:" style="font-weight: bold;"/>
+                            <h:outputText value="Proveedor:" style="font-weight: bold;"/>
                             <h:outputText value="#{CodigosCortosBean.selectedCC.emrCodigo.emtNombre}" />
                             <h:outputText value="Observaciones:" style="font-weight: bold;"/>
                             <h:outputText value="#{CodigosCortosBean.selectedCC.cctObservaciones}" />
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{UserBean.login}">
-                                    <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" update="datosPreasignar" oncomplete="ccDialog.hide();preasignarDialog.show();">
-                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
-                                    </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ccDialog.hide();recuperarDialog.show();"/>
-                                    <p:commandButton value="Liberar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" actionListener="#{TramiteBean.agregarRecurso}" oncomplete="ccDialog.hide();"/>
-                                    <p:commandButton value="Reservar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" actionListener="#{CodigosCortosBean.recuperar}" oncomplete="ccDialog.hide();"/>
+                                <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" update="datosPreasignar" oncomplete="ccDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                </p:commandButton>
+                                <p:commandButton value="Recuperar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ccDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                             <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
@@ -179,8 +185,14 @@
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                 </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{CodigosCortosBean.liberar}" update="pgCodigosCortos" oncomplete="ccAccionDialog.hide();"/>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{CodigosCortosBean.reservar}" update="pgCodigosCortos" oncomplete="ccAccionDialog.hide();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                </p:commandButton>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                </p:commandButton>
                             </h:panelGroup>
 
                         </h:panelGrid>

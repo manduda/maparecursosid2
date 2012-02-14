@@ -263,48 +263,6 @@ public class SenalizacionBean implements Serializable {
         }
     }
     
-    public String reservar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedSens.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedSens[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,1);
-        
-        if(operacion == 1){
-            buscar();
-            selectedSensAccion = false;
-            return "Reserva de señalización exitosa";
-        }else{
-            return "Error en el bean de Señalización";   
-        }
-    }
-    
-    public String liberar() {
-        int operacion;
-        facade fachada = new facade();
-        
-        ArrayList vo = new ArrayList();
-        int size = selectedSens.length;
-        for (int i = 0; i < size; i++) {
-            vo.add(selectedSens[i]);
-        }
-        
-        operacion = fachada.reservarLiberarRecurso(vo,0);
-        
-        if(operacion == 1){
-            buscar();
-            selectedSensAccion = false;
-            return "Liberación de señalización exitosa";
-        }else{
-         return "Error en el bean de Señalización";   
-        }
-    }
-    
     public void postProcessXLS(Object document) {
 	HSSFWorkbook wb = (HSSFWorkbook) document;
 	HSSFSheet sheet = wb.getSheetAt(0);

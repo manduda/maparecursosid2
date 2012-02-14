@@ -79,7 +79,9 @@
                         <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
                         <h:outputText value="Numeracion&lt;br/&gt;" rendered="#{not empty tr.tnTramiteNumeracionCollection}" escape="false"/>
                         <h:outputText value="Códigos LD&lt;br/&gt;" rendered="#{not empty tr.tlTramiteLdCollection}" escape="false"/>
-                        <h:outputText value="Códigos Cortos" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
+                        <h:outputText value="Códigos Cortos&lt;br/&gt;" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
+                        <h:outputText value="Marcación Abreviada&lt;br/&gt;" rendered="#{not empty tr.taTramiteMaCollection}" escape="false"/>
+                        <h:outputText value="Códigos MNC" rendered="#{not empty tr.tmTramiteMncCollection}" escape="false"/>
                     </p:column>
                     <p:column style="width:32px">  
                         <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
