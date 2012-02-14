@@ -52,7 +52,7 @@ public class TlTramiteLdDAO {
         return n;
     }
 
-    public static List<TlTramiteLd> findTramiteCodigoCorto(int clnCodigo, int etnCodigo, EntityManager em) {
+    public static List<TlTramiteLd> findTramiteLd(int clnCodigo, int etnCodigo, EntityManager em) {
         String searchQuery = "SELECT tl FROM TlTramiteLd tl where tl.clnCodigo.clnCodigo = ?1 AND tl.trnCodigo.etnCodigo.etnCodigo = ?2 "
                 + "ORDER BY tl.trnCodigo.trfFechaResolucion DESC";
         

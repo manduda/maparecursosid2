@@ -89,6 +89,13 @@ public class ClCodigosLdService {
         //si la accion es 0 se libera
         //si la accion es 1 se reserva
         
+        RsReservasTemporalesService reservasTemporales = new RsReservasTemporalesService();
+        Boolean reservado = false;
+        reservado = reservasTemporales.consultaReservaTemporal(vo.getClnCodigo(), "CodigosLd", em);
+        if (accion == 0 && reservado) {
+            return 3;
+        }
+        
         ClCodigosLd entity = new ClCodigosLd();
         
         entity = ClCodigosLdDAO.findbyId(vo.getClnCodigo(), em);

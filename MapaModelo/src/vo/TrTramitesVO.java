@@ -28,6 +28,8 @@ public class TrTramitesVO implements Serializable {
     private Collection<TnTramiteNumeracionVO> tnTramiteNumeracionCollection;
     private Collection<TlTramiteLdVO> tlTramiteLdCollection;
     private Collection<TcTramiteCcVO> tcTramiteCcCollection;
+    private Collection<TaTramiteMaVO> taTramiteMaCollection;
+    private Collection<TmTramiteMncVO> tmTramiteMncCollection;
     
     public TrTramitesVO() {
     }
@@ -134,6 +136,22 @@ public class TrTramitesVO implements Serializable {
 
     public void setTnTramiteNumeracionCollection(Collection<TnTramiteNumeracionVO> tnTramiteNumeracionCollection) {
         this.tnTramiteNumeracionCollection = tnTramiteNumeracionCollection;
+    }
+
+    public Collection<TaTramiteMaVO> getTaTramiteMaCollection() {
+        return taTramiteMaCollection;
+    }
+
+    public void setTaTramiteMaCollection(Collection<TaTramiteMaVO> taTramiteMaCollection) {
+        this.taTramiteMaCollection = taTramiteMaCollection;
+    }
+
+    public Collection<TmTramiteMncVO> getTmTramiteMncCollection() {
+        return tmTramiteMncCollection;
+    }
+
+    public void setTmTramiteMncCollection(Collection<TmTramiteMncVO> tmTramiteMncCollection) {
+        this.tmTramiteMncCollection = tmTramiteMncCollection;
     }
 
 }

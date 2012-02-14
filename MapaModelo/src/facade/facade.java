@@ -11,8 +11,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import services.CcCodigosCortosService;
+import services.CdCodigosMncService;
 import services.ClCodigosLdService;
 import services.EsEstadoService;
+import services.MaMarcacionAbreviadaService;
 import services.MunicipiosService;
 import services.NdNdcService;
 import services.NuNumeracionService;
@@ -22,11 +24,13 @@ import services.SeSenalizacionService;
 import services.TrTramitesService;
 import services.UsUsuariosService;
 import vo.CcCodigosCortosVO;
+import vo.CdCodigosMncVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.EtEstadoTramiteVO;
+import vo.MaMarcacionAbreviadaVO;
 import vo.MdModalidadCcVO;
 import vo.MunicipiosVO;
 import vo.NdNdcVO;
@@ -35,8 +39,10 @@ import vo.NuNumeracionVO;
 import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
+import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -52,6 +58,8 @@ public class facade {
     private NuNumeracionService numeracion;
     private SeSenalizacionService senalizacion;
     private CcCodigosCortosService codigosCortos;
+    private MaMarcacionAbreviadaService marcacionAbreviada;
+    private CdCodigosMncService codigosMnc;
     private NdNdcService ndc;
     private MunicipiosService municipios;
     private ReRegionService regionSenalizacion;
@@ -65,6 +73,8 @@ public class facade {
         numeracion = new NuNumeracionService();
         senalizacion = new SeSenalizacionService();
         codigosCortos = new CcCodigosCortosService();
+        marcacionAbreviada = new MaMarcacionAbreviadaService();
+        codigosMnc = new CdCodigosMncService();
         ndc = new NdNdcService();
         municipios = new MunicipiosService();
         regionSenalizacion = new ReRegionService();
@@ -677,6 +687,163 @@ public class facade {
     
     //--------------------------------
     
+    //-------- MARCACIÓN ABREVIADA --------
+    
+    public List<MaMarcacionAbreviadaVO> cargarMarcacionAbreviada(int first, int max, String operador, int codigoMarcacion, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<MaMarcacionAbreviadaVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = marcacionAbreviada.cargarMarcacionAbreviada(first, max, operador, codigoMarcacion, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarMarcacionAbreviada(String operador, int codigoMarcacion, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = marcacionAbreviada.countCargarMarcacionAbreviada(operador, codigoMarcacion, estado,  em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<EmOperadorVO> listaOperadorMarcacionAbreviada() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = marcacionAbreviada.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    //--------------------------------
+    
+    //-------- MARCACIÓN ABREVIADA --------
+    
+    public List<CdCodigosMncVO> cargarCodigosMnc(int first, int max, String operador, int codigoMnc, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<CdCodigosMncVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosMnc.cargarCodigosMnc(first, max, operador, codigoMnc, estado, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarCodigosMnc(String operador, int codigoMnc, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = codigosMnc.countCargarCodigosMnc(operador, codigoMnc, estado,  em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<EmOperadorVO> listaOperadorCodigosMnc() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigosMnc.getListOperadores(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    //--------------------------------
     
     public List<UsUsuariosVO> listaUsuariosAplicacion() {
         EntityManagerFactory emf = null;
@@ -1100,6 +1267,10 @@ public class facade {
                     resultado = tramites.agregarRecurso((TlTramiteLdVO) r, em);
                 } else if (nombre.equals("TcTramiteCcVO")){
                     resultado = tramites.agregarRecurso((TcTramiteCcVO) r, em);
+                } else if (nombre.equals("TaTramiteMaVO")){
+                    resultado = tramites.agregarRecurso((TaTramiteMaVO) r, em);
+                } else if (nombre.equals("TmTramiteMncVO")){
+                    resultado = tramites.agregarRecurso((TmTramiteMncVO) r, em);
                 } else {
                     resultado = 0;
                 }
@@ -1148,6 +1319,10 @@ public class facade {
                 resultado = tramites.eliminarRecurso((TlTramiteLdVO) recurso, em);
             } else if(nombre.equals("TcTramiteCcVO")) {
                 resultado = tramites.eliminarRecurso((TcTramiteCcVO) recurso, em);
+            } else if(nombre.equals("TaTramiteMaVO")) {
+                resultado = tramites.eliminarRecurso((TaTramiteMaVO) recurso, em);
+            } else if(nombre.equals("TmTramiteMncVO")) {
+                resultado = tramites.eliminarRecurso((TmTramiteMncVO) recurso, em);
             } else {
                 resultado = false;
             }
@@ -1311,6 +1486,56 @@ public class facade {
         return vo;
     }
     
+    public List<TaTramiteMaVO> buscarTramitePorMarcacionAbreviada(int manCodigo, int acnCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TaTramiteMaVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarTramiteMarcacionAbreviada(manCodigo, acnCodigo, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<TmTramiteMncVO> buscarTramitePorCodigosMnc(int cdnCodigo, int acnCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<TmTramiteMncVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarTramiteCodigosMnc(cdnCodigo, acnCodigo, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
     public List<EmOperadorVO> cargarOperadores() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1354,7 +1579,6 @@ public class facade {
         }
         return vo;
     }
-
     
     public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc){
         EntityManagerFactory emf = null;
@@ -1404,6 +1628,7 @@ public class facade {
          * 0: Error al reservar/liberar el recurso
          * 1: Recurso reservado/liberado correctamente
          * 2: Falta un dato del VO
+         * 3: El recurso está reservado temporalmente y no se puede liberar
         */
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1425,6 +1650,10 @@ public class facade {
                     resultado = codigosld.reservarLiberarCodigoLd((ClCodigosLdVO) r, em, accion);
                 } else if (nombre.equals("CcCodigosCortosVO")){
                     resultado = codigosCortos.reservarLiberarCodigoCorto((CcCodigosCortosVO) r, em, accion);
+                } else if (nombre.equals("MaMarcacionAbreviadaVO")){
+                    resultado = marcacionAbreviada.reservarLiberarMarcacionAbreviada((MaMarcacionAbreviadaVO) r, em, accion);
+                } else if (nombre.equals("CdCodigosMncVO")){
+                    resultado = codigosMnc.reservarLiberarCodigosMnc((CdCodigosMncVO) r, em, accion);
                 } else {
                     resultado = 0;
                 }
@@ -1473,6 +1702,10 @@ public class facade {
             recurso=codigosld.getById(codigoRecurso, em);
         } else if(tipoRecurso.equals("CodigosCortos")){
             recurso=codigosCortos.getById(codigoRecurso, em);
+        } else if(tipoRecurso.equals("MarcacionAbreviada")){
+            recurso=marcacionAbreviada.getById(codigoRecurso, em);
+        } else if(tipoRecurso.equals("CodigosMnc")){
+            recurso=codigosMnc.getById(codigoRecurso, em);
         }
 
 
@@ -1483,5 +1716,28 @@ public class facade {
 
         
         return recurso;
+    }
+    
+    public Boolean consultaReservaTemporal(int codigoRecurso, String tipoRecurso){
+        Boolean resultado = false;
+        
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+                
+        emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+        em = emf.createEntityManager();
+        tx = em.getTransaction();
+        tx.begin();
+        
+        resultado = reservasTemporales.consultaReservaTemporal(codigoRecurso, tipoRecurso, em);
+
+        if(em != null){
+            resultado = false;
+            em.clear();
+            em.close();
+        }
+        
+        return resultado;
     } 
 }

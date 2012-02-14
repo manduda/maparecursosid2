@@ -17,11 +17,13 @@ import java.util.List;
 import services.UsUsuariosService;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
+import vo.CdCodigosMncVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
+import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
@@ -118,6 +120,36 @@ public class main {
 	}*/
         //-------------------------------------
         
+        //----  MARCACIÓN ABREVIADA
+        /*List<MaMarcacionAbreviadaVO> vo = new ArrayList<MaMarcacionAbreviadaVO>();
+        int cantidad = 0;
+        vo = fachada.cargarMarcacionAbreviada(0,-1,"-1",-1,-1);
+        cantidad = fachada.countCargarMarcacionAbreviada("-1",-1,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getManCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            int codigoMarcacion = vo.get(i).getManCodigoMarcacion();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoMarcacion);
+	}*/
+        //-------------------------------------
+        
+        //----  CODIGOS MNC
+        List<CdCodigosMncVO> vo = new ArrayList<CdCodigosMncVO>();
+        int cantidad = 0;
+        vo = fachada.cargarCodigosMnc(0,-1,"-1",-1,-1);
+        cantidad = fachada.countCargarCodigosMnc("-1",-1,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getCdnCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            int codigoMnc = vo.get(i).getCdnMnc();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoMnc);
+	}
+        //-------------------------------------
+        
         //----  MUNICIPIOS
         /*List<MunicipiosVO> vo = new ArrayList<MunicipiosVO>();
         vo = fachada.listaMunicipios("4C");
@@ -175,14 +207,14 @@ public class main {
         }*/
         //-------------------------------------
         
-        String mensaje = "MIGUEL01";
+        /*String mensaje = "MIGUEL01";
         System.out.println("Mensaje = " + mensaje);
         System.out.println("MD2 = " + StringMD.getStringMessageDigest(mensaje, StringMD.MD2));
         System.out.println("MD5 = " + StringMD.getStringMessageDigest(mensaje, StringMD.MD5));
         System.out.println("SHA = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA));
         System.out.println("SHA-256 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA256));
         System.out.println("SHA-384 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA384));
-        System.out.println("SHA-512 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA512));
+        System.out.println("SHA-512 = " + StringMD.getStringMessageDigest(mensaje, StringMD.SHA512));*/
         
         
         

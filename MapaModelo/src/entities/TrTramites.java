@@ -23,8 +23,10 @@ import javax.persistence.Temporal;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
+import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -89,6 +91,12 @@ public class TrTramites implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<TcTramiteCc> tcTramiteCcCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TaTramiteMa> taTramiteMaCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TmTramiteMnc> tmTramiteMncCollection;
         
     public TrTramites() {
     }
@@ -129,6 +137,16 @@ public class TrTramites implements Serializable {
         for (TcTramiteCc tcc : this.tcTramiteCcCollection) {
             tramiteCcVO.add(tcc.toVO());
         }
+        // Tramite Marcación abreviada
+        Collection<TaTramiteMaVO> tramiteMaVO = new ArrayList<TaTramiteMaVO>();        
+        for (TaTramiteMa tma : this.taTramiteMaCollection) {
+            tramiteMaVO.add(tma.toVO());
+        }
+        // Tramite MNC
+        Collection<TmTramiteMncVO> tramiteMncVO = new ArrayList<TmTramiteMncVO>();        
+        for (TmTramiteMnc tmc : this.tmTramiteMncCollection) {
+            tramiteMncVO.add(tmc.toVO());
+        }
         
         vo.setTrnCodigo(this.getTrnCodigo());
         vo.setUsnCodigo(userVO);
@@ -143,6 +161,8 @@ public class TrTramites implements Serializable {
         vo.setTnTramiteNumeracionCollection(tramiteNumeracionVO);
         vo.setTlTramiteLdCollection(tramiteLdVO);
         vo.setTcTramiteCcCollection(tramiteCcVO);
+        vo.setTaTramiteMaCollection(tramiteMaVO);
+        vo.setTmTramiteMncCollection(tramiteMncVO);
         
         return vo;
     }
@@ -279,6 +299,22 @@ public class TrTramites implements Serializable {
 
     public void setTnTramiteNumeracionCollection(Collection<TnTramiteNumeracion> tnTramiteNumeracionCollection) {
         this.tnTramiteNumeracionCollection = tnTramiteNumeracionCollection;
+    }
+
+    public Collection<TaTramiteMa> getTaTramiteMaCollection() {
+        return taTramiteMaCollection;
+    }
+
+    public void setTaTramiteMaCollection(Collection<TaTramiteMa> taTramiteMaCollection) {
+        this.taTramiteMaCollection = taTramiteMaCollection;
+    }
+
+    public Collection<TmTramiteMnc> getTmTramiteMncCollection() {
+        return tmTramiteMncCollection;
+    }
+
+    public void setTmTramiteMncCollection(Collection<TmTramiteMnc> tmTramiteMncCollection) {
+        this.tmTramiteMncCollection = tmTramiteMncCollection;
     }
     
  }

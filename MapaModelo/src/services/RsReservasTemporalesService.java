@@ -48,4 +48,8 @@ public class RsReservasTemporalesService {
         return reservasTemporalesVO;
     }
     
+    public Boolean consultaReservaTemporal(int codigoRecurso, String tipoRecurso, EntityManager em){
+        return RsReservasTemporalesDAO.consultaReservaTemporal(codigoRecurso, tipoRecurso, em);
+    }
+    
 }

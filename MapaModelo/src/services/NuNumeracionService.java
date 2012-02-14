@@ -133,8 +133,17 @@ public class NuNumeracionService {
     }
 
     public Integer reservarLiberarNumeracion(NuNumeracionVO vo, EntityManager em, int accion) {
-        NuNumeracion entity = new NuNumeracion();
+        //si la accion es 0 se libera
+        //si la accion es 1 se reserva
         
+        RsReservasTemporalesService reservasTemporales = new RsReservasTemporalesService();
+        Boolean reservado = false;
+        reservado = reservasTemporales.consultaReservaTemporal(vo.getNunCodigo(), "Numeracion", em);
+        if (accion == 0 && reservado) {
+            return 3;
+        }
+        
+        NuNumeracion entity = new NuNumeracion();
         
         NdNdc ndc = new NdNdc();
         ndc.setNdnCodigo(vo.getNdnCodigo().getNdnCodigo());

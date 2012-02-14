@@ -5,33 +5,41 @@
 package services;
 
 import daos.CcCodigosCortosDAO;
+import daos.CdCodigosMncDAO;
 import daos.ClCodigosLdDAO;
 import daos.EmOperadorDAO;
 import daos.EtEstadoTramiteDAO;
 import daos.GtGestionTramiteDAO;
+import daos.MaMarcacionAbreviadaDAO;
 import daos.NuNumeracionDAO;
 import daos.RsReservasTemporalesDAO;
 import daos.SeSenalizacionDAO;
+import daos.TaTramiteMaDAO;
 import daos.TcTramiteCcDAO;
 import daos.TlTramiteLdDAO;
+import daos.TmTramiteMncDAO;
 import daos.TnTramiteNumeracionDAO;
 import daos.TrTramitesDAO;
 import daos.TsTramiteSenalizacionDAO;
 import daos.UsUsuariosDAO;
 import entities.AcAccion;
 import entities.CcCodigosCortos;
+import entities.CdCodigosMnc;
 import entities.ClCodigosLd;
 import entities.EmOperador;
 import entities.EsEstado;
 import entities.EtEstadoTramite;
 import entities.GtGestionTramite;
+import entities.MaMarcacionAbreviada;
 import entities.Municipios;
 import entities.NdNdc;
 import entities.NuNumeracion;
 import entities.RsReservasTemporales;
 import entities.SeSenalizacion;
+import entities.TaTramiteMa;
 import entities.TcTramiteCc;
 import entities.TlTramiteLd;
+import entities.TmTramiteMnc;
 import entities.TnTramiteNumeracion;
 import entities.TrTramites;
 import entities.TsTramiteSenalizacion;
@@ -44,8 +52,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import vo.EmOperadorVO;
 import vo.EtEstadoTramiteVO;
+import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
 import vo.TlTramiteLdVO;
+import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
@@ -285,6 +295,46 @@ public class TrTramitesService {
                     codigosCortos.setEsnCodigo(estadoRecurso);
                     codigosCortos.setCctObservaciones(t.getTctObservaciones());
                     CcCodigosCortosDAO.merge(codigosCortos, em);
+                }
+            }
+        }
+        
+        if (!entity.getTaTramiteMaCollection().isEmpty()) {
+            Collection<TaTramiteMa> recursos = entity.getTaTramiteMaCollection();
+            for (TaTramiteMa t : recursos) {
+                if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    AcAccion accion = new AcAccion();
+                    accion.setAcnCodigo(3);
+                    t.setAcnCodigo(accion);
+                    TaTramiteMaDAO.merge(t, em);
+                    
+                    MaMarcacionAbreviada codigoMarcacionAbreviada = MaMarcacionAbreviadaDAO.findbyId(t.getManCodigo().getManCodigo(), em);
+                    codigoMarcacionAbreviada.setEmrCodigo(t.getEmrCodigo());
+                    EsEstado estadoRecurso = new EsEstado();
+                    estadoRecurso.setEsnCodigo(2);
+                    codigoMarcacionAbreviada.setEsnCodigo(estadoRecurso);
+                    codigoMarcacionAbreviada.setMatObservaciones(t.getTatObservaciones());
+                    MaMarcacionAbreviadaDAO.merge(codigoMarcacionAbreviada, em);
+                }
+            }
+        }
+        
+        if (!entity.getTmTramiteMncCollection().isEmpty()) {
+            Collection<TmTramiteMnc> recursos = entity.getTmTramiteMncCollection();
+            for (TmTramiteMnc t : recursos) {
+                if (t.getAcnCodigo().getAcnCodigo() == 2) {
+                    AcAccion accion = new AcAccion();
+                    accion.setAcnCodigo(3);
+                    t.setAcnCodigo(accion);
+                    TmTramiteMncDAO.merge(t, em);
+                    
+                    CdCodigosMnc codigoMnc = CdCodigosMncDAO.findbyId(t.getCdnCodigo().getCdnCodigo(), em);
+                    codigoMnc.setEmrCodigo(t.getEmrCodigo());
+                    EsEstado estadoRecurso = new EsEstado();
+                    estadoRecurso.setEsnCodigo(2);
+                    codigoMnc.setEsnCodigo(estadoRecurso);
+                    codigoMnc.setCdtObservaciones(t.getTmtObservaciones());
+                    CdCodigosMncDAO.merge(codigoMnc, em);
                 }
             }
         }
@@ -572,6 +622,124 @@ public class TrTramitesService {
                 }
                 codigoCortos.setEsnCodigo(estadoRecurso);
                 CcCodigosCortosDAO.merge(codigoCortos, em);
+            }
+        }
+        
+        //actualizamos la información de los registros de marcación abreviada
+        if (!entity.getTaTramiteMaCollection().isEmpty()) {
+            Collection<TaTramiteMa> recursos = entity.getTaTramiteMaCollection();
+            for (TaTramiteMa t : recursos) {
+               
+                MaMarcacionAbreviada marcacionAbreviada = MaMarcacionAbreviadaDAO.findbyId(t.getManCodigo().getManCodigo(), em);
+                
+                marcacionAbreviada.setEmrCodigo(t.getEmrCodigo());
+                marcacionAbreviada.setMatObservaciones(t.getTatObservaciones());
+
+                EsEstado estadoRecurso = new EsEstado();
+                
+                switch(t.getAcnCodigo().getAcnCodigo()){
+                    case 1:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                    case 2:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 3:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 4:
+                        estadoRecurso.setEsnCodigo(4);
+                        break;
+                    case 5:
+                        if(t.getTatReservaTemporal()=='S'){
+                           Date fecha; 
+                           //Cálculo de la fecha de liberación
+                            Calendar ahoraCal = Calendar.getInstance();//instancia una clase de calendario
+                            ahoraCal.setTime(vo.getTrfFechaResolucion());//se le asigna la fecha de la resolución
+                            ahoraCal.add(Calendar.MONTH, t.getTanMesesLiberacion());//se le suman los meses escogidos a la fecha de la resolución
+                            fecha=ahoraCal.getTime();
+                            //instanciamiento del entity
+                            RsReservasTemporales resTemp = new RsReservasTemporales();
+                            
+                            //cargue del entity
+                            resTemp.setTrnCodigo(entity);
+                            resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
+                            resTemp.setRsnCodigoRecurso(t.getManCodigo().getManCodigo());
+                            resTemp.setRstEstado('S');
+                            resTemp.setRstTipoRecurso("MarcacionAbreviada");
+                            resTemp.setRsfFechaLiberacion(fecha);
+                            
+                            //Guardado del entity
+                            RsReservasTemporalesDAO.persist(resTemp, em);
+
+                            //Modificación del estado del recurso a reserva
+                            estadoRecurso.setEsnCodigo(4);
+                        }else{
+                            estadoRecurso.setEsnCodigo(1);   
+                        }
+                        break;
+                }
+                marcacionAbreviada.setEsnCodigo(estadoRecurso);
+                MaMarcacionAbreviadaDAO.merge(marcacionAbreviada, em);
+            }
+        }
+        
+        //actualizamos la información de los registros de codigos MNC
+        if (!entity.getTmTramiteMncCollection().isEmpty()) {
+            Collection<TmTramiteMnc> recursos = entity.getTmTramiteMncCollection();
+            for (TmTramiteMnc t : recursos) {
+               
+                CdCodigosMnc codigosMnc = CdCodigosMncDAO.findbyId(t.getCdnCodigo().getCdnCodigo(), em);
+                
+                codigosMnc.setEmrCodigo(t.getEmrCodigo());
+                codigosMnc.setCdtObservaciones(t.getTmtObservaciones());
+
+                EsEstado estadoRecurso = new EsEstado();
+                
+                switch(t.getAcnCodigo().getAcnCodigo()){
+                    case 1:
+                        estadoRecurso.setEsnCodigo(1);
+                        break;
+                    case 2:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 3:
+                        estadoRecurso.setEsnCodigo(3);
+                        break;
+                    case 4:
+                        estadoRecurso.setEsnCodigo(4);
+                        break;
+                    case 5:
+                        if(t.getTmtReservaTemporal()=='S'){
+                           Date fecha; 
+                           //Cálculo de la fecha de liberación
+                            Calendar ahoraCal = Calendar.getInstance();//instancia una clase de calendario
+                            ahoraCal.setTime(vo.getTrfFechaResolucion());//se le asigna la fecha de la resolución
+                            ahoraCal.add(Calendar.MONTH, t.getTmnMesesLiberacion());//se le suman los meses escogidos a la fecha de la resolución
+                            fecha=ahoraCal.getTime();
+                            //instanciamiento del entity
+                            RsReservasTemporales resTemp = new RsReservasTemporales();
+                            
+                            //cargue del entity
+                            resTemp.setTrnCodigo(entity);
+                            resTemp.setRsnCodigo(RsReservasTemporalesDAO.getMaxId(em)+1);
+                            resTemp.setRsnCodigoRecurso(t.getCdnCodigo().getCdnCodigo());
+                            resTemp.setRstEstado('S');
+                            resTemp.setRstTipoRecurso("CodigosMnc");
+                            resTemp.setRsfFechaLiberacion(fecha);
+                            
+                            //Guardado del entity
+                            RsReservasTemporalesDAO.persist(resTemp, em);
+
+                            //Modificación del estado del recurso a reserva
+                            estadoRecurso.setEsnCodigo(4);
+                        }else{
+                            estadoRecurso.setEsnCodigo(1);   
+                        }
+                        break;
+                }
+                codigosMnc.setEsnCodigo(estadoRecurso);
+                CdCodigosMncDAO.merge(codigosMnc, em);
             }
         }
         
@@ -975,6 +1143,8 @@ public class TrTramitesService {
         entity.setTlnRadicado(vo.getTlnRadicado());
         entity.setEmrCodigo(operador);
         entity.setTltObservaciones(vo.getTltObservaciones());
+        entity.setTltReservaTemporal(reservaTemporal);
+        entity.setTlnMesesLiberacion(mesesLiberacion);
         
         TlTramiteLdDAO.persist(entity, em);
         
@@ -1053,8 +1223,170 @@ public class TrTramitesService {
         entity.setTcnRadicado(vo.getTcnRadicado());
         entity.setEmrCodigo(operador);
         entity.setTctObservaciones(vo.getTctObservaciones());
+        entity.setTctReservaTemporal(reservaTemporal);
+        entity.setTcnMesesLiberacion(mesesLiberacion);
         
         TcTramiteCcDAO.persist(entity, em);
+        
+        return 1;
+        
+    }
+    
+    public Integer agregarRecurso(TaTramiteMaVO vo, EntityManager em){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+        */
+        
+        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getManCodigo().getManCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getEmrCodigo().getEmrCodigo().equals(""))){
+            return 2;
+        }
+        
+        if (TaTramiteMaDAO.findIdMarcacionAbreviada(vo.getManCodigo().getManCodigo(), em)) {
+            return 4;
+        }
+        
+        TaTramiteMa entity = new TaTramiteMa();
+        
+        TrTramites tramite = TrTramitesDAO.findbyId(vo.getTrnCodigo().getTrnCodigo(), em);
+        String operadorTramite = tramite.getEmrCodigo().getEmrCodigo();
+        
+        MaMarcacionAbreviada marcacionAbreviada = MaMarcacionAbreviadaDAO.findbyId(vo.getManCodigo().getManCodigo(), em);
+        String operadorRecurso = marcacionAbreviada.getEmrCodigo().getEmrCodigo();
+        
+        EmOperador operador = new EmOperador();
+        AcAccion accion = new AcAccion();
+        char reservaTemporal='N';
+        int mesesLiberacion =0;
+        
+        switch(vo.getAcnCodigo().getAcnCodigo()){
+            case 1: //LIBERAR
+                break;
+            case 2: //PREASIGNAR
+                if(marcacionAbreviada.getEsnCodigo().getEsnCodigo()!=1){ // El estado del recurso no es libre
+                    return 6;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                break;
+            case 3: //ASIGNAR
+                break;
+            case 4: //RESERVAR
+                break;
+            case 5: //RECUPERAR
+                if(marcacionAbreviada.getEsnCodigo().getEsnCodigo()!=3){ // El estado del recurso no es asignado
+                    return 5;
+                }
+                
+                if(!operadorTramite.equals(operadorRecurso)){ // El operador del trámite es diferente al del recurso
+                    return 3;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                
+                if(vo.getTatReservaTemporal()== 'S'){
+                    reservaTemporal='S';
+                    mesesLiberacion=vo.getTanMesesLiberacion();
+                }
+                
+                break;
+        }
+        
+        accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
+        
+        entity.setTanCodigo(TaTramiteMaDAO.getMaxId(em)+1);
+        entity.setTrnCodigo(tramite);
+        entity.setManCodigo(marcacionAbreviada);
+        entity.setAcnCodigo(accion);
+        entity.setTanRadicado(vo.getTanRadicado());
+        entity.setEmrCodigo(operador);
+        entity.setTatObservaciones(vo.getTatObservaciones());
+        entity.setTatReservaTemporal(reservaTemporal);
+        entity.setTanMesesLiberacion(mesesLiberacion);
+        
+        TaTramiteMaDAO.persist(entity, em);
+        
+        return 1;
+        
+    }
+    
+    public Integer agregarRecurso(TmTramiteMncVO vo, EntityManager em){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+        */
+        
+        if((vo.getTrnCodigo().getTrnCodigo()==0)||(vo.getCdnCodigo().getCdnCodigo()==0)||(vo.getAcnCodigo().getAcnCodigo()==0)||(vo.getEmrCodigo().getEmrCodigo().equals(""))){
+            return 2;
+        }
+        
+        if (TaTramiteMaDAO.findIdMarcacionAbreviada(vo.getCdnCodigo().getCdnCodigo(), em)) {
+            return 4;
+        }
+        
+        TmTramiteMnc entity = new TmTramiteMnc();
+        
+        TrTramites tramite = TrTramitesDAO.findbyId(vo.getTrnCodigo().getTrnCodigo(), em);
+        String operadorTramite = tramite.getEmrCodigo().getEmrCodigo();
+        
+        CdCodigosMnc codigosMnc = CdCodigosMncDAO.findbyId(vo.getCdnCodigo().getCdnCodigo(), em);
+        String operadorRecurso = codigosMnc.getEmrCodigo().getEmrCodigo();
+        
+        EmOperador operador = new EmOperador();
+        AcAccion accion = new AcAccion();
+        char reservaTemporal='N';
+        int mesesLiberacion =0;
+        
+        switch(vo.getAcnCodigo().getAcnCodigo()){
+            case 1: //LIBERAR
+                break;
+            case 2: //PREASIGNAR
+                if(codigosMnc.getEsnCodigo().getEsnCodigo()!=1){ // El estado del recurso no es libre
+                    return 6;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                break;
+            case 3: //ASIGNAR
+                break;
+            case 4: //RESERVAR
+                break;
+            case 5: //RECUPERAR
+                if(codigosMnc.getEsnCodigo().getEsnCodigo()!=3){ // El estado del recurso no es asignado
+                    return 5;
+                }
+                
+                if(!operadorTramite.equals(operadorRecurso)){ // El operador del trámite es diferente al del recurso
+                    return 3;
+                }
+                operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                
+                if(vo.getTmtReservaTemporal()== 'S'){
+                    reservaTemporal='S';
+                    mesesLiberacion=vo.getTmnMesesLiberacion();
+                }
+                
+                break;
+        }
+        
+        accion.setAcnCodigo(vo.getAcnCodigo().getAcnCodigo());
+        
+        entity.setTmnCodigo(TmTramiteMncDAO.getMaxId(em)+1);
+        entity.setTrnCodigo(tramite);
+        entity.setCdnCodigo(codigosMnc);
+        entity.setAcnCodigo(accion);
+        entity.setTmnRadicado(vo.getTmnRadicado());
+        entity.setEmrCodigo(operador);
+        entity.setTmtObservaciones(vo.getTmtObservaciones());
+        entity.setTmtReservaTemporal(reservaTemporal);
+        entity.setTmnMesesLiberacion(mesesLiberacion);
+        
+        TmTramiteMncDAO.persist(entity, em);
         
         return 1;
         
@@ -1100,6 +1432,26 @@ public class TrTramitesService {
         return true;
     }
     
+    public boolean eliminarRecurso(TaTramiteMaVO vo, EntityManager em){
+        TaTramiteMa entity = new TaTramiteMa();
+        
+        entity = TaTramiteMaDAO.findbyId(vo.getTanCodigo(), em);
+
+        TaTramiteMaDAO.delete(entity, em);
+        
+        return true;
+    }
+    
+    public boolean eliminarRecurso(TmTramiteMncVO vo, EntityManager em){
+        TmTramiteMnc entity = new TmTramiteMnc();
+        
+        entity = TmTramiteMncDAO.findbyId(vo.getTmnCodigo(), em);
+
+        TmTramiteMncDAO.delete(entity, em);
+        
+        return true;
+    }
+    
     public List<TsTramiteSenalizacionVO> buscarTramiteSenalizacion(int senCodigo, int acnCodigo, EntityManager em){
         List<TsTramiteSenalizacion> tramiteSenalizacion = TsTramiteSenalizacionDAO.findTramiteSenalizacion(senCodigo, acnCodigo, em);
         List<TsTramiteSenalizacionVO> tramiteSenalizacionVO = new ArrayList<TsTramiteSenalizacionVO>();        
@@ -1119,12 +1471,30 @@ public class TrTramitesService {
     }
 
     public List<TlTramiteLdVO> buscarTramiteCodigoLd(int clnCodigo, int acnCodigo, EntityManager em) {
-        List<TlTramiteLd> tramiteLd = TlTramiteLdDAO.findTramiteCodigoCorto(clnCodigo, acnCodigo, em);
+        List<TlTramiteLd> tramiteLd = TlTramiteLdDAO.findTramiteLd(clnCodigo, acnCodigo, em);
         List<TlTramiteLdVO> tramiteLdVO = new ArrayList<TlTramiteLdVO>();        
         for (TlTramiteLd t : tramiteLd) {
             tramiteLdVO.add(t.toVO());
         }
         return tramiteLdVO;
+    }
+    
+    public List<TaTramiteMaVO> buscarTramiteMarcacionAbreviada(int manCodigo, int acnCodigo, EntityManager em) {
+        List<TaTramiteMa> tramiteMa = TaTramiteMaDAO.findTramiteMarcacionAbreviada(manCodigo, acnCodigo, em);
+        List<TaTramiteMaVO> tramiteMaVO = new ArrayList<TaTramiteMaVO>();        
+        for (TaTramiteMa t : tramiteMa) {
+            tramiteMaVO.add(t.toVO());
+        }
+        return tramiteMaVO;
+    }
+    
+    public List<TmTramiteMncVO> buscarTramiteCodigosMnc(int cdnCodigo, int acnCodigo, EntityManager em) {
+        List<TmTramiteMnc> tramiteMnc = TmTramiteMncDAO.findTramiteCodigosMnc(cdnCodigo, acnCodigo, em);
+        List<TmTramiteMncVO> tramiteMncVO = new ArrayList<TmTramiteMncVO>();        
+        for (TmTramiteMnc t : tramiteMnc) {
+            tramiteMncVO.add(t.toVO());
+        }
+        return tramiteMncVO;
     }
     
 }

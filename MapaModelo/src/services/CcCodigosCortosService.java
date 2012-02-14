@@ -60,6 +60,16 @@ public class CcCodigosCortosService {
     }
 
     public Integer reservarLiberarCodigoCorto(CcCodigosCortosVO vo, EntityManager em, int accion) {
+        //si la accion es 0 se libera
+        //si la accion es 1 se reserva
+        
+        RsReservasTemporalesService reservasTemporales = new RsReservasTemporalesService();
+        Boolean reservado = false;
+        reservado = reservasTemporales.consultaReservaTemporal(vo.getCcnCodigo(), "CodigosCortos", em);
+        if (accion == 0 && reservado) {
+            return 3;
+        }
+        
         CcCodigosCortos entity = new CcCodigosCortos();
         
         entity = CcCodigosCortosDAO.findbyId(vo.getCcnCodigo(), em);

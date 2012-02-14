@@ -127,6 +127,15 @@ public class SeSenalizacionService {
     }
     
     public int reservarLiberarSenalizacion (SeSenalizacionVO vo, EntityManager em, int accion){
+        //si la accion es 0 se libera
+        //si la accion es 1 se reserva
+        
+        RsReservasTemporalesService reservasTemporales = new RsReservasTemporalesService();
+        Boolean reservado = false;
+        reservado = reservasTemporales.consultaReservaTemporal(vo.getSenCodigo(), "Senalizacion", em);
+        if (accion == 0 && reservado) {
+            return 3;
+        }
         
         SeSenalizacion entity = new SeSenalizacion();
         

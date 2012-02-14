@@ -45,8 +45,21 @@ public class EmOperador implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
     private Collection<CcCodigosCortos> ccCodigosCortosCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
+    private Collection<MaMarcacionAbreviada> maMarcacionAbreviadaCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
+    private Collection<CdCodigosMnc> cdCodigosMncCollection;
 
     public EmOperador() {
+    }
+    
+    public EmOperadorVO toVO(){
+        EmOperadorVO vo = new EmOperadorVO();
+        vo.setEmrCodigo(this.getEmrCodigo());
+        vo.setEmtNombre(this.getEmtNombre());
+        return vo;
     }
     
     public Collection<ClCodigosLd> getClCodigosLdCollection() {
@@ -97,11 +110,20 @@ public class EmOperador implements Serializable {
         this.ccCodigosCortosCollection = ccCodigosCortosCollection;
     }
 
-    public EmOperadorVO toVO(){
-        EmOperadorVO vo = new EmOperadorVO();
-        vo.setEmrCodigo(this.getEmrCodigo());
-        vo.setEmtNombre(this.getEmtNombre());
-        return vo;
+    public Collection<MaMarcacionAbreviada> getMaMarcacionAbreviadaCollection() {
+        return maMarcacionAbreviadaCollection;
+    }
+
+    public void setMaMarcacionAbreviadaCollection(Collection<MaMarcacionAbreviada> maMarcacionAbreviadaCollection) {
+        this.maMarcacionAbreviadaCollection = maMarcacionAbreviadaCollection;
+    }
+
+    public Collection<CdCodigosMnc> getCdCodigosMncCollection() {
+        return cdCodigosMncCollection;
+    }
+
+    public void setCdCodigosMncCollection(Collection<CdCodigosMnc> cdCodigosMncCollection) {
+        this.cdCodigosMncCollection = cdCodigosMncCollection;
     }
     
 }
