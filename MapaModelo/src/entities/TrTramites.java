@@ -25,6 +25,8 @@ import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
+import vo.TiTramiteIinVO;
+import vo.TkTramiteNrnVO;
 import vo.TlTramiteLdVO;
 import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
@@ -97,6 +99,12 @@ public class TrTramites implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<TmTramiteMnc> tmTramiteMncCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TkTramiteNrn> tkTramiteNrnCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TiTramiteIin> tiTramiteIinCollection;
         
     public TrTramites() {
     }
@@ -148,6 +156,18 @@ public class TrTramites implements Serializable {
             tramiteMncVO.add(tmc.toVO());
         }
         
+        // Tramite Códigos NRN
+        Collection<TkTramiteNrnVO> tramiteNrnVO = new ArrayList<TkTramiteNrnVO>();        
+        for (TkTramiteNrn tk : this.tkTramiteNrnCollection) {
+            tramiteNrnVO.add(tk.toVO());
+        }
+        
+        // Tramite Códigos IIN
+        Collection<TiTramiteIinVO> tramiteIinVO = new ArrayList<TiTramiteIinVO>();        
+        for (TiTramiteIin ti : this.tiTramiteIinCollection) {
+            tramiteIinVO.add(ti.toVO());
+        }
+        
         vo.setTrnCodigo(this.getTrnCodigo());
         vo.setUsnCodigo(userVO);
         vo.setEmrCodigo(operadorVO);
@@ -163,6 +183,8 @@ public class TrTramites implements Serializable {
         vo.setTcTramiteCcCollection(tramiteCcVO);
         vo.setTaTramiteMaCollection(tramiteMaVO);
         vo.setTmTramiteMncCollection(tramiteMncVO);
+        vo.setTkTramiteNrnCollection(tramiteNrnVO);
+        vo.setTiTramiteIinCollection(tramiteIinVO);
         
         return vo;
     }
@@ -315,6 +337,22 @@ public class TrTramites implements Serializable {
 
     public void setTmTramiteMncCollection(Collection<TmTramiteMnc> tmTramiteMncCollection) {
         this.tmTramiteMncCollection = tmTramiteMncCollection;
+    }
+
+    public Collection<TkTramiteNrn> getTkTramiteNrnCollection() {
+        return tkTramiteNrnCollection;
+    }
+
+    public void setTkTramiteNrnCollection(Collection<TkTramiteNrn> tkTramiteNrnCollection) {
+        this.tkTramiteNrnCollection = tkTramiteNrnCollection;
+    }
+
+    public Collection<TiTramiteIin> getTiTramiteIinCollection() {
+        return tiTramiteIinCollection;
+    }
+
+    public void setTiTramiteIinCollection(Collection<TiTramiteIin> tiTramiteIinCollection) {
+        this.tiTramiteIinCollection = tiTramiteIinCollection;
     }
     
  }

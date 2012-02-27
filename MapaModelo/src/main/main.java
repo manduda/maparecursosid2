@@ -18,6 +18,7 @@ import services.UsUsuariosService;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
 import vo.CdCodigosMncVO;
+import vo.CiCodigosIinVO;
 import vo.ClCodigosLdVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
@@ -25,6 +26,7 @@ import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
+import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
 import vo.SeSenalizacionVO;
@@ -136,7 +138,7 @@ public class main {
         //-------------------------------------
         
         //----  CODIGOS MNC
-        List<CdCodigosMncVO> vo = new ArrayList<CdCodigosMncVO>();
+        /*List<CdCodigosMncVO> vo = new ArrayList<CdCodigosMncVO>();
         int cantidad = 0;
         vo = fachada.cargarCodigosMnc(0,-1,"-1",-1,-1);
         cantidad = fachada.countCargarCodigosMnc("-1",-1,-1);
@@ -147,6 +149,36 @@ public class main {
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
             int codigoMnc = vo.get(i).getCdnMnc();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoMnc);
+	}*/
+        //-------------------------------------
+        
+        //----  CODIGOS NRN
+        /*List<NrCodigosNrnVO> vo = new ArrayList<NrCodigosNrnVO>();
+        int cantidad = 0;
+        vo = fachada.cargarCodigosNrn(0,-1,"-1",-1,-1);
+        cantidad = fachada.countCargarCodigosNrn("-1",-1,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getNrnCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            int codigoNrn = vo.get(i).getNrnCodigoNrn();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoNrn);
+	}*/
+        //-------------------------------------
+        
+        //----  CODIGOS IIN
+        List<CiCodigosIinVO> vo = new ArrayList<CiCodigosIinVO>();
+        int cantidad = 0;
+        vo = fachada.cargarCodigosIin(0,-1,"-1",-1,-1);
+        cantidad = fachada.countCargarCodigosIin("-1",-1,-1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getCinCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            int codigoNrn = vo.get(i).getCinCodigoIin();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoNrn);
 	}
         //-------------------------------------
         

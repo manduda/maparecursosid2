@@ -30,6 +30,8 @@ public class TrTramitesVO implements Serializable {
     private Collection<TcTramiteCcVO> tcTramiteCcCollection;
     private Collection<TaTramiteMaVO> taTramiteMaCollection;
     private Collection<TmTramiteMncVO> tmTramiteMncCollection;
+    private Collection<TkTramiteNrnVO> tkTramiteNrnCollection;
+    private Collection<TiTramiteIinVO> tiTramiteIinCollection;
     
     public TrTramitesVO() {
     }
@@ -154,4 +156,20 @@ public class TrTramitesVO implements Serializable {
         this.tmTramiteMncCollection = tmTramiteMncCollection;
     }
 
+    public Collection<TkTramiteNrnVO> getTkTramiteNrnCollection() {
+        return tkTramiteNrnCollection;
+    }
+
+    public void setTkTramiteNrnCollection(Collection<TkTramiteNrnVO> tkTramiteNrnCollection) {
+        this.tkTramiteNrnCollection = tkTramiteNrnCollection;
+    }
+
+    public Collection<TiTramiteIinVO> getTiTramiteIinCollection() {
+        return tiTramiteIinCollection;
+    }
+
+    public void setTiTramiteIinCollection(Collection<TiTramiteIinVO> tiTramiteIinCollection) {
+        this.tiTramiteIinCollection = tiTramiteIinCollection;
+    }
+    
 }

@@ -52,6 +52,12 @@ public class EmOperador implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
     private Collection<CdCodigosMnc> cdCodigosMncCollection;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
+    private Collection<NrCodigosNrn> nrCodigosNrnCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "emrCodigo")
+    private Collection<CiCodigosIin> ciCodigosIinCollection;
+    
     public EmOperador() {
     }
     
@@ -124,6 +130,22 @@ public class EmOperador implements Serializable {
 
     public void setCdCodigosMncCollection(Collection<CdCodigosMnc> cdCodigosMncCollection) {
         this.cdCodigosMncCollection = cdCodigosMncCollection;
+    }
+
+    public Collection<NrCodigosNrn> getNrCodigosNrnCollection() {
+        return nrCodigosNrnCollection;
+    }
+
+    public void setNrCodigosNrnCollection(Collection<NrCodigosNrn> nrCodigosNrnCollection) {
+        this.nrCodigosNrnCollection = nrCodigosNrnCollection;
+    }
+
+    public Collection<CiCodigosIin> getCiCodigosIinCollection() {
+        return ciCodigosIinCollection;
+    }
+
+    public void setCiCodigosIinCollection(Collection<CiCodigosIin> ciCodigosIinCollection) {
+        this.ciCodigosIinCollection = ciCodigosIinCollection;
     }
     
 }

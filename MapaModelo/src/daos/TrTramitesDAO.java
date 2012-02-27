@@ -4,6 +4,7 @@
  */
 package daos;
 
+import entities.EmOperador;
 import entities.TrTramites;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,6 +113,10 @@ public class TrTramitesDAO {
                     + "(t.trnCodigo IN (SELECT DISTINCT ta.trnCodigo.trnCodigo FROM TaTramiteMa ta where ta.tanRadicado = ?5))"
                     + "OR "
                     + "(t.trnCodigo IN (SELECT DISTINCT tm.trnCodigo.trnCodigo FROM TmTramiteMnc tm where tm.tmnRadicado = ?5))"
+                    + "OR "
+                    + "(t.trnCodigo IN (SELECT DISTINCT tk.trnCodigo.trnCodigo FROM TkTramiteNrn tk where tk.tknRadicado = ?5))"
+                    + "OR "
+                    + "(t.trnCodigo IN (SELECT DISTINCT ti.trnCodigo.trnCodigo FROM TiTramiteIin ti where ti.tinRadicado = ?5))"
                     + ") ");
         }
         
@@ -141,5 +146,16 @@ public class TrTramitesDAO {
         }
         tramites = query.getResultList();        
         return tramites;
+    }
+    
+    public static void cambiarOperadorTramite(int trnCodigo, String emrCodigo, EntityManager em) {
+        EmOperador operador = new EmOperador();
+        operador.setEmrCodigo(emrCodigo);
+        
+        TrTramites entity = new TrTramites();
+        entity = TrTramitesDAO.findbyId(trnCodigo, em);
+        entity.setEmrCodigo(operador);
+        
+        TrTramitesDAO.merge(entity, em);
     }
 }
