@@ -30,15 +30,19 @@ import utils.Functions;
 import vo.AcAccionVO;
 import vo.CcCodigosCortosVO;
 import vo.CdCodigosMncVO;
+import vo.CiCodigosIinVO;
 import vo.ClCodigosLdVO;
 import vo.EmOperadorVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
+import vo.NrCodigosNrnVO;
 import vo.NuNumeracionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
+import vo.TiTramiteIinVO;
+import vo.TkTramiteNrnVO;
 import vo.TlTramiteLdVO;
 import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
@@ -112,6 +116,9 @@ public class TramiteBean implements Serializable {
     private Integer tipoUsuario = 0;
     private Integer nuevoUsuarioTramite = 0;
     private String mensajeCambiarUsuarioTramite = "";
+    private String nuevoOperadorTramite = "-1";
+    private String mensajeCambiarOperadorTramite = "";
+    
     
     private Integer codigoDetalleTramite = -1;
     private String tipoRecurso = "";
@@ -136,6 +143,8 @@ public class TramiteBean implements Serializable {
     private TcTramiteCcVO tramiteCodigosCortosVO = new TcTramiteCcVO();
     private TaTramiteMaVO tramiteMarcacionAbreviadaVO = new TaTramiteMaVO();
     private TmTramiteMncVO tramiteMncVO = new TmTramiteMncVO();
+    private TkTramiteNrnVO tramiteNrnVO = new TkTramiteNrnVO();
+    private TiTramiteIinVO tramiteIinVO = new TiTramiteIinVO();
     private Boolean reservaTemporal = false;
     private int mesesReserva = 0;
 
@@ -429,11 +438,14 @@ public class TramiteBean implements Serializable {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
+            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+            
             List<UsUsuariosVO> coordinadores = fachada.getUsuarios(2);
             for(UsUsuariosVO u: coordinadores){
-                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin()+" te ha enviado un trámite.<br/><br/>"
-                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>";
-                enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje);
+                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha enviado un trámite.<br/><br/>"
+                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
+                        + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
+                enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
             }
             
         } else {
@@ -445,13 +457,13 @@ public class TramiteBean implements Serializable {
         return null;
     }
     
-    public void enviarCorreo(String usuarioTo, String mensaje){
+    public void enviarCorreo(String usuarioTo, String mensaje, Integer TramiteId){
         Correo correo = new Correo();
         correo.setServidor(configuracion.getServidorCorreo());
         correo.setPuerto(configuracion.getPuertoServidor());
         correo.setCorreoFrom(configuracion.getCorreoAplicacion());
         correo.setPassword(configuracion.getPasswordCorreo());
-        correo.setAsunto("Sistema de Información y Gestión de Recursos de Identificación");
+        correo.setAsunto("Sistema de Información y Gestión de Recursos de Identificación - Trámite " + TramiteId);
         //String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin()+" te ha enviado un trámite.";
         correo.setMensaje(mensaje);
         correo.setCorreoTo(usuarioTo);
@@ -484,10 +496,13 @@ public class TramiteBean implements Serializable {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
-            String email = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0).getUsnCodigo().getCodigoSIUST().getEmail();
-            String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin()+" te ha enviado un trámite.<br/><br/>"
-                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>";
-            enviarCorreo(email, mensaje);
+            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+            
+            String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
+            String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha devuelto un trámite.<br/><br/>"
+                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
+                        + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
+            enviarCorreo(email, mensaje, selectedTramite.getTrnCodigo());
             
         } else {
             mensajeTramite = "<br><b>Error al devolver el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
@@ -520,11 +535,14 @@ public class TramiteBean implements Serializable {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
+            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+
             List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
             for(UsUsuariosVO u: administradores){
-                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin()+" te ha enviado un trámite.<br/><br/>"
-                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>";
-                enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje);
+                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") ha aprobado un trámite.<br/><br/>"
+                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
+                        + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
+                enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
             }
             
         } else {
@@ -618,6 +636,32 @@ public class TramiteBean implements Serializable {
                 break;
             case 2:
                 mensajeCambiarUsuarioTramite = "<br><b>El usuario a asignar no puede ser igual al que tiene actualmente el trámite.</b><br><br>";
+                break;
+        }
+        
+        return null;
+    }
+    
+    public String cambiarOperadorTramite() {
+        if(nuevoOperadorTramite.equals("-1")){
+            mensajeCambiarOperadorTramite = "<br><b>Error al cambiar el operador del trámite.</b><br><br>Debes escoger un operador<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        
+        mensajeCambiarOperadorTramite = "";
+   
+        Integer resultado = fachada.cambiarOperadorTramite(selectedTramite.getTrnCodigo(), nuevoOperadorTramite);
+        
+        switch(resultado){
+            case 0:
+                mensajeCambiarOperadorTramite = "<br><b>Error al cambiar el operador del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
+                mensajeCambiarOperadorTramite  = "<br><b>Operador cambiado correctamente al trámite.</b><br><br>";
                 break;
         }
         
@@ -1061,6 +1105,104 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteMncVO = new TmTramiteMncVO();
+        } else if (tipoRecurso.equals("codigosNrn")) {
+            ArrayList vo = new ArrayList();
+            CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);//session.getAttribute("SenalizacionBean");
+            
+            List<NrCodigosNrnVO> codigosNrn = new ArrayList<NrCodigosNrnVO>();
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                codigosNrn.add(bean.getSelecteds()[i]);
+            }
+            
+            for(NrCodigosNrnVO c : codigosNrn){
+                TkTramiteNrnVO tkVO = new TkTramiteNrnVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteNrnVO.getTktObservaciones();
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                tkVO.setTrnCodigo(tramite);
+                tkVO.setNrnCodigo(c);
+                tkVO.setAcnCodigo(accion);
+                tkVO.setTknRadicado(radicado);
+                tkVO.setEmrCodigo(operador);
+                tkVO.setTktObservaciones(observaciones);
+                tkVO.setTktReservaTemporal(resTemp);
+                tkVO.setTknMesesLiberacion(mesesResTemp);
+                
+                vo.add(tkVO);
+            
+            }
+            resultado = fachada.agregarRecursos(vo);
+            tramiteNrnVO = new TkTramiteNrnVO();
+        } else if (tipoRecurso.equals("codigosIin")) {
+            ArrayList vo = new ArrayList();
+            CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);//session.getAttribute("SenalizacionBean");
+            
+            List<CiCodigosIinVO> codigosIin = new ArrayList<CiCodigosIinVO>();
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                codigosIin.add(bean.getSelecteds()[i]);
+            }
+            
+            for(CiCodigosIinVO c : codigosIin){
+                TiTramiteIinVO tiVO = new TiTramiteIinVO();
+                EmOperadorVO operador = new EmOperadorVO();
+                String observaciones = tramiteIinVO.getTitObservaciones();
+                Integer radicado = Integer.parseInt(this.radicadoAgregarRecurso);
+                char resTemp = 'N';
+                int mesesResTemp = 0;
+                switch(codigoAccion){
+                    case 2: //Preasignar
+                        for (TrTramitesVO detalleVO : tramites) {
+                            if (detalleVO.getTrnCodigo() == tramiteAgregarRecurso){
+                                operador.setEmrCodigo(detalleVO.getEmrCodigo().getEmrCodigo());
+                                break;
+                            }
+                        }
+                        break;
+                    case 5: //Recuperar
+                        if (reservaTemporal=true){
+                            resTemp='S';                    
+                            mesesResTemp=mesesReserva;
+                        }
+                        operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                        break;
+                }
+                tiVO.setTrnCodigo(tramite);
+                tiVO.setCinCodigo(c);
+                tiVO.setAcnCodigo(accion);
+                tiVO.setTinRadicado(radicado);
+                tiVO.setEmrCodigo(operador);
+                tiVO.setTitObservaciones(observaciones);
+                tiVO.setTitReservaTemporal(resTemp);
+                tiVO.setTinMesesLiberacion(mesesResTemp);
+                
+                vo.add(tiVO);
+            
+            }
+            resultado = fachada.agregarRecursos(vo);
+            tramiteIinVO = new TiTramiteIinVO();
         }
         
         switch(resultado){
@@ -1162,6 +1304,22 @@ public class TramiteBean implements Serializable {
                 vo.add(bean.getSelecteds()[i]);
             }
             bean.setSelectedsAccion(false);
+        } else if (tipoRecurso.equals("codigosNrn")) {
+            CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelecteds()[i]);
+            }
+            bean.setSelectedsAccion(false);
+        } else if (tipoRecurso.equals("codigosIin")) {
+            CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);
+            
+            int size = bean.getSelecteds().length;
+            for (int i = 0; i < size; i++) {
+                vo.add(bean.getSelecteds()[i]);
+            }
+            bean.setSelectedsAccion(false);
         }
         
         String accion = "";
@@ -1243,6 +1401,14 @@ public class TramiteBean implements Serializable {
         } else if(tipoRecurso.equals("codigosMnc")) {
             TmTramiteMncVO vo = new TmTramiteMncVO();
             vo.setTmnCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        } else if(tipoRecurso.equals("codigosNrn")) {
+            TkTramiteNrnVO vo = new TkTramiteNrnVO();
+            vo.setTknCodigo(codigoDetalleTramite);
+            resultado = fachada.eliminarRecurso(vo);
+        }  else if(tipoRecurso.equals("codigosIin")) {
+            TiTramiteIinVO vo = new TiTramiteIinVO();
+            vo.setTinCodigo(codigoDetalleTramite);
             resultado = fachada.eliminarRecurso(vo);
         }
         
@@ -1446,13 +1612,17 @@ public class TramiteBean implements Serializable {
         boolean hayCodigosCortos = false;
         boolean hayMarcacionAbreviada = false;
         boolean hayCodigosMnc = false;
+        boolean hayCodigosNrn = false;
+        boolean hayCodigosIin = false;
         haySenalizacion = !selectedTramite.getTsTramiteSenalizacionCollection().isEmpty();
         hayNumeracion = !selectedTramite.getTnTramiteNumeracionCollection().isEmpty();
         hayCodigosLd = !selectedTramite.getTlTramiteLdCollection().isEmpty();
         hayCodigosCortos = !selectedTramite.getTcTramiteCcCollection().isEmpty();
         hayMarcacionAbreviada = !selectedTramite.getTaTramiteMaCollection().isEmpty();
         hayCodigosMnc = !selectedTramite.getTmTramiteMncCollection().isEmpty();
-        if (haySenalizacion || hayNumeracion || hayCodigosLd || hayCodigosCortos || hayMarcacionAbreviada || hayCodigosMnc){
+        hayCodigosNrn = !selectedTramite.getTkTramiteNrnCollection().isEmpty();
+        hayCodigosIin = !selectedTramite.getTiTramiteIinCollection().isEmpty();
+        if (haySenalizacion || hayNumeracion || hayCodigosLd || hayCodigosCortos || hayMarcacionAbreviada || hayCodigosMnc || hayCodigosNrn || hayCodigosIin){
             return true;
         }
         return false;
@@ -1511,6 +1681,18 @@ public class TramiteBean implements Serializable {
                 CdCodigosMncVO rec = (CdCodigosMncVO)recurso;
                 r.setRstTipoRecurso("Códigos MNC");
                 int recDetalle = rec.getCdnMnc();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("CodigosNrn")){
+                NrCodigosNrnVO rec = (NrCodigosNrnVO)recurso;
+                r.setRstTipoRecurso("Códigos NRN");
+                int recDetalle = rec.getNrnCodigoNrn();
+                ((ArrayList)reservas.get(i)).add(r);
+                ((ArrayList)reservas.get(i)).add(recDetalle);
+            } else if(r.getRstTipoRecurso().equals("CodigosIin")){
+                CiCodigosIinVO rec = (CiCodigosIinVO)recurso;
+                r.setRstTipoRecurso("Códigos IIN");
+                int recDetalle = rec.getCinCodigoIin();
                 ((ArrayList)reservas.get(i)).add(r);
                 ((ArrayList)reservas.get(i)).add(recDetalle);
             }
@@ -2035,6 +2217,38 @@ public class TramiteBean implements Serializable {
 
     public void setTramiteMncVO(TmTramiteMncVO tramiteMncVO) {
         this.tramiteMncVO = tramiteMncVO;
+    }
+
+    public TkTramiteNrnVO getTramiteNrnVO() {
+        return tramiteNrnVO;
+    }
+
+    public void setTramiteNrnVO(TkTramiteNrnVO tramiteNrnVO) {
+        this.tramiteNrnVO = tramiteNrnVO;
+    }
+
+    public TiTramiteIinVO getTramiteIinVO() {
+        return tramiteIinVO;
+    }
+
+    public void setTramiteIinVO(TiTramiteIinVO tramiteIinVO) {
+        this.tramiteIinVO = tramiteIinVO;
+    }
+
+    public String getMensajeCambiarOperadorTramite() {
+        return mensajeCambiarOperadorTramite;
+    }
+
+    public void setMensajeCambiarOperadorTramite(String mensajeCambiarOperadorTramite) {
+        this.mensajeCambiarOperadorTramite = mensajeCambiarOperadorTramite;
+    }
+
+    public String getNuevoOperadorTramite() {
+        return nuevoOperadorTramite;
+    }
+
+    public void setNuevoOperadorTramite(String nuevoOperadorTramite) {
+        this.nuevoOperadorTramite = nuevoOperadorTramite;
     }
 
 }

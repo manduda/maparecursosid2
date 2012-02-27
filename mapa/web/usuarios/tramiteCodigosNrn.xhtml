@@ -7,40 +7,40 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteMarcacionAbreviada.xhtml')}">
-            <h:panelGroup id="pgTramiteMarcacionAbreviada" >
+        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/tramiteCodigosNrn.xhtml')}">
+            <h:panelGroup id="pgCodigosNrn" >
                 <h:form>
                 <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0" 
-                             rendered="#{!empty TramiteBean.selectedTramite.taTramiteMaCollection}">
+                             rendered="#{!empty TramiteBean.selectedTramite.tkTramiteNrnCollection}">
                     <br/>
                     <h:panelGrid width="100%" styleClass="tabla-encabezado">
-                        <h:outputText value="MARCACIÓN ABREVIADA" style="font-size:11px; font-weight: bold;"/>
+                        <h:outputText value="CÓDIGOS NRN" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
-                    <p:dataTable value="#{TramiteBean.selectedTramite.taTramiteMaCollection}"
-                                 var="tramiteMarcacionAbreviada" style="font-size:9px" >
+                    <p:dataTable value="#{TramiteBean.selectedTramite.tkTramiteNrnCollection}"
+                                 var="tramiteCodigosNrn" style="font-size:9px" >
                         <p:column styleClass="tabla-expandir">  
                             <p:rowToggler />  
                         </p:column>
-                        <p:column headerText="CÓDIGO MARCACIÓN ABREVIADA" styleClass="tabla-recurso">
-                            <h:outputText value="#{tramiteMarcacionAbreviada.manCodigo.manCodigoMarcacion}"/>
+                        <p:column headerText="CÓDIGO NRN" styleClass="tabla-recurso">
+                            <h:outputText value="#{tramiteCodigosNrn.nrnCodigo.nrnCodigoNrn}"/>
                         </p:column>
                         <p:column headerText="ACCIÓN" styleClass="tabla-accion">
-                            <h:outputText value="#{tramiteMarcacionAbreviada.acnCodigo.actNombre}" style="font-weight: bold;"/>
+                            <h:outputText value="#{tramiteCodigosNrn.acnCodigo.actNombre}" style="font-weight: bold;"/>
                         </p:column>
                         <p:column headerText="RADICADO" styleClass="tabla-radicado">
-                            <h:outputText value="#{tramiteMarcacionAbreviada.tanRadicado}"/>
+                            <h:outputText value="#{tramiteCodigosNrn.tknRadicado}"/>
                         </p:column>
                         <p:column headerText="OBSERVACIONES">
-                            <h:outputText value="#{tramiteMarcacionAbreviada.tatObservaciones}"/>
+                            <h:outputText value="#{tramiteCodigosNrn.tktObservaciones}"/>
                         </p:column>
                         <p:column headerText="RESERVA&lt;br/&gt;TEMPORAL" styleClass="tabla-reserva">
-                            <h:outputText value="#{tramiteMarcacionAbreviada.tatReservaTemporal=='S'? fnc:concat(tramiteMarcacionAbreviada.tanMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteMarcacionAbreviada.acnCodigo.acnCodigo==5}"/>
-                            <h:outputText value="N/A" rendered="#{tramiteMarcacionAbreviada.acnCodigo.acnCodigo!=5}"/>
+                            <h:outputText value="#{tramiteCodigosNrn.tktReservaTemporal=='S'? fnc:concat(tramiteCodigosNrn.tknMesesLiberacion,' meses') :'NO'}" rendered="#{tramiteCodigosNrn.acnCodigo.acnCodigo==5}"/>
+                            <h:outputText value="N/A" rendered="#{tramiteCodigosNrn.acnCodigo.acnCodigo!=5}"/>
                         </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
-                            <p:commandLink oncomplete="eliminarMarcacionAbreviada.show()" update="eliminarMarcacionAbreviada">
-                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteMarcacionAbreviada.tanCodigo}"/>
-                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
+                            <p:commandLink oncomplete="eliminarDialogNrn.show()" update="eliminarDialogNrn">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteCodigosNrn.tknCodigo}"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosNrn"/>
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
                             </p:commandLink>
                         </p:column>
@@ -51,9 +51,9 @@
                                         <h:outputText value="CARACTERÍSTICAS ACTUALES DEL RECURSO" style="font-weight: bold;"/>
                                 </f:facet>
                                     <h:outputText value="ESTADO" style="font-weight: bold;"/>
-                                    <h:outputText value="#{tramiteMarcacionAbreviada.manCodigo.esnCodigo.estNombre}"/>
+                                    <h:outputText value="#{tramiteCodigosNrn.nrnCodigo.esnCodigo.estNombre}"/>
                                     <h:outputText value="OPERADOR" style="font-weight: bold;"/>
-                                    <h:outputText value="#{tramiteMarcacionAbreviada.manCodigo.emrCodigo.emtNombre}"/>
+                                    <h:outputText value="#{tramiteCodigosNrn.nrnCodigo.emrCodigo.emtNombre}"/>
                             </h:panelGrid>
                             <br/>
                         </p:rowExpansion>
@@ -65,11 +65,11 @@
             <!-- MENÚ ELIMINAR RECURSO -->
             <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{(UserBean.login)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}" 
                              showEffect="fade" hideEffect="fade" modal="true" closable="false"
-                             header="Confirmación" severity="alert" widgetVar="eliminarMarcacionAbreviada">  
+                             header="Confirmación" severity="alert" widgetVar="eliminarDialogNrn">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteMarcacionAbreviada,pgMenuTramite" oncomplete="eliminarMarcacionAbreviada.hide();"/>
-                        <p:commandButton type="button" value="Cancelar" onclick="eliminarMarcacionAbreviada.hide();"/>
+                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgCodigosNrn,pgMenuTramite" oncomplete="eliminarDialogNrn.hide();"/>
+                        <p:commandButton type="button" value="Cancelar" onclick="eliminarDialogNrn.hide();"/>
                     </h:form>
                 </h:panelGrid>
             </p:confirmDialog>

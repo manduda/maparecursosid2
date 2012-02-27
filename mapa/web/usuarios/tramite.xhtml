@@ -54,17 +54,25 @@
                                         <h:form>
                                             <h:panelGrid width="100%">
                                                 <h:outputText value="Trámite" style="font-weight: bold;"/>
-                                                <h:selectOneMenu value="#{TramiteBean.selectedTramite.emrCodigo.emrCodigo}">
+                                                <h:selectOneMenu value="#{TramiteBean.nuevoOperadorTramite}">
                                                     <f:selectItems value="#{TramiteBean.listaOperador}"/>
                                                 </h:selectOneMenu>
                                             </h:panelGrid>
                                             <br/>
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                <p:commandButton value="Aceptar" onclick="cambiarOperadorDialog.hide();" />
+                                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.cambiarOperadorTramite}" ajax="true" update="datosResultadoCambiarOperador,pgDatosTramite,pgMenuTramite" oncomplete="cambiarOperadorDialog.hide();resultadoCambiarOperadorDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="cambiarOperadorDialog.hide();" />
                                             </h:panelGrid>
                                         </h:form>
                                      </h:panelGrid>
+                                </p:dialog>
+                                
+                                <p:dialog header="Resultado" widgetVar="resultadoCambiarOperadorDialog" resizable="false" modal="true" draggable="false"
+                                          width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
+                                    <h:panelGrid id="datosResultadoCambiarOperador" style="text-align: center; " width="100%">
+                                        <h:outputText value="#{TramiteBean.mensajeCambiarOperadorTramite}" escape="false"/>
+                                        <p:commandButton type="button" value="Aceptar" onclick="resultadoCambiarOperadorDialog.hide();"/>
+                                    </h:panelGrid>
                                 </p:dialog>
                                 <br/>
                             </h:panelGroup>
@@ -213,10 +221,8 @@
                                 <p:dialog header="Resultado" widgetVar="resultadoCambiarUsuarioDialog" resizable="false" modal="true" draggable="false"
                                           width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
                                     <h:panelGrid id="datosResultadoCambiarUsuario" style="text-align: center; " width="100%">
-                                        <h:form>
-                                            <h:outputText value="#{TramiteBean.mensajeCambiarUsuarioTramite}" escape="false"/>
-                                            <p:commandButton type="button" value="Aceptar" onclick="resultadoCambiarUsuarioDialog.hide();"/>
-                                         </h:form>
+                                        <h:outputText value="#{TramiteBean.mensajeCambiarUsuarioTramite}" escape="false"/>
+                                        <p:commandButton type="button" value="Aceptar" onclick="resultadoCambiarUsuarioDialog.hide();"/>
                                     </h:panelGrid>
                                 </p:dialog>
 
@@ -236,6 +242,10 @@
                     <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteMarcacionAbreviada.xhtml"/>
                     
                     <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosMnc.xhtml"/>
+                    
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosNrn.xhtml"/>
+                    
+                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteCodigosIin.xhtml"/>
                 </h:panelGroup>
 
         </h:panelGroup>

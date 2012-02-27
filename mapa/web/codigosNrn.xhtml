@@ -9,57 +9,58 @@
                 xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
-        <h:outputText value="Marcación Abreviada"/>
+        <h:outputText value="Network Routing Number"/>
     </ui:define>
 
     <ui:define name="content">
         <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
-            <h:form id="formMarcacionAbreviada">
+            <h:form id="formCodigosNrn">
                 <h:panelGrid>
                     <h:panelGrid columns="2">
                         <h:outputText value="Operador"/>
-                        <h:selectOneMenu value="#{MarcacionAbreviadaBean.operadorVO.emrCodigo}">
-                            <f:selectItems value="#{MarcacionAbreviadaBean.listaOperador}" />  
+                        <h:selectOneMenu value="#{CodigosNrnBean.operadorVO.emrCodigo}">
+                            <f:selectItems value="#{CodigosNrnBean.listaOperador}" />  
                         </h:selectOneMenu>
                         <h:outputText value="Estado"/>
-                        <h:selectOneMenu value="#{MarcacionAbreviadaBean.estadoVO.esnCodigo}">
-                            <f:selectItems value="#{MarcacionAbreviadaBean.listaEstado}" />  
+                        <h:selectOneMenu value="#{CodigosNrnBean.estadoVO.esnCodigo}">
+                            <f:selectItems value="#{CodigosNrnBean.listaEstado}" />  
                         </h:selectOneMenu>
-                        <h:outputText value="Código marcación"/>
+                        <h:outputText value="Código NRN"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputText id="codigoMarcacionAbreviada" value="#{MarcacionAbreviadaBean.codigoMarcacionAbreviada}" maxlength="6" size="6" converter="javax.faces.Integer"
+                            <h:inputText id="codigoNrn" value="#{CodigosNrnBean.codigoNrn}" maxlength="6" size="6" converter="javax.faces.Integer"
                                          converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
-                            <p:message for="codigoMarcacionAbreviada" />
+                            <p:message for="codigoNrn" />
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid>
-                        <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update="pgMarcacionAbreviada,formMarcacionAbreviada"/>
+                        <p:commandButton value="Consultar" actionListener="#{CodigosNrnBean.buscar}" ajax="true" update="pgCodigosNrn,formCodigosNrn"/>
                     </h:panelGrid>
                 </h:panelGrid>
             </h:form>
         </p:panel>
         
-        <h:panelGrid id="pgMarcacionAbreviada" width="100%">
+        <h:panelGrid id="pgCodigosNrn" width="100%">
             <h:form>
                 <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                     <h:panelGroup id="opciones">
-                        <p:commandButton value="Acción" action="#{MarcacionAbreviadaBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!MarcacionAbreviadaBean.selectedsAccion}"/>
+                        <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosNrnBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosNrnBean.selectedsAccion}"/>
                     </h:panelGroup>
                 </h:panelGrid>
-                <p:dataTable id="datos" value="#{MarcacionAbreviadaBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
+
+                <p:dataTable id="datos" value="#{CodigosNrnBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
                              selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
-                             selection="#{MarcacionAbreviadaBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                             selection="#{CodigosNrnBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                              onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                             rowSelectListener="#{MarcacionAbreviadaBean.onRowSelect}" rowUnselectListener="#{MarcacionAbreviadaBean.onRowUnselect}"
+                             rowSelectListener="#{CodigosNrnBean.onRowSelect}" rowUnselectListener="#{CodigosNrnBean.onRowUnselect}"
                              rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
-                             paginatorTemplate=" #{MarcacionAbreviadaBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                             paginatorTemplate=" #{CodigosNrnBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
                     <p:column style="width:25px">
-                        <p:commandButton update="display,datosRecurso" oncomplete="Dialog.show();" image="ui-icon ui-icon-search" action="#{MarcacionAbreviadaBean.detalle}">  
-                            <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selected}" value="#{recurso}"/>  
+                        <p:commandButton update="display,datosRecurso" oncomplete="Dialog.show();" image="ui-icon ui-icon-search" action="#{CodigosNrnBean.detalle}">  
+                            <f:setPropertyActionListener target="#{CodigosNrnBean.selected}" value="#{recurso}"/>  
                         </p:commandButton>
                     </p:column>
-                    <p:column headerText="CÓDIGO MARCACIÓN" style="text-align: center; width: 100px;">
-                        <h:outputText value="#{recurso.manCodigoMarcacion}"/>
+                    <p:column headerText="CÓDIGO NRN" style="text-align: center; width: 100px;">
+                        <h:outputText value="#{recurso.nrnCodigoNrn}"/>
                     </p:column>
                     <p:column headerText="ESTADO" style="width: 100px">
                         <div style="width: 100%; text-align: center;" class="#{recurso.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
@@ -83,14 +84,14 @@
                       width="500" showEffect="fade" hideEffect="fade" position="center">
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
                     <h:panelGrid columns="2" cellpadding="4" width="100%">
-                        <h:outputText value="Código Marcación Abreviada:" style="font-weight: bold;"/>
-                        <h:outputText value="#{MarcacionAbreviadaBean.selected.manCodigoMarcacion}" />
+                        <h:outputText value="Código NRN:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosNrnBean.selected.nrnCodigoNrn}" />
                         <h:outputText value="Estado:" style="font-weight: bold;"/>
-                        <h:outputText value="#{MarcacionAbreviadaBean.selected.esnCodigo.estNombre}" />
+                        <h:outputText value="#{CodigosNrnBean.selected.esnCodigo.estNombre}" />
                         <h:outputText value="Operador:" style="font-weight: bold;"/>
-                        <h:outputText value="#{MarcacionAbreviadaBean.selected.emrCodigo.emtNombre}" />
+                        <h:outputText value="#{CodigosNrnBean.selected.emrCodigo.emtNombre}" />
                         <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                        <h:outputText value="#{MarcacionAbreviadaBean.selected.matObservaciones}" />
+                        <h:outputText value="#{CodigosNrnBean.selected.nrtObservaciones}" />
                     </h:panelGrid>
                     <h:panelGrid columns="2" width="100%" style="text-align: center;">
                         <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
@@ -101,7 +102,7 @@
             <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
                       width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
                 <h:form>
-                    <p:dataTable var="t" value="#{MarcacionAbreviadaBean.tramiteMarcacionAbreviada}" style="font-size: 10px;"
+                    <p:dataTable var="t" value="#{CodigosNrnBean.tramiteCodigosNrn}" style="font-size: 10px;"
                                  emptyMessage="No se encontró historia registrada para este recurso">
                         <p:column>
                             <f:facet name="header">
@@ -134,10 +135,10 @@
                       width="700" showEffect="fade" hideEffect="fade" position="center">
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
                     <h:form>
-                        <p:dataTable id="datosAccion" value="#{MarcacionAbreviadaBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
-                            <f:facet name="header">Detalle marcación abreviada</f:facet>
-                            <p:column headerText="CÓDIGO MARCACIÓN" styleClass="tabla-recurso">
-                                <h:outputText value="#{detalle.manCodigoMarcacion}"/>
+                        <p:dataTable id="datosAccion" value="#{CodigosNrnBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                            <f:facet name="header">Detalle códigos NRN</f:facet>
+                            <p:column headerText="CÓDIGO NRN" styleClass="tabla-recurso">
+                                <h:outputText value="#{detalle.nrnCodigoNrn}"/>
                             </p:column>
                             <p:column headerText="ESTADO" >
                                 <h:outputText value="#{detalle.esnCodigo.estNombre}"/>
@@ -149,17 +150,17 @@
                         
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{UserBean.login}">
-                                <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (MarcacionAbreviadaBean.selected.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and MarcacionAbreviadaBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
+                                <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosNrnBean.selected.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosNrnBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosNrn"/>
                                 </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and MarcacionAbreviadaBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and MarcacionAbreviadaBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
+                                <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosNrnBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosNrnBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosNrn"/>
                                     <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
                                 </p:commandButton>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and MarcacionAbreviadaBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosNrnBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosNrn"/>
                                     <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
                                 </p:commandButton>
                             </h:panelGroup>
@@ -170,6 +171,6 @@
             </p:dialog>
         </h:panelGroup>
         
-        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleMarcacionAbreviada.xhtml"/>
+        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosNrn.xhtml"/>
     </ui:define>
 </ui:composition>

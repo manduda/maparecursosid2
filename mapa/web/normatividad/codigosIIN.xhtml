@@ -1,24 +1,64 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/codigosIIN.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                CÓDIGOS IIN
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
-            
-        </h:panelGroup>
-    </ui:composition>
-</html>
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
 
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            CÓDIGOS IIN
+        </p>
+
+        <p style="text-align: justify">
+        El IIN (Issuer Identification Number) es el número que tienen las tarjetas de crédito internacionales para identificar la entidad emisora 
+        de la tarjeta.
+        <br/><br/>
+        La UIT ha extendido el concepto a las tarjetas internacionales de llamadas telefónicas (phonecards) emitidas y reconocidas por empresas de 
+        telecomunicaciones. La norma se encuentra en la Recomendación E.118 .
+        <br/><br/>
+        El IIN tiene tres partes, que no pueden superar 7 dígitos en total:
+        <br/><br/>
+        
+        <table width="500px">
+            <tr style="text-align: center;">
+                <td>Major Industry Identifier</td>
+                <td></td>
+                <td>Código de País</td>
+                <td></td>
+                <td>Issuer Identifier Number</td>
+            </tr>
+            <tr>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>MII</td></tr></table></td>
+                <td></td>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>CC</td></tr></table></td>
+                <td></td>
+                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>IIN</td></tr></table></td>
+            </tr>
+            <tr style="text-align: center;">
+                <td>89 para entidades de Telecomunicaciones</td>
+                <td></td>
+                <td>57 de Colombia</td>
+                <td></td>
+                <td>3 digitos</td>
+            </tr>
+        </table>
+        <br/><br/>
+        Se asigna a cada entidad emisora de tarjetas telefónicas un número, donde los dos primeros dígitos son "89". Estos números se conocen como 
+        Major Industry Identifier, donde "89" indica que la terjeta en cuestión es de telecomunicaciones. Las siguientes cifras (de 1 a 3) 
+        identifican el país de emisión; la UIT ha determinado que debe coincidir con el código de país correspondiente, que para Colombia es "57".
+        <br/><br/>
+        </p>
+        <p>
+        Para información adicional consultar la <a href="http://www.itu.int/rec/T-REC-E.118/es" target="blank">Recomendación UIT-T E.118</a> 
+        </p>
+            
+    </ui:define>
+</ui:composition>

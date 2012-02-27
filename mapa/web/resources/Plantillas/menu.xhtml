@@ -14,20 +14,20 @@
                 <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaCodigosCortos}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="false" value="Matriz 1XY" url="#{ConfiguracionBean.rutaMatriz1xy}" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem rendered="false" value="Códigos IIN" url="#{ConfiguracionBean.rutaCodigosIIN}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="Códigos IIN" url="#{ConfiguracionBean.rutaCodigosIIN}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Códigos MNC" url="#{ConfiguracionBean.rutaCodigosMnc}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem value="Marcación abreviada" url="#{ConfiguracionBean.rutaMarcacionAbreviada}" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem rendered="false" value="NRN" url="#{ConfiguracionBean.rutaNRN}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem value="NRN" url="#{ConfiguracionBean.rutaNRN}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:submenu label="Estructura" icon="ui-icon ui-icon-document">
                     <p:menuitem rendered="false" value="Numeración" url="#{ConfiguracionBean.rutaNormatividad}?recurso=numeracion"/>
                     <p:menuitem rendered="false" value="Señalización" url="#{ConfiguracionBean.rutaNormatividad}?recurso=senalizacion"/>
                     <p:menuitem value="Códigos LD" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosld.xhtml"/>
                     <p:menuitem value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosCortos.xhtml"/>
                     <p:menuitem rendered="false" value="Matriz 1XY" url="#{ConfiguracionBean.rutaNormatividad}?recurso=matriz1xy"/>
-                    <p:menuitem rendered="false" value="Códigos IIN" url="#{ConfiguracionBean.rutaNormatividad}?recurso=codigosIIN"/>
-                    <p:menuitem value="Códigos MNC" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosMNC.xhtml"/>
+                    <p:menuitem value=" IIN" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosIIN.xhtml"/>
+                    <p:menuitem value="MNC" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosMNC.xhtml"/>
                     <p:menuitem value="Marcación abreviada" url="#{ConfiguracionBean.rutaContexto}normatividad/marcacionAbreviada.xhtml"/>
-                    <p:menuitem rendered="false" value="NRN" url="#{ConfiguracionBean.rutaNormatividad}?recurso=nrn"/>
+                    <p:menuitem value="NRN" url="#{ConfiguracionBean.rutaContexto}/normatividad/codigosNrn.xhtml"/>
                 </p:submenu>
             </p:menubar>
         </h:form>

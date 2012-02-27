@@ -66,14 +66,15 @@ public class Correo {
             
             // The HTML
             BodyPart htmlPart = new MimeBodyPart();
-            String firma = "<p><strong><b>MAPA DE RECURSOS DE IDENTIFICACIÓN</b></strong><br/>"
+            /*String firma = "<p><strong><b>MAPA DE RECURSOS DE IDENTIFICACIÓN</b></strong><br/>"
                     + "Comisión de Regulación de Comunicaciones<br/>"
                     + "Cra 7 No 77-07 Piso 9 Bogotá, Colombia<br/>"
                     + "Teléfono: +57(1)3198300<br/>"
                     + "Bogotá, Colombia<br/>"
                     + "Página web: <a href=\"http://www.crcom.gov.co\" title=\"http://www.crom.gov.co\" target=\"_blank\">http://www.crcom.gov.co</a></p>";
+             */
 
-            htmlPart.setContent("<html><body><p>" + this.mensaje + "</p>" + firma
+            htmlPart.setContent("<html><body><p>" + this.mensaje + "</p>" + this.getFirma()
                     + "<img src=\"cid:imgPart\"/><br/></body></html>", "text/html");
             multipart.addBodyPart(htmlPart);
             

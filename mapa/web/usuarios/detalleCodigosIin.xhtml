@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fnc="http://yournamespace.com/fnc">
+    <ui:composition>
+        <h:panelGroup id="display" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/detalleCodigosIin.xhtml')}">
+            
+            <!-- MENÚ RECUPERAR --> 
+            <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
+
+                <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
+                    <h:form>
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <p:dataTable value="#{CodigosIinBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos IIN</f:facet>
+                                <p:column headerText="CÓDIGO IIN" styleClass="tabla-recurso">
+                                    <h:outputText value="#{fnc:rellenarCerosIzquierda(detalle.cinCodigoIin,3)}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalle.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}" size="9" maxlength="9"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:outputText value="Trámite" style="font-weight: bold;"/>
+                            <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
+                                <f:selectItems value="#{TramiteBean.listaTramites}"/> 
+                            </h:selectOneMenu>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Reserva temporal&#160;" style="font-weight: bold;" title="La reserva temporal se emplea cuando se recupera un recurso que ha sido usado previamente. Una vez se vence el tiempo contemplado, el recurso se libera automáticamente"/>
+                                <h:selectOneMenu value="#{TramiteBean.reservaTemporal}">
+                                  <f:selectItem itemValue="false" itemLabel="NO"/>
+                                  <f:selectItem itemValue="true" itemLabel="SI"/>
+                                  <p:ajax update="mesReserva"/>
+                                </h:selectOneMenu>                                    
+                            </h:panelGrid>
+                            <h:panelGroup id="mesReserva">
+                                <h:selectOneMenu value="#{TramiteBean.mesesReserva}" rendered="#{TramiteBean.reservaTemporal}">
+                                  <f:selectItem itemValue="1" itemLabel="1"/>
+                                  <f:selectItem itemValue="2" itemLabel="2"/>
+                                  <f:selectItem itemValue="3" itemLabel="3"/>
+                                  <f:selectItem itemValue="4" itemLabel="4"/>
+                                  <f:selectItem itemValue="5" itemLabel="5"/>
+                                  <f:selectItem itemValue="6" itemLabel="6"/>
+                                  <f:selectItem itemValue="7" itemLabel="7"/>
+                                  <f:selectItem itemValue="8" itemLabel="8"/>
+                                  <f:selectItem itemValue="9" itemLabel="9"/>
+                                  <f:selectItem itemValue="10" itemLabel="10"/>
+                                  <f:selectItem itemValue="11" itemLabel="11"/>
+                                  <f:selectItem itemValue="12" itemLabel="12"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="Meses" style="font-weight: bold;" rendered="#{TramiteBean.reservaTemporal}"/>
+                            </h:panelGroup>
+                            <br/>
+                            <h:outputText value="Observaciones" style="font-weight: bold;"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteIinVO.titObservaciones}" rows="5" cols="80"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
+                            </p:commandButton>
+                            <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
+                        </h:panelGrid>
+                    </h:form>
+                 </h:panelGrid>
+
+            </p:dialog>
+
+            <!-- MENÚ PREASIGNAR --> 
+            <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
+                <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
+                    <h:form>
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <p:dataTable value="#{CodigosIinBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos IIN</f:facet>
+                                <p:column headerText="CÓDIGO IIN" styleClass="tabla-recurso">
+                                    <h:outputText value="#{fnc:rellenarCerosIzquierda(detalle.cinCodigoIin,3)}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
+                            <br/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Radicado:&#160;" style="font-weight: bold;"/>
+                                <h:inputText value="#{TramiteBean.radicadoAgregarRecurso}" size="9" maxlength="9"/>
+                            </h:panelGrid>
+                            <br/>
+                            <h:outputText value="Trámite" style="font-weight: bold;"/>
+                            <h:selectOneMenu value="#{TramiteBean.tramiteAgregarRecurso}">
+                                <f:selectItems value="#{TramiteBean.listaTramites}"/> 
+                            </h:selectOneMenu>
+                            <br/>
+                            <h:outputText value="Observaciones" style="font-weight: bold;"/>
+                            <h:inputTextarea value="#{TramiteBean.tramiteIinVO.titObservaciones}" rows="5" cols="80"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                                <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
+                            </p:commandButton>
+                            <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid>
+            </p:dialog>
+
+            <!-- RESULTADO AGREGAR -->
+            <p:dialog header="Resultado" widgetVar="resultadoAgregarDialog" resizable="false" modal="true" draggable="false"
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
+                <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
+                    <h:form>
+                        <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
+                        <p:commandButton value="Aceptar" onclick="resultadoAgregarDialog.hide();" update="pgMenuTramite,pgCodigosIin">
+                            <f:setPropertyActionListener value="#{false}" target="#{CodigosIinBean.selectedsAccion}" />
+                        </p:commandButton>
+                    </h:form>
+                </h:panelGrid>
+            </p:dialog>
+            
+            <script type="text/javascript">  
+                function cerrarDialogos(xhr, status, args) {
+                    if(args.cerrarDialog) {
+                        recuperarDialog.hide();
+                        preasignarDialog.hide();
+                    }
+                }
+            </script>
+            
+        </h:panelGroup>
+    </ui:composition>
+</html>

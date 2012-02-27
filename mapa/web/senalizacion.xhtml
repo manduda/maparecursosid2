@@ -50,7 +50,7 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid>
-                        <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="false" update="pgSenalizacion,formSen"/>
+                        <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="true" update="pgSenalizacion,formSen"/>
                     </h:panelGrid>
                 </h:panelGrid>
             </h:form>
@@ -60,7 +60,7 @@
             <h:form>
                 <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                     <h:panelGroup id="opciones">
-                        <p:commandButton value="Acción" action="#{SenalizacionBean.detalleAccionSen}" update="datosAccionRecurso,display" oncomplete="senAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!SenalizacionBean.selectedSensAccion}"/>
+                        <p:commandButton value="Acción" ajax="true" actionListener="#{SenalizacionBean.detalleAccionSen}" update="datosAccionRecurso,display" oncomplete="senAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!SenalizacionBean.selectedSensAccion}"/>
                     </h:panelGroup>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
@@ -116,48 +116,28 @@
             <p:dialog header="Detalle" widgetVar="senDialog" resizable="false" modal="true" draggable="false"
                       width="500" showEffect="fade" hideEffect="fade" position="center">
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
-                    <h:form>
-                        <h:panelGrid columns="2" cellpadding="4" width="100%">
-                            <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
-                            <h:outputText value="Estado:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
-                            <h:outputText value="Operador:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
-                            <h:outputText value="Muncipio:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
-                            <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
-                            <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
-                            <h:outputText value="Dirección:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
-                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                            <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
+                    <h:panelGrid columns="2" cellpadding="4" width="100%">
+                        <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
+                        <h:outputText value="Estado:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
+                        <h:outputText value="Operador:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.emrCodigo.emtNombre}" />
+                        <h:outputText value="Muncipio:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.codigoMunicipio.nombreMunicipio} (#{SenalizacionBean.selectedSen.codigoMunicipio.codigoDepartamento.nombreDepartamento})" />
+                        <h:outputText value="Nombre Nodo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
+                        <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
+                        <h:outputText value="Dirección:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
+                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                        <h:outputText value="#{SenalizacionBean.selectedSen.setObservaciones}" />
+                    </h:panelGrid>
 
-                        </h:panelGrid>
-
-                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <h:panelGroup rendered="#{UserBean.login}">
-                                <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senDialog.hide();preasignarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
-                                </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="senDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
-                                </p:commandButton>
-                                <p:commandButton value="Reservar" rendered="#{(SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
-                                </p:commandButton>
-                            </h:panelGroup>
-
-                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
-
-                        </h:panelGrid>
-                    </h:form>
+                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                        <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+                    </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
 

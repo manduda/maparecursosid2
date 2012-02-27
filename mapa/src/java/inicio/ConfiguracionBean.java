@@ -67,7 +67,7 @@ public class ConfiguracionBean implements Serializable {
             rutaCodigosIIN = rutaContexto + "codigosIIN.xhtml";
             rutaMarcacionAbreviada = rutaContexto + "marcacionAbreviada.xhtml";
             rutaCodigosMnc = rutaContexto + "codigosMNC.xhtml";
-            rutaNRN = rutaContexto + "nrn.xhtml";
+            rutaNRN = rutaContexto + "codigosNrn.xhtml";
             rutaNormatividad = rutaContexto + "normatividad.xhtml";
 
         } catch (IOException e) {

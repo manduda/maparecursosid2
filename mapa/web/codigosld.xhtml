@@ -42,7 +42,7 @@
             <h:form>
                 <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                     <h:panelGroup id="opciones">
-                        <p:commandButton value="Acción" action="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}"/>
+                        <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}"/>
                     </h:panelGroup>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="true" paginatorPosition="top"
@@ -82,38 +82,19 @@
             <p:dialog header="Detalle" widgetVar="ldDialog" resizable="false" modal="true" draggable="false"
                       width="400" showEffect="fade" hideEffect="fade" position="center">  
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
-                    <h:form>
-                        <h:panelGrid columns="2" cellpadding="4" width="100%">
-                            <h:outputText value="Código LD:" style="font-weight: bold;"/>
-                            <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}" />
-                            <h:outputText value="Estado:" style="font-weight: bold;"/>
-                            <h:outputText value="#{CodigosLdBean.selectedLd.esnCodigo.estNombre}" />
-                            <h:outputText value="Operador:" style="font-weight: bold;"/>
-                            <h:outputText value="#{CodigosLdBean.selectedLd.emrCodigo.emtNombre}" />
-                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                            <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
-                        </h:panelGrid>
-                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <h:panelGroup rendered="#{UserBean.login}">
-                                <h:outputText value="Los códigos LD en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.preasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="ldDialog.hide();preasignarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
-                                </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 3)and(UserBean.recuperar)}" update="datosRecuperar" oncomplete="ldDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 4)and(UserBean.liberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ldDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
-                                </p:commandButton>
-                                <p:commandButton value="Reservar" rendered="#{(CodigosLdBean.selectedLd.esnCodigo.esnCodigo == 1)and(UserBean.reservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ldDialog.hide();resultadoAgregarDialog.show();" >
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
-                                </p:commandButton>
-                            </h:panelGroup>
-
-                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
-
-                        </h:panelGrid>
-                    </h:form>
+                    <h:panelGrid columns="2" cellpadding="4" width="100%">
+                        <h:outputText value="Código LD:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.clnCodigoLd}" />
+                        <h:outputText value="Estado:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.esnCodigo.estNombre}" />
+                        <h:outputText value="Operador:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.emrCodigo.emtNombre}" />
+                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                        <h:outputText value="#{CodigosLdBean.selectedLd.cltObservaciones}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                        <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+                    </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
             

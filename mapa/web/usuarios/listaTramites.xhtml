@@ -34,7 +34,7 @@
                             </h:panelGrid>
                             <h:panelGrid width="100%"  style="border-top: 1px solid; border-bottom: 1px solid;">
                                 <h:panelGrid width="100%" style="text-align: center;" cellpadding="0" cellspacing="0"
-                                             rendered="#{(!empty tramite.tnTramiteNumeracionCollection) or (!empty tramite.tsTramiteSenalizacionCollection) or (!empty tramite.tlTramiteLdCollection) or (!empty tramite.tcTramiteCcCollection) or (!empty tramite.taTramiteMaCollection) or (!empty tramite.tmTramiteMncCollection)}">
+                                             rendered="#{(!empty tramite.tnTramiteNumeracionCollection) or (!empty tramite.tsTramiteSenalizacionCollection) or (!empty tramite.tlTramiteLdCollection) or (!empty tramite.tcTramiteCcCollection) or (!empty tramite.taTramiteMaCollection) or (!empty tramite.tmTramiteMncCollection) or (!empty tramite.tkTramiteNrnCollection) or (!empty tramite.tiTramiteIinCollection)}">
                                     <h:outputText value="Recursos del trámite" style="font-weight: bold"/>
                                 </h:panelGrid>
                                 <h:outputText value="&#8226; Señalización" rendered="#{!empty tramite.tsTramiteSenalizacionCollection}"/>
@@ -43,7 +43,9 @@
                                 <h:outputText value="&#8226; Código Corto" rendered="#{!empty tramite.tcTramiteCcCollection}"/>
                                 <h:outputText value="&#8226; Marcación Abreviada" rendered="#{!empty tramite.taTramiteMaCollection}"/>
                                 <h:outputText value="&#8226; Código MNC" rendered="#{!empty tramite.tmTramiteMncCollection}"/>
-                                <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tnTramiteNumeracionCollection) and (empty tramite.tlTramiteLdCollection) and (empty tramite.tcTramiteCcCollection)  and (empty tramite.taTramiteMaCollection) and (empty tramite.tmTramiteMncCollection)}"
+                                <h:outputText value="&#8226; Código NRN" rendered="#{!empty tramite.tkTramiteNrnCollection}"/>
+                                <h:outputText value="&#8226; Código IIN" rendered="#{!empty tramite.tiTramiteIinCollection}"/>
+                                <h:panelGrid width="100%" rendered="#{(empty tramite.tsTramiteSenalizacionCollection) and (empty tramite.tnTramiteNumeracionCollection) and (empty tramite.tlTramiteLdCollection) and (empty tramite.tcTramiteCcCollection)  and (empty tramite.taTramiteMaCollection) and (empty tramite.tmTramiteMncCollection) and (empty tramite.tkTramiteNrnCollection) and (empty tramite.tiTramiteIinCollection)}"
                                          cellpadding="0" cellspacing="0" style="text-align: center;">
                                     <h:outputText value="No hay recursos en el trámite" style="font-weight: bold; color: #D20005"/>
                                 </h:panelGrid>
