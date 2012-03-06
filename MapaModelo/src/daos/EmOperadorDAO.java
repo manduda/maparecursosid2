@@ -58,4 +58,9 @@ public class EmOperadorDAO {
         
         return operadores;
     }
+    
+    public static EmOperador findbyId(String emrCodigo, EntityManager em){
+        return em.find(EmOperador.class, emrCodigo);
+    }
+    
 }

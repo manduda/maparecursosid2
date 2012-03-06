@@ -26,6 +26,7 @@ import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
+import vo.Nc1xyVO;
 import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
@@ -168,7 +169,7 @@ public class main {
         //-------------------------------------
         
         //----  CODIGOS IIN
-        List<CiCodigosIinVO> vo = new ArrayList<CiCodigosIinVO>();
+        /*List<CiCodigosIinVO> vo = new ArrayList<CiCodigosIinVO>();
         int cantidad = 0;
         vo = fachada.cargarCodigosIin(0,-1,"-1",-1,-1);
         cantidad = fachada.countCargarCodigosIin("-1",-1,-1);
@@ -179,6 +180,21 @@ public class main {
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
             int codigoNrn = vo.get(i).getCinCodigoIin();
             System.out.println(codigo+"-"+operador+"-"+estado+"-"+codigoNrn);
+	}*/
+        //-------------------------------------
+        
+        //----  CODIGOS 1XY
+        List<Nc1xyVO> vo = new ArrayList<Nc1xyVO>();
+        int cantidad = 0;
+        vo = fachada.cargarCodigos1xy(0,-1,-1,-1,-1,"-1");
+        cantidad = fachada.countCargarCodigos1xy(-1,-1,-1,"-1");
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getNcnCodigo();
+            int codigo1xy = vo.get(i).getNcn1xy();
+            String modalidad = vo.get(i).getMonCodigo().getMotNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            System.out.println(codigo+"-"+codigo1xy+"-"+modalidad+"-"+estado);
 	}
         //-------------------------------------
         

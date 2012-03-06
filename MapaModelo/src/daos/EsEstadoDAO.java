@@ -23,4 +23,9 @@ public class EsEstadoDAO {
         return query.getResultList();
     }
     
+    public static List<EsEstado> getListEstados1xy(EntityManager em){
+        Query query = em.createQuery("SELECT e FROM EsEstado e WHERE e.esnCodigo = 3 OR e.esnCodigo = 4");
+        return query.getResultList();
+    }
+    
 }

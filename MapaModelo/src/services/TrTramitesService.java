@@ -958,18 +958,51 @@ public class TrTramitesService {
 
     }
     
-    public Integer cambiarOperadorTramite(int trnCodigo, String emrCodigo, EntityManager em){
+    public Integer cambiarOperadorTramite(TrTramitesVO vo, String codigoNuevoOperador, EntityManager em){
         /*
          * 1: Operador cambiado correctamente
-         * 2: El ususario actual y el nuevo son iguales
+         * 2: El operador actual y el nuevo son iguales
         */
         
-        TrTramitesDAO.cambiarOperadorTramite(trnCodigo, emrCodigo, em);
+        TrTramites entity = new TrTramites();
         
+        entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
         
+        String codigoOperador = entity.getEmrCodigo().getEmrCodigo();
+        //int codigoNuevoUsuarioSIUST = UsUsuariosDAO.findbyId(codigoNuevoUsuario, em).getCodigoSIUST().getUserCode();
+        
+        if(codigoOperador.equals(codigoNuevoOperador)){
+            return 2;
+        }
+        
+        EmOperador nuevoOperador = new EmOperador();
+        nuevoOperador.setEmrCodigo(codigoNuevoOperador);
+        entity.setEmrCodigo(nuevoOperador);
+        
+        Date fecha = new Date();
+        entity.setTrfFecha(fecha);
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(8);
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(fecha);
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        gestionTramite.setUsnCodigo(usuario);
+        
+        TrTramites tramite = new TrTramites();
+        tramite.setTrnCodigo(vo.getTrnCodigo());
+        gestionTramite.setTrnCodigo(tramite);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
         
         return 1;
-
+        
     }
     
     public List<EtEstadoTramiteVO> getListaEstadoTramites(EntityManager em){
@@ -1056,6 +1089,11 @@ public class TrTramitesService {
             operadoresVO.add(t.toVO());
         }
         return operadoresVO;
+    }
+    
+    public EmOperadorVO buscarOperador(String emrCodigo, EntityManager em){
+        EmOperador operador = EmOperadorDAO.findbyId(emrCodigo, em);
+        return operador.toVO();
     }
     
     public Integer agregarRecurso(TsTramiteSenalizacionVO vo, EntityManager em){

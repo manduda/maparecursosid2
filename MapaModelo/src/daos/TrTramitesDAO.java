@@ -148,7 +148,7 @@ public class TrTramitesDAO {
         return tramites;
     }
     
-    public static void cambiarOperadorTramite(int trnCodigo, String emrCodigo, EntityManager em) {
+    /*public static void cambiarOperadorTramite(int trnCodigo, String emrCodigo, EntityManager em) {
         EmOperador operador = new EmOperador();
         operador.setEmrCodigo(emrCodigo);
         
@@ -157,5 +157,5 @@ public class TrTramitesDAO {
         entity.setEmrCodigo(operador);
         
         TrTramitesDAO.merge(entity, em);
-    }
+    }*/
 }

@@ -32,12 +32,19 @@ public class EsEstadoService {
     public List<EsEstadoVO> getList(EntityManager em){
         List<EsEstado> estado = EsEstadoDAO.getList(em);
         List<EsEstadoVO> estadoVO = new ArrayList<EsEstadoVO>();        
-        EsEstadoVO vo = new EsEstadoVO();
-        int size = estado.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(estado.get(i));
-            estadoVO.add(vo);
+        for (EsEstado o : estado) {
+            estadoVO.add(o.toVO());
         }
         return estadoVO;
     }
+    
+    public List<EsEstadoVO> getListEstados1xy(EntityManager em){
+        List<EsEstado> estado = EsEstadoDAO.getListEstados1xy(em);
+        List<EsEstadoVO> estadoVO = new ArrayList<EsEstadoVO>();        
+        for (EsEstado o : estado) {
+            estadoVO.add(o.toVO());
+        }
+        return estadoVO;
+    }
+    
 }

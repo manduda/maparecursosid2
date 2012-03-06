@@ -4,6 +4,7 @@
  */
 package facade;
 
+import entities.Nc1xy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,6 +18,7 @@ import services.ClCodigosLdService;
 import services.EsEstadoService;
 import services.MaMarcacionAbreviadaService;
 import services.MunicipiosService;
+import services.Nc1xyService;
 import services.NdNdcService;
 import services.NrCodigosNrnService;
 import services.NuNumeracionService;
@@ -35,7 +37,9 @@ import vo.EsEstadoVO;
 import vo.EtEstadoTramiteVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MdModalidadCcVO;
+import vo.MoModalidad1xyVO;
 import vo.MunicipiosVO;
+import vo.Nc1xyVO;
 import vo.NdNdcVO;
 import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
@@ -68,6 +72,7 @@ public class facade {
     private CdCodigosMncService codigosMnc;
     private NrCodigosNrnService codigosNrn;
     private CiCodigosIinService codigosIin;
+    private Nc1xyService codigos1xy;
     private NdNdcService ndc;
     private MunicipiosService municipios;
     private ReRegionService regionSenalizacion;
@@ -85,6 +90,7 @@ public class facade {
         codigosMnc = new CdCodigosMncService();
         codigosNrn = new NrCodigosNrnService();
         codigosIin = new CiCodigosIinService();
+        codigos1xy = new Nc1xyService();
         ndc = new NdNdcService();
         municipios = new MunicipiosService();
         regionSenalizacion = new ReRegionService();
@@ -256,6 +262,56 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = estado.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<EsEstadoVO> listaEstado1xy() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<EsEstadoVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = estado.getListEstados1xy(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public List<String> listaServicios1xy() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<String> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigos1xy.getListServicios(em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -1013,6 +1069,112 @@ public class facade {
     
     //--------------------------------
     
+    //-------- CÓDIGOS 1XY --------
+    
+    public List<Nc1xyVO> cargarCodigos1xy(int first, int max, int codigo1xy, int codigoModalidad, int estado, String servicio){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<Nc1xyVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigos1xy.cargarCodigos1xy(first, max, codigo1xy, codigoModalidad, estado, servicio, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public int countCargarCodigos1xy(int codigo1xy, int codigoModalidad, int estado, String servicio){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            cantidad = codigos1xy.countCargarCodigos1xy(codigo1xy, codigoModalidad, estado, servicio, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return cantidad;
+    }
+    
+    public List<MoModalidad1xyVO> listaModalidad1xy() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<MoModalidad1xyVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = codigos1xy.getListModalidad1xy(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public boolean editarCodigo1xy(Nc1xyVO vo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            codigos1xy.editarCodigo1xy(vo, em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    //--------------------------------
+    
     public List<UsUsuariosVO> listaUsuariosAplicacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -1149,6 +1311,31 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = usuario.buscarUsuario(userCode, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public EmOperadorVO buscarOperador(String emrCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        EmOperadorVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = tramites.buscarOperador(emrCodigo, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
@@ -1330,7 +1517,7 @@ public class facade {
         /*
          * 0: Error al cambiar el usuario
          * 1: Usuario cambiado correctamente
-         * 2: El ususario actual y el nuevo son iguales
+         * 2: El usuario actual y el nuevo son iguales
         */
         
         EntityManagerFactory emf = null;
@@ -1358,10 +1545,11 @@ public class facade {
         return resultado;
     }
     
-    public Integer cambiarOperadorTramite(int trnCodigo, String emrOperador){
+    public Integer cambiarOperadorTramite(TrTramitesVO vo, String codigoNuevoOperador){
         /*
          * 0: Error al cambiar el operador
          * 1: Operador cambiado correctamente
+         * 2: El operador actual y el nuevo son iguales
         */
         
         EntityManagerFactory emf = null;
@@ -1373,7 +1561,7 @@ public class facade {
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            resultado = tramites.cambiarOperadorTramite(trnCodigo, emrOperador, em);
+            resultado = tramites.cambiarOperadorTramite(vo, codigoNuevoOperador, em);
             tx.commit();
         } catch (Exception e) {
             if(em != null && tx != null){
