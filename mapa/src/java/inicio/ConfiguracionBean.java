@@ -30,7 +30,7 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMapaNumeracion;
     private String rutaCodigosLd;
     private String rutaCodigosCortos;
-    private String rutaMatriz1xy;
+    private String rutaCodigos1xy;
     private String rutaCodigosIIN;
     private String rutaMarcacionAbreviada;
     private String rutaCodigosMnc;
@@ -63,7 +63,7 @@ public class ConfiguracionBean implements Serializable {
             rutaMapaNumeracion = rutaContexto + "numeracion.xhtml";
             rutaCodigosLd = rutaContexto + "codigosld.xhtml";
             rutaCodigosCortos = rutaContexto + "codigosCortos.xhtml";
-            rutaMatriz1xy = rutaContexto + "matriz1xy.xhtml";
+            rutaCodigos1xy = rutaContexto + "codigos1xy.xhtml";
             rutaCodigosIIN = rutaContexto + "codigosIIN.xhtml";
             rutaMarcacionAbreviada = rutaContexto + "marcacionAbreviada.xhtml";
             rutaCodigosMnc = rutaContexto + "codigosMNC.xhtml";
@@ -214,12 +214,12 @@ public class ConfiguracionBean implements Serializable {
         this.rutaMarcacionAbreviada = rutaMarcacionAbreviada;
     }
 
-    public String getRutaMatriz1xy() {
-        return rutaMatriz1xy;
+    public String getRutaCodigos1xy() {
+        return rutaCodigos1xy;
     }
 
-    public void setRutaMatriz1xy(String rutaMatriz1xy) {
-        this.rutaMatriz1xy = rutaMatriz1xy;
+    public void setRutaCodigos1xy(String rutaCodigos1xy) {
+        this.rutaCodigos1xy = rutaCodigos1xy;
     }
 
     public String getRutaNRN() {

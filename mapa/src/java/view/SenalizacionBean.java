@@ -64,6 +64,7 @@ public class SenalizacionBean implements Serializable {
     private LazyDataModel<SeSenalizacionVO> lazyModel;
     private SeSenalizacionVO selectedSen;
     private SeSenalizacionVO[] selectedSens;
+    private Boolean selectedSensPreasignar;
     private Boolean selectedSensRecuperar;
     private Boolean selectedSensReservar;
     private Boolean selectedSensLiberar;
@@ -221,14 +222,26 @@ public class SenalizacionBean implements Serializable {
     public void detalleAccionSen(){
         if (selectedSens != null){
             //selectedSensCantidad = 0;
+            selectedSensPreasignar = true;
             selectedSensRecuperar = true;
             selectedSensReservar = true;
             selectedSensLiberar = true;
             String operador = selectedSens[0].getEmrCodigo().getEmrCodigo();
             
+            //--- Activar / desactivar botón Preasignar (solo se permite la presignación de un recurso a la vez)
+            if (selectedSens.length > 1) {
+                selectedSensPreasignar = false;
+            } else {
+                if (selectedSens[0].getEsnCodigo().getEsnCodigo() == 1) {
+                    selectedSensPreasignar = true;
+                } else {
+                    selectedSensPreasignar = false;
+                }
+            }
+            
             for (SeSenalizacionVO n : selectedSens) {
                 //selectedNumsCantidad = selectedNumsCantidad + (n.getNunFin()-n.getNunInicio()+1);
-                
+
                 //--- Activar / desactivar botón Recuperar
                 if (selectedSensRecuperar == true) {
                     if((n.getEsnCodigo().getEsnCodigo() == 3) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
@@ -257,6 +270,7 @@ public class SenalizacionBean implements Serializable {
             }
         } else {
             //selectedNumsCantidad = 0;
+            selectedSensPreasignar = false;
             selectedSensRecuperar = false;
             selectedSensReservar = false;
             selectedSensLiberar = false;
@@ -495,6 +509,14 @@ public class SenalizacionBean implements Serializable {
 
     public void setTramiteSenalizacion(List<TsTramiteSenalizacionVO> tramiteSenalizacion) {
         this.tramiteSenalizacion = tramiteSenalizacion;
+    }
+
+    public Boolean getSelectedSensPreasignar() {
+        return selectedSensPreasignar;
+    }
+
+    public void setSelectedSensPreasignar(Boolean selectedSensPreasignar) {
+        this.selectedSensPreasignar = selectedSensPreasignar;
     }
 
 }

@@ -60,7 +60,7 @@
                                             </h:panelGrid>
                                             <br/>
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.cambiarOperadorTramite}" ajax="true" update="datosResultadoCambiarOperador,pgDatosTramite,pgMenuTramite" oncomplete="cambiarOperadorDialog.hide();resultadoCambiarOperadorDialog.show();"/>
+                                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.cambiarOperadorTramite}" ajax="true" update="datosResultadoCambiarOperador,pgDatosTramite,pgMenuTramite,pgHistoriaTramite" oncomplete="cambiarOperadorDialog.hide();resultadoCambiarOperadorDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="cambiarOperadorDialog.hide();" />
                                             </h:panelGrid>
                                         </h:form>
@@ -81,7 +81,9 @@
                     
                     
                     <!-- HISTORIA TRAMITE -->
-                    <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteHistoria.xhtml"/>
+                    <h:panelGroup id="pgHistoriaTramite">
+                        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/tramiteHistoria.xhtml"/>
+                    </h:panelGroup>
                     <br/>
                     <h:panelGroup id="pgAccionTramite">
                         <h:panelGrid columns="12">

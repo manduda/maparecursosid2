@@ -127,3 +127,24 @@ padding: 5px;
 .ui-dialog {
     width: auto !important;
 }
+
+.modalidad-1 {
+    background-color: #00FF00;
+    color: #000000
+}
+.modalidad-2 {
+    background-color: #FFFF00;
+    color: #000000
+}
+.modalidad-3 {
+    background-color: #0080FF;
+    color: #000000
+}
+.modalidad-4 {
+    background-color: #DF7401;
+    color: #000000
+}
+.modalidad-reserva {
+    background-color: gray;
+    color: #000000
+}

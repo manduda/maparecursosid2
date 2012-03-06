@@ -81,6 +81,7 @@ public class InicioBean {
                         userBean.setPreasignar(false);
                         userBean.setReservar(true);
                         userBean.setLiberar(true);
+                        userBean.setEditarCodigos1xy(true);
                         userBean.setEliminarRecurso(false);
                         userBean.setCrearTramite(false);
                         userBean.setEnviarTramite(false);
@@ -99,6 +100,7 @@ public class InicioBean {
                         userBean.setPreasignar(false);
                         userBean.setReservar(false);
                         userBean.setLiberar(false);
+                        userBean.setEditarCodigos1xy(false);
                         userBean.setEliminarRecurso(false);
                         userBean.setCrearTramite(false);
                         userBean.setEnviarTramite(false);
@@ -117,6 +119,7 @@ public class InicioBean {
                         userBean.setPreasignar(true);
                         userBean.setReservar(false);
                         userBean.setLiberar(false);
+                        userBean.setEditarCodigos1xy(false);
                         userBean.setEliminarRecurso(true);
                         userBean.setCrearTramite(true);
                         userBean.setEnviarTramite(true);

@@ -118,7 +118,7 @@
                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
                     <h:panelGrid columns="2" cellpadding="4" width="100%">
                         <h:outputText value="Punto de señalización:" style="font-weight: bold;"/>
-                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{SenalizacionBean.selectedSen.senZona} - #{SenalizacionBean.selectedSen.senPs}" />
+                        <h:outputText value="#{SenalizacionBean.selectedSen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(SenalizacionBean.selectedSen.senZona,2)} - #{fnc:rellenarCerosIzquierda(SenalizacionBean.selectedSen.senPs,2)}" />
                         <h:outputText value="Estado:" style="font-weight: bold;"/>
                         <h:outputText value="#{SenalizacionBean.selectedSen.esnCodigo.estNombre}" />
                         <h:outputText value="Operador:" style="font-weight: bold;"/>
@@ -180,7 +180,7 @@
                         <p:dataTable id="datosAccionSen" value="#{SenalizacionBean.selectedSens}" var="detalleSen" paginator="false" style="font-size:10px">
                             <f:facet name="header">Detalle señalización</f:facet>
                             <p:column headerText="PUNTO" styleClass="tabla-recurso">
-                                <h:outputText value="#{detalleSen.renCodigo.retNombre} - #{detalleSen.senZona} - #{detalleSen.senPs}"/>
+                                <h:outputText value="#{detalleSen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(detalleSen.senZona,2)} - #{fnc:rellenarCerosIzquierda(detalleSen.senPs,2)}"/>
                             </p:column>
                             <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
                                 <h:outputText value="#{detalleSen.codigoMunicipio.nombreMunicipio}"/>
@@ -198,6 +198,9 @@
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
                             <h:panelGroup rendered="#{UserBean.login}">
                                 <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSen.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
+                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and SenalizacionBean.selectedSensPreasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senAccionDialog.hide();preasignarDialog.show();">
+                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and SenalizacionBean.selectedSensRecuperar)}" update="datosRecuperar" oncomplete="senAccionDialog.hide();recuperarDialog.show();"/>
                                 <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and SenalizacionBean.selectedSensLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="senAccionDialog.hide();resultadoAgregarDialog.show();">
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>

@@ -27,7 +27,7 @@
                         </h:selectOneMenu>
                         <h:outputText value="Código MNC"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputText id="codigoMnc" value="#{CodigosMncBean.codigoMnc}" maxlength="6" size="6" converter="javax.faces.Integer"
+                            <h:inputText id="codigoMnc" value="#{CodigosMncBean.codigoMnc}" maxlength="3" size="3" converter="javax.faces.Integer"
                                          converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                             <p:message for="codigoMnc" />
                         </h:panelGrid>

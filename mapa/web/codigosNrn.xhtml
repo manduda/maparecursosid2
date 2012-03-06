@@ -27,7 +27,7 @@
                         </h:selectOneMenu>
                         <h:outputText value="Código NRN"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputText id="codigoNrn" value="#{CodigosNrnBean.codigoNrn}" maxlength="6" size="6" converter="javax.faces.Integer"
+                            <h:inputText id="codigoNrn" value="#{CodigosNrnBean.codigoNrn}" maxlength="3" size="3" converter="javax.faces.Integer"
                                          converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                             <p:message for="codigoNrn" />
                         </h:panelGrid>

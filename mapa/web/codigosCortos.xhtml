@@ -166,11 +166,11 @@
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                 </p:commandButton>
                                 <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                     <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
                                 </p:commandButton>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
                                     <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                     <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
                                 </p:commandButton>

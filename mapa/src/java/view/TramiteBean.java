@@ -649,10 +649,22 @@ public class TramiteBean implements Serializable {
         }
         
         facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
         
         mensajeCambiarOperadorTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        vo.setTrtObservaciones("Operador anterior: " + selectedTramite.getEmrCodigo().getEmtNombre()
+                + ". Nuevo operador: " + fachada.buscarOperador(nuevoOperadorTramite).getEmtNombre()+".");
    
-        Integer resultado = fachada.cambiarOperadorTramite(selectedTramite.getTrnCodigo(), nuevoOperadorTramite);
+        Integer resultado = fachada.cambiarOperadorTramite(vo, nuevoOperadorTramite);
         
         switch(resultado){
             case 0:
@@ -663,7 +675,12 @@ public class TramiteBean implements Serializable {
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 mensajeCambiarOperadorTramite  = "<br><b>Operador cambiado correctamente al trámite.</b><br><br>";
                 break;
+            case 2:
+                mensajeCambiarOperadorTramite = "<br><b>El operador a asignar no puede ser igual al que tiene actualmente el trámite.</b><br><br>";
+                break;
         }
+        
+        nuevoOperadorTramite = "-1";
         
         return null;
     }
@@ -833,7 +850,7 @@ public class TramiteBean implements Serializable {
             
             resultado = fachada.agregarRecursos(vo);
             tramiteSenalizacionVO = new TsTramiteSenalizacionVO();
-          
+            sen.setSelectedSensAccion(false);
         } else if (tipoRecurso.equals("numeracion")){
             ArrayList vo = new ArrayList();
             NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);//session.getAttribute("SenalizacionBean");
@@ -894,7 +911,7 @@ public class TramiteBean implements Serializable {
             
             resultado = fachada.agregarRecursos(vo);
             tramiteNumeracionVO = new TnTramiteNumeracionVO();
-            
+            num.setSelectedNumsAccion(false);
         } else if (tipoRecurso.equals("codigosld")) {
             ArrayList vo = new ArrayList();
             //TlTramiteLdVO vo = new TlTramiteLdVO();
@@ -949,7 +966,7 @@ public class TramiteBean implements Serializable {
             
             resultado = fachada.agregarRecursos(vo);
             tramiteCodigosLdVO = new TlTramiteLdVO();
-            
+            ld.setSelectedLdsAccion(false);
         } else if (tipoRecurso.equals("codigosCortos")) {
             ArrayList vo = new ArrayList();
             //TcTramiteCcVO vo = new TcTramiteCcVO();
@@ -1003,6 +1020,7 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteCodigosCortosVO = new TcTramiteCcVO();
+            cc.setSelectedCCsAccion(false);
         } else if (tipoRecurso.equals("marcacionAbreviada")) {
             ArrayList vo = new ArrayList();
             //TcTramiteCcVO vo = new TcTramiteCcVO();
@@ -1056,6 +1074,7 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteMarcacionAbreviadaVO = new TaTramiteMaVO();
+            ma.setSelectedsAccion(false);
         } else if (tipoRecurso.equals("codigosMnc")) {
             ArrayList vo = new ArrayList();
             CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);//session.getAttribute("SenalizacionBean");
@@ -1105,6 +1124,7 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteMncVO = new TmTramiteMncVO();
+            bean.setSelectedsAccion(false);
         } else if (tipoRecurso.equals("codigosNrn")) {
             ArrayList vo = new ArrayList();
             CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);//session.getAttribute("SenalizacionBean");
@@ -1154,6 +1174,7 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteNrnVO = new TkTramiteNrnVO();
+            bean.setSelectedsAccion(false);
         } else if (tipoRecurso.equals("codigosIin")) {
             ArrayList vo = new ArrayList();
             CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);//session.getAttribute("SenalizacionBean");
@@ -1203,6 +1224,7 @@ public class TramiteBean implements Serializable {
             }
             resultado = fachada.agregarRecursos(vo);
             tramiteIinVO = new TiTramiteIinVO();
+            bean.setSelectedsAccion(false);
         }
         
         switch(resultado){
@@ -1288,6 +1310,7 @@ public class TramiteBean implements Serializable {
                 vo.add(bean.getSelectedCCs()[i]);
             }
             bean.setSelectedCCsAccion(false);
+            bean.buscar();
         } else if (tipoRecurso.equals("marcacionAbreviada")) {
             MarcacionAbreviadaBean bean = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);
             
@@ -1451,12 +1474,38 @@ public class TramiteBean implements Serializable {
         String tipoRecurso = facesContext.getExternalContext().getRequestParameterValuesMap().get("tipoRecurso")[0].toString();*/
         
         if(tipoRecurso.equals("senalizacion")){
-            SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
+            /*SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
             seleccionDepartamento = sen.getSelectedSen().getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
             cambiarDepartamento();
             MunicipiosVO municipio = new MunicipiosVO();
             municipio.setCodigoMunicipio(sen.getSelectedSen().getCodigoMunicipio().getCodigoMunicipio());
+            tramiteSenalizacionVO.setCodigoMunicipio(municipio);*/
+            SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);
+            SeSenalizacionVO[] senalizacion = sen.getSelectedSens();
+            
+            int size = sen.getSelectedSens().length;
+            String departamento = senalizacion[0].getCodigoMunicipio().getCodigoMunicipio();
+            Boolean valida = true;
+            for (int i = 1; i < size; i++) {
+                if (!departamento.equals(senalizacion[i].getCodigoMunicipio().getCodigoMunicipio())) {
+                    valida = false;
+                    break;
+                }
+            }
+            
+            MunicipiosVO municipio = new MunicipiosVO();
+            
+            if (valida) {
+                seleccionDepartamento = senalizacion[0].getCodigoMunicipio().getCodigoDepartamento().getCodigoDepartamento();
+                municipio.setCodigoMunicipio(senalizacion[0].getCodigoMunicipio().getCodigoMunicipio());
+            } else {
+                seleccionDepartamento = "-1";
+                municipio.setCodigoMunicipio("-1");
+            }
+            
+            cambiarDepartamento();
             tramiteSenalizacionVO.setCodigoMunicipio(municipio);
+            
         }else if(tipoRecurso.equals("numeracion")){
             NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
             NuNumeracionVO[] numeracion = num.getSelectedNums();

@@ -31,6 +31,7 @@ import vo.UsUsuariosVO;
 //@ManagedBean(name = "UserBean")
 //@SessionScoped
 public class UserBean implements Serializable, HttpSessionBindingListener {
+    private static final long serialVersionUID = 1L;
     
     // All logins.
     private static Map<UserBean, HttpSession> logins = new HashMap<UserBean, HttpSession>();
@@ -43,6 +44,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     private boolean preasignar = false;
     private boolean reservar = false;
     private boolean liberar = false;
+    private boolean editarCodigos1xy = false;
     
     // --- OPCIONES ELIMINAR RECURSOS DE UN TRAMITE
     private boolean eliminarRecurso = false;
@@ -239,6 +241,14 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
     public static void setLogins(Map<UserBean, HttpSession> logins) {
         UserBean.logins = logins;
+    }
+
+    public boolean isEditarCodigos1xy() {
+        return editarCodigos1xy;
+    }
+
+    public void setEditarCodigos1xy(boolean editarCodigos1xy) {
+        this.editarCodigos1xy = editarCodigos1xy;
     }
     
 }
