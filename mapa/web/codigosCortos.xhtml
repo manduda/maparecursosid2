@@ -13,178 +13,182 @@
     </ui:define>
 
     <ui:define name="content">
-        <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
-            <h:form id="formCodCorto">
-                <h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <h:outputText value="Proveedor"/>
-                        <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
-                            <f:selectItems value="#{CodigosCortosBean.listaOperador}" />  
-                        </h:selectOneMenu>
-                        <h:outputText value="Estado"/>
-                        <h:selectOneMenu value="#{CodigosCortosBean.estadoVO.esnCodigo}">
-                            <f:selectItems value="#{CodigosCortosBean.listaEstado}" />  
-                        </h:selectOneMenu>
-                        <h:outputText value="Modalidad"/>
-                        <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
-                            <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
-                        </h:selectOneMenu>
-                        <h:outputText value="Código Corto"/>
-                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputText id="codigoCorto" value="#{CodigosCortosBean.codigoCorto}" maxlength="6" size="6" converter="javax.faces.Integer"
-                                         converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
-                            <p:message for="codigoCorto" />
+        <h:panelGroup rendered="#{!ConfiguracionModulosBean.moduloCodigosCortos}">
+            <h:outputText value="Este módulo está desactivado" style="color: red;"/>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{ConfiguracionModulosBean.moduloCodigosCortos}">
+            <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
+                <h:form id="formCodCorto">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Proveedor"/>
+                            <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
+                                <f:selectItems value="#{CodigosCortosBean.listaOperador}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="Estado"/>
+                            <h:selectOneMenu value="#{CodigosCortosBean.estadoVO.esnCodigo}">
+                                <f:selectItems value="#{CodigosCortosBean.listaEstado}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="Modalidad"/>
+                            <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
+                                <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="Código Corto"/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:inputText id="codigoCorto" value="#{CodigosCortosBean.codigoCorto}" maxlength="6" size="6" converter="javax.faces.Integer"
+                                             converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                                <p:message for="codigoCorto" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:commandButton value="Consultar" actionListener="#{CodigosCortosBean.buscar}" ajax="true" update="pgCodigosCortos,formCodCorto"/>
                         </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid>
-                        <p:commandButton value="Consultar" actionListener="#{CodigosCortosBean.buscar}" ajax="true" update="pgCodigosCortos,formCodCorto"/>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </h:form>
-        </p:panel>
-        
-        <h:panelGrid id="pgCodigosCortos" width="100%">
-            <h:form>
-                <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
-                    <h:panelGroup id="opciones">
-                        <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update="datosAccionRecurso,display" oncomplete="ccAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}"/>
-                    </h:panelGroup>
-                </h:panelGrid>
-                <p:dataTable id="datos" value="#{CodigosCortosBean.lazyModel}" var="cc" paginator="true" paginatorPosition="top"
-                             selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
-                             selection="#{CodigosCortosBean.selectedCCs}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                             onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                             rowSelectListener="#{CodigosCortosBean.onRowSelect}" rowUnselectListener="#{CodigosCortosBean.onRowUnselect}"
-                             rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
-                             paginatorTemplate=" #{CodigosCortosBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-                    <p:column style="width:25px">
-                        <p:commandButton update="display,datosRecurso" oncomplete="ccDialog.show();" image="ui-icon ui-icon-search" action="#{CodigosCortosBean.detalleCC}">  
-                            <f:setPropertyActionListener target="#{CodigosCortosBean.selectedCC}" value="#{cc}"/>  
-                        </p:commandButton>
-                    </p:column>
-                    <p:column headerText="CÓDIGO CORTO" style="text-align: center; width: 100px;">
-                            <h:outputText value="#{cc.ccnCodigoCorto}"/>
-                    </p:column>
-                    <p:column headerText="MODALIDAD" >
-                        <h:outputText value="#{cc.mdnCodigo.mdtNombre}"/>
-                    </p:column>
-                    <p:column headerText="ESTADO" style="width: 100px">
-                        <div style="width: 100%; text-align: center;" class="#{cc.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
-                                                                               cc.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
-                                                                               cc.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
-                                                                               cc.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
-                                                                               null}">
-                            <h:outputText value="#{cc.esnCodigo.estNombre}"/>
-                        </div>
-                    </p:column>
-                    <p:column headerText="EMPRESA" style="min-width: 250px">
-                        <h:outputText value="#{cc.emrCodigo.emtNombre}"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </h:panelGrid>
+                </h:form>
+            </p:panel>
 
-        <!-- DETALLE RECURSO -->
-        <h:panelGroup id="datosRecurso">
-            <p:dialog header="Detalle" widgetVar="ccDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center">
-                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
-                    <h:panelGrid columns="2" cellpadding="4" width="100%">
-                        <h:outputText value="Código Corto:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosCortosBean.selectedCC.ccnCodigoCorto}" />
-                        <h:outputText value="Modalidad:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosCortosBean.selectedCC.mdnCodigo.mdtNombre}" />
-                        <h:outputText value="Estado:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosCortosBean.selectedCC.esnCodigo.estNombre}" />
-                        <h:outputText value="Proveedor:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosCortosBean.selectedCC.emrCodigo.emtNombre}" />
-                        <h:outputText value="Observaciones:" style="font-weight: bold;"/>
-                        <h:outputText value="#{CodigosCortosBean.selectedCC.cctObservaciones}" />
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                        <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-
-            <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
-                      width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
+            <h:panelGrid id="pgCodigosCortos" width="100%">
                 <h:form>
-                    <p:dataTable var="tc" value="#{CodigosCortosBean.tramiteCodigoCorto}" style="font-size: 10px;"
-                                 emptyMessage="No se encontró historia registrada para este recurso">
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Resolución" style="font-weight: bold;"/>
-                            </f:facet>
-                            <h:outputText value="#{tc.trnCodigo.trnResolucion}"/>
+                    <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
+                        <h:panelGroup id="opciones">
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update="datosAccionRecurso,display" oncomplete="ccAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <p:dataTable id="datos" value="#{CodigosCortosBean.lazyModel}" var="cc" paginator="true" paginatorPosition="top"
+                                 selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                                 selection="#{CodigosCortosBean.selectedCCs}" rowIndexVar="rowIndex" widgetVar="datatableVar"
+                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
+                                 rowSelectListener="#{CodigosCortosBean.onRowSelect}" rowUnselectListener="#{CodigosCortosBean.onRowUnselect}"
+                                 rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                                 paginatorTemplate=" #{CodigosCortosBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                        <p:column style="width:25px">
+                            <p:commandButton update="display,datosRecurso" oncomplete="ccDialog.show();" image="ui-icon ui-icon-search" action="#{CodigosCortosBean.detalleCC}">  
+                                <f:setPropertyActionListener target="#{CodigosCortosBean.selectedCC}" value="#{cc}"/>  
+                            </p:commandButton>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Fecha Resolución" style="font-weight: bold;"/>
-                            </f:facet>
-                            <h:outputText value="#{tc.trnCodigo.trfFechaResolucion}">
-                                <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
-                            </h:outputText>
+                        <p:column headerText="CÓDIGO CORTO" style="text-align: center; width: 100px;">
+                                <h:outputText value="#{cc.ccnCodigoCorto}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="Acción" style="font-weight: bold;"/>
-                            </f:facet>
-                            <h:outputText value="#{tc.acnCodigo.actNombre}"/>
+                        <p:column headerText="MODALIDAD" >
+                            <h:outputText value="#{cc.mdnCodigo.mdtNombre}"/>
+                        </p:column>
+                        <p:column headerText="ESTADO" style="width: 100px">
+                            <div style="width: 100%; text-align: center;" class="#{cc.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
+                                                                                   cc.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
+                                                                                   cc.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
+                                                                                   cc.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
+                                                                                   null}">
+                                <h:outputText value="#{cc.esnCodigo.estNombre}"/>
+                            </div>
+                        </p:column>
+                        <p:column headerText="EMPRESA" style="min-width: 250px">
+                            <h:outputText value="#{cc.emrCodigo.emtNombre}"/>
                         </p:column>
                     </p:dataTable>
                 </h:form>
-            </p:dialog>
-        </h:panelGroup>
-        
-        <h:panelGroup id="datosAccionRecurso">
-        
-            <p:dialog header="Detalle" widgetVar="ccAccionDialog" resizable="false" modal="true" draggable="false"
-                      width="700" showEffect="fade" hideEffect="fade" position="center">
-                <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+            </h:panelGrid>
+
+            <!-- DETALLE RECURSO -->
+            <h:panelGroup id="datosRecurso">
+                <p:dialog header="Detalle" widgetVar="ccDialog" resizable="false" modal="true" draggable="false"
+                          width="500" showEffect="fade" hideEffect="fade" position="center">
+                    <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                        <h:panelGrid columns="2" cellpadding="4" width="100%">
+                            <h:outputText value="Código Corto:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosCortosBean.selectedCC.ccnCodigoCorto}" />
+                            <h:outputText value="Modalidad:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosCortosBean.selectedCC.mdnCodigo.mdtNombre}" />
+                            <h:outputText value="Estado:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosCortosBean.selectedCC.esnCodigo.estNombre}" />
+                            <h:outputText value="Proveedor:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosCortosBean.selectedCC.emrCodigo.emtNombre}" />
+                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                            <h:outputText value="#{CodigosCortosBean.selectedCC.cctObservaciones}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
+                          width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
                     <h:form>
-                        <p:dataTable id="datosAccionCC" value="#{CodigosCortosBean.selectedCCs}" var="detalleCC" paginator="false" style="font-size:10px">
-                            <f:facet name="header">Detalle códigos cortos</f:facet>
-                            <p:column headerText="CÓDIGO CORTO" styleClass="tabla-recurso">
-                                <h:outputText value="#{detalleCC.ccnCodigoCorto}"/>
+                        <p:dataTable var="tc" value="#{CodigosCortosBean.tramiteCodigoCorto}" style="font-size: 10px;"
+                                     emptyMessage="No se encontró historia registrada para este recurso">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Resolución" style="font-weight: bold;"/>
+                                </f:facet>
+                                <h:outputText value="#{tc.trnCodigo.trnResolucion}"/>
                             </p:column>
-                            <p:column headerText="MODALIDAD" >
-                                <h:outputText value="#{detalleCC.mdnCodigo.mdtNombre}"/>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Fecha Resolución" style="font-weight: bold;"/>
+                                </f:facet>
+                                <h:outputText value="#{tc.trnCodigo.trfFechaResolucion}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" type="date" timeZone="EST"/>
+                                </h:outputText>
                             </p:column>
-                            <p:column headerText="ESTADO" >
-                                <h:outputText value="#{detalleCC.esnCodigo.estNombre}"/>
-                            </p:column>
-                            <p:column headerText="EMPRESA" >
-                                <h:outputText value="#{detalleCC.emrCodigo.emtNombre}"/>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Acción" style="font-weight: bold;"/>
+                                </f:facet>
+                                <h:outputText value="#{tc.acnCodigo.actNombre}"/>
                             </p:column>
                         </p:dataTable>
-                        
-                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <h:panelGroup rendered="#{UserBean.login}">
-                                <h:outputText value="Los códigos cortos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosCortosBean.selectedCC.esnCodigo.esnCodigo == 4)}" style="color: red;"/>
-                                <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosCortosBean.selectedCCsPreasignar)}" update="datosPreasignar" oncomplete="ccAccionDialog.hide();preasignarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
-                                </p:commandButton>
-                                <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
-                                <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
-                                </p:commandButton>
-                                <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
-                                    <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
-                                    <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
-                                </p:commandButton>
-                            </h:panelGroup>
-
-                        </h:panelGrid>
                     </h:form>
-                </h:panelGrid>
-            </p:dialog>
+                </p:dialog>
+            </h:panelGroup>
+
+            <h:panelGroup id="datosAccionRecurso">
+
+                <p:dialog header="Detalle" widgetVar="ccAccionDialog" resizable="false" modal="true" draggable="false"
+                          width="700" showEffect="fade" hideEffect="fade" position="center">
+                    <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                        <h:form>
+                            <p:dataTable id="datosAccionCC" value="#{CodigosCortosBean.selectedCCs}" var="detalleCC" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle códigos cortos</f:facet>
+                                <p:column headerText="CÓDIGO CORTO" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalleCC.ccnCodigoCorto}"/>
+                                </p:column>
+                                <p:column headerText="MODALIDAD" >
+                                    <h:outputText value="#{detalleCC.mdnCodigo.mdtNombre}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalleCC.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalleCC.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                <h:panelGroup rendered="#{UserBean.login}">
+                                    <h:outputText value="Los códigos cortos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosCortosBean.selectedCCsLiberar)}" style="color: red;"/>
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosCortosBean.selectedCCsPreasignar)}" update="datosPreasignar" oncomplete="ccAccionDialog.hide();preasignarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                        <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosCortosBean.selectedCCsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
+                                        <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                    </p:commandButton>
+                                </h:panelGroup>
+
+                            </h:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                </p:dialog>
+            </h:panelGroup>
+
+            <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosCortos.xhtml"/>
+        
         </h:panelGroup>
-        
-        <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosCortos.xhtml"/>
-        
-        
         
     </ui:define>
 </ui:composition>

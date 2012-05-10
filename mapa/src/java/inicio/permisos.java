@@ -29,6 +29,8 @@ public class permisos {
     private boolean cambiarOperadorTramite = false;
         
     private boolean transferirRecursos = false;
+    
+    private boolean administrarModulos = false;
         
     public permisos() {
     }
@@ -135,6 +137,14 @@ public class permisos {
 
     public void setTransferirRecursos(boolean transferirRecursos) {
         this.transferirRecursos = transferirRecursos;
+    }
+
+    public boolean isAdministrarModulos() {
+        return administrarModulos;
+    }
+
+    public void setAdministrarModulos(boolean administrarModulos) {
+        this.administrarModulos = administrarModulos;
     }
     
 }

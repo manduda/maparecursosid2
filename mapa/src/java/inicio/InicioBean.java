@@ -94,6 +94,7 @@ public class InicioBean {
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(true);
                         userBean.setAdministrarUsuarios(true);
+                        userBean.setAdministrarModulos(true);
                         break;
                     case 2: // COORDINADOR
                         userBean.setRecuperar(false);
@@ -113,6 +114,7 @@ public class InicioBean {
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
+                        userBean.setAdministrarModulos(false);
                         break;
                     case 3: // ASESOR
                         userBean.setRecuperar(true);
@@ -132,6 +134,7 @@ public class InicioBean {
                         userBean.setConsultarTramite(true);
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
+                        userBean.setAdministrarModulos(false);
                         break;
                 }
                 

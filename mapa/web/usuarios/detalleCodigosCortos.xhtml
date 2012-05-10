@@ -72,7 +72,7 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteCodigosCortosVO.tctObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar,pgMenuTramite,pgCodigosCortos" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                             </p:commandButton>
@@ -130,8 +130,8 @@
             <p:dialog header="Resultado" widgetVar="resultadoAgregarDialog" resizable="false" modal="true" draggable="false"
                       width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
                 <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
-                        <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
-                        <p:commandButton type="button" value="Aceptar" onclick="resultadoAgregarDialog.hide();"/>
+                    <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
+                    <p:commandButton type="button" value="Aceptar" onclick="resultadoAgregarDialog.hide();"/>
                 </h:panelGrid>
             </p:dialog>
             
@@ -147,4 +147,4 @@
         </h:panelGroup>
     </ui:composition>
 </html>
-
+    

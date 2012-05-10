@@ -26,6 +26,11 @@
                             <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
                                 <h:outputText value="Administrar usuarios"/>
                             </h:outputLink>
+                            
+                            <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarModulos}"/>
+                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminModulos.xhtml" rendered="#{UserBean.administrarModulos}">
+                                <h:outputText value="Administrar modulos"/>
+                            </h:outputLink>
 
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.transferirRecursos}"/>
                             <h:commandLink value="Transferir recursos entre operadores" action="#{TramiteBean.opcionesTransferirRecursos}" rendered="#{UserBean.transferirRecursos}"/>

@@ -21,6 +21,13 @@
                 En segundo lugar, se deberá elegir un criterio específico de búsqueda. Finalmente, se deberá indicar el valor que debe ser objeto 
                 de búsqueda.
             </p>
+            <h:panelGroup rendered="#{ConfiguracionModulosBean.mensajeConfiguracionModulos != ''}">
+                <p style="text-align: center">
+                    <h:outputText value="#{ConfiguracionModulosBean.mensajeConfiguracionModulos}" style="color: red"/>
+                </p>
+                <h:graphicImage url="/resources/images/warning.jpg" width="100px"/>
+            </h:panelGroup>
+            
 
         </h:panelGrid>
     </ui:define>

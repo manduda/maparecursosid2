@@ -1,0 +1,85 @@
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Administrar modulos"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{!UserBean.administrarModulos}">
+            <h:panelGrid width="100%">
+                <br/><br/><br/>
+                <h:panelGrid style="text-align: center; margin: 0px auto; color: red; font-weight: bold" >
+                        <h:outputText value="No tienes permiso para acceder a esta sección"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{UserBean.administrarModulos}">
+            <h:form id="listaModulos">
+                <h:panelGroup id="pgModulos">
+                    <p:dataTable id="datos" value="#{AdministracionAplicacionBean.modulos}" var="m"
+                                 selectionMode="single" selection="#{AdministracionAplicacionBean.selectedModulo}"
+                                 onRowSelectUpdate="datosAdministrar" onRowUnselectUpdate="datosAdministrar"
+                                 onRowSelectComplete="administrarDialog.show();"
+                                 style="font-size:10px" rows="10" emptyMessage="No se encontraron modulos" >
+                        <f:facet name="header">Lista de módulos de la aplicación</f:facet>
+                        <p:column headerText="CÓDIGO MÓDULO" style="width:20px; text-align: center;">
+                            <h:outputText value="#{m.cmnCodigo}"/>
+                        </p:column>
+                        <p:column headerText="NOMBRE DEL MÓDULO" style="text-align: left;">
+                            <h:outputText value="#{m.cmtModulo}"/>
+                        </p:column>
+                        <p:column headerText="ACTIVO" style="width:80px; text-align: center;">
+                            <h:outputText value="#{m.cmtActivo}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            
+            <p:dialog header="Administrar módulo" widgetVar="administrarDialog" resizable="false" modal="true" draggable="false"
+                      width="200" showEffect="fade" hideEffect="fade" position="center">
+                <h:panelGrid id="datosAdministrar" width="100%" style="font-size: 12px;" >
+                    
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Módulo:&#160;" style="font-weight: bold;"/>
+                                <h:outputText value="#{AdministracionAplicacionBean.selectedModulo.cmtModulo}"/>
+                            </h:panelGrid>
+                            <br/>
+                        
+                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                <h:form>
+                                <p:commandButton value="Activar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'N'}" update="datosResultado,listaModulos,menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                    <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="S"/>
+                                </p:commandButton>
+                                <p:commandButton value="Desactivar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'S'}" update="datosResultado,listaModulos,menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                    <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="N"/>
+                                </p:commandButton>
+                                <p:commandButton type="button" value="Cancelar" onclick="administrarDialog.hide();"/>
+                                </h:form>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    
+                 </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog header="Resultado" widgetVar="resultadoDialog" resizable="false" modal="true" draggable="false"
+                      width="400" showEffect="fade" hideEffect="fade" position="center" closable="false">
+                <h:panelGrid id="datosResultado" style="text-align: center; " width="100%">
+                    <h:outputText value="#{AdministracionAplicacionBean.mensajeAdminModulo}" escape="false"/>
+                    <p:commandButton type="button" value="Aceptar" onclick="resultadoDialog.hide();" />
+                </h:panelGrid>
+            </p:dialog>
+            
+            
+            
+            
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+
