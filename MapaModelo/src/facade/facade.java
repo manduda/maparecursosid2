@@ -4,7 +4,6 @@
  */
 package facade;
 
-import entities.Nc1xy;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -15,6 +14,7 @@ import services.CcCodigosCortosService;
 import services.CdCodigosMncService;
 import services.CiCodigosIinService;
 import services.ClCodigosLdService;
+import services.CmConfiguracionModulosService;
 import services.EsEstadoService;
 import services.MaMarcacionAbreviadaService;
 import services.MunicipiosService;
@@ -31,6 +31,7 @@ import vo.CcCodigosCortosVO;
 import vo.CdCodigosMncVO;
 import vo.CiCodigosIinVO;
 import vo.ClCodigosLdVO;
+import vo.CmConfiguracionModulosVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -80,6 +81,7 @@ public class facade {
     private UsUsuariosService usuario;
     private TrTramitesService tramites;
     private RsReservasTemporalesService reservasTemporales;
+    private CmConfiguracionModulosService configuracionModulos;
 
     public facade(){
         codigosld = new ClCodigosLdService();
@@ -98,6 +100,7 @@ public class facade {
         usuario = new UsUsuariosService();
         tramites = new TrTramitesService();
         reservasTemporales = new RsReservasTemporalesService();
+        configuracionModulos = new CmConfiguracionModulosService();
     }
 
     public List<ClCodigosLdVO> ListaCodigosLd(){
@@ -2193,4 +2196,83 @@ public class facade {
         
         return resultado;
     } 
+
+    //-------- CONFIGURACIÓN MÓDULOS --------
+
+    public List<CmConfiguracionModulosVO> listaModulos() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        List<CmConfiguracionModulosVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = configuracionModulos.getList(em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
+    
+    public boolean editarConfiguracionModulo(CmConfiguracionModulosVO vo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            configuracionModulos.editarConfiguracionModulo(vo, em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = false;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
+    public CmConfiguracionModulosVO buscarConfiguracionModulo(Integer cmnCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        CmConfiguracionModulosVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            vo = configuracionModulos.getById(cmnCodigo, em);
+            tx.commit();
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return vo;
+    }
 }

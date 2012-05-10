@@ -29,10 +29,22 @@
     <class>entities.UsUsuarios</class>
     <class>entities.Users</class>
     <class>entities.TnTramiteNumeracion</class>
+    <class>entities.CdCodigosMnc</class>
+    <class>entities.CiCodigosIin</class>
+    <class>entities.MaMarcacionAbreviada</class>
+    <class>entities.McMcc</class>
+    <class>entities.MoModalidad1xy</class>
+    <class>entities.Nc1xy</class>
+    <class>entities.NrCodigosNrn</class>
+    <class>entities.TaTramiteMa</class>
+    <class>entities.TiTramiteIin</class>
+    <class>entities.TkTramiteNrn</class>
+    <class>entities.TmTramiteMnc</class>
+    <class>entities.CmConfiguracionModulos</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@172.30.125.166:1521:SIUST"/>
-      <property name="javax.persistence.jdbc.password" value="MapaCrC2012"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>
+      <property name="javax.persistence.jdbc.password" value="crcmarzo"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
       <property name="javax.persistence.jdbc.user" value="mapa"/>
     </properties>
