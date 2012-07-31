@@ -25,6 +25,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import utils.Correo;
 import utils.Functions;
 import vo.AcAccionVO;
@@ -88,6 +89,8 @@ public class TramiteBean implements Serializable {
     private List<TrTramitesVO> listaBuscarTramite = new ArrayList<TrTramitesVO>();
     private int countListaBuscarTramite;
     private TrTramitesVO seleccionBuscarTramite = new TrTramitesVO();
+    private TrTramitesVO[] selectedUnirTramites;
+    private Boolean selectedUnir;
     
     private Collection<SelectItem> listaUsuariosAplicacion;
     private List<UsUsuariosVO> usuariosAplicacion = new ArrayList<UsUsuariosVO>();
@@ -167,6 +170,9 @@ public class TramiteBean implements Serializable {
                     //for (TrTramitesVO t : fachada.cargarTramites(0,-1,-1,userVO.getCodigoSIUST().getLogin(),"-1",3)){
                     //    tramites.add(t);
                     //}
+                    tipoUsuario = 6;
+                    break;
+                case 4:
                     tipoUsuario = 6;
                     break;
             }
@@ -640,6 +646,107 @@ public class TramiteBean implements Serializable {
         }
         
         return null;
+    }
+    
+    public String asignarTramite() {
+        if(nuevoUsuarioTramite == -1){
+            mensajeTramite = "<br><b>Error al asignar el trámite.</b><br><br>Debes escoger un usuario<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        TrTramitesVO vo = new TrTramitesVO();
+        
+        mensajeTramite = "";
+        
+        UsUsuariosVO usuario = new UsUsuariosVO();
+        usuario.setUsnCodigo(userVO.getUsnCodigo());
+        
+        Date fecha = new Date();
+        
+        vo.setTrnCodigo(selectedTramite.getTrnCodigo());
+        vo.setUsnCodigo(usuario);
+        vo.setTrfFecha(fecha);
+        vo.setTrtObservaciones("Trámite asignado por el usuario: " + userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ").");
+   
+        Integer resultado = fachada.cambiarUsuarioTramite(vo, nuevoUsuarioTramite);
+        
+        switch(resultado){
+            case 0:
+                mensajeTramite = "<br><b>Error al asignar el usuario del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
+                
+                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                mensajeTramite  = "<br><b>Trámite asignado correctamente al usuario " + vo.getUsnCodigo().getCodigoSIUST().getLogin() + ".</b><br><br>";
+                
+                String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
+                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha asignado un trámite.<br/><br/>"
+                            + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
+                            + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
+                enviarCorreo(email, mensaje, selectedTramite.getTrnCodigo());
+                break;
+            case 2:
+                mensajeTramite = "<br><b>El usuario a asignar no puede ser igual al que tiene actualmente el trámite.</b><br><br>";
+                break;
+        }
+        
+        observacionesTramite = "";
+        
+        return null;
+    }
+    
+    public String detalleMostrarTramites() {
+        mensajeTramite = "";
+        return configuracion.getRutaContexto()+"usuarios/mostrarTramites";
+    }
+    
+    public String unirTramites() {
+        if ((selectedUnirTramites == null)||(selectedUnirTramites.length < 2)){
+            mensajeTramite = "<br><b>Error al asignar el trámite.</b><br><br>Debes escoger al menos 2 trámites<br><br>";
+        }
+        
+        facade fachada = new facade();
+        Integer resultado = fachada.unirTramites(selectedUnirTramites);
+        
+        switch(resultado){
+            case 0:
+                mensajeTramite = "<br><b>Error al unir los trámites.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
+                mensajeTramite = "<br><b>Trámites unidos correctamente.</b><br><br>";
+                break;
+            case 2:
+                mensajeTramite = "<br><b>Las empresas de los trámites deben ser las mismas.</b><br><br>";
+                break;
+        }
+        
+        
+        
+        return configuracion.getRutaContexto()+"usuarios/mostrarTramites";
+    }
+        
+    public void onRowSelectUnir(SelectEvent event) {
+        if (selectedUnirTramites == null){
+            selectedUnir = false;
+        } else if (selectedUnirTramites.length > 1) {
+            selectedUnir = true;
+        } else {
+            selectedUnir = false;
+        }
+    }
+    
+    public void onRowUnselectUnir(UnselectEvent event) {
+        if (selectedUnirTramites == null){
+            selectedUnir = false;
+        } else if (selectedUnirTramites.length > 1) {
+            selectedUnir = true;
+        } else {
+            selectedUnir = false;
+        }
     }
     
     public String cambiarOperadorTramite() {
@@ -2298,6 +2405,22 @@ public class TramiteBean implements Serializable {
 
     public void setNuevoOperadorTramite(String nuevoOperadorTramite) {
         this.nuevoOperadorTramite = nuevoOperadorTramite;
+    }
+
+    public TrTramitesVO[] getSelectedUnirTramites() {
+        return selectedUnirTramites;
+    }
+
+    public void setSelectedUnirTramites(TrTramitesVO[] selectedUnirTramites) {
+        this.selectedUnirTramites = selectedUnirTramites;
+    }
+
+    public Boolean getSelectedUnir() {
+        return selectedUnir;
+    }
+
+    public void setSelectedUnir(Boolean selectedUnir) {
+        this.selectedUnir = selectedUnir;
     }
 
 }

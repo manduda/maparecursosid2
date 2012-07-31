@@ -212,6 +212,7 @@
                                                 </h:selectOneMenu>
                                             </h:panelGrid>
                                             <br/>
+                                            
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                                 <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgDatosTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
@@ -228,6 +229,31 @@
                                     </h:panelGrid>
                                 </p:dialog>
 
+                            </h:panelGroup>
+                            
+                            <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4))}">
+                                <!-- ASIGNAR TRAMITE -->
+                                <h:form>
+                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update="datosAsignarUsuario"/>
+                                </h:form>
+                                <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
+                                            header="Asignar asesor" widgetVar="confirmarAsignarUsuario">
+                                    <h:panelGrid id="datosAsignarUsuario" style="text-align: center; " width="100%">
+                                        <h:form>
+                                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                <h:outputText value="Usuario:&#160;" style="font-weight: bold;"/>
+                                                <h:selectOneMenu value="#{TramiteBean.nuevoUsuarioTramite}">
+                                                    <f:selectItems value="#{TramiteBean.listaAsesores}"/>
+                                                </h:selectOneMenu>
+                                            </h:panelGrid>
+                                            <br/>
+                                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                                <p:commandButton value="Aceptar" action="#{TramiteBean.asignarTramite}" ajax="false" onclick="confirmarAsignarUsuario.hide();statusDialog.show();" />
+                                                <p:commandButton type="button" value="Cancelar" onclick="confirmarAsignarUsuario.hide()" />
+                                            </h:panelGrid>
+                                        </h:form>
+                                    </h:panelGrid>
+                                </p:dialog>
                             </h:panelGroup>
 
                         </h:panelGrid>

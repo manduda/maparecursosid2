@@ -64,6 +64,9 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     private boolean transferirRecursos = false;
     private boolean administrarUsuarios = false;
     private boolean administrarModulos = false;
+    
+    private boolean asignarTramites = false;
+    
 
     public UserBean() {
     }
@@ -258,6 +261,14 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
     public void setAdministrarModulos(boolean administrarModulos) {
         this.administrarModulos = administrarModulos;
+    }
+
+    public boolean isAsignarTramites() {
+        return asignarTramites;
+    }
+
+    public void setAsignarTramites(boolean asignarTramites) {
+        this.asignarTramites = asignarTramites;
     }
 
 }

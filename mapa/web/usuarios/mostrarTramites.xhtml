@@ -11,47 +11,80 @@
 
     <ui:define name="content">
         <h:panelGroup rendered="#{UserBean.login == true}">
-            <h:panelGroup rendered="#{empty TramiteBean.tramites}">
-                <h:outputText value="No tienes trámites"/>
+            <h:panelGroup rendered="#{!(TramiteBean.mensajeTramite == '')}">
+                <h:panelGrid width="100%">
+                    <br/><br/><br/>
+                    <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                        <h:panelGrid style="border-bottom: 1px solid; background:#acbece" width="100%">
+                            <h:outputText value="Resultado" style="font-weight: bold;"/>
+                        </h:panelGrid>
+                        <h:panelGrid width="100%">
+                            <h:outputText value="#{TramiteBean.mensajeTramite}" escape="false"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
             </h:panelGroup>
+            
+            <h:panelGroup rendered="#{(TramiteBean.mensajeTramite == '')}">
+                <h:form>
+                    <p:dataTable value="#{TramiteBean.tramites}" var="tr" paginator="false"
+                                 selectionMode="multiple" selection="#{TramiteBean.selectedUnirTramites}"
+                                 rowIndexVar="rowIndex" widgetVar="datatableVar"
+                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
+                                 rowSelectListener="#{TramiteBean.onRowSelectUnir}" rowUnselectListener="#{TramiteBean.onRowUnselectUnir}"
+                                 style="font-size:10px" emptyMessage="No se encontraron trámites">
+                        <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:80px; text-align: center;">
+                            <h:outputText value="#{tr.trnCodigo}"/>
+                        </p:column>
+                        <p:column headerText="Fecha" sortBy="#{tr.emrCodigo.emtNombre}" style="width:70px">
+                            <h:outputText value="#{tr.trfFecha}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Estado" sortBy="#{tr.etnCodigo.ettNombre}" style="width:80px">
+                            <h:outputText value="#{tr.etnCodigo.ettNombre}"/>
+                        </p:column>
+                        <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.login}" style="width:80px">
+                            <h:outputText value="#{tr.usnCodigo.codigoSIUST.login}"/>
+                        </p:column>
+                        <p:column headerText="Operador" sortBy="#{tr.emrCodigo.emtNombre}">
+                            <h:outputText value="#{tr.emrCodigo.emtNombre}"/>
+                        </p:column>
+                        <p:column headerText="Recursos" style="width:100px">
+                            <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
+                            <h:outputText value="Numeración&lt;br/&gt;" rendered="#{not empty tr.tnTramiteNumeracionCollection}" escape="false"/>
+                            <h:outputText value="Códigos LD&lt;br/&gt;" rendered="#{not empty tr.tlTramiteLdCollection}" escape="false"/>
+                            <h:outputText value="Códigos Cortos&lt;br/&gt;" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
+                            <h:outputText value="Marcación Abreviada&lt;br/&gt;" rendered="#{not empty tr.taTramiteMaCollection}" escape="false"/>
+                            <h:outputText value="Códigos MNC&lt;br/&gt;" rendered="#{not empty tr.tmTramiteMncCollection}" escape="false"/>
+                            <h:outputText value="Códigos NRN&lt;br/&gt;" rendered="#{not empty tr.tkTramiteNrnCollection}" escape="false"/>
+                            <h:outputText value="Códigos IIN" rendered="#{not empty tr.tiTramiteIinCollection}" escape="false"/>
+                        </p:column>
+                        <p:column style="width:32px">  
+                            <p:commandButton value="ver" action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                                <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tr}"/>  
+                            </p:commandButton>  
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid style="text-align: left;font-size:10px">
+                        <h:panelGroup id="opciones">
+                            <p:commandButton type="button" value="Unir trámites" onclick="confirmarUnirTramites.show()" disabled="#{!TramiteBean.selectedUnir}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
 
-            <h:form>
-                <p:dataTable value="#{TramiteBean.tramites}" var="tr" paginator="false"
-                             style="font-size:10px" emptyMessage="No se encontraron trámites">
-                    <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:80px; text-align: center;">
-                        <h:outputText value="#{tr.trnCodigo}"/>
-                    </p:column>
-                    <p:column headerText="Fecha" sortBy="#{tr.emrCodigo.emtNombre}" style="width:70px">
-                        <h:outputText value="#{tr.trfFecha}">
-                            <f:convertDateTime pattern="dd/MM/yyyy hh:mm a" type="date" timeZone="EST"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column headerText="Estado" sortBy="#{tr.etnCodigo.ettNombre}" style="width:80px">
-                        <h:outputText value="#{tr.etnCodigo.ettNombre}"/>
-                    </p:column>
-                    <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.login}" style="width:80px">
-                        <h:outputText value="#{tr.usnCodigo.codigoSIUST.login}"/>
-                    </p:column>
-                    <p:column headerText="Operador" sortBy="#{tr.emrCodigo.emtNombre}">
-                        <h:outputText value="#{tr.emrCodigo.emtNombre}"/>
-                    </p:column>
-                    <p:column headerText="Recursos" style="width:100px">
-                        <h:outputText value="Señalización&lt;br/&gt;" rendered="#{not empty tr.tsTramiteSenalizacionCollection}" escape="false"/>
-                        <h:outputText value="Numeración&lt;br/&gt;" rendered="#{not empty tr.tnTramiteNumeracionCollection}" escape="false"/>
-                        <h:outputText value="Códigos LD&lt;br/&gt;" rendered="#{not empty tr.tlTramiteLdCollection}" escape="false"/>
-                        <h:outputText value="Códigos Cortos&lt;br/&gt;" rendered="#{not empty tr.tcTramiteCcCollection}" escape="false"/>
-                        <h:outputText value="Marcación Abreviada&lt;br/&gt;" rendered="#{not empty tr.taTramiteMaCollection}" escape="false"/>
-                        <h:outputText value="Códigos MNC&lt;br/&gt;" rendered="#{not empty tr.tmTramiteMncCollection}" escape="false"/>
-                        <h:outputText value="Códigos NRN&lt;br/&gt;" rendered="#{not empty tr.tkTramiteNrnCollection}" escape="false"/>
-                        <h:outputText value="Códigos IIN" rendered="#{not empty tr.tiTramiteIinCollection}" escape="false"/>
-                    </p:column>
-                    <p:column style="width:32px">  
-                        <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
-                            <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tr}"/>  
-                        </p:commandButton>  
-                    </p:column>
-                </p:dataTable>
-            </h:form>
+                </h:form>
+                <p:confirmDialog message="Deseas unir los trámites seleccionados?"  
+                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                            header="Confirmación" severity="alert" widgetVar="confirmarUnirTramites">  
+                    <h:form>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton value="Si" action="#{TramiteBean.unirTramites}" ajax="false" onclick="confirmarUnirTramites.hide();statusDialog.show();" />
+                            <p:commandButton type="button" value="No" onclick="confirmarUnirTramites.hide()" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:confirmDialog>
+            </h:panelGroup>
+            
         </h:panelGroup>
     </ui:define>
     

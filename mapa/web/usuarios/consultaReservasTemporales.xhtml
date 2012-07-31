@@ -11,10 +11,6 @@
 
     <ui:define name="content">
         <h:panelGroup rendered="#{UserBean.login == true}">
-            <h:panelGroup rendered="#{empty TramiteBean.reservas}">
-                <h:outputText value="No hay en el momento reservas temporales"/>
-            </h:panelGroup>
-
             <h:form>
                 <p:dataTable value="#{TramiteBean.reservas}" var="tr" paginator="false"
                              style="font-size:10px" emptyMessage="No se encontraron reservas temporales">

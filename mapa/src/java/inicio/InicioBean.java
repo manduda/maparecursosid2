@@ -95,6 +95,7 @@ public class InicioBean {
                         userBean.setTransferirRecursos(true);
                         userBean.setAdministrarUsuarios(true);
                         userBean.setAdministrarModulos(true);
+                        userBean.setAsignarTramites(false);
                         break;
                     case 2: // COORDINADOR
                         userBean.setRecuperar(false);
@@ -115,6 +116,7 @@ public class InicioBean {
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
                         userBean.setAdministrarModulos(false);
+                        userBean.setAsignarTramites(false);
                         break;
                     case 3: // ASESOR
                         userBean.setRecuperar(true);
@@ -135,6 +137,28 @@ public class InicioBean {
                         userBean.setTransferirRecursos(false);
                         userBean.setAdministrarUsuarios(false);
                         userBean.setAdministrarModulos(false);
+                        userBean.setAsignarTramites(false);
+                        break;
+                    case 4: // ASIGNADOR
+                        userBean.setRecuperar(false);
+                        userBean.setPreasignar(false);
+                        userBean.setReservar(false);
+                        userBean.setLiberar(false);
+                        userBean.setEditarCodigos1xy(false);
+                        userBean.setEliminarRecurso(false);
+                        userBean.setCrearTramite(false);
+                        userBean.setEnviarTramite(false);
+                        userBean.setArchivarTramite(false);
+                        userBean.setDevolverTramite(false);
+                        userBean.setAprobarTramite(false);
+                        userBean.setTerminarTramite(false);
+                        userBean.setCambiarOperadorTramite(false);
+                        userBean.setCambiarUsuarioTramite(false);
+                        userBean.setConsultarTramite(true);
+                        userBean.setTransferirRecursos(false);
+                        userBean.setAdministrarUsuarios(false);
+                        userBean.setAdministrarModulos(false);
+                        userBean.setAsignarTramites(true);
                         break;
                 }
                 

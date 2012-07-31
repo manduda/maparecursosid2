@@ -39,9 +39,7 @@
                             <h:commandLink value="Crear trámite" action="#{TramiteBean.opcionesCrearTramite}" rendered="#{UserBean.crearTramite}"/>
                             
                             <h:outputText value="&#8226;" style="color: #045491;"/>
-                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/mostrarTramites.xhtml">
-                                <h:outputText value="Ver trámites actuales"/>
-                            </h:outputLink>
+                            <h:commandLink value="Ver trámites actuales" action="#{TramiteBean.detalleMostrarTramites}"/>
                             
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarTramite}"/>
                             <h:commandLink value="Buscar trámite" action="#{TramiteBean.opcionesBuscarTramite}" rendered="#{UserBean.consultarTramite}"/>
