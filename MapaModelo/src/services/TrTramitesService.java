@@ -95,6 +95,42 @@ public class TrTramitesService {
         
         TrTramitesDAO.persist(entity, em);
         
+        vo.setTrnCodigo(entity.getTrnCodigo());
+        
+        for (TsTramiteSenalizacionVO ts : vo.getTsTramiteSenalizacionCollection()) {
+            ts.setTrnCodigo(vo);
+            agregarRecurso(ts, em);
+        }
+        for (TnTramiteNumeracionVO tn : vo.getTnTramiteNumeracionCollection()) {
+            tn.setTrnCodigo(vo);
+            agregarRecurso(tn, em);
+        }
+        for (TlTramiteLdVO tld : vo.getTlTramiteLdCollection()) {
+            tld.setTrnCodigo(vo);
+            agregarRecurso(tld, em);
+        }
+        for (TcTramiteCcVO tc : vo.getTcTramiteCcCollection()) {
+            tc.setTrnCodigo(vo);
+            agregarRecurso(tc, em);
+        }
+        for (TaTramiteMaVO tma : vo.getTaTramiteMaCollection()) {
+            tma.setTrnCodigo(vo);
+            agregarRecurso(tma, em);
+        }
+        for (TmTramiteMncVO tmnc : vo.getTmTramiteMncCollection()) {
+            tmnc.setTrnCodigo(vo);
+            agregarRecurso(tmnc, em);
+        }
+        for (TkTramiteNrnVO tnrn : vo.getTkTramiteNrnCollection()) {
+            tnrn.setTrnCodigo(vo);
+            agregarRecurso(tnrn, em);
+        }
+        for (TiTramiteIinVO tiin : vo.getTiTramiteIinCollection()) {
+            tiin.setTrnCodigo(vo);
+            agregarRecurso(tiin, em);
+        }
+        
+        
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
         gestionTramite.setGtfFecha(vo.getTrfFecha());

@@ -5,6 +5,7 @@
 package facade;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -36,6 +37,7 @@ import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.EtEstadoTramiteVO;
+import vo.GtGestionTramiteVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MdModalidadCcVO;
 import vo.MoModalidad1xyVO;
@@ -1515,6 +1517,109 @@ public class facade {
         }
         return resultado;
     }
+    
+    public Integer unirTramites(TrTramitesVO[] vo){
+        /*
+         * 0: Error al unir los trámites
+         * 1: Trámites unidos correctamente
+         * 2: Las empresas de los trámites deben ser las mismas
+        */
+        
+        String empresa = vo[0].getEmrCodigo().getEmrCodigo();
+        String observaciones = "";
+        for(TrTramitesVO t : vo){
+            if (!empresa.equals(t.getEmrCodigo().getEmrCodigo())) {
+                return 2;
+            }
+        }
+                
+        TrTramitesVO tramite = new TrTramitesVO();
+        Collection<TsTramiteSenalizacionVO> tramiteSen = new ArrayList<TsTramiteSenalizacionVO>();
+        Collection<TnTramiteNumeracionVO> tramiteNum = new ArrayList<TnTramiteNumeracionVO>();
+        Collection<TlTramiteLdVO> tramiteLd = new ArrayList<TlTramiteLdVO>();
+        Collection<TcTramiteCcVO> tramiteCC = new ArrayList<TcTramiteCcVO>();
+        Collection<TaTramiteMaVO> tramiteMa = new ArrayList<TaTramiteMaVO>();
+        Collection<TmTramiteMncVO> tramiteMnc = new ArrayList<TmTramiteMncVO>();
+        Collection<TkTramiteNrnVO> tramiteNrn = new ArrayList<TkTramiteNrnVO>();
+        Collection<TiTramiteIinVO> tramiteIin = new ArrayList<TiTramiteIinVO>();
+        
+        observaciones = "Se unieron los trámites: ";
+        
+        for(TrTramitesVO t : vo){
+            for (TsTramiteSenalizacionVO ts : t.getTsTramiteSenalizacionCollection()) {
+                tramiteSen.add(ts);
+            }
+            for (TnTramiteNumeracionVO tn : t.getTnTramiteNumeracionCollection()) {
+                tramiteNum.add(tn);
+            }
+            for (TlTramiteLdVO tld : t.getTlTramiteLdCollection()) {
+                tramiteLd.add(tld);
+            }
+            for (TcTramiteCcVO tc : t.getTcTramiteCcCollection()) {
+                tramiteCC.add(tc);
+            }
+            for (TaTramiteMaVO tma : t.getTaTramiteMaCollection()) {
+                tramiteMa.add(tma);
+            }
+            for (TmTramiteMncVO tmnc : t.getTmTramiteMncCollection()) {
+                tramiteMnc.add(tmnc);
+            }
+            for (TkTramiteNrnVO tnrn : t.getTkTramiteNrnCollection()) {
+                tramiteNrn.add(tnrn);
+            }
+            for (TiTramiteIinVO tiin : t.getTiTramiteIinCollection()) {
+                tramiteIin.add(tiin);
+            }
+            observaciones = observaciones + t.getTrnCodigo() + "-";            
+        }
+        
+        tramite.setTsTramiteSenalizacionCollection(tramiteSen);
+        tramite.setTnTramiteNumeracionCollection(tramiteNum);
+        tramite.setTlTramiteLdCollection(tramiteLd);
+        tramite.setTcTramiteCcCollection(tramiteCC);
+        tramite.setTaTramiteMaCollection(tramiteMa);
+        tramite.setTmTramiteMncCollection(tramiteMnc);
+        tramite.setTkTramiteNrnCollection(tramiteNrn);
+        tramite.setTiTramiteIinCollection(tramiteIin);
+        tramite.setEmrCodigo(vo[0].getEmrCodigo());
+        tramite.setEtnCodigo(vo[0].getEtnCodigo());
+        tramite.setTrfFecha(vo[0].getTrfFecha());
+        tramite.setTrtObservaciones(observaciones);
+        tramite.setUsnCodigo(vo[0].getUsnCodigo());
+        
+        for (int i = 0; i < vo.length; i++) {
+            vo[i].setTrtObservaciones(observaciones);
+        }
+        
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            for(TrTramitesVO t : vo){
+                tramites.archivarTramite(t, em);
+            }
+            tramites.crearTramite(tramite, em);
+            tx.commit();
+            resultado = 1;
+        } catch (Exception e) {
+            if(em != null && tx != null){
+                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            if(em != null){
+                em.clear();
+                em.close();
+            }
+        }
+        return resultado;
+    }
+    
     
     public Integer cambiarUsuarioTramite(TrTramitesVO vo, int codigoNuevoUsuario){
         /*
