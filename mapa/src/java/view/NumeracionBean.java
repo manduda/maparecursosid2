@@ -114,7 +114,7 @@ public class NumeracionBean implements Serializable {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize*10, "-1", "-1", -1, -1, -1, -1, "-1", "-1"); 
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", "-1", -1, -1, -1, -1, "-1", "-1"); 
                 lazyNumeracion = agruparNumeracion(numera);
   
                 return lazyNumeracion;  
@@ -170,7 +170,7 @@ public class NumeracionBean implements Serializable {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize*10, operadorVO.getEmrCodigo(), ndcVO.getNdtNombre(), tipoNdcVO.getNtnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento()); 
+                numera = fachada.cargarNumeracion(first, pageSize, operadorVO.getEmrCodigo(), ndcVO.getNdtNombre(), tipoNdcVO.getNtnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento()); 
                 lazyNumeracion = agruparNumeracion(numera);
                 
                 /*for(int i=0; i < numera.size();i++) {

@@ -36,7 +36,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd"/>
+                            <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd">
+                                <f:setPropertyActionListener target="#{CodigosLdBean.selectedLdsAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

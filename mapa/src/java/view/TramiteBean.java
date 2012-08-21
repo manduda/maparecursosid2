@@ -500,8 +500,11 @@ public class TramiteBean implements Serializable {
         
         if (resultado == true){
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
-            mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
-            
+            if (userVO.getTunCodigo().getTunCodigo() == 3) {
+                mensajeTramite = "<br><b>Trámite enviado al Asignador para reasignar.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            } else {
+                mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+            }
             vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
             
             String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();

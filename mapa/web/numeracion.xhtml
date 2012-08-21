@@ -68,7 +68,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" action="#{NumeracionBean.buscar}" ajax="false"/>
+                            <p:commandButton value="Consultar" action="#{NumeracionBean.buscar}" ajax="true" update="pgNumeracion,frmNum">
+                                <f:setPropertyActionListener target="#{NumeracionBean.selectedNumsAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

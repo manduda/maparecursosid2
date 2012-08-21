@@ -37,7 +37,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update="pgMarcacionAbreviada,formMarcacionAbreviada"/>
+                            <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update="pgMarcacionAbreviada,formMarcacionAbreviada">
+                                <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selectedsAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

@@ -96,6 +96,7 @@ public class InicioBean {
                         userBean.setAdministrarUsuarios(true);
                         userBean.setAdministrarModulos(true);
                         userBean.setAsignarTramites(false);
+                        userBean.setReasignarTramite(false);
                         break;
                     case 2: // COORDINADOR
                         userBean.setRecuperar(false);
@@ -117,6 +118,7 @@ public class InicioBean {
                         userBean.setAdministrarUsuarios(false);
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
+                        userBean.setReasignarTramite(false);
                         break;
                     case 3: // ASESOR
                         userBean.setRecuperar(true);
@@ -138,6 +140,7 @@ public class InicioBean {
                         userBean.setAdministrarUsuarios(false);
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
+                        userBean.setReasignarTramite(true);
                         break;
                     case 4: // ASIGNADOR
                         userBean.setRecuperar(false);
@@ -159,6 +162,7 @@ public class InicioBean {
                         userBean.setAdministrarUsuarios(false);
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(true);
+                        userBean.setReasignarTramite(false);
                         break;
                 }
                 

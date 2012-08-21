@@ -37,7 +37,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{CodigosMncBean.buscar}" ajax="true" update="pgCodigosMnc,formCodigosMnc"/>
+                            <p:commandButton value="Consultar" actionListener="#{CodigosMncBean.buscar}" ajax="true" update="pgCodigosMnc,formCodigosMnc">
+                                <f:setPropertyActionListener target="#{CodigosMncBean.selectedsAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

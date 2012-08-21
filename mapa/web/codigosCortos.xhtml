@@ -41,7 +41,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{CodigosCortosBean.buscar}" ajax="true" update="pgCodigosCortos,formCodCorto"/>
+                            <p:commandButton value="Consultar" actionListener="#{CodigosCortosBean.buscar}" ajax="true" update="pgCodigosCortos,formCodCorto">
+                                <f:setPropertyActionListener target="#{CodigosCortosBean.selectedCCsAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

@@ -49,12 +49,14 @@
                             <h:outputText value="Punto"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="ps" value="#{SenalizacionBean.psSenalizacion}" maxlength="2" size="2" converter="javax.faces.Integer"
-                                             converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                                             converterMessage="Debes ingresar un número entero mayor o igual a cero" validator="#{Validador.enteroMayorIgualCero}"/>
                                 <p:message for="ps" />
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="true" update="pgSenalizacion,formSen"/>
+                            <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="true" update="pgSenalizacion,formSen">
+                                <f:setPropertyActionListener target="#{SenalizacionBean.selectedSensAccion}" value="false"/>
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

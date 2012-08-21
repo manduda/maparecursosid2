@@ -231,7 +231,7 @@
 
                             </h:panelGroup>
                             
-                            <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4))}">
+                            <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ASIGNAR TRAMITE -->
                                 <h:form>
                                     <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update="datosAsignarUsuario"/>
@@ -254,6 +254,25 @@
                                         </h:form>
                                     </h:panelGrid>
                                 </p:dialog>
+                            </h:panelGroup>
+                            
+                            <h:panelGroup rendered="#{(UserBean.reasignarTramite)}">
+                                <!-- SOLICITAR REASIGNAR TRAMITE -->
+                                <p:commandButton type="button" value="Reasignar" onclick="confirmarReasignar.show()"/>
+                                <p:confirmDialog message="Deseas enviar el trámite al Asignador para reasignar?"  
+                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                            header="Confirmación" severity="alert" widgetVar="confirmarReasignar">  
+                                    <h:form>
+                                        <h:panelGrid style="text-align: center;" width="100%">
+                                            <h:outputText value="Comentarios" style="font-weight: bold;"/>
+                                            <h:inputTextarea style="width: 250px; height: 100px" value="#{TramiteBean.observacionesTramite}"/>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                            <p:commandButton value="Si" action="#{TramiteBean.devolverTramite}" ajax="false" onclick="confirmarReasignar.hide();statusDialog.show();" />
+                                            <p:commandButton type="button" value="No" onclick="confirmarReasignar.hide()" />
+                                        </h:panelGrid>
+                                    </h:form>
+                                </p:confirmDialog>
                             </h:panelGroup>
 
                         </h:panelGrid>
