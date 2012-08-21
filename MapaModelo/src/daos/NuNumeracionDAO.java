@@ -69,13 +69,14 @@ public class NuNumeracionDAO {
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
         
         StringBuilder searchQuery1 = new StringBuilder(
-                "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9) FROM (SELECT DISTINCT "
+                "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9) FROM ( "
+                + "SELECT A.NUM, ROWNUM NUMERO FROM ( "
+                + "SELECT DISTINCT "
                 + "SUBSTR(n.NUN_INICIO,1,4) NUM, "
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
-                + "n.NDN_CODIGO, "
-                + "n.SK_REGION_CODE "
+                + "n.NDN_CODIGO "
                 + "FROM NU_NUMERACION n, SA.DEPARTAMENTOS d, SA.MUNICIPIOS m, ND_NDC nd "
                 + "WHERE 1=1 "
                 + "AND n.SK_REGION_CODE = m.CODIGO_MUNICIPIO "
@@ -94,7 +95,7 @@ public class NuNumeracionDAO {
             searchQuery1.append("AND nd.NDT_NOMBRE = ?2 ");
             searchQuery.append("AND n.ndnCodigo.ndtNombre = ?2 ");
         }
-        if(tipoNdc != -1) {
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
             searchQuery1.append("AND nd.NTN_CODIGO = ?3 ");
             searchQuery.append("AND n.ndnCodigo.ntnCodigo.ntnCodigo = ?3 ");
         }
@@ -133,7 +134,10 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?8 ");
         }
         
-        searchQuery1.append(" ) a");
+        searchQuery1.append(" ORDER BY SUBSTR(n.NUN_INICIO,1,4) "
+                + ") A "
+                + ") B "
+                + "WHERE NUMERO BETWEEN ?9 AND ?10 ");
         
         Query query1 = em.createNativeQuery(searchQuery1.toString());
 
@@ -143,7 +147,7 @@ public class NuNumeracionDAO {
         if(!ndc.equals("-1")) {
             query1.setParameter(2, ndc);
         }
-        if(tipoNdc != -1) {
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
             query1.setParameter(3, tipoNdc);
         }
         if(inicio != -1) {
@@ -161,6 +165,8 @@ public class NuNumeracionDAO {
         if(!departamento.equals("-1")) {
             query1.setParameter(8, departamento);
         }
+        query1.setParameter(9, first + 1);
+        query1.setParameter(10, first + max);
         
         Object[] results = (Object [])query1.getSingleResult();
 //                getResultList();
@@ -179,7 +185,7 @@ public class NuNumeracionDAO {
         if(!ndc.equals("-1")) {
             query.setParameter(2, ndc);
         }
-        if(tipoNdc != -1) {
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
             query.setParameter(3, tipoNdc);
         }
         if(inicio != -1) {
@@ -206,10 +212,10 @@ public class NuNumeracionDAO {
         }
         
         
-        query.setFirstResult(first);
+        /*query.setFirstResult(first);
         if(max != -1) {
             query.setMaxResults(max);
-        }
+        }*/
         numeracion = query.getResultList();        
         return numeracion;
     }
@@ -222,8 +228,7 @@ public class NuNumeracionDAO {
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
-                + "n.NDN_CODIGO, "
-                + "n.SK_REGION_CODE "
+                + "n.NDN_CODIGO "
                 + "FROM NU_NUMERACION n, SA.DEPARTAMENTOS d, SA.MUNICIPIOS m, ND_NDC nd "
                 + "WHERE 1=1 "
                 + "AND n.SK_REGION_CODE = m.CODIGO_MUNICIPIO "
@@ -236,7 +241,7 @@ public class NuNumeracionDAO {
         if(!ndc.equals("-1")) {
             searchQuery.append("AND nd.NDT_NOMBRE = ?2 ");
         }
-        if(tipoNdc != -1) {
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
             searchQuery.append("AND nd.NTN_CODIGO = ?3 ");
         }
         if(inicio != -1) {
@@ -279,7 +284,7 @@ public class NuNumeracionDAO {
         if(!ndc.equals("-1")) {
             query.setParameter(2, ndc);
         }
-        if(tipoNdc != -1) {
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
             query.setParameter(3, tipoNdc);
         }
         if(inicio != -1) {

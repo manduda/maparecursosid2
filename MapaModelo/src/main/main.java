@@ -74,12 +74,12 @@ public class main {
         *///-------------------------------------
  
         //----  NUMERACION
-        /*List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
+        List<NuNumeracionVO> vo = new ArrayList<NuNumeracionVO>();
         int cantidad = 0;
         vo = fachada.cargarNumeracion(0, 20, "-1","1",3,-1,-1,-1,"2AF9","0B");
-        cantidad = fachada.countCargarNumeracion("-1","1",3,-1,-1,-1,"2AF9","0B");
+        cantidad = fachada.countCargarNumeracion("-1","1",-1,-1,-1,-1,"-1","-1");
         System.out.println("Cantidad:"+cantidad);
-        for(int i=0; i < vo.size();i++) {
+        /*for(int i=0; i < vo.size();i++) {
             int codigo = vo.get(i).getNunCodigo();
             String operador = vo.get(i).getEmrCodigo().getEmtNombre();
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
@@ -184,7 +184,7 @@ public class main {
         //-------------------------------------
         
         //----  CODIGOS 1XY
-        List<Nc1xyVO> vo = new ArrayList<Nc1xyVO>();
+        /*List<Nc1xyVO> vo = new ArrayList<Nc1xyVO>();
         int cantidad = 0;
         vo = fachada.cargarCodigos1xy(0,-1,-1,-1,-1,"-1");
         cantidad = fachada.countCargarCodigos1xy(-1,-1,-1,"-1");
@@ -195,7 +195,7 @@ public class main {
             String modalidad = vo.get(i).getMonCodigo().getMotNombre();
             String estado = vo.get(i).getEsnCodigo().getEstNombre();
             System.out.println(codigo+"-"+codigo1xy+"-"+modalidad+"-"+estado);
-	}
+	}*/
         //-------------------------------------
         
         //----  MUNICIPIOS

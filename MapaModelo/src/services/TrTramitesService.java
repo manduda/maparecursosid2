@@ -211,6 +211,12 @@ public class TrTramitesService {
         UsUsuarios usuario = new UsUsuarios();
         usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
         
+        Integer tipoUsuario = UsUsuariosDAO.findbyId(vo.getUsnCodigo().getUsnCodigo(), em).getTunCodigo().getTunCodigo();
+        
+        if (tipoUsuario == 3) {
+            entity.setUsnCodigo(UsUsuariosDAO.getAsignador(em));
+        }
+        
         //entity.setTrnCodigo(vo.getTrnCodigo());
         entity.setEtnCodigo(estado);
         //entity.setUsnCodigo(usuario);
