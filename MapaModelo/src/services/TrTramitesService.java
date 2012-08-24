@@ -97,39 +97,61 @@ public class TrTramitesService {
         
         vo.setTrnCodigo(entity.getTrnCodigo());
         
-        for (TsTramiteSenalizacionVO ts : vo.getTsTramiteSenalizacionCollection()) {
-            ts.setTrnCodigo(vo);
-            agregarRecurso(ts, em);
-        }
-        for (TnTramiteNumeracionVO tn : vo.getTnTramiteNumeracionCollection()) {
-            tn.setTrnCodigo(vo);
-            agregarRecurso(tn, em);
-        }
-        for (TlTramiteLdVO tld : vo.getTlTramiteLdCollection()) {
-            tld.setTrnCodigo(vo);
-            agregarRecurso(tld, em);
-        }
-        for (TcTramiteCcVO tc : vo.getTcTramiteCcCollection()) {
-            tc.setTrnCodigo(vo);
-            agregarRecurso(tc, em);
-        }
-        for (TaTramiteMaVO tma : vo.getTaTramiteMaCollection()) {
-            tma.setTrnCodigo(vo);
-            agregarRecurso(tma, em);
-        }
-        for (TmTramiteMncVO tmnc : vo.getTmTramiteMncCollection()) {
-            tmnc.setTrnCodigo(vo);
-            agregarRecurso(tmnc, em);
-        }
-        for (TkTramiteNrnVO tnrn : vo.getTkTramiteNrnCollection()) {
-            tnrn.setTrnCodigo(vo);
-            agregarRecurso(tnrn, em);
-        }
-        for (TiTramiteIinVO tiin : vo.getTiTramiteIinCollection()) {
-            tiin.setTrnCodigo(vo);
-            agregarRecurso(tiin, em);
+        if (vo.getTsTramiteSenalizacionCollection()!=null){
+            for (TsTramiteSenalizacionVO ts : vo.getTsTramiteSenalizacionCollection()) {
+                ts.setTrnCodigo(vo);
+                agregarRecurso(ts, em);
+            }
         }
         
+        if (vo.getTnTramiteNumeracionCollection()!=null){
+            for (TnTramiteNumeracionVO tn : vo.getTnTramiteNumeracionCollection()) {
+                tn.setTrnCodigo(vo);
+                agregarRecurso(tn, em);
+            }
+        }
+        
+        if (vo.getTlTramiteLdCollection()!=null){
+            for (TlTramiteLdVO tld : vo.getTlTramiteLdCollection()) {
+                tld.setTrnCodigo(vo);
+                agregarRecurso(tld, em);
+            }
+        }
+        
+        if (vo.getTcTramiteCcCollection()!=null){
+            for (TcTramiteCcVO tc : vo.getTcTramiteCcCollection()) {
+                tc.setTrnCodigo(vo);
+                agregarRecurso(tc, em);
+            }
+        }
+        
+        if (vo.getTaTramiteMaCollection()!=null){
+            for (TaTramiteMaVO tma : vo.getTaTramiteMaCollection()) {
+                tma.setTrnCodigo(vo);
+                agregarRecurso(tma, em);
+            }
+        }
+        
+        if (vo.getTmTramiteMncCollection()!=null){
+            for (TmTramiteMncVO tmnc : vo.getTmTramiteMncCollection()) {
+                tmnc.setTrnCodigo(vo);
+                agregarRecurso(tmnc, em);
+            }
+        }
+        
+        if (vo.getTkTramiteNrnCollection()!=null){
+            for (TkTramiteNrnVO tnrn : vo.getTkTramiteNrnCollection()) {
+                tnrn.setTrnCodigo(vo);
+                agregarRecurso(tnrn, em);
+            }
+        }
+        
+        if (vo.getTiTramiteIinCollection()!=null){
+            for (TiTramiteIinVO tiin : vo.getTiTramiteIinCollection()) {
+                tiin.setTrnCodigo(vo);
+                agregarRecurso(tiin, em);
+            }
+        }
         
         GtGestionTramite gestionTramite = new GtGestionTramite();
         gestionTramite.setEtnCodigo(estado);
