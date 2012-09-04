@@ -55,14 +55,14 @@ public class UsUsuariosDAO {
     }
     
     public static List<UsUsuarios> getList(EntityManager em){
-        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1");
+        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1 ORDER BY u.codigoSIUST.login");
         return query.getResultList();
     }
     
     public static List<Users> getUsuariosNoAplicacion(EntityManager em) {
         
         Query query = em.createQuery("SELECT us FROM Users us "
-                + "WHERE us.userCode NOT IN (SELECT u.codigoSIUST.userCode FROM UsUsuarios u WHERE u.usnEstado = 1)");
+                + "WHERE us.userCode NOT IN (SELECT u.codigoSIUST.userCode FROM UsUsuarios u WHERE u.usnEstado = 1) us.login");
         
         return query.getResultList();
     }
@@ -75,7 +75,8 @@ public class UsUsuariosDAO {
                 + "WHERE A.LOGIN = B.OBJECT_NAME "
                 + "AND   B.OBJECT_TYPE = 'USUARIOS'"
                 + "AND   B.DIMENSION_NAME = 'EMPRESA' "
-                + "AND   B.DIMENSION_CATEGORY_NAME = 'CRT'");
+                + "AND   B.DIMENSION_CATEGORY_NAME = 'CRT' "
+                + "ORDER BY A.LOGIN");
         
         List<Object[]> results = query.getResultList();
         List<Users> usuarios = new ArrayList<Users>();

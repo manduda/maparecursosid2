@@ -2367,11 +2367,11 @@ public class facade {
             tx = em.getTransaction();
             tx.begin();
             vo = configuracionModulos.getById(cmnCodigo, em);
-            tx.commit();
+            //tx.commit();
         } catch (Exception e) {
-            if(em != null && tx != null){
-                tx.rollback();
-            }
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
         } finally {
             if(em != null){
                 em.clear();

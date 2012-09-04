@@ -5,6 +5,7 @@
 package services;
 
 import OID.GetAuthenticated;
+import OID.AutenticacionLDAP;
 import OID.oidApoyo;
 import com.novell.ldap.LDAPConnection;
 import daos.UsUsuariosDAO;
@@ -15,10 +16,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.AuthenticationException;
+import javax.naming.Binding;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.RefAddr;
+import javax.naming.Reference;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.InitialDirContext;
 import javax.persistence.EntityManager;
 import vo.TuTipoUsuarioVO;
 import vo.UsUsuariosVO;
@@ -55,38 +67,14 @@ public class UsUsuariosService {
     }
     
     public boolean autenticar(String usuario, String contrasena) {
-        Properties propOID = new Properties();
-        try {
-            /*InputStream input = UsUsuariosService.class.getResourceAsStream("../properties/ConnectionOID.properties");
-            properties.load(input);
-            input.close();*/
-            
-            InputStream input = UsUsuariosService.class.getResourceAsStream("/properties/ConnectionOID.properties");
-            propOID.load(input);
-            input.close();
-            
-            LDAPConnection conn = new LDAPConnection();
-            int ldapPort = Integer.parseInt((String)propOID.getProperty("puertoOID"));
-            String ldapHost = (String)propOID.getProperty("HostName");
-            String params = (String)propOID.getProperty("DnRequeridos");
-            String nomParams = (String)propOID.getProperty("parametros");
-            String loginDN = oidApoyo.getDN(usuario, params, nomParams);
-
-            String respuesta = GetAuthenticated.simpleBind1(conn, ldapHost, ldapPort, loginDN, contrasena);
-            
-            if(respuesta.equals("1")){
-                return true;
-            } else {
-                return false;
-            }
-
-        } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo ConnectionOID.properties no encontrado", e);
-            return false;
-        } catch (Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros", e);
-            return false;
-        }
+        /*
+         * 1 - JDNI a través de Resource Reference
+         * 2 - JDNI a través de Archivo Properties
+         * 3 - Archivo properties con librería LDAP
+         */
+        boolean resultado = false;
+        resultado = AutenticacionLDAP.autenticar(usuario, contrasena, 1);
+        return resultado;
     }
     
     public UsUsuariosVO cargarUsuario(String usuario, EntityManager em) {

@@ -5,43 +5,49 @@
     <non-jta-data-source>java:/comp/env/ds/OracleMapaDS</non-jta-data-source>
     <class>entities.AcAccion</class>
     <class>entities.CcCodigosCortos</class>
+    <class>entities.CdCodigosMnc</class>
+    <class>entities.CiCodigosIin</class>
     <class>entities.ClCodigosLd</class>
+    <class>entities.CmConfiguracionModulos</class>
     <class>entities.CoConfiguracion</class>
     <class>entities.Departamentos</class>
     <class>entities.EmOperador</class>
     <class>entities.EsEstado</class>
     <class>entities.EtEstadoTramite</class>
     <class>entities.GtGestionTramite</class>
+    <class>entities.MaMarcacionAbreviada</class>
+    <class>entities.McMcc</class>
     <class>entities.MdModalidadCc</class>
+    <class>entities.MoModalidad1xy</class>
     <class>entities.Municipios</class>
+    <class>entities.Nc1xy</class>
     <class>entities.NdNdc</class>
+    <class>entities.NrCodigosNrn</class>
     <class>entities.NtTipoNdc</class>
     <class>entities.NuNumeracion</class>
     <class>entities.ReRegion</class>
     <class>entities.RsReservasTemporales</class>
     <class>entities.RtTipoRegion</class>
     <class>entities.SeSenalizacion</class>
+    <class>entities.TaTramiteMa</class>
     <class>entities.TcTramiteCc</class>
     <class>entities.TeTipoSenalizacion</class>
+    <class>entities.TiTramiteIin</class>
+    <class>entities.TkTramiteNrn</class>
     <class>entities.TlTramiteLd</class>
+    <class>entities.TmTramiteMnc</class>
+    <class>entities.TnTramiteNumeracion</class>
     <class>entities.TrTramites</class>
     <class>entities.TsTramiteSenalizacion</class>
     <class>entities.TuTipoUsuario</class>
     <class>entities.UsUsuarios</class>
     <class>entities.Users</class>
-    <class>entities.TnTramiteNumeracion</class>
-    <class>entities.CdCodigosMnc</class>
-    <class>entities.CiCodigosIin</class>
-    <class>entities.MaMarcacionAbreviada</class>
-    <class>entities.McMcc</class>
-    <class>entities.MoModalidad1xy</class>
-    <class>entities.Nc1xy</class>
-    <class>entities.NrCodigosNrn</class>
-    <class>entities.TaTramiteMa</class>
-    <class>entities.TiTramiteIin</class>
-    <class>entities.TkTramiteNrn</class>
-    <class>entities.TmTramiteMnc</class>
-    <class>entities.CmConfiguracionModulos</class>
     <shared-cache-mode>NONE</shared-cache-mode>
+    <!--<properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>
+      <property name="javax.persistence.jdbc.password" value="crcmarzo"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.user" value="mapa"/>
+    </properties>-->
   </persistence-unit>
 </persistence>
