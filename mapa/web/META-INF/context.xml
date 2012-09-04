@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Context antiJARLocking="true" path="/mapa"/>
+<Context antiJARLocking="true" path="/mapa">
+    <ResourceLink name="ds/OracleMapaDS" global="ds/OracleMapaDS" type="javax.sql.DataSource"/>
+    <ResourceLink name="ldap/OracleOID" global="ldap/OracleOID" type="com.sun.jndi.ldap.LdapCtx"/>
+</Context>

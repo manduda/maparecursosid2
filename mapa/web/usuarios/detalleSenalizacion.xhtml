@@ -72,6 +72,7 @@
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar,pgMenuTramite,pgSenalizacion" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{SenalizacionBean.selectedSensAccion}" value="false"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="recuperarDialog.hide();"/>
                         </h:panelGrid>
@@ -139,6 +140,7 @@
                             <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar,pgMenuTramite,pgSenalizacion" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
+                                <f:setPropertyActionListener target="#{SenalizacionBean.selectedSensAccion}" value="false"/>
                             </p:commandButton>
                             <p:commandButton type="button" value="Cancelar" onclick="preasignarDialog.hide();"/>
                         </h:panelGrid>

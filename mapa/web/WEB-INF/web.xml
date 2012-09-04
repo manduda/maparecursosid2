@@ -6,6 +6,12 @@
         <res-type>javax.sql.DataSource</res-type>
         <res-auth>Container</res-auth>
     </resource-ref>
+     <resource-ref>
+        <description>Ldap</description>
+        <res-ref-name>ldap/OracleOID</res-ref-name> 
+        <res-type>com.sun.jndi.ldap.LdapCtx</res-type> 
+        <res-auth>Container</res-auth> 
+    </resource-ref>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Production</param-value>

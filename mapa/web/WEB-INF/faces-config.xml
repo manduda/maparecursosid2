@@ -13,4 +13,9 @@
         </locale-config>
         <message-bundle>properties.MyMessages</message-bundle>
     </application>
+    
+    <factory>
+        <exception-handler-factory>inicio.MapaExceptionHandlerFactory</exception-handler-factory>
+    </factory>
+    
 </faces-config>
