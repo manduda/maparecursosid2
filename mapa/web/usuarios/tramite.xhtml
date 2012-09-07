@@ -256,7 +256,7 @@
                                 </p:dialog>
                             </h:panelGroup>
                             
-                            <h:panelGroup rendered="#{(UserBean.reasignarTramite)}">
+                            <h:panelGroup rendered="#{(UserBean.reasignarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- SOLICITAR REASIGNAR TRAMITE -->
                                 <p:commandButton type="button" value="Reasignar" onclick="confirmarReasignar.show()"/>
                                 <p:confirmDialog message="Deseas enviar el trámite al Asignador para reasignar?"  

@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/mapa">
-    <ResourceLink name="ds/OracleMapaDS" global="ds/OracleMapaDS" type="javax.sql.DataSource"/>
-    <ResourceLink name="ldap/OracleOID" global="ldap/OracleOID" type="com.sun.jndi.ldap.LdapCtx"/>
+    <!--<ResourceLink name="ds/OracleMapaDS" global="ds/OracleMapaDS" type="javax.sql.DataSource"/>-->
+    <ResourceLink name="jdbc/UCPPool" global="jdbc/UCPPool" type="oracle.ucp.jdbc.PoolDataSource"/>
+    
+    <Resource auth="Container"
+        com.sun.jndi.ldap.connect.pool="true"
+        factory="com.sun.jndi.ldap.LdapCtxFactory"
+        java.naming.factory.initial="com.sun.jndi.ldap.LdapCtxFactory"
+        java.naming.provider.url="ldap://192.168.0.204:389"
+        java.naming.security.authentication="simple"
+        java.naming.security.credentials=""
+        java.naming.security.principal="cn=users,dc=apolo,dc=com"
+        name="ldap/OracleOID"
+        type="com.sun.jndi.ldap.LdapCtx"/>
+     
+     <!--<Resource auth="Container"
+        com.sun.jndi.ldap.connect.pool="true"
+        factory="com.sun.jndi.ldap.LdapCtxFactory"
+        java.naming.factory.initial="com.sun.jndi.ldap.LdapCtxFactory"
+        java.naming.provider.url="ldap://172.30.125.24:389"
+        java.naming.security.authentication="simple"
+        java.naming.security.credentials=""
+        java.naming.security.principal="cn=users,dc=accrtpr01,dc=com"
+        name="ldap/OracleOID"
+        type="com.sun.jndi.ldap.LdapCtx"/>-->
 </Context>
