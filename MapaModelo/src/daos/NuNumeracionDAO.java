@@ -69,19 +69,16 @@ public class NuNumeracionDAO {
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
         
         StringBuilder searchQuery1 = new StringBuilder(
-                "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9) FROM ( "
-                + "SELECT A.NUM, ROWNUM NUMERO FROM ( "
+                "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9),NDN_CODIGO FROM ( "
+                + "SELECT A.NUM, A.NDN_CODIGO, ROWNUM NUMERO FROM ( "
                 + "SELECT DISTINCT "
                 + "SUBSTR(n.NUN_INICIO,1,4) NUM, "
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
                 + "n.NDN_CODIGO "
-                + "FROM NU_NUMERACION n, SA.DEPARTAMENTOS d, SA.MUNICIPIOS m, ND_NDC nd "
-                + "WHERE 1=1 "
-                + "AND n.SK_REGION_CODE = m.CODIGO_MUNICIPIO "
-                + "AND m.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO "
-                + "AND n.NDN_CODIGO = nd.NDN_CODIGO ");
+                + "FROM NU_NUMERACION n "
+                + "WHERE 1=1 ");
         
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT n FROM NuNumeracion n " +
@@ -92,11 +89,11 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.emrCodigo.emrCodigo = ?1 ");
         }
         if(!ndc.equals("-1")) {
-            searchQuery1.append("AND nd.NDT_NOMBRE = ?2 ");
+            searchQuery1.append("AND n.NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NDT_NOMBRE = ?2) ");
             searchQuery.append("AND n.ndnCodigo.ndtNombre = ?2 ");
         }
         if((tipoNdc != -1) && (!ndc.equals("-1"))) {
-            searchQuery1.append("AND nd.NTN_CODIGO = ?3 ");
+            searchQuery1.append("AND n.NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NTN_CODIGO = ?3) ");
             searchQuery.append("AND n.ndnCodigo.ntnCodigo.ntnCodigo = ?3 ");
         }
         if(inicio != -1) {
@@ -130,14 +127,15 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.codigoMunicipio.codigoMunicipio = ?7 ");
         }
         if(!departamento.equals("-1")) {
-            searchQuery1.append("AND d.CODIGO_DEPARTAMENTO = ?8 ");
+            searchQuery1.append("AND n.SK_REGION_CODE IN (SELECT m.CODIGO_MUNICIPIO FROM SA.MUNICIPIOS m WHERE d.CODIGO_DEPARTAMENTO = ?8) ");
             searchQuery.append("AND n.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?8 ");
         }
         
-        searchQuery1.append(" ORDER BY SUBSTR(n.NUN_INICIO,1,4) "
+        searchQuery1.append("ORDER BY n.NDN_CODIGO,SUBSTR(n.NUN_INICIO,1,4) "
                 + ") A "
                 + ") B "
-                + "WHERE NUMERO BETWEEN ?9 AND ?10 ");
+                + "WHERE NUMERO BETWEEN ?9 AND ?10 "
+                + "GROUP BY NDN_CODIGO");
         
         Query query1 = em.createNativeQuery(searchQuery1.toString());
 
@@ -207,8 +205,10 @@ public class NuNumeracionDAO {
         if (results[0] != null){
             Integer a = Integer.valueOf(results[0].toString());
             Integer b = Integer.valueOf(results[1].toString());
+            Integer c = Integer.valueOf(results[2].toString());
             query.setParameter(10, a);
             query.setParameter(11, b);
+            query.setParameter(2, b);
         }
         
         

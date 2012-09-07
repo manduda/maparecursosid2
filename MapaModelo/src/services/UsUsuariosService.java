@@ -73,7 +73,7 @@ public class UsUsuariosService {
          * 3 - Archivo properties con librería LDAP
          */
         boolean resultado = false;
-        resultado = AutenticacionLDAP.autenticar(usuario, contrasena, 1);
+        resultado = AutenticacionLDAP.autenticar(usuario, contrasena, 2);
         return resultado;
     }
     
