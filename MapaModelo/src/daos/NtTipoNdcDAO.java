@@ -17,7 +17,8 @@ public class NtTipoNdcDAO {
     
     public static List<NtTipoNdc> getList(String ndc, EntityManager em){
         Query query = em.createQuery("SELECT nt FROM NtTipoNdc nt "
-                + "WHERE nt.ntnCodigo IN (SELECT DISTINCT nd.ntnCodigo.ntnCodigo FROM NdNdc nd WHERE nd.ndtNombre = :ndc)");
+                + "WHERE nt.ntnCodigo IN (SELECT DISTINCT nd.ntnCodigo.ntnCodigo FROM NdNdc nd WHERE nd.ndtNombre = :ndc) "
+                + "ORDER BY nt.nttNombre");
         query.setParameter("ndc", ndc);
         return query.getResultList();
     }    

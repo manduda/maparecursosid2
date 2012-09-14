@@ -21,7 +21,7 @@ import vo.EsEstadoVO;
  * @author miguel.duran
  */
 public class ClCodigosLdService {
-    public ClCodigosLdVO getVOFromEntity(ClCodigosLd entity){
+    /*public ClCodigosLdVO getVOFromEntity(ClCodigosLd entity){
         ClCodigosLdVO vo = new ClCodigosLdVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -40,21 +40,18 @@ public class ClCodigosLdService {
         vo.setCltObservaciones(entity.getCltObservaciones());
 
         return vo;
-    }
+    }*/
     
     public ClCodigosLdVO getById(int id, EntityManager em){
         ClCodigosLd entity = ClCodigosLdDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<ClCodigosLdVO> getList(EntityManager em){
         List<ClCodigosLd> codigosld = ClCodigosLdDAO.getList(em);
         List<ClCodigosLdVO> codigosldVO = new ArrayList<ClCodigosLdVO>();        
-        ClCodigosLdVO vo = new ClCodigosLdVO();
-        int size = codigosld.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(codigosld.get(i));
-            codigosldVO.add(vo);
+        for (ClCodigosLd c : codigosld) {
+            codigosldVO.add(c.toVO());
         }
         return codigosldVO;
     }
@@ -62,11 +59,8 @@ public class ClCodigosLdService {
     public List<ClCodigosLdVO> cargarCodigosLd(int first, int max, String operador, int codigoLd, int estado, EntityManager em){
         List<ClCodigosLd> codigosld = ClCodigosLdDAO.cargarCodigosLd(first, max, operador, codigoLd, estado, em);
         List<ClCodigosLdVO> codigosldVO = new ArrayList<ClCodigosLdVO>();        
-        ClCodigosLdVO vo = new ClCodigosLdVO();
-        int size = codigosld.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(codigosld.get(i));
-            codigosldVO.add(vo);
+        for (ClCodigosLd c : codigosld) {
+            codigosldVO.add(c.toVO());
         }
         return codigosldVO;
     }

@@ -108,12 +108,12 @@ public class SeSenalizacionService {
         return operadorVO;
     }
     
-    public EmOperadorVO getVOFromEntityOperador(EmOperador entity){
+    /*public EmOperadorVO getVOFromEntityOperador(EmOperador entity){
         EmOperadorVO vo = new EmOperadorVO();
         vo.setEmrCodigo(entity.getEmrCodigo());
         vo.setEmtNombre(entity.getEmtNombre());
         return vo;
-    }
+    }*/
     
     public void transferirSenalizacion (String operadorOrigen, String operadorDestino, EntityManager em){
         SeSenalizacionDAO.transferirSenalizacionDAO(operadorOrigen, operadorDestino, em);

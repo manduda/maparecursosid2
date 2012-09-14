@@ -17,7 +17,7 @@ import vo.RtTipoRegionVO;
  * @author miguel.duran
  */
 public class ReRegionService {
-    public ReRegionVO getVOFromEntity(ReRegion entity){
+    /*public ReRegionVO getVOFromEntity(ReRegion entity){
         ReRegionVO vo = new ReRegionVO();
         // Tipo Region Señalización
         RtTipoRegionVO tipoRegion = new RtTipoRegionVO();
@@ -28,21 +28,18 @@ public class ReRegionService {
         vo.setRenCodigo(entity.getRenCodigo());
         vo.setRetNombre(entity.getRetNombre());
         return vo;
-    }
+    }*/
     
     public ReRegionVO getById(int id, EntityManager em){
         ReRegion entity = ReRegionDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<ReRegionVO> getList(EntityManager em){
         List<ReRegion> region = ReRegionDAO.getList(em);
         List<ReRegionVO> regionVO = new ArrayList<ReRegionVO>();        
-        ReRegionVO vo = new ReRegionVO();
-        int size = region.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(region.get(i));
-            regionVO.add(vo);
+        for (ReRegion r : region) {
+            regionVO.add(r.toVO());
         }
         return regionVO;
     }

@@ -41,7 +41,7 @@ import vo.UsersVO;
  * @author miguel.duran
  */
 public class UsUsuariosService {
-    public UsUsuariosVO getVOFromEntity(UsUsuarios entity){
+    /*public UsUsuariosVO getVOFromEntity(UsUsuarios entity){
         UsUsuariosVO vo = new UsUsuariosVO();
         // Datos Usuario
         UsersVO datosusuario = new UsersVO();
@@ -64,7 +64,7 @@ public class UsUsuariosService {
         vo.setUsfFecha(entity.getUsfFecha());
 
         return vo;
-    }
+    }*/
     
     public boolean autenticar(String usuario, String contrasena) {
         /*
@@ -82,7 +82,7 @@ public class UsUsuariosService {
         
         if(u!=null){
             UsUsuariosVO uVO = new UsUsuariosVO();
-            uVO = getVOFromEntity(u);
+            uVO = u.toVO();
             return uVO;
         }
         return null;         

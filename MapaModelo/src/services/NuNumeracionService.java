@@ -111,12 +111,12 @@ public class NuNumeracionService {
         return operadorVO;
     }
 
-    public EmOperadorVO getVOFromEntityOperador(EmOperador entity){
+    /*public EmOperadorVO getVOFromEntityOperador(EmOperador entity){
         EmOperadorVO vo = new EmOperadorVO();
         vo.setEmrCodigo(entity.getEmrCodigo());
         vo.setEmtNombre(entity.getEmtNombre());
         return vo;
-    }
+    }*/
    
     public void transferirNumeracion (String operadorOrigen, String operadorDestino, EntityManager em){
         NuNumeracionDAO.transferirNumeracionDAO(operadorOrigen, operadorDestino, em);

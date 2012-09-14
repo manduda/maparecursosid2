@@ -20,7 +20,7 @@ import vo.EsEstadoVO;
  * @author miguel.duran
  */
 public class CiCodigosIinService {
-    public CiCodigosIinVO getVOFromEntity(CiCodigosIin entity){
+    /*public CiCodigosIinVO getVOFromEntity(CiCodigosIin entity){
         CiCodigosIinVO vo = new CiCodigosIinVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -39,11 +39,11 @@ public class CiCodigosIinService {
         vo.setCitObservaciones(entity.getCitObservaciones());
 
         return vo;
-    }
+    }*/
     
     public CiCodigosIinVO getById(int id, EntityManager em){
         CiCodigosIin entity = CiCodigosIinDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     

@@ -20,7 +20,7 @@ import vo.NtTipoNdcVO;
  * @author miguel.duran
  */
 public class NdNdcService {
-    public NdNdcVO getVOFromEntity(NdNdc entity){
+    /*public NdNdcVO getVOFromEntity(NdNdc entity){
         NdNdcVO vo = new NdNdcVO();
         // Tipo NDC      
         NtTipoNdcVO tipoNDC = new NtTipoNdcVO();
@@ -31,11 +31,11 @@ public class NdNdcService {
         vo.setNdnCodigo(entity.getNdnCodigo());
         vo.setNdtNombre(entity.getNdtNombre());
         return vo;
-    }
+    }*/
     
     public NdNdcVO getById(BigDecimal id, EntityManager em){
         NdNdc entity = NdNdcDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<NdNdcVO> getList(EntityManager em){

@@ -16,17 +16,17 @@ import vo.EsEstadoVO;
  * @author miguel.duran
  */
 public class EsEstadoService {
-    public EsEstadoVO getVOFromEntity(EsEstado entity){
+    /*public EsEstadoVO getVOFromEntity(EsEstado entity){
         EsEstadoVO vo = new EsEstadoVO();
         vo.setEsnCodigo(entity.getEsnCodigo());
         vo.setEstNombre(entity.getEstNombre());
 
         return vo;
-    }
+    }*/
     
     public EsEstadoVO getById(int id, EntityManager em){
         EsEstado entity = EsEstadoDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<EsEstadoVO> getList(EntityManager em){

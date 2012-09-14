@@ -20,7 +20,7 @@ import vo.MaMarcacionAbreviadaVO;
  * @author miguel.duran
  */
 public class MaMarcacionAbreviadaService {
-    public MaMarcacionAbreviadaVO getVOFromEntity(MaMarcacionAbreviada entity){
+    /*public MaMarcacionAbreviadaVO getVOFromEntity(MaMarcacionAbreviada entity){
         MaMarcacionAbreviadaVO vo = new MaMarcacionAbreviadaVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -39,21 +39,18 @@ public class MaMarcacionAbreviadaService {
         vo.setMatObservaciones(entity.getMatObservaciones());
 
         return vo;
-    }
+    }*/
     
     public MaMarcacionAbreviadaVO getById(int id, EntityManager em){
         MaMarcacionAbreviada entity = MaMarcacionAbreviadaDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<MaMarcacionAbreviadaVO> getList(EntityManager em){
         List<MaMarcacionAbreviada> codigosMarcacion = MaMarcacionAbreviadaDAO.getList(em);
         List<MaMarcacionAbreviadaVO> codigosMarcacionVO = new ArrayList<MaMarcacionAbreviadaVO>();        
-        MaMarcacionAbreviadaVO vo = new MaMarcacionAbreviadaVO();
-        int size = codigosMarcacion.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(codigosMarcacion.get(i));
-            codigosMarcacionVO.add(vo);
+        for (MaMarcacionAbreviada ma : codigosMarcacion) {
+            codigosMarcacionVO.add(ma.toVO());
         }
         return codigosMarcacionVO;
     }
@@ -61,11 +58,8 @@ public class MaMarcacionAbreviadaService {
     public List<MaMarcacionAbreviadaVO> cargarMarcacionAbreviada(int first, int max, String operador, int codigoMarcacion, int estado, EntityManager em){
         List<MaMarcacionAbreviada> codigosMarcacionAbreviada = MaMarcacionAbreviadaDAO.cargarMarcacionAbreviada(first, max, operador, codigoMarcacion, estado, em);
         List<MaMarcacionAbreviadaVO> codigosMarcacionAbreviadaVO = new ArrayList<MaMarcacionAbreviadaVO>();        
-        MaMarcacionAbreviadaVO vo = new MaMarcacionAbreviadaVO();
-        int size = codigosMarcacionAbreviada.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(codigosMarcacionAbreviada.get(i));
-            codigosMarcacionAbreviadaVO.add(vo);
+        for (MaMarcacionAbreviada ma : codigosMarcacionAbreviada) {
+            codigosMarcacionAbreviadaVO.add(ma.toVO());
         }
         return codigosMarcacionAbreviadaVO;
     }

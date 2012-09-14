@@ -19,7 +19,7 @@ import vo.MunicipiosVO;
  * @author miguel.duran
  */
 public class MunicipiosService {
-    public MunicipiosVO getVOFromEntity(Municipios entity){
+    /*public MunicipiosVO getVOFromEntity(Municipios entity){
         MunicipiosVO vo = new MunicipiosVO();
         // Departamento
         DepartamentosVO departamento = new DepartamentosVO();
@@ -30,21 +30,18 @@ public class MunicipiosService {
         vo.setCodigoMunicipio(entity.getCodigoMunicipio());
         vo.setNombreMunicipio(entity.getNombreMunicipio());
         return vo;
-    }
+    }*/
     
     public MunicipiosVO getById(String id, EntityManager em){
         Municipios entity = MunicipiosDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<MunicipiosVO> getList(EntityManager em){
         List<Municipios> municipio = MunicipiosDAO.getList(em);
         List<MunicipiosVO> municipioVO = new ArrayList<MunicipiosVO>();        
-        MunicipiosVO vo = new MunicipiosVO();
-        int size = municipio.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(municipio.get(i));
-            municipioVO.add(vo);
+        for (Municipios m : municipio) {
+            municipioVO.add(m.toVO());
         }
         return municipioVO;
     }
@@ -52,11 +49,8 @@ public class MunicipiosService {
     public List<MunicipiosVO> cargarMunicipios(String departamento, EntityManager em){
         List<Municipios> municipio = MunicipiosDAO.cargarMunicipios(departamento, em);
         List<MunicipiosVO> municipioVO = new ArrayList<MunicipiosVO>();
-        MunicipiosVO vo = new MunicipiosVO();
-        int size = municipio.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(municipio.get(i));
-            municipioVO.add(vo);
+        for (Municipios m : municipio) {
+            municipioVO.add(m.toVO());
         }
         return municipioVO;
     }

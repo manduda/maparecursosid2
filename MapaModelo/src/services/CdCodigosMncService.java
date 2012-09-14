@@ -20,7 +20,7 @@ import vo.EsEstadoVO;
  * @author miguel.duran
  */
 public class CdCodigosMncService {
-    public CdCodigosMncVO getVOFromEntity(CdCodigosMnc entity){
+    /*public CdCodigosMncVO getVOFromEntity(CdCodigosMnc entity){
         CdCodigosMncVO vo = new CdCodigosMncVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -39,11 +39,11 @@ public class CdCodigosMncService {
         vo.setCdtObservaciones(entity.getCdtObservaciones());
 
         return vo;
-    }
+    }*/
     
     public CdCodigosMncVO getById(int id, EntityManager em){
         CdCodigosMnc entity = CdCodigosMncDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     public List<CdCodigosMncVO> cargarCodigosMnc(int first, int max, String operador, int codigoMnc, int estado, EntityManager em){

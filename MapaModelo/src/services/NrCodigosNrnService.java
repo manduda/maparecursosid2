@@ -20,8 +20,7 @@ import vo.NrCodigosNrnVO;
  * @author miguel.duran
  */
 public class NrCodigosNrnService {
-    
-    public NrCodigosNrnVO getVOFromEntity(NrCodigosNrn entity){
+    /*public NrCodigosNrnVO getVOFromEntity(NrCodigosNrn entity){
         NrCodigosNrnVO vo = new NrCodigosNrnVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -40,11 +39,11 @@ public class NrCodigosNrnService {
         vo.setNrtObservaciones(entity.getNrtObservaciones());
 
         return vo;
-    }
+    }*/
     
     public NrCodigosNrnVO getById(int id, EntityManager em){
         NrCodigosNrn entity = NrCodigosNrnDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
 
     

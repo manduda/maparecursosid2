@@ -73,7 +73,8 @@ public class NuNumeracionDAO {
                 + "              nn.SK_REGION_CODE, "
                 + "              nn.SK_EMPRESA_CODE, "
                 + "              nn.ESN_CODIGO, "
-                + "              nn.NDN_CODIGO "
+                + "              nn.NDN_CODIGO, "
+                + "              (SELECT nd.NDT_NOMBRE FROM ND_NDC nd WHERE nn.NDN_CODIGO = nd.NDN_CODIGO) NDC "
                 + "              FROM ( "
                 + "                SELECT n.* "
                 + "                FROM NU_NUMERACION n "
@@ -130,9 +131,11 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?8 ");
         }
         
-            searchQuery1.append("ORDER BY n.NDN_CODIGO, n.NUN_INICIO "
+            searchQuery1.append(" "
+                //+ "ORDER BY n.NDN_CODIGO, n.NUN_INICIO "
                 + "    )  nn  "
-                + "    ORDER BY nn.NDN_CODIGO, SUBSTR(nn.NUN_INICIO,1,4) "
+                //+ "    ORDER BY nn.NDN_CODIGO, SUBSTR(nn.NUN_INICIO,1,4) "
+                + "    ORDER BY NDC,NUM "
                 + "  ) a "
                 + "  WHERE ROWNUM <= (?10) "
                 + ") "

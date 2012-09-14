@@ -17,8 +17,7 @@ import vo.TrTramitesVO;
  * @author juan.loaiza
  */
 public class RsReservasTemporalesService {
-    
-    public RsReservasTemporalesVO getVOFromEntity(RsReservasTemporales entity) {
+    /*public RsReservasTemporalesVO getVOFromEntity(RsReservasTemporales entity) {
         RsReservasTemporalesVO vo = new RsReservasTemporalesVO();
         
         vo.setRsfFechaLiberacion(entity.getRsfFechaLiberacion());
@@ -34,16 +33,13 @@ public class RsReservasTemporalesService {
         //------------------------------------        
         
         return vo;
-    }
+    }*/
     
     public List<RsReservasTemporalesVO> getList(EntityManager em){
         List<RsReservasTemporales> reservasTemporales = RsReservasTemporalesDAO.getList(em);
         List<RsReservasTemporalesVO> reservasTemporalesVO = new ArrayList<RsReservasTemporalesVO>();        
-        RsReservasTemporalesVO vo = new RsReservasTemporalesVO();
-        int size = reservasTemporales.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(reservasTemporales.get(i));
-            reservasTemporalesVO.add(vo);
+        for (RsReservasTemporales r : reservasTemporales) {
+            reservasTemporalesVO.add(r.toVO());
         }
         return reservasTemporalesVO;
     }
