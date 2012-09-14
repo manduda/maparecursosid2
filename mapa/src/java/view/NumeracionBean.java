@@ -283,7 +283,8 @@ public class NumeracionBean implements Serializable {
     
     public void detalleNum(){
         facade fachada = new facade();
-        detalleSelectedNum = fachada.cargarNumeracion(0, -1, "-1", selectedNum.getNdnCodigo().getNdtNombre(), -1, selectedNum.getNunInicio(), selectedNum.getNunFin(), -1, "-1", "-1");
+        //detalleSelectedNum = fachada.cargarNumeracion(0, -1, "-1", selectedNum.getNdnCodigo().getNdtNombre(), -1, selectedNum.getNunInicio(), selectedNum.getNunFin(), -1, "-1", "-1");
+        detalleSelectedNum = fachada.cargarNumeracionBloque(selectedNum.getNdnCodigo().getNdtNombre(),selectedNum.getNunInicio(), selectedNum.getNunFin());
     }
     
     public void onRowSelect(SelectEvent event) {
