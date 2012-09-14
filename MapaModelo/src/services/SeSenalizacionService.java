@@ -25,7 +25,7 @@ import vo.TeTipoSenalizacionVO;
  * @author miguel.duran
  */
 public class SeSenalizacionService {
-    public SeSenalizacionVO getVOFromEntity(SeSenalizacion entity){
+    /*public SeSenalizacionVO getVOFromEntity(SeSenalizacion entity){
         SeSenalizacionVO vo = new SeSenalizacionVO();
         // Estado
         EsEstadoVO estado = new EsEstadoVO();
@@ -78,21 +78,18 @@ public class SeSenalizacionService {
         vo.setSetObservaciones(entity.getSetObservaciones());
 
         return vo;
-    }
+    }*/
     
     public SeSenalizacionVO getById(int id, EntityManager em){
         SeSenalizacion entity = SeSenalizacionDAO.findbyId(id, em);
-        return getVOFromEntity(entity);
+        return entity.toVO();
     }
     
     public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
         List<SeSenalizacion> senalizacion = SeSenalizacionDAO.cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, em);
         List<SeSenalizacionVO> senalizacionVO = new ArrayList<SeSenalizacionVO>();        
-        SeSenalizacionVO vo = new SeSenalizacionVO();
-        int size = senalizacion.size();
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntity(senalizacion.get(i));
-            senalizacionVO.add(vo);
+        for (SeSenalizacion s : senalizacion) {
+            senalizacionVO.add(s.toVO());
         }
         return senalizacionVO;
     }
@@ -105,12 +102,8 @@ public class SeSenalizacionService {
     public List<EmOperadorVO> getListOperadores(EntityManager em){
         List<EmOperador> operador = SeSenalizacionDAO.getListOperadores(em);
         List<EmOperadorVO> operadorVO = new ArrayList<EmOperadorVO>();        
-        EmOperadorVO vo = new EmOperadorVO();
-        int size = operador.size();
-        
-        for (int i = 0; i < size; i++) {
-            vo = getVOFromEntityOperador(operador.get(i));
-            operadorVO.add(vo);
+        for (EmOperador o : operador) {
+            operadorVO.add(o.toVO());
         }
         return operadorVO;
     }

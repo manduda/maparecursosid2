@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import vo.NuNumeracionVO;
 
 /**
  *
@@ -58,6 +59,19 @@ public class NuNumeracion implements Serializable {
     private EsEstado esnCodigo;
 
     public NuNumeracion() {
+    }
+    
+    public NuNumeracionVO toVO() {
+        NuNumeracionVO vo = new NuNumeracionVO();
+        vo.setEsnCodigo(this.getEsnCodigo().toVO());
+        vo.setEmrCodigo(this.getEmrCodigo().toVO());
+        vo.setCodigoMunicipio(this.getCodigoMunicipio().toVO());
+        vo.setNdnCodigo(this.getNdnCodigo().toVO());
+        vo.setNunCodigo(this.getNunCodigo());
+        vo.setNunInicio(this.getNunInicio());
+        vo.setNunFin(this.getNunFin());
+        vo.setNutObservaciones(this.getNutObservaciones());
+        return vo;
     }
 
     public int getNunCodigo() {
