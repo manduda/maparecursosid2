@@ -38,6 +38,7 @@ import vo.MaMarcacionAbreviadaVO;
 import vo.MunicipiosVO;
 import vo.NrCodigosNrnVO;
 import vo.NuNumeracionVO;
+import vo.PtTipoPermisoVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TaTramiteMaVO;
@@ -104,6 +105,10 @@ public class TramiteBean implements Serializable {
     private int usuariosBuscar = 0;
     private UsUsuariosVO usuariosEncontrado = new UsUsuariosVO();
     private String mensajeAdminUsuario = "";
+    private UsUsuariosVO asesorEditar = new UsUsuariosVO();
+    private List<PtTipoPermisoVO> permisosAsesor = new ArrayList<PtTipoPermisoVO>();
+    private int tipoPermiso = 0;
+    //3002026010
     
     private String seleccionDepartamento;
     private String seleccionMunicipio;
@@ -306,6 +311,87 @@ public class TramiteBean implements Serializable {
 
         return null;
     }
+    
+    public String mostrarPermisosAsesor() {
+        if (asesorEditar.getCodigoSIUST().getUserCode() == 0){
+            mensajeAdminUsuario = "<br><b>Error al cambiar el perfil al usuario.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
+        
+        if (asesorEditar.getTunCodigo().getTunCodigo() != 3){
+            mensajeAdminUsuario = "<br><b>El usuario no es Asesor<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        
+        permisosAsesor = fachada.cargarPermisosTotales(asesorEditar.getUsnCodigo());
+
+        return configuracion.getRutaContexto()+"usuarios/adminPermisosAsesor";
+    }
+    
+    public String borrarPermiso() {
+        if (asesorEditar.getCodigoSIUST().getUserCode() == 0){
+            mensajeAdminUsuario = "<br><b>Error al borrar el permiso al usuario.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
+        
+        if (asesorEditar.getTunCodigo().getTunCodigo() != 3){
+            mensajeAdminUsuario = "<br><b>El usuario no es Asesor<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        int resultado = 0;
+        resultado = fachada.cambiarPermisoAsesor(asesorEditar.getUsnCodigo(), tipoPermiso, false);
+        
+        switch(resultado) {
+            case 0:
+                mensajeAdminUsuario = "<br><b>Error al borrar el permiso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                mensajeAdminUsuario  = "<br><b>Permiso borrado correctamente.</b><br><br>";
+                permisosAsesor = fachada.cargarPermisosTotales(asesorEditar.getUsnCodigo());
+                break;
+            case 2:
+                mensajeAdminUsuario  = "<br><b>El permiso no puede borrarse porque el usuario no lo tiene asignado.</b><br><br>";
+                break;
+        }
+        
+        return null;
+    }
+    
+    public String crearPermiso() {
+        if (asesorEditar.getCodigoSIUST().getUserCode() == 0){
+            mensajeAdminUsuario = "<br><b>Error al crear el permiso al usuario.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+            return null;
+        }
+        
+        if (asesorEditar.getTunCodigo().getTunCodigo() != 3){
+            mensajeAdminUsuario = "<br><b>El usuario no es Asesor<br><br>";
+            return null;
+        }
+        
+        facade fachada = new facade();
+        int resultado = 0;
+        resultado = fachada.cambiarPermisoAsesor(asesorEditar.getUsnCodigo(), tipoPermiso, true);
+        
+        switch(resultado) {
+            case 0:
+                mensajeAdminUsuario = "<br><b>Error al crear el permiso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                mensajeAdminUsuario  = "<br><b>Permiso creado correctamente.</b><br><br>";
+                permisosAsesor = fachada.cargarPermisosTotales(asesorEditar.getUsnCodigo());
+                break;
+            case 2:
+                mensajeAdminUsuario  = "<br><b>El permiso no puede crearse porque el usuario ya lo tiene asignado.</b><br><br>";
+                break;
+        }
+        
+        return null;
+    }
+    
     // -------------------------------------------
     
     // ---- Funciones para crear trámite ---
@@ -2336,6 +2422,30 @@ public class TramiteBean implements Serializable {
         this.mensajeAdminUsuario = mensajeAdminUsuario;
     }
 
+    public UsUsuariosVO getAsesorEditar() {
+        return asesorEditar;
+    }
+
+    public void setAsesorEditar(UsUsuariosVO asesorEditar) {
+        this.asesorEditar = asesorEditar;
+    }
+
+    public List<PtTipoPermisoVO> getPermisosAsesor() {
+        return permisosAsesor;
+    }
+
+    public void setPermisosAsesor(List<PtTipoPermisoVO> permisosAsesor) {
+        this.permisosAsesor = permisosAsesor;
+    }
+
+    public int getTipoPermiso() {
+        return tipoPermiso;
+    }
+
+    public void setTipoPermiso(int tipoPermiso) {
+        this.tipoPermiso = tipoPermiso;
+    }
+    
     public Integer getNuevoUsuarioTramite() {
         return nuevoUsuarioTramite;
     }

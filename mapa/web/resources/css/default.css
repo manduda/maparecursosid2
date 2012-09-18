@@ -148,3 +148,13 @@ padding: 5px;
     background-color: gray;
     color: #000000
 }
+
+.permiso-asignado {
+    background-color: olivedrab;
+    color: #ffffff;
+}
+
+.permiso-no-asignado {
+    background-color: red;
+    color: #000000;
+}

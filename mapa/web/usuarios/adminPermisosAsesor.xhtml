@@ -1,0 +1,102 @@
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui">
+
+    <ui:define name="titulo">
+        <h:outputText value="Administrar usuarios"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{!UserBean.administrarUsuarios}">
+            <h:panelGrid width="100%">
+                <br/><br/><br/>
+                <h:panelGrid style="text-align: center; margin: 0px auto; color: red; font-weight: bold" >
+                        <h:outputText value="No tienes permiso para acceder a esta sección"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGroup>
+        
+        <h:panelGroup rendered="#{UserBean.administrarUsuarios}">
+            <h:panelGrid columns="2">
+                <h:outputText value="Usuario" style="font-weight: bold;"/>
+                <h:outputText value="#{TramiteBean.asesorEditar.codigoSIUST.login}"/>
+                <h:outputText value="Código usuario" style="font-weight: bold;"/>
+                <h:outputText value="#{TramiteBean.asesorEditar.codigoSIUST.userCode}"/>
+                <h:outputText value="Nombre" style="font-weight: bold;"/>
+                <h:outputText value="#{TramiteBean.asesorEditar.codigoSIUST.name} #{TramiteBean.asesorEditar.codigoSIUST.lastName}"/>
+                <h:outputText value="Email" style="font-weight: bold;"/>
+                <h:outputLink value="mailto:#{TramiteBean.asesorEditar.codigoSIUST.email}">
+                    <h:outputText value="#{TramiteBean.asesorEditar.codigoSIUST.email}" />
+                </h:outputLink>
+                <h:outputText value="Tipo de usuario" style="font-weight: bold;"/>
+                <h:outputText value="#{TramiteBean.asesorEditar.tunCodigo.tutNombre == null ? 'SIN PERMISOS' : TramiteBean.asesorEditar.tunCodigo.tutNombre}" style="font-weight: bold; #{TramiteBean.asesorEditar.tunCodigo.tutNombre == null ? 'color: red;' : 'color: green;'}"/>
+            </h:panelGrid>
+            
+            <h:panelGroup id="pgPermisos">
+                <h:form id="listaPermisos">
+                    <p:dataTable id="datos" value="#{TramiteBean.permisosAsesor}" var="p"
+                                 style="font-size:10px" rows="10" emptyMessage="No se encontraron permisos" >
+                        <f:facet name="header">Lista de permisos</f:facet>
+                        <p:column headerText="CÓDIGO" sortBy="#{p.ptnCodigo}" style="width:80px; text-align: center;">
+                            <h:outputText value="#{p.ptnCodigo}"/>
+                        </p:column>
+                        <p:column headerText="RECURSO" sortBy="#{p.pttNombre}" style="width:80px; text-align: center;">
+                            <h:outputText value="#{p.pttNombre}"/>
+                        </p:column>
+                        <p:column styleClass=".permiso-asignado" rendered="#{empty p.paPermisosAsesorCollection}">
+                            <p:commandButton value="Asignar" oncomplete="crearPermiso.show()" update="crearPermiso">
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
+                            </p:commandButton>
+                        </p:column>
+                        <p:column styleClass=".permiso-no-asignado" rendered="#{not empty p.paPermisosAsesorCollection}">
+                            <p:commandButton value="Eliminar" oncomplete="eliminarPermiso.show()" update="eliminarPermiso">
+                                <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                
+                <!-- CREAR PERMISO -->
+                <p:confirmDialog message="Asignar permiso?" showEffect="fade" hideEffect="fade" modal="true" 
+                                 closable="false" header="Confirmación" severity="alert" 
+                                 widgetVar="crearPermiso">  
+                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                        <h:form>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.crearPermiso}" update="datos" oncomplete="crearPermiso.hide();resultadoDialog.show;"/>
+                            <p:commandButton type="button" value="Cancelar" onclick="crearPermiso.hide();"/>
+                        </h:form>
+                    </h:panelGrid>
+                </p:confirmDialog>
+                
+                <!-- BORRAR PERMISO -->
+                <p:confirmDialog message="Eliminar permiso?" showEffect="fade" hideEffect="fade" modal="true" 
+                                 closable="false" header="Confirmación" severity="alert" 
+                                 widgetVar="eliminarPermiso">  
+                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                        <h:form>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.borrarPermiso}" update="datosResultado,listaPermisos" oncomplete="eliminarPermiso.hide();resultadoDialog.show();"/>
+                            <p:commandButton type="button" value="Cancelar" onclick="eliminarPermiso.hide();"/>
+                        </h:form>
+                    </h:panelGrid>
+                </p:confirmDialog>
+                
+                <!-- RESULTADO -->
+                <p:dialog header="Resultado" widgetVar="resultadoDialog" resizable="false" modal="true" draggable="false"
+                          width="400" showEffect="fade" hideEffect="fade" position="center" closable="false">
+                    <h:panelGrid id="datosResultado" style="text-align: center; " width="100%">
+                        <h:outputText value="#{TramiteBean.mensajeAdminUsuario}" escape="false"/>
+                        <p:commandButton type="button" value="Aceptar" onclick="resultadoDialog.hide();"/>
+                    </h:panelGrid>
+                </p:dialog>
+                
+            </h:panelGroup>
+            
+            
+            
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

@@ -116,6 +116,11 @@
                         <p:column headerText="EMAIL" sortBy="#{us.codigoSIUST.email}" style="width:80px">
                             <h:outputText value="#{us.codigoSIUST.email}"/>
                         </p:column>
+                        <p:column style="width:32px">  
+                            <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="ver permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                                <f:setPropertyActionListener target="#{TramiteBean.asesorEditar}" value="#{us}"/>  
+                            </p:commandButton>  
+                        </p:column>
                     </p:dataTable>
                 </h:panelGroup>
             </h:form>
