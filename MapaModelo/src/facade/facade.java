@@ -31,6 +31,8 @@ import vo.NdNdcVO;
 import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
+import vo.PaPermisosAsesorVO;
+import vo.PtTipoPermisoVO;
 import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
@@ -539,8 +541,79 @@ public class facade {
             tx.commit();
         } catch (Exception e) {
             System.out.println(e);
+            resultado = 0;
             if(em != null && tx != null){
-                resultado = 0;
+                tx.rollback();
+            }
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return resultado;
+    }
+    
+    public List<PtTipoPermisoVO> cargarPermisos(int usuario){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        List<PtTipoPermisoVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createPaPermisosAsesorService().cargarPermisos(usuario, em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<PtTipoPermisoVO> cargarPermisosTotales(int usuario){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        List<PtTipoPermisoVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createPaPermisosAsesorService().cargarPermisosTotales(usuario, em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public Integer cambiarPermisoAsesor(int usuario, int tipo, boolean accion){
+        /*
+         * 0: Error al crear/borrar el permiso
+         * 1: Permiso creado/borrado correctamente
+         * 2: El usuario tiene/no tiene el permiso
+        */
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        Integer resultado = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            boolean permiso = false; 
+            if (accion) {
+                permiso = ServiceFactory.createPaPermisosAsesorService().crearPermiso(usuario, tipo, em);
+            } else {
+                permiso = ServiceFactory.createPaPermisosAsesorService().borrarPermiso(usuario, tipo, em);
+            }
+            if (permiso) { //Se pudo crear/borrar
+                tx.commit();
+                resultado = 1;
+            } else { //El usuario tiene/no tiene el permiso
+                resultado = 2;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            resultado = 0;
+            if(em != null && tx != null){
                 tx.rollback();
             }
         } finally {

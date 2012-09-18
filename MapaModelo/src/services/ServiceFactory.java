@@ -60,5 +60,7 @@ public class ServiceFactory {
     public static UsUsuariosService createUsUsuariosService() {
            return (new UsUsuariosService());
     }
-    
+    public static PaPermisosAsesorService createPaPermisosAsesorService() {
+           return (new PaPermisosAsesorService());
+    }
 }
