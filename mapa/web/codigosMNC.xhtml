@@ -49,11 +49,11 @@
                 <h:form>
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosMncBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosMncBean.selectedsAccion}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosMncBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosMncBean.selectedsAccion}" rendered="#{UserBean.permisos.codigosMnc}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{CodigosMncBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosMnc == true) ? 'multiple' : null}"
                                  selection="#{CodigosMncBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{CodigosMncBean.onRowSelect}" rowUnselectListener="#{CodigosMncBean.onRowUnselect}"
@@ -159,10 +159,10 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosMncBean.selectedsLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosMncBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosMnc and CodigosMncBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosMncBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosMnc and CodigosMncBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
                                     <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosMncBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosMnc" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosMnc"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
@@ -177,9 +177,11 @@
                     </h:panelGrid>
                 </p:dialog>
             </h:panelGroup>
-
-            <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosMnc.xhtml"/>
-        
+            
+            <h:panelGroup rendered="#{UserBean.permisos.codigosMnc}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosMnc.xhtml"/>
+            </h:panelGroup>
+            
         </h:panelGroup>
             
     </ui:define>

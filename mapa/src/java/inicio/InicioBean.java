@@ -77,8 +77,8 @@ public class InicioBean {
                 int tipoUsuario = userBean.getUserVO().getTunCodigo().getTunCodigo();
                 switch(tipoUsuario) {
                     case 1: // ADMINISTADOR
-                        userBean.setRecuperar(false);
-                        userBean.setPreasignar(false);
+                        //userBean.setRecuperar(false);
+                        //userBean.setPreasignar(false);
                         userBean.setReservar(true);
                         userBean.setLiberar(true);
                         userBean.setEditarCodigos1xy(true);
@@ -99,8 +99,8 @@ public class InicioBean {
                         userBean.setReasignarTramite(false);
                         break;
                     case 2: // COORDINADOR
-                        userBean.setRecuperar(false);
-                        userBean.setPreasignar(false);
+                        //userBean.setRecuperar(false);
+                        //userBean.setPreasignar(false);
                         userBean.setReservar(false);
                         userBean.setLiberar(false);
                         userBean.setEditarCodigos1xy(false);
@@ -121,8 +121,8 @@ public class InicioBean {
                         userBean.setReasignarTramite(false);
                         break;
                     case 3: // ASESOR
-                        userBean.setRecuperar(true);
-                        userBean.setPreasignar(true);
+                        //userBean.setRecuperar(true);
+                        //userBean.setPreasignar(true);
                         userBean.setReservar(false);
                         userBean.setLiberar(false);
                         userBean.setEditarCodigos1xy(false);
@@ -141,10 +141,24 @@ public class InicioBean {
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(true);
+                        
+                        permisos permisos = new permisos();
+                        permisos.setNumeracion(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),1));
+                        permisos.setSenalizacion(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),2));
+                        permisos.setCodigosLd(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),3));
+                        permisos.setCodigosCortos(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),4));
+                        permisos.setCodigos1xy(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),5));
+                        permisos.setCodigosIin(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),6));
+                        permisos.setCodigosMnc(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),7));
+                        permisos.setMarcacionAbreviada(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),8));
+                        permisos.setCodigosNrn(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),9));
+                        
+                        userBean.setPermisos(permisos);
+                        
                         break;
                     case 4: // ASIGNADOR
-                        userBean.setRecuperar(false);
-                        userBean.setPreasignar(false);
+                        //userBean.setRecuperar(false);
+                        //userBean.setPreasignar(false);
                         userBean.setReservar(false);
                         userBean.setLiberar(false);
                         userBean.setEditarCodigos1xy(false);

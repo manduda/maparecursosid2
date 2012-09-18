@@ -11,7 +11,7 @@
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.recuperar}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.permisos.senalizacion}">
 
                 <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
                     <h:form>
@@ -83,7 +83,7 @@
 
             <!-- MENÚ PREASIGNAR --> 
             <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.preasignar}">
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.permisos.senalizacion}">
                 <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
@@ -150,7 +150,7 @@
 
             <!-- RESULTADO AGREGAR -->
             <p:dialog header="Resultado" widgetVar="resultadoAgregarDialog" resizable="false" modal="true" draggable="false"
-                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">
+                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.permisos.senalizacion}" closable="false">
                 <h:panelGrid id="datosResultadoAgregar" style="text-align: center; " width="100%">
                     <h:outputText value="#{TramiteBean.mensajeRecurso}" escape="false"/>
                     <p:commandButton type="button" value="Aceptar" onclick="resultadoAgregarDialog.hide();"/>

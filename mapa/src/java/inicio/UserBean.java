@@ -40,8 +40,8 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     private Boolean login = false;
     
     // --- OPCIONES AGREGAR RECURSOS DE UN TRAMITE
-    private boolean recuperar = false;
-    private boolean preasignar = false;
+    //private boolean recuperar = false;
+    //private boolean preasignar = false;
     private boolean reservar = false;
     private boolean liberar = false;
     private boolean editarCodigos1xy = false;
@@ -68,6 +68,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     
     private boolean asignarTramites = false;
     
+    private permisos permisos;
 
     public UserBean() {
     }
@@ -176,7 +177,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
         this.liberar = liberar;
     }
 
-    public boolean isPreasignar() {
+    /*public boolean isPreasignar() {
         return preasignar;
     }
 
@@ -190,7 +191,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
     public void setRecuperar(boolean recuperar) {
         this.recuperar = recuperar;
-    }
+    }*/
 
     public boolean isReservar() {
         return reservar;
@@ -278,6 +279,14 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
     public void setReasignarTramite(boolean reasignarTramite) {
         this.reasignarTramite = reasignarTramite;
+    }
+
+    public inicio.permisos getPermisos() {
+        return permisos;
+    }
+
+    public void setPermisos(inicio.permisos permisos) {
+        this.permisos = permisos;
     }
 
 }

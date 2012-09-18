@@ -53,12 +53,12 @@
                 <h:form>
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}" rendered="#{UserBean.permisos.codigos1xy}"/>
                         </h:panelGroup>
                     </h:panelGrid>
 
                     <p:dataTable id="datos" value="#{Codigos1xyBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
-                                 selectionMode="single"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigos1xy == true) ? 'single' : null}"
                                  selection="#{Codigos1xyBean.selected}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{Codigos1xyBean.onRowSelect}" rowUnselectListener="#{Codigos1xyBean.onRowUnselect}"

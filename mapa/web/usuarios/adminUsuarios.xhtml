@@ -45,15 +45,15 @@
                             <h:outputText value="#{TramiteBean.usuariosEncontrado.codigoSIUST.email}" />
                         </h:outputLink>
                         <h:outputText value="Tipo de usuario" style="font-weight: bold;"/>
-                        <h:outputText value="#{TramiteBean.usuariosEncontrado.tunCodigo.tutNombre == null ? 'SIN PERMISOS' : TramiteBean.usuariosEncontrado.tunCodigo.tutNombre}" style="font-weight: bold; #{TramiteBean.usuariosEncontrado.tunCodigo.tutNombre == null ? 'color: red;' : 'color: green;'}"/>
+                        <h:outputText value="#{TramiteBean.usuariosEncontrado.tunCodigo.tutNombre == null ? 'SIN PERFIL' : TramiteBean.usuariosEncontrado.tunCodigo.tutNombre}" style="font-weight: bold; #{TramiteBean.usuariosEncontrado.tunCodigo.tutNombre == null ? 'color: red;' : 'color: green;'}"/>
                     </h:panelGrid>
 
                     <h:panelGrid rendered="#{TramiteBean.usuariosEncontrado.tunCodigo.tunCodigo != 1}">
                         <h:form>
-                            <p:commandButton type="button" value="Cambiar permisos" onclick="permisosDialog.show();"/>
+                            <p:commandButton type="button" value="Cambiar perfil" onclick="permisosDialog.show();"/>
                         </h:form>
 
-                        <p:dialog header="Cambiar permisos" widgetVar="permisosDialog" resizable="false" modal="true" draggable="false"
+                        <p:dialog header="Cambiar perfil" widgetVar="permisosDialog" resizable="false" modal="true" draggable="false"
                                   width="200" showEffect="fade" hideEffect="fade" position="center">
                             <h:panelGrid id="datosPermisos" width="100%" style="font-size: 10px;" >
                                 <h:form>
@@ -65,7 +65,7 @@
                                         <br/>
                                         <h:outputText value="Escoger perfil"/>
                                         <h:selectOneMenu value="#{TramiteBean.usuariosEncontrado.tunCodigo.tunCodigo}">
-                                            <f:selectItem itemValue="0" itemLabel="SIN PERMISOS" />
+                                            <f:selectItem itemValue="0" itemLabel="SIN PERFIL" />
                                             <f:selectItem itemValue="2" itemLabel="COORDINADOR"/>
                                             <f:selectItem itemValue="3" itemLabel="ASESOR"/>
                                             <f:selectItem itemValue="4" itemLabel="ASIGNADOR"/>
@@ -116,7 +116,7 @@
                         <p:column headerText="EMAIL" sortBy="#{us.codigoSIUST.email}" style="width:80px">
                             <h:outputText value="#{us.codigoSIUST.email}"/>
                         </p:column>
-                        <p:column style="width:32px">  
+                        <p:column style="width:32px; text-align: center;">  
                             <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="ver permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
                                 <f:setPropertyActionListener target="#{TramiteBean.asesorEditar}" value="#{us}"/>  
                             </p:commandButton>  

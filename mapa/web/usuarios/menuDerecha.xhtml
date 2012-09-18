@@ -10,17 +10,46 @@
         <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'usuarios/menuDerecha.xhtml')}">
             <!-- MENU -->
             <p:panel header="Menu" rendered="#{UserBean.login}" toggleable="true" toggleSpeed="100">
-                <h:panelGrid columns="2" style="font-size:9px;" >
-                    <h:outputText value="Usuario:" style="font-weight: bold;"/>
-                    <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}"/>
-                    <h:outputText value="Tipo:" style="font-weight: bold;"/>
-                    <h:outputText value="#{UserBean.userVO.tunCodigo.tutNombre}"/>
-                </h:panelGrid>
-                <br/>
-                <h:panelGrid style="font-size:10px; margin: 0px auto;">
-                    <h:outputText value="OPCIONES" style="font-weight: bold;"/>
-                </h:panelGrid>
-                <h:form style="font-size:10px">
+
+                <h:panelGrid columns="1" style="font-size:9px;" width="100%" cellpadding="0" cellspacing="0">
+                    <h:panelGrid columns="1" style="background-color: #acbece; text-align: center;" width="100%" >
+                        <h:outputText value="Usuario" style="font-weight: bold;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%" >
+                        <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}"/>
+                    </h:panelGrid>
+                    
+                    <br/>
+                    <h:panelGrid columns="1" style="background-color: #acbece; text-align: center;" width="100%" >
+                        <h:outputText value="Tipo usuario" style="font-weight: bold;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" width="100%" >
+                        <h:outputText value="#{UserBean.userVO.tunCodigo.tutNombre}"/>
+                    </h:panelGrid>
+                    
+                    <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
+                        <br/>
+                        <h:panelGrid columns="1" style="background-color: #acbece; text-align: center;" width="100%" >
+                            <h:outputText value="Permisos asignados" style="font-weight: bold;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" width="100%" >
+                            <h:outputText value="Numeración" rendered="#{UserBean.permisos.numeracion}"/>
+                            <h:outputText value="Señalizacion" rendered="#{UserBean.permisos.senalizacion}"/>
+                            <h:outputText value="Códigos LD" rendered="#{UserBean.permisos.codigosLd}"/>
+                            <h:outputText value="Códigos Cortos" rendered="#{UserBean.permisos.codigosCortos}"/>
+                            <h:outputText value="Códigos 1XY" rendered="#{UserBean.permisos.codigos1xy}"/>
+                            <h:outputText value="Códigos IIN" rendered="#{UserBean.permisos.codigosIin}"/>
+                            <h:outputText value="Códigos MNC" rendered="#{UserBean.permisos.codigosMnc}"/>
+                            <h:outputText value="Marcación Abreviada" rendered="#{UserBean.permisos.marcacionAbreviada}"/>
+                            <h:outputText value="Códigos NRN" rendered="#{UserBean.permisos.codigosMnc}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    
+                    <br/>
+                    <h:panelGrid columns="1" style="background-color: #acbece; text-align: center;" width="100%" >
+                        <h:outputText value="Opciones" style="font-weight: bold;"/>
+                    </h:panelGrid>
+                    <h:form style="font-size:10px">
                         <h:panelGrid columns="2">
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarUsuarios}"/>
                             <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
@@ -46,9 +75,10 @@
                             
                             <h:outputText value="&#8226;" style="color: #045491;"/>
                             <h:commandLink value="Ver reservas temporales" action="#{TramiteBean.consultaReservasTemporales}"/>
-                            
                         </h:panelGrid>
-                </h:form>
+                    </h:form>
+                </h:panelGrid>
+
             </p:panel>
             
             <!-- TRAMITES -->

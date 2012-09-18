@@ -4,147 +4,108 @@
  */
 package inicio;
 
+import java.io.Serializable;
+
 /**
  *
  * @author miguel.duran
  */
-public class permisos {
+public class permisos implements Serializable {
+    private static final long serialVersionUID = 1L;
     
     // --- OPCIONES AGREGAR RECURSOS DE UN TRAMITE
-    private boolean recuperar = false;
-    private boolean preasignar = false;
-    private boolean reservar = false;
-    private boolean liberar = false;
+    private boolean numeracion = false;
+    private boolean senalizacion = false;
+    private boolean codigosLd = false;
+    private boolean codigosCortos = false;
+    private boolean codigos1xy = false;
+    private boolean codigosIin = false;
+    private boolean codigosMnc = false;
+    private boolean marcacionAbreviada = false;
+    private boolean codigosNrn = false;
     
-    // --- OPCIONES ELIMINAR RECURSOS DE UN TRAMITE
-    private boolean eliminarRecurso = false;
-    
-    // --- OPCIONES GESTIÓN TRÁMITE
-    private boolean crearTramite = false;
-    private boolean enviarTramite = false;
-    private boolean archivarTramite = false;
-    private boolean devolverTramite = false;
-    private boolean aprobarTramite = false;
-    private boolean terminarTramite = false;
-    private boolean cambiarOperadorTramite = false;
-        
-    private boolean transferirRecursos = false;
-    
-    private boolean administrarModulos = false;
-        
     public permisos() {
+        this.numeracion = false;
+        this.senalizacion = false;
+        this.codigosLd = false;
+        this.codigosCortos = false;
+        this.codigos1xy = false;
+        this.codigosIin = false;
+        this.codigosMnc = false;
+        this.marcacionAbreviada = false;
+        this.codigosNrn = false;
     }
 
-    public boolean isAprobarTramite() {
-        return aprobarTramite;
+    public boolean isCodigos1xy() {
+        return codigos1xy;
     }
 
-    public void setAprobarTramite(boolean aprobarTramite) {
-        this.aprobarTramite = aprobarTramite;
+    public void setCodigos1xy(boolean codigos1xy) {
+        this.codigos1xy = codigos1xy;
     }
 
-    public boolean isArchivarTramite() {
-        return archivarTramite;
+    public boolean isCodigosCortos() {
+        return codigosCortos;
     }
 
-    public void setArchivarTramite(boolean archivarTramite) {
-        this.archivarTramite = archivarTramite;
+    public void setCodigosCortos(boolean codigosCortos) {
+        this.codigosCortos = codigosCortos;
     }
 
-    public boolean isCambiarOperadorTramite() {
-        return cambiarOperadorTramite;
+    public boolean isCodigosIin() {
+        return codigosIin;
     }
 
-    public void setCambiarOperadorTramite(boolean cambiarOperadorTramite) {
-        this.cambiarOperadorTramite = cambiarOperadorTramite;
+    public void setCodigosIin(boolean codigosIin) {
+        this.codigosIin = codigosIin;
     }
 
-    public boolean isCrearTramite() {
-        return crearTramite;
+    public boolean isCodigosLd() {
+        return codigosLd;
     }
 
-    public void setCrearTramite(boolean crearTramite) {
-        this.crearTramite = crearTramite;
+    public void setCodigosLd(boolean codigosLd) {
+        this.codigosLd = codigosLd;
     }
 
-    public boolean isDevolverTramite() {
-        return devolverTramite;
+    public boolean isCodigosMnc() {
+        return codigosMnc;
     }
 
-    public void setDevolverTramite(boolean devolverTramite) {
-        this.devolverTramite = devolverTramite;
+    public void setCodigosMnc(boolean codigosMnc) {
+        this.codigosMnc = codigosMnc;
     }
 
-    public boolean isEliminarRecurso() {
-        return eliminarRecurso;
+    public boolean isCodigosNrn() {
+        return codigosNrn;
     }
 
-    public void setEliminarRecurso(boolean eliminarRecurso) {
-        this.eliminarRecurso = eliminarRecurso;
+    public void setCodigosNrn(boolean codigosNrn) {
+        this.codigosNrn = codigosNrn;
     }
 
-    public boolean isEnviarTramite() {
-        return enviarTramite;
+    public boolean isMarcacionAbreviada() {
+        return marcacionAbreviada;
     }
 
-    public void setEnviarTramite(boolean enviarTramite) {
-        this.enviarTramite = enviarTramite;
+    public void setMarcacionAbreviada(boolean marcacionAbreviada) {
+        this.marcacionAbreviada = marcacionAbreviada;
     }
 
-    public boolean isLiberar() {
-        return liberar;
+    public boolean isNumeracion() {
+        return numeracion;
     }
 
-    public void setLiberar(boolean liberar) {
-        this.liberar = liberar;
+    public void setNumeracion(boolean numeracion) {
+        this.numeracion = numeracion;
     }
 
-    public boolean isPreasignar() {
-        return preasignar;
+    public boolean isSenalizacion() {
+        return senalizacion;
     }
 
-    public void setPreasignar(boolean preasignar) {
-        this.preasignar = preasignar;
-    }
-
-    public boolean isRecuperar() {
-        return recuperar;
-    }
-
-    public void setRecuperar(boolean recuperar) {
-        this.recuperar = recuperar;
-    }
-
-    public boolean isReservar() {
-        return reservar;
-    }
-
-    public void setReservar(boolean reservar) {
-        this.reservar = reservar;
-    }
-
-    public boolean isTerminarTramite() {
-        return terminarTramite;
-    }
-
-    public void setTerminarTramite(boolean terminarTramite) {
-        this.terminarTramite = terminarTramite;
-    }
-
-    public boolean isTransferirRecursos() {
-        return transferirRecursos;
-    }
-
-    public void setTransferirRecursos(boolean transferirRecursos) {
-        this.transferirRecursos = transferirRecursos;
-    }
-
-    public boolean isAdministrarModulos() {
-        return administrarModulos;
-    }
-
-    public void setAdministrarModulos(boolean administrarModulos) {
-        this.administrarModulos = administrarModulos;
+    public void setSenalizacion(boolean senalizacion) {
+        this.senalizacion = senalizacion;
     }
     
 }

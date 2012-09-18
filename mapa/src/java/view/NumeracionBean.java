@@ -85,7 +85,7 @@ public class NumeracionBean implements Serializable {
 //            System.out.println(ope.get(i).getEmtNombre());
 //        }
         
-        ndcVO.setNdtNombre("-1");
+        ndcVO.setNdtNombre("1");
         tipoNdcVO.setNtnCodigo(-1);
         
         try {
@@ -114,13 +114,13 @@ public class NumeracionBean implements Serializable {
                 List<NuNumeracionVO> lazyNumeracion = new ArrayList<NuNumeracionVO>();
                 List<NuNumeracionVO> numera = new ArrayList<NuNumeracionVO>();
                 facade fachada = new facade();
-                numera = fachada.cargarNumeracion(first, pageSize, "-1", "-1", -1, -1, -1, -1, "-1", "-1"); 
+                numera = fachada.cargarNumeracion(first, pageSize, "-1", ndcVO.getNdtNombre(), -1, -1, -1, -1, "-1", "-1"); 
                 lazyNumeracion = agruparNumeracion(numera);
   
                 return lazyNumeracion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", "-1", -1, -1, -1, -1,"-1","-1"));
+        lazyModel.setRowCount(fachada.countCargarNumeracion("-1", ndcVO.getNdtNombre(), -1, -1, -1, -1,"-1","-1"));
         
         operadorVO.setEmrCodigo("-1");
         municipioVO.setCodigoMunicipio("-1");

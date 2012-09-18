@@ -66,11 +66,11 @@
                 <h:form>
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{SenalizacionBean.detalleAccionSen}" update="datosAccionRecurso,display" oncomplete="senAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!SenalizacionBean.selectedSensAccion}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{SenalizacionBean.detalleAccionSen}" update="datosAccionRecurso,display" oncomplete="senAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!SenalizacionBean.selectedSensAccion}" rendered="#{UserBean.permisos.senalizacion}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{SenalizacionBean.lazyModel}" var="sen" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.senalizacion == true) ? 'multiple' : null}"
                                  selection="#{SenalizacionBean.selectedSens}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{SenalizacionBean.onRowSelect}" rowUnselectListener="#{SenalizacionBean.onRowUnselect}"
@@ -204,10 +204,10 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los puntos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (SenalizacionBean.selectedSensLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and SenalizacionBean.selectedSensPreasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senAccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.senalizacion and SenalizacionBean.selectedSensPreasignar)}" action="#{TramiteBean.opcionesPreasignar}" update="datosPreasignar" oncomplete="senAccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and SenalizacionBean.selectedSensRecuperar)}" update="datosRecuperar" oncomplete="senAccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.senalizacion and SenalizacionBean.selectedSensRecuperar)}" update="datosRecuperar" oncomplete="senAccionDialog.hide();recuperarDialog.show();"/>
                                     <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and SenalizacionBean.selectedSensLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgSenalizacion" oncomplete="senAccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
@@ -223,8 +223,10 @@
                     </h:panelGrid>
                 </p:dialog>
             </h:panelGroup>
-
-            <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleSenalizacion.xhtml"/>
+            
+            <h:panelGroup rendered="#{UserBean.permisos.senalizacion}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleSenalizacion.xhtml"/>
+            </h:panelGroup>
         
         </h:panelGroup>
             

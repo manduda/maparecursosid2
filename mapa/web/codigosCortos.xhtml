@@ -53,11 +53,11 @@
                 <h:form>
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update="datosAccionRecurso,display" oncomplete="ccAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update="datosAccionRecurso,display" oncomplete="ccAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}" rendered="#{UserBean.permisos.codigosCortos}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{CodigosCortosBean.lazyModel}" var="cc" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosCortos == true) ? 'multiple' : null}"
                                  selection="#{CodigosCortosBean.selectedCCs}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{CodigosCortosBean.onRowSelect}" rowUnselectListener="#{CodigosCortosBean.onRowUnselect}"
@@ -168,10 +168,10 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los códigos cortos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosCortosBean.selectedCCsLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosCortosBean.selectedCCsPreasignar)}" update="datosPreasignar" oncomplete="ccAccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosCortos and CodigosCortosBean.selectedCCsPreasignar)}" update="datosPreasignar" oncomplete="ccAccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosCortos and CodigosCortosBean.selectedCCsRecuperar)}" update="datosRecuperar" oncomplete="ccAccionDialog.hide();recuperarDialog.show();"/>
                                     <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosCortosBean.selectedCCsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosCortos" oncomplete="ccAccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
@@ -187,8 +187,10 @@
                     </h:panelGrid>
                 </p:dialog>
             </h:panelGroup>
-
-            <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosCortos.xhtml"/>
+            
+            <h:panelGroup rendered="#{UserBean.permisos.codigosCortos}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosCortos.xhtml"/>
+            </h:panelGroup>
         
         </h:panelGroup>
         

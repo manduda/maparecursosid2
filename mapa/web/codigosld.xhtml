@@ -48,11 +48,11 @@
                 <h:form>
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}" rendered="#{UserBean.permisos.codigosLd}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosLd == true) ? 'multiple' : null}"
                                  selection="#{CodigosLdBean.selectedLds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{CodigosLdBean.onRowSelect}" rowUnselectListener="#{CodigosLdBean.onRowUnselect}"
@@ -156,10 +156,10 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los códigos LD en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLdsLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.preasignar and CodigosLdBean.selectedLdsPreasignar)}" update="datosPreasignar" oncomplete="ldAccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsPreasignar)}" update="datosPreasignar" oncomplete="ldAccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.recuperar and CodigosLdBean.selectedLdsRecuperar)}" update="datosRecuperar" oncomplete="ldAccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsRecuperar)}" update="datosRecuperar" oncomplete="ldAccionDialog.hide();recuperarDialog.show();"/>
                                     <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosLdBean.selectedLdsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosLd" oncomplete="ldAccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
@@ -174,8 +174,10 @@
                     </h:panelGrid>
                 </p:dialog>
             </h:panelGroup>
-
-            <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosLd.xhtml"/>
+            
+            <h:panelGroup rendered="#{UserBean.permisos.codigosLd}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosLd.xhtml"/>
+            </h:panelGroup>
 
         </h:panelGroup>
             

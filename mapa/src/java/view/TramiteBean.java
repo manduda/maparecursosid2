@@ -358,6 +358,11 @@ public class TramiteBean implements Serializable {
                 break;
         }
         
+        if (resultado != 1) {
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.addCallbackParam("abrirDialog", true);
+        }
+        
         return null;
     }
     
@@ -389,6 +394,10 @@ public class TramiteBean implements Serializable {
                 break;
         }
         
+        if (resultado != 1) {
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.addCallbackParam("abrirDialog", true);
+        }
         return null;
     }
     
@@ -976,7 +985,15 @@ public class TramiteBean implements Serializable {
 
             Integer resultado = 0;
 
+            agregar:
             if(tipoRecurso.equals("senalizacion")){
+                if(!userSession.getPermisos().isSenalizacion()){
+                    mensaje = "No tienes permisos asignados para el módulo de señalización.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 //TsTramiteSenalizacionVO vo = new TsTramiteSenalizacionVO();
                 SenalizacionBean sen = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);//session.getAttribute("SenalizacionBean");
@@ -1071,6 +1088,13 @@ public class TramiteBean implements Serializable {
                 }
                 
             } else if (tipoRecurso.equals("numeracion")){
+                if(!userSession.getPermisos().isNumeracion()){
+                    mensaje = "No tienes permisos asignados para el módulo de numeración.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);//session.getAttribute("SenalizacionBean");
 
@@ -1132,6 +1156,13 @@ public class TramiteBean implements Serializable {
                 tramiteNumeracionVO = new TnTramiteNumeracionVO();
                 num.setSelectedNumsAccion(false);
             } else if (tipoRecurso.equals("codigosld")) {
+                if(!userSession.getPermisos().isCodigosLd()){
+                    mensaje = "No tienes permisos asignados para el módulo de códigos LD.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 //TlTramiteLdVO vo = new TlTramiteLdVO();
                 CodigosLdBean ld = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);//session.getAttribute("SenalizacionBean");
@@ -1187,6 +1218,13 @@ public class TramiteBean implements Serializable {
                 tramiteCodigosLdVO = new TlTramiteLdVO();
                 ld.setSelectedLdsAccion(false);
             } else if (tipoRecurso.equals("codigosCortos")) {
+                if(!userSession.getPermisos().isCodigosCortos()){
+                    mensaje = "No tienes permisos asignados para el módulo de codigos cortos.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 //TcTramiteCcVO vo = new TcTramiteCcVO();
                 CodigosCortosBean cc = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);//session.getAttribute("SenalizacionBean");
@@ -1241,6 +1279,13 @@ public class TramiteBean implements Serializable {
                 tramiteCodigosCortosVO = new TcTramiteCcVO();
                 cc.setSelectedCCsAccion(false);
             } else if (tipoRecurso.equals("marcacionAbreviada")) {
+                if(!userSession.getPermisos().isMarcacionAbreviada()){
+                    mensaje = "No tienes permisos asignados para el módulo de marcación abreviada.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 //TcTramiteCcVO vo = new TcTramiteCcVO();
                 MarcacionAbreviadaBean ma = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);//session.getAttribute("SenalizacionBean");
@@ -1295,6 +1340,13 @@ public class TramiteBean implements Serializable {
                 tramiteMarcacionAbreviadaVO = new TaTramiteMaVO();
                 ma.setSelectedsAccion(false);
             } else if (tipoRecurso.equals("codigosMnc")) {
+                if(!userSession.getPermisos().isCodigosMnc()){
+                    mensaje = "No tienes permisos asignados para el módulo de códigos MNC.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);//session.getAttribute("SenalizacionBean");
 
@@ -1345,6 +1397,13 @@ public class TramiteBean implements Serializable {
                 tramiteMncVO = new TmTramiteMncVO();
                 bean.setSelectedsAccion(false);
             } else if (tipoRecurso.equals("codigosNrn")) {
+                if(!userSession.getPermisos().isCodigosNrn()){
+                    mensaje = "No tienes permisos asignados para el módulo de códigos NRN.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);//session.getAttribute("SenalizacionBean");
 
@@ -1395,6 +1454,13 @@ public class TramiteBean implements Serializable {
                 tramiteNrnVO = new TkTramiteNrnVO();
                 bean.setSelectedsAccion(false);
             } else if (tipoRecurso.equals("codigosIin")) {
+                if(!userSession.getPermisos().isCodigosIin()){
+                    mensaje = "No tienes permisos asignados para el módulo de códigos IIN.";
+                    error = true;
+                    cerrarDialog = true;
+                    break agregar;
+                }
+                
                 ArrayList vo = new ArrayList();
                 CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);//session.getAttribute("SenalizacionBean");
 
