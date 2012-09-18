@@ -47,16 +47,6 @@ public class PaPermisosAsesor implements Serializable {
         vo.setPtnCodigo(this.ptnCodigo.toVO());
         return vo;
     }
-    
-    public PaPermisosAsesorVO toVOSinDetalles(){
-        PaPermisosAsesorVO vo = new PaPermisosAsesorVO();
-        vo.setPanCodigo(this.panCodigo);
-        vo.setUsnCodigo(this.usnCodigo.toVO());
-        PtTipoPermisoVO tipo = new PtTipoPermisoVO();
-        tipo.setPtnCodigo(this.getPtnCodigo().getPtnCodigo());
-        vo.setPtnCodigo(tipo);
-        return vo;
-    }
 
     public int getPanCodigo() {
         return panCodigo;

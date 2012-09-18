@@ -59,19 +59,7 @@ public class PaPermisosAsesorDAO {
         Query query = em.createQuery("SELECT pt FROM PtTipoPermiso pt "
                 + "ORDER BY pt.ptnCodigo");
         
-        List<PtTipoPermiso> permisos = query.getResultList();
-        List<PtTipoPermiso> permisosFinales = new ArrayList<PtTipoPermiso>();
-        
-        for (PtTipoPermiso p : permisos){
-            PaPermisosAsesor permisosAsesor = consultarPermiso(usuario, p.getPtnCodigo(), em);
-            Collection<PaPermisosAsesor> coleccionPermisosAsesor = new ArrayList<PaPermisosAsesor>();
-            coleccionPermisosAsesor.add(permisosAsesor);
-            PtTipoPermiso permiso = p;
-            permiso.setPaPermisosAsesorCollection(coleccionPermisosAsesor);
-            permisosFinales.add(permiso);
-        }
-        
-        return permisosFinales;
+        return query.getResultList();
     }
     
     public static PaPermisosAsesor consultarPermiso(int usuario, int tipo, EntityManager em) {
@@ -87,6 +75,25 @@ public class PaPermisosAsesorDAO {
             return (PaPermisosAsesor)query.getSingleResult();
         } catch(NoResultException e) {
             return null;
+        }
+        
+    }
+    
+    public static boolean tienePermiso(int usuario, int tipo, EntityManager em) {
+        
+        Query query = em.createQuery("SELECT COUNT(p) FROM PaPermisosAsesor p "
+                + "WHERE p.usnCodigo.usnCodigo = :usuario "
+                + "AND p.ptnCodigo.ptnCodigo = :tipo");
+        
+        query.setParameter("usuario", usuario);
+        query.setParameter("tipo", tipo);
+        
+        int cuenta = ((Number)query.getSingleResult()).intValue();
+        
+        if (cuenta == 0){
+            return false;
+        } else {
+            return true;
         }
         
     }

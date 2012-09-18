@@ -16,9 +16,10 @@ public class PtTipoPermisoVO implements Serializable {
 
     private int ptnCodigo;
     private String pttNombre;
-    private Collection<PaPermisosAsesorVO> PaPermisosAsesorCollection;
+    private boolean estado;
     
     public PtTipoPermisoVO() {
+        this.estado = false;
     }
 
     public int getPtnCodigo() {
@@ -37,12 +38,12 @@ public class PtTipoPermisoVO implements Serializable {
         this.pttNombre = pttNombre;
     }
 
-    public Collection<PaPermisosAsesorVO> getPaPermisosAsesorCollection() {
-        return PaPermisosAsesorCollection;
+    public boolean isEstado() {
+        return estado;
     }
 
-    public void setPaPermisosAsesorCollection(Collection<PaPermisosAsesorVO> PaPermisosAsesorCollection) {
-        this.PaPermisosAsesorCollection = PaPermisosAsesorCollection;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
     
 }

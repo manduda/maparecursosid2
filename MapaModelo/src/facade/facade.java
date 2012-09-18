@@ -583,6 +583,24 @@ public class facade {
         return vo;
     }
     
+    public boolean tienePermiso(int usuario, int tipo){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        List<PtTipoPermisoVO> vo = null;
+        boolean resultado = false;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            resultado = ServiceFactory.createPaPermisosAsesorService().tienePermiso(usuario, tipo, em);
+        } catch (Exception e) {
+            System.out.println(e);
+            resultado = false;
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return resultado;
+    }
+    
     public Integer cambiarPermisoAsesor(int usuario, int tipo, boolean accion){
         /*
          * 0: Error al crear/borrar el permiso

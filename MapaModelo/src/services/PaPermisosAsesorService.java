@@ -20,11 +20,8 @@ import vo.PtTipoPermisoVO;
  */
 public class PaPermisosAsesorService {
     public boolean crearPermiso(int user, int type, EntityManager em){
-        PaPermisosAsesor entity = new PaPermisosAsesor();
-        
-        entity = PaPermisosAsesorDAO.consultarPermiso(user, type, em);
-        
-        if (entity == null) {
+        if (!PaPermisosAsesorDAO.tienePermiso(user, type, em)) {
+            PaPermisosAsesor entity = new PaPermisosAsesor();
             UsUsuarios usuario = new UsUsuarios();
             usuario.setUsnCodigo(user);
 
@@ -44,14 +41,11 @@ public class PaPermisosAsesorService {
     }
     
     public boolean borrarPermiso(int user, int type, EntityManager em){
-        
-        PaPermisosAsesor entity = new PaPermisosAsesor();
-        
-        entity = PaPermisosAsesorDAO.consultarPermiso(user, type, em);
-        
-        if (entity == null) {
+        if (!PaPermisosAsesorDAO.tienePermiso(user, type, em)) {
             return false;
         } else {
+            PaPermisosAsesor entity = new PaPermisosAsesor();
+            entity = PaPermisosAsesorDAO.consultarPermiso(user, type, em);
             PaPermisosAsesorDAO.delete(entity, em);
             return true;
         }
@@ -71,8 +65,15 @@ public class PaPermisosAsesorService {
         List<PtTipoPermiso> permisos = PaPermisosAsesorDAO.cargarPermisosTotales(usuario, em);
         List<PtTipoPermisoVO> permisosVO = new ArrayList<PtTipoPermisoVO>();
         for (PtTipoPermiso t: permisos){
-            permisosVO.add(t.toVO());
+            PtTipoPermisoVO permisoVO = new PtTipoPermisoVO();
+            permisoVO = t.toVO();
+            permisoVO.setEstado(PaPermisosAsesorDAO.tienePermiso(usuario,permisoVO.getPtnCodigo(),em));
+            permisosVO.add(permisoVO);
         }
         return permisosVO;
+    }
+    
+    public boolean tienePermiso(int usuario, int tipo, EntityManager em) {
+        return PaPermisosAsesorDAO.tienePermiso(usuario, tipo, em);
     }
 }

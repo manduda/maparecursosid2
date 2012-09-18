@@ -35,9 +35,6 @@ public class PtTipoPermiso implements Serializable {
     @Column(name = "PTT_NOMBRE")
     private String pttNombre;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "ptnCodigo")
-    private Collection<PaPermisosAsesor> PaPermisosAsesorCollection;
-    
     public PtTipoPermiso() {
     }
     
@@ -45,11 +42,6 @@ public class PtTipoPermiso implements Serializable {
         PtTipoPermisoVO vo = new PtTipoPermisoVO();
         vo.setPtnCodigo(this.ptnCodigo);
         vo.setPttNombre(this.pttNombre);
-        Collection<PaPermisosAsesorVO> permisosAsesorVO = new ArrayList<PaPermisosAsesorVO>();        
-        for (PaPermisosAsesor pa : this.PaPermisosAsesorCollection) {
-            permisosAsesorVO.add(pa.toVOSinDetalles());
-        }
-        vo.setPaPermisosAsesorCollection(permisosAsesorVO);
         return vo;
     }
 
@@ -67,14 +59,6 @@ public class PtTipoPermiso implements Serializable {
 
     public void setPttNombre(String pttNombre) {
         this.pttNombre = pttNombre;
-    }
-
-    public Collection<PaPermisosAsesor> getPaPermisosAsesorCollection() {
-        return PaPermisosAsesorCollection;
-    }
-
-    public void setPaPermisosAsesorCollection(Collection<PaPermisosAsesor> PaPermisosAsesorCollection) {
-        this.PaPermisosAsesorCollection = PaPermisosAsesorCollection;
     }
     
 }
