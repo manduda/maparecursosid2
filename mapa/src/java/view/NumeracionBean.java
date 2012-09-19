@@ -220,11 +220,11 @@ public class NumeracionBean implements Serializable {
             ndcF = numeraF.getNdnCodigo().getNdnCodigo();
             inicioF = numeraF.getNunInicio();
             finF = numeraF.getNunFin();
-            operadorF = numeraF.getEmrCodigo().getEmtNombre();
+            operadorF = numeraF.getEmrCodigo().getEmrCodigo();
             municipioF = numeraF.getCodigoMunicipio().getCodigoMunicipio();
             estadoF = numeraF.getEsnCodigo().getEsnCodigo();
             
-            if ((ndc == ndcF)&&(operador.equals(operadorF))&&(municipio.equals(municipioF))&&(inicio.toString().substring(0,4).equals(inicioF.toString().substring(0,4)))&&(estado == estadoF)){
+            if ((ndc == ndcF)&&(operador.equals(operadorF))&&(municipio.equals(municipioF))&&(Math.floor(inicio/1000) == Math.floor(inicioF/1000))&&(estado == estadoF)){
                 numeros.get(x-1).setNunFin(finF);
             } else {
                 numeros.add(x, numeraF);
@@ -235,7 +235,7 @@ public class NumeracionBean implements Serializable {
             ndc = numera.getNdnCodigo().getNdnCodigo();
             inicio = numera.getNunInicio();
             fin = numera.getNunFin();
-            operador = numera.getEmrCodigo().getEmtNombre();
+            operador = numera.getEmrCodigo().getEmrCodigo();
             municipio = numera.getCodigoMunicipio().getCodigoMunicipio();
             estado = estadoF;
             

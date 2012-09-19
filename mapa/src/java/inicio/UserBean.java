@@ -68,7 +68,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     
     private boolean asignarTramites = false;
     
-    private permisos permisos;
+    private Permisos permisos;
 
     public UserBean() {
     }
@@ -281,11 +281,11 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
         this.reasignarTramite = reasignarTramite;
     }
 
-    public inicio.permisos getPermisos() {
+    public inicio.Permisos getPermisos() {
         return permisos;
     }
 
-    public void setPermisos(inicio.permisos permisos) {
+    public void setPermisos(inicio.Permisos permisos) {
         this.permisos = permisos;
     }
 

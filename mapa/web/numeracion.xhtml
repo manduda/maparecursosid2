@@ -5,7 +5,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
         <h:outputText value="Numeración"/>
@@ -100,10 +101,10 @@
                             <h:outputText value="#{num.ndnCodigo.ndtNombre}"/>
                         </p:column>
                         <p:column headerText="INICIO" >
-                            <h:outputText value="#{num.nunInicio}"/>
+                            <h:outputText value="#{fnc:rellenarCerosIzquierda(num.nunInicio,7)}"/>
                         </p:column>
                         <p:column headerText="FIN" >
-                            <h:outputText value="#{num.nunFin}"/>
+                            <h:outputText value="#{fnc:rellenarCerosIzquierda(num.nunFin,7)}"/>
                         </p:column>
                         <p:column headerText="CANTIDAD" >
                             <h:outputText value="#{num.nunFin-num.nunInicio+1}"/>

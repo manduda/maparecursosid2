@@ -142,7 +142,7 @@ public class InicioBean {
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(true);
                         
-                        permisos permisos = new permisos();
+                        Permisos permisos = new Permisos();
                         permisos.setNumeracion(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),1));
                         permisos.setSenalizacion(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),2));
                         permisos.setCodigosLd(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),3));
