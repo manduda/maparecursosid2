@@ -69,7 +69,7 @@ public class NuNumeracionDAO {
                 + "        FROM ( SELECT a.*, ROWNUM rnum "
                 + "            from ( "
                 + "              SELECT DISTINCT "
-                + "              SUBSTR(nn.NUN_INICIO,1,4) NUM, "
+                + "              SUBSTR(LPAD(nn.NUN_INICIO,7,0),1,4) NUM, "
                 + "              nn.SK_REGION_CODE, "
                 + "              nn.SK_EMPRESA_CODE, "
                 + "              nn.ESN_CODIGO, "
@@ -240,7 +240,7 @@ public class NuNumeracionDAO {
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(*) FROM (SELECT DISTINCT "
-                + "SUBSTR(n.NUN_INICIO,1,4), "
+                + "SUBSTR(LPAD(n.NUN_INICIO,7,0),1,4), "
                 + "n.SK_REGION_CODE, "
                 + "n.SK_EMPRESA_CODE, "
                 + "n.ESN_CODIGO, "
