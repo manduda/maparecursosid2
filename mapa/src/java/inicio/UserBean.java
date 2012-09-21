@@ -68,7 +68,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     
     private boolean asignarTramites = false;
     
-    private Permisos permisos;
+    private Permisos permisos = new Permisos();
 
     public UserBean() {
     }

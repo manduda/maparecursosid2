@@ -58,7 +58,7 @@
                     </h:panelGrid>
 
                     <p:dataTable id="datos" value="#{Codigos1xyBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigos1xy == true) ? 'single' : null}"
+                                 selectionMode="single"
                                  selection="#{Codigos1xyBean.selected}" rowIndexVar="rowIndex" widgetVar="datatableVar"
                                  onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
                                  rowSelectListener="#{Codigos1xyBean.onRowSelect}" rowUnselectListener="#{Codigos1xyBean.onRowUnselect}"
@@ -118,10 +118,10 @@
                 <p:dialog header="Detalle" widgetVar="AccionDialog" resizable="false" modal="true" draggable="false"
                           width="700" showEffect="fade" hideEffect="fade" position="center">
                     <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
-                        <h:panelGroup rendered="#{!UserBean.editarCodigos1xy}">
-                            <h:outputText value="Los códigos 1xy solo pueden ser modificados por el administrador" rendered="#{!UserBean.editarCodigos1xy}" style="color: red;"/>
+                        <h:panelGroup rendered="#{!UserBean.permisos.codigos1xy}">
+                            <h:outputText value="No tienes permisos para editar los códigos 1xy" style="color: red;"/>
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{UserBean.editarCodigos1xy}">
+                        <h:panelGroup rendered="#{UserBean.permisos.codigos1xy}">
                             <h:form>
                                 <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
                                     <h:panelGrid columns="2" cellpadding="4" width="100%">
@@ -147,7 +147,7 @@
 
                                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                     <h:panelGroup rendered="#{UserBean.login}">
-                                        <p:commandButton value="Editar" action="#{Codigos1xyBean.editarCodigo1xy}" rendered="#{(UserBean.editarCodigos1xy and Codigos1xyBean.selectedEditar)}" update="datosResultado,pgCodigos1xy,formCodigos1xy" oncomplete="cerrarDialogos(xhr, status, args);resultadoDialog.show();"/>
+                                        <p:commandButton value="Editar" action="#{Codigos1xyBean.editarCodigo1xy}" rendered="#{(UserBean.permisos.codigos1xy and Codigos1xyBean.selectedEditar)}" update="datosResultado,pgCodigos1xy,formCodigos1xy" oncomplete="cerrarDialogos(xhr, status, args);resultadoDialog.show();"/>
                                     </h:panelGroup>
                                 </h:panelGrid>
                             </h:form>
@@ -155,7 +155,7 @@
                     </h:panelGrid>
                 </p:dialog>
 
-                <h:panelGroup rendered="#{UserBean.editarCodigos1xy}">
+                <h:panelGroup rendered="#{UserBean.permisos.codigos1xy}">
                     <!-- RESULTADO -->
                     <p:dialog header="Resultado" widgetVar="resultadoDialog" resizable="false" modal="true" draggable="false"
                               width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.login}" closable="false">

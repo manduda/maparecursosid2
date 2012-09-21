@@ -6,6 +6,7 @@ package view;
 
 import facade.facade;
 import helper.ConvertirListasHelper;
+import inicio.UserBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -178,14 +180,28 @@ public class Codigos1xyBean implements Serializable {
     }
     
     public String editarCodigo1xy() {
-        boolean cerrarDialog = false;
+        UserBean usuario = (UserBean) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("UserBean");
         
         mensaje = "";
+        
+        if (usuario == null) {
+            mensaje = "<br><b>Error al editar el código 1xy.</b><br><br>No eres un usuario autenticado<br><br>";
+            return null;
+        } else {
+            if (!usuario.getPermisos().isCodigos1xy()) {
+                mensaje = "<br><b>Error al editar el código 1xy.</b><br><br>No tienes permisos para realizar esta acción<br><br>";
+                return null;
+            }
+        }
+                
+        
         
         if (seleccionModalidad == -1) {
             mensaje = "<br><b>Error al editar el código 1xy.</b><br><br>Debes seleccionar la modalidad<br><br>";
             return null;
         }
+
+        boolean cerrarDialog = false;
         
         Nc1xyVO codigo = new Nc1xyVO();
         codigo = selected;
