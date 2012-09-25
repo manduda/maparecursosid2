@@ -35,8 +35,8 @@ public class ReRegionService {
         return entity.toVO();
     }
 
-    public List<ReRegionVO> getList(EntityManager em){
-        List<ReRegion> region = ReRegionDAO.getList(em);
+    public List<ReRegionVO> getList(int tipoRegion, EntityManager em){
+        List<ReRegion> region = ReRegionDAO.getList(tipoRegion, em);
         List<ReRegionVO> regionVO = new ArrayList<ReRegionVO>();        
         for (ReRegion r : region) {
             regionVO.add(r.toVO());

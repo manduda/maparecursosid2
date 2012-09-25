@@ -4,6 +4,7 @@
  */
 package facade;
 
+import entities.TeTipoSenalizacion;
 import facade.helpers.CloseEntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,9 +36,11 @@ import vo.PaPermisosAsesorVO;
 import vo.PtTipoPermisoVO;
 import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
+import vo.RtTipoRegionVO;
 import vo.SeSenalizacionVO;
 import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
+import vo.TeTipoSenalizacionVO;
 import vo.TiTramiteIinVO;
 import vo.TkTramiteNrnVO;
 import vo.TlTramiteLdVO;
@@ -344,7 +347,7 @@ public class facade {
         return vo;
     }
     
-    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento){
+    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -354,7 +357,7 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            vo =ServiceFactory.createSeSenalizacionService().cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, em);
+            vo =ServiceFactory.createSeSenalizacionService().cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, tipoSenalizacion, tipoRegion, em);
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);
@@ -367,7 +370,7 @@ public class facade {
         return vo;
     }
     
-    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento){
+    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -377,7 +380,7 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            cantidad =ServiceFactory.createSeSenalizacionService().countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento,  em);
+            cantidad =ServiceFactory.createSeSenalizacionService().countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento, tipoSenalizacion, tipoRegion, em);
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);
@@ -390,7 +393,7 @@ public class facade {
         return cantidad;
     }
     
-    public List<ReRegionVO> listaRegionSenalizacion() {
+    public List<ReRegionVO> listaRegionSenalizacion(int tipoRegion) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -400,7 +403,76 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            vo = ServiceFactory.createReRegionService().getList(em);
+            vo = ServiceFactory.createReRegionService().getList(tipoRegion, em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<Integer> listaZonaSenalizacion(int tipoRegion) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<Integer> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createSeSenalizacionService().getListZona(tipoRegion, em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<TeTipoSenalizacionVO> listaTipoSenalizacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<TeTipoSenalizacionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createSeSenalizacionService().getListTipoSenalizacion(em); 
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<RtTipoRegionVO> listaTipoRegionSenalizacion() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<RtTipoRegionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createSeSenalizacionService().getListTipoRegionSenalizacion(em); 
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);

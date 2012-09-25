@@ -36,8 +36,28 @@ public class SeSenalizacionDAO {
         Query query = em.createQuery("SELECT DISTINCT e FROM EmOperador e JOIN e.seSenalizacionCollection n ORDER BY e.emtNombre ASC");
         return query.getResultList();
     }
+    
+    public static List<Integer> getListZona(int tipoRegion, EntityManager em){
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT DISTINCT s.senZona FROM SeSenalizacion s " +
+                "WHERE 1=1 ");
 
-    public static List<SeSenalizacion> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
+        if(tipoRegion != -1) {
+            searchQuery.append("AND s.renCodigo.rtnCodigo.rtnCodigo = ?1 ");
+        }
+        
+        searchQuery.append("ORDER BY s.senZona ASC");
+        
+        Query query = em.createQuery(searchQuery.toString());
+        
+        if(tipoRegion != -1) {
+            query.setParameter(1, tipoRegion);
+        }
+        
+        return query.getResultList();
+    }
+
+    public static List<SeSenalizacion> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion, EntityManager em){
         List<SeSenalizacion> senalizacion = new ArrayList<SeSenalizacion>();
 
         StringBuilder searchQuery = new StringBuilder(
@@ -65,6 +85,12 @@ public class SeSenalizacionDAO {
         if(!departamento.equals("-1")) {
             searchQuery.append("AND s.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?7 ");
         }
+        if(tipoSenalizacion != -1) {
+            searchQuery.append("AND s.tenCodigo.tenCodigo = ?8 ");
+        }
+        if(tipoRegion != -1) {
+            searchQuery.append("AND s.renCodigo.rtnCodigo.rtnCodigo = ?9 ");
+        }
         
         searchQuery.append("ORDER BY s.renCodigo.renCodigo,s.senZona,s.senPs ASC");
         
@@ -91,6 +117,12 @@ public class SeSenalizacionDAO {
         if(!departamento.equals("-1")) {
             query.setParameter(7, departamento);
         }
+        if(tipoSenalizacion != -1) {
+            query.setParameter(8, tipoSenalizacion);
+        }
+        if(tipoRegion != -1) {
+            query.setParameter(9, tipoRegion);
+        }
         
         query.setFirstResult(first);
         if(max != -1) {
@@ -100,7 +132,7 @@ public class SeSenalizacionDAO {
         return senalizacion;
     }
 
-    public static int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
+    public static int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT COUNT(s) FROM SeSenalizacion s " +
@@ -127,6 +159,12 @@ public class SeSenalizacionDAO {
         if(!departamento.equals("-1")) {
             searchQuery.append("AND s.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?7 ");
         }
+        if(tipoSenalizacion != -1) {
+            searchQuery.append("AND s.tenCodigo.tenCodigo = ?8 ");
+        }
+        if(tipoRegion != -1) {
+            searchQuery.append("AND s.renCodigo.rtnCodigo.rtnCodigo = ?9 ");
+        }
         
         Query query = em.createQuery(searchQuery.toString());
         
@@ -151,11 +189,17 @@ public class SeSenalizacionDAO {
         if(!departamento.equals("-1")) {
             query.setParameter(7, departamento);
         }
+        if(tipoSenalizacion != -1) {
+            query.setParameter(8, tipoSenalizacion);
+        }
+        if(tipoRegion != -1) {
+            query.setParameter(9, tipoRegion);
+        }
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();
     }
     
-        public static void transferirSenalizacionDAO(String operadorOrigen, String operadorDestino, EntityManager em){
+    public static void transferirSenalizacionDAO(String operadorOrigen, String operadorDestino, EntityManager em){
 
         String searchQuery = "UPDATE SE_SENALIZACION SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
                 

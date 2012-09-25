@@ -4,10 +4,14 @@
  */
 package services;
 
+import daos.RtTipoRegionDAO;
 import daos.SeSenalizacionDAO;
+import daos.TeTipoSenalizacionDAO;
 import entities.EmOperador;
 import entities.EsEstado;
+import entities.RtTipoRegion;
 import entities.SeSenalizacion;
+import entities.TeTipoSenalizacion;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -85,8 +89,8 @@ public class SeSenalizacionService {
         return entity.toVO();
     }
     
-    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
-        List<SeSenalizacion> senalizacion = SeSenalizacionDAO.cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, em);
+    public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion, EntityManager em){
+        List<SeSenalizacion> senalizacion = SeSenalizacionDAO.cargarSenalizacion(first, max, operador, region, zona, ps, estado, municipio, departamento, tipoSenalizacion, tipoRegion, em);
         List<SeSenalizacionVO> senalizacionVO = new ArrayList<SeSenalizacionVO>();        
         for (SeSenalizacion s : senalizacion) {
             senalizacionVO.add(s.toVO());
@@ -94,8 +98,8 @@ public class SeSenalizacionService {
         return senalizacionVO;
     }
     
-    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, EntityManager em){
-        int senalizacion = SeSenalizacionDAO.countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento, em);
+    public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion, EntityManager em){
+        int senalizacion = SeSenalizacionDAO.countCargarSenalizacion(operador, region, zona, ps, estado, municipio, departamento, tipoSenalizacion, tipoRegion, em);
         return senalizacion;
     }
     
@@ -106,6 +110,29 @@ public class SeSenalizacionService {
             operadorVO.add(o.toVO());
         }
         return operadorVO;
+    }
+    
+    public List<Integer> getListZona(int tipoRegion, EntityManager em){
+        List<Integer> zona = SeSenalizacionDAO.getListZona(tipoRegion, em);
+        return zona;
+    }
+    
+    public List<TeTipoSenalizacionVO> getListTipoSenalizacion(EntityManager em){
+        List<TeTipoSenalizacion> tipoSenalizacion = TeTipoSenalizacionDAO.getList(em);
+        List<TeTipoSenalizacionVO> tipoSenalizacionVO = new ArrayList<TeTipoSenalizacionVO>();        
+        for (TeTipoSenalizacion r : tipoSenalizacion) {
+            tipoSenalizacionVO.add(r.toVO());
+        }
+        return tipoSenalizacionVO;
+    }
+    
+    public List<RtTipoRegionVO> getListTipoRegionSenalizacion(EntityManager em){
+        List<RtTipoRegion> tipoRegionSenalizacion = RtTipoRegionDAO.getList(em);
+        List<RtTipoRegionVO> tipoRegionSenalizacionVO = new ArrayList<RtTipoRegionVO>();        
+        for (RtTipoRegion r : tipoRegionSenalizacion) {
+            tipoRegionSenalizacionVO.add(r.toVO());
+        }
+        return tipoRegionSenalizacionVO;
     }
     
     /*public EmOperadorVO getVOFromEntityOperador(EmOperador entity){

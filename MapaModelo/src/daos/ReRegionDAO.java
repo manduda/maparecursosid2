@@ -18,8 +18,23 @@ public class ReRegionDAO {
         return em.find(ReRegion.class, renCodigo);
     }
     
-    public static List<ReRegion> getList(EntityManager em){
-        Query query = em.createQuery("SELECT e FROM ReRegion e ORDER BY e.retNombre ASC");
+    public static List<ReRegion> getList(int tipoRegion, EntityManager em){
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT DISTINCT s.renCodigo FROM SeSenalizacion s " +
+                "WHERE 1=1 ");
+
+        if(tipoRegion != -1) {
+            searchQuery.append("AND s.renCodigo.rtnCodigo.rtnCodigo = ?1 ");
+        }
+        
+        searchQuery.append("ORDER BY s.renCodigo.retNombre ASC");
+        
+        Query query = em.createQuery(searchQuery.toString());
+        
+        if(tipoRegion != -1) {
+            query.setParameter(1, tipoRegion);
+        }
+        
         return query.getResultList();
     }
 }
