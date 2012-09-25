@@ -21,37 +21,124 @@
                 <h:form id="formSen">
                     <h:panelGrid>
                         <h:panelGrid columns="2">
+                            
+                            <h:outputText value="Tipo región señalización"/>
+                            <h:selectOneMenu value="#{SenalizacionBean.tipoRegionSenalizacionVO.rtnCodigo}">
+                                <f:selectItems value="#{SenalizacionBean.listaTipoRegionSenalizacion}" />  
+                                <p:ajax update="listaRegion,listaZona" listener="#{SenalizacionBean.cambiarTipoRegionSenalizacion}"/>
+                            </h:selectOneMenu>
+                            
                             <h:outputText value="Operador"/>
-                            <h:selectOneMenu value="#{SenalizacionBean.operadorVO.emrCodigo}">
-                                <f:selectItems value="#{SenalizacionBean.listaOperador}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.operadorVO.emrCodigo}" >
+                                    <f:selectItems value="#{SenalizacionBean.listaOperador}" /> 
+                                    <p:ajax update="listaOperador"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.operadorVO.emrCodigo != -1}" update="listaOperador">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.operadorVO.emrCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Departamento"/>
-                            <h:selectOneMenu value="#{SenalizacionBean.departamentoVO.codigoDepartamento}">
-                                <f:selectItems value="#{SenalizacionBean.listaDepartamento}" />
-                                <p:ajax update="municipios" listener="#{SenalizacionBean.cambiarDepartamento}"/>
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.departamentoVO.codigoDepartamento}">
+                                    <f:selectItems value="#{SenalizacionBean.listaDepartamento}" />
+                                    <p:ajax update="listaDepartamento,listaMunicipio" listener="#{SenalizacionBean.cambiarDepartamento}"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio" action="#{SenalizacionBean.cambiarDepartamento}">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.departamentoVO.codigoDepartamento}" value="-1" />
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.municipioVO.codigoMunicipio}" value="-1" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Municipio"/>
-                            <h:selectOneMenu id="municipios" value="#{SenalizacionBean.municipioVO.codigoMunicipio}">
-                                <f:selectItems value="#{SenalizacionBean.listaMunicipio}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaMunicipio" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.municipioVO.codigoMunicipio}">
+                                    <f:selectItems value="#{SenalizacionBean.listaMunicipio}" />  
+                                    <p:ajax update="listaMunicipio"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.municipioVO.codigoMunicipio != -1}" update="listaMunicipio">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            
                             <h:outputText value="Estado"/>
-                            <h:selectOneMenu value="#{SenalizacionBean.estadoVO.esnCodigo}">
-                                <f:selectItems value="#{SenalizacionBean.listaEstado}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.estadoVO.esnCodigo}">
+                                    <f:selectItems value="#{SenalizacionBean.listaEstado}" />  
+                                    <p:ajax update="listaEstado"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.estadoVO.esnCodigo != -1}" update="listaEstado">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Region"/>
-                            <h:selectOneMenu value="#{SenalizacionBean.regionSenalizacionVO.renCodigo}">
-                                <f:selectItems value="#{SenalizacionBean.listaRegionSenalizacion}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaRegion" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.regionSenalizacionVO.renCodigo}">
+                                    <f:selectItems value="#{SenalizacionBean.listaRegionSenalizacion}" />  
+                                    <p:ajax update="listaRegion"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.regionSenalizacionVO.renCodigo != -1}" update="listaRegion">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.regionSenalizacionVO.renCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            
                             <h:outputText value="Zona"/>
-                            <h:selectOneMenu value="#{SenalizacionBean.zonaSenalizacion}">
-                                <f:selectItems value="#{SenalizacionBean.listaZona}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaZona" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.zonaSenalizacion}">
+                                    <f:selectItems value="#{SenalizacionBean.listaZona}" /> 
+                                    <p:ajax update="listaZona"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.zonaSenalizacion != -1}" update="listaZona">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.zonaSenalizacion}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            
                             <h:outputText value="Punto"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="ps" value="#{SenalizacionBean.psSenalizacion}" maxlength="2" size="2" converter="javax.faces.Integer"
                                              converterMessage="Debes ingresar un número entero mayor o igual a cero" validator="#{Validador.enteroMayorIgualCero}"/>
                                 <p:message for="ps" />
                             </h:panelGrid>
+                            
+                            <h:outputText value="Tipo señalización"/>
+                            <h:panelGrid id="listaTipoSenalizacion" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{SenalizacionBean.tipoSenalizacionVO.tenCodigo}">
+                                    <f:selectItems value="#{SenalizacionBean.listaTipoSenalizacion}" /> 
+                                    <p:ajax update="listaTipoSenalizacion"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{SenalizacionBean.tipoSenalizacionVO.tenCodigo != -1}" update="listaTipoSenalizacion">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.tipoSenalizacionVO.tenCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="formSen" action="#{SenalizacionBean.cambiarDepartamento}">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.departamentoVO.codigoDepartamento}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.regionSenalizacionVO.renCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.zonaSenalizacion}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.tipoSenalizacionVO.tenCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{SenalizacionBean.psSenalizacion}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                         </h:panelGrid>
                         <h:panelGrid>
                             <p:commandButton value="Consultar" actionListener="#{SenalizacionBean.buscar}" ajax="true" update="pgSenalizacion,formSen">
@@ -83,6 +170,12 @@
                         </p:column>
                         <p:column headerText="CÓDIGO SEÑALIZACION&lt;br/&gt;(Región-Zona-Punto)" style="text-align: center; width: 120px;">
                             <h:outputText value="#{sen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(sen.senZona,2)} - #{fnc:rellenarCerosIzquierda(sen.senPs,2)}"/>
+                        </p:column>
+                        <p:column headerText="TIPO&lt;br/&gt;SEÑALIZACIÓN" >
+                            <h:outputText value="#{sen.tenCodigo.tetNombre}"/>
+                        </p:column>
+                        <p:column headerText="TIPO REGIÓN&lt;br/&gt;SEÑALIZACIÓN" >
+                            <h:outputText value="#{sen.renCodigo.rtnCodigo.rttNombre}"/>
                         </p:column>
                         <p:column headerText="DEPARTAMENTO" >
                             <h:outputText value="#{sen.codigoMunicipio.codigoDepartamento.nombreDepartamento}"/>
@@ -135,6 +228,8 @@
                             <h:outputText value="#{SenalizacionBean.selectedSen.setNombreNodo}" />
                             <h:outputText value="Marca Modelo:" style="font-weight: bold;"/>
                             <h:outputText value="#{SenalizacionBean.selectedSen.setMarcaModelo}" />
+                            <h:outputText value="Tipo:" style="font-weight: bold;"/>
+                            <h:outputText value="#{SenalizacionBean.selectedSen.tenCodigo.tetNombre}" />
                             <h:outputText value="Dirección:" style="font-weight: bold;"/>
                             <h:outputText value="#{SenalizacionBean.selectedSen.setDireccion}" />
                             <h:outputText value="Observaciones:" style="font-weight: bold;"/>

@@ -1961,7 +1961,7 @@ public class TramiteBean implements Serializable {
             opcionNumeracion = true;
         }
         // Activa el campo de señalizacion en transferencia de recursos
-        countRecurso = fachada.countCargarSenalizacion(operadorOrigen, -1, -1, -1, -1, "-1", "-1");
+        countRecurso = fachada.countCargarSenalizacion(operadorOrigen, -1, -1, -1, -1, "-1", "-1", -1, -1);
         if(countRecurso > 0){
             opcionSenalizacion = true;
         }

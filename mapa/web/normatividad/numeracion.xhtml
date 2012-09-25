@@ -1,193 +1,197 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/numeracion.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                NUMERACIÓN
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Estructura de la numeración.</b><br/>La estructura de la numeración es de áreas
-            geográficas y no geográficas, identificadas con los primeros tres dígitos del número
-            nacional (significativo) el cual tiene una longitud de 10 dígitos. Las áreas no geográficas
-            las constituyen las redes, las telecomunicaciones personales universales (UPT) y los
-            servicios, entendidos estos en el marco de las Recomendaciones de la Unión
-            Internacional de Telecomunicaciones (UIT), tales como cobro revertido, tarifa con prima
-            y los demás que la Comisión de Regulación de Telecomunicaciones y la UIT incluyan
-            en el futuro y que por sus características no correspondan a ninguna de las categorías
-            anteriores. La Comisión de Regulación de Telecomunicaciones podrá definir otras áreas
-            de acuerdo a las necesidades del sector y al avance en la tecnología, teniendo en
-            cuenta los lineamientos del presente plan y la normatividad vigente. Adicionalmente se
-            define una numeración que hace uso de los símbolos * y #, destinada a facilitar el
-            control de los servicios suplementarios, la cual hace parte integral del presente plan.
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
-            <p style="text-align: justify">
-            <b>Estructura del número.</b><br/>El número internacional se compone del indicativo
-            de país (CC) y del número nacional (significativo) [N(S)N], con una longitud total de 12
-            dígitos.
-            </p>
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
 
-            <table>
-              <tr>
-                <td>2 dígitos</td>
-                <td></td>
-                <td>3 dígitos</td>
-                <td></td>
-                <td>7 dígitos</td>
-              </tr>
-              <tr>
-                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>CC</td></tr></table></td>
-                <td></td>
-                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>NDC</td></tr></table></td>
-                <td></td>
-                <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>SN</td></tr></table></td>
-              </tr>
-              <tr>
-                <td colspan="5"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Número Internacional</td></tr></table></td>
-              </tr>
-              <tr>
-                <td></td>
-                <td></td>
-                <td colspan="3"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>N(S)N</td></tr></table></td>
-              </tr>
-            </table>
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            NUMERACIÓN
+        </p>
+        
+        <p style="text-align: justify">
+        <b>Estructura de la numeración.</b><br/>La estructura de la numeración es de áreas
+        geográficas y no geográficas, identificadas con los primeros tres dígitos del número
+        nacional (significativo) el cual tiene una longitud de 10 dígitos. Las áreas no geográficas
+        las constituyen las redes, las telecomunicaciones personales universales (UPT) y los
+        servicios, entendidos estos en el marco de las Recomendaciones de la Unión
+        Internacional de Telecomunicaciones (UIT), tales como cobro revertido, tarifa con prima
+        y los demás que la Comisión de Regulación de Telecomunicaciones y la UIT incluyan
+        en el futuro y que por sus características no correspondan a ninguna de las categorías
+        anteriores. La Comisión de Regulación de Telecomunicaciones podrá definir otras áreas
+        de acuerdo a las necesidades del sector y al avance en la tecnología, teniendo en
+        cuenta los lineamientos del presente plan y la normatividad vigente. Adicionalmente se
+        define una numeración que hace uso de los símbolos * y #, destinada a facilitar el
+        control de los servicios suplementarios, la cual hace parte integral del presente plan.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Indicativo de país (CC).</b><br/>Corresponde a la combinación de una, dos o tres
-            cifras, que identifica cada país en el ámbito internacional y según la asignación de la
-            Unión Internacional de Telecomunicaciones estableció para Colombia el número 57.
-            </p>
+        <p style="text-align: justify">
+        <b>Estructura del número.</b><br/>El número internacional se compone del indicativo
+        de país (CC) y del número nacional (significativo) [N(S)N], con una longitud total de 12
+        dígitos.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Número nacional (significativo) [N(S)N].</b><br/>Es el número que sigue al
-            indicativo de país. El número nacional (significativo) se compone del indicativo nacional
-            de destino (NDC), seguido por el número de abonado (SN). Su función es seleccionar el
-            abonado de destino en regiones geográficas o no geográficas.
-            </p>
+        <table>
+          <tr>
+            <td>2 dígitos</td>
+            <td></td>
+            <td>3 dígitos</td>
+            <td></td>
+            <td>7 dígitos</td>
+          </tr>
+          <tr>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>CC</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>NDC</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>SN</td></tr></table></td>
+          </tr>
+          <tr>
+            <td colspan="5"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Número Internacional</td></tr></table></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td colspan="3"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>N(S)N</td></tr></table></td>
+          </tr>
+        </table>
 
-            <p style="text-align: justify">
-            <b>Indicativo nacional de destino (NDC).</b><br/>Es el código que combinado con el
-            número de abonado (SN) constituye el número nacional (significativo). Tiene la función
-            de identificar y/o seleccionar: regiones geográficas, redes, telecomunicaciones
-            personales universales (UPT) o servicios. Su longitud es de tres dígitos. Las categorías
-            de indicativos nacionales de destino (NDC), para los servicios prestados por la Red de
-            Telecomunicaciones del Estado son: Tipo de numeración Categorías de NDC
-            Numeración geográfica Regiones geográficas Redes Numeración no geográfica UPT
-            Servicios Tabla 1 La Comisión de Regulación de Telecomunicaciones podrá definir
-            otras categorías, de acuerdo a las necesidades del sector y a los avances en la
-            tecnología, Así mismo, corresponde a la Comisión de Regulación de
-            Telecomunicaciones la asignación de cada NDC.
-            </p>
+        <p style="text-align: justify">
+        <b>Indicativo de país (CC).</b><br/>Corresponde a la combinación de una, dos o tres
+        cifras, que identifica cada país en el ámbito internacional y según la asignación de la
+        Unión Internacional de Telecomunicaciones estableció para Colombia el número 57.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Número de abonado (SN).</b><br/>Es el número que identifica un abonado en una
-            región geográfica, red, telecomunicaciones personales universales (UPT) o servicio. Su
-            longitud es de siete dígitos. Se reserva la numeración que comienza por el dígito 1 para
-            la numeración de servicios especiales (marcación 1XY), contemplada en el artículo 29
-            del presente decreto.
-            </p>
+        <p style="text-align: justify">
+        <b>Número nacional (significativo) [N(S)N].</b><br/>Es el número que sigue al
+        indicativo de país. El número nacional (significativo) se compone del indicativo nacional
+        de destino (NDC), seguido por el número de abonado (SN). Su función es seleccionar el
+        abonado de destino en regiones geográficas o no geográficas.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Numeración geográfica.</b><br/>Es el conjunto de los números nacionales
-            (significativos) conformados por indicativos nacionales de destino asociados a una
-            determinada región geográfica.
-            </p>
+        <p style="text-align: justify">
+        <b>Indicativo nacional de destino (NDC).</b><br/>Es el código que combinado con el
+        número de abonado (SN) constituye el número nacional (significativo). Tiene la función
+        de identificar y/o seleccionar: regiones geográficas, redes, telecomunicaciones
+        personales universales (UPT) o servicios. Su longitud es de tres dígitos. Las categorías
+        de indicativos nacionales de destino (NDC), para los servicios prestados por la Red de
+        Telecomunicaciones del Estado son: Tipo de numeración Categorías de NDC
+        Numeración geográfica Regiones geográficas Redes Numeración no geográfica UPT
+        Servicios Tabla 1 La Comisión de Regulación de Telecomunicaciones podrá definir
+        otras categorías, de acuerdo a las necesidades del sector y a los avances en la
+        tecnología, Así mismo, corresponde a la Comisión de Regulación de
+        Telecomunicaciones la asignación de cada NDC.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Numeración no geográfica.</b><br/>La numeración no geográfica la constituye el
-            conjunto de los números nacionales (significativos) conformados por indicativos
-            nacionales de destino no asociados a regiones geográficas para uso de redes,
-            telecomunicaciones personales universales (UPT) o servicios.
-            </p>
+        <p style="text-align: justify">
+        <b>Número de abonado (SN).</b><br/>Es el número que identifica un abonado en una
+        región geográfica, red, telecomunicaciones personales universales (UPT) o servicio. Su
+        longitud es de siete dígitos. Se reserva la numeración que comienza por el dígito 1 para
+        la numeración de servicios especiales (marcación 1XY), contemplada en el artículo 29
+        del presente decreto.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Numeración para redes.</b><br/>La numeración para redes, la constituye el
-            conjunto de los números nacionales (significativos) conformados por indicativos
-            nacionales de destino asociados a redes tales como: redes de telefonía móvil celular,
-            PCS, satelitales, entre otras, conforme al régimen de prestación de cada servicio.
-            Teniendo en cuenta que se trata de un recurso escaso, deberá administrarse de
-            manera eficiente.
-            </p>
+        <p style="text-align: justify">
+        <b>Numeración geográfica.</b><br/>Es el conjunto de los números nacionales
+        (significativos) conformados por indicativos nacionales de destino asociados a una
+        determinada región geográfica.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Numeración para telecomunicaciones personales universales (UPT).</b><br/>Esta
-            numeración la constituye el conjunto de los números nacionales (significativos)
-            conformados por indicativos nacionales de destino asociados a telecomunicaciones
-            personales universales (UPT), definida en la Recomendación de la Unión Internacional
-            de Telecomunicaciones UIT-T E.168 y sus posteriores modificaciones y/o
-            actualizaciones.
-            </p>
+        <p style="text-align: justify">
+        <b>Numeración no geográfica.</b><br/>La numeración no geográfica la constituye el
+        conjunto de los números nacionales (significativos) conformados por indicativos
+        nacionales de destino no asociados a regiones geográficas para uso de redes,
+        telecomunicaciones personales universales (UPT) o servicios.
+        </p>
 
-            <p style="text-align: justify">
-            <b>Numeración para servicios.</b><br/>La numeración para servicios la constituye el
-            conjunto de los números nacionales (significativos) conformados por indicativos
-            nacionales de destino, asociados a categorías de servicios tales como cobro revertido,
-            tarifa con prima y las demás que la Comisión de Regulación de Telecomunicaciones y
-            la Unión Internacional de Telecomunicaciones incluyan en el futuro y que por sus
-            características no correspondan a ninguna de las categorías anteriores.
-            </p>
+        <p style="text-align: justify">
+        <b>Numeración para redes.</b><br/>La numeración para redes, la constituye el
+        conjunto de los números nacionales (significativos) conformados por indicativos
+        nacionales de destino asociados a redes tales como: redes de telefonía móvil celular,
+        PCS, satelitales, entre otras, conforme al régimen de prestación de cada servicio.
+        Teniendo en cuenta que se trata de un recurso escaso, deberá administrarse de
+        manera eficiente.
+        </p>
 
-            <table style="border:1px solid; border-spacing: 0px;" >
-              <tr style="text-align: center; font-weight:bold">
-                <td style="border:1px solid;">NDC</td>
-                <td style="border:1px solid;">APLICACIÓN</td>
-                <td style="border:1px solid;">DESCRIPCIÓN</td>
-                <td style="border:1px solid;">SIGNIFICANCIA</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">800</td>
-                <td style="border:1px solid;">Cobro revertido</td>
-                <td style="border:1px solid;">Aplica para todos aquellos servicios enlos cuales la llamada se carga alabonado de destino</td>
-                <td style="border:1px solid;">Significancia nacional</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">900, 910 a 919</td>
-                <td style="border:1px solid;">Otros servicios</td>
-                <td style="border:1px solid;">Esquema de numeración para serviciosque no tienen tarifa con prima</td>
-                <td style="border:1px solid;">Significancia nacional (1)</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">901 a 909</td>
-                <td style="border:1px solid;">Tarifa con prima</td>
-                <td style="border:1px solid;">Esquema de numeración para servicioscon cobro de tarifa con prima</td>
-                <td style="border:1px solid;">Significancia nacional (1)</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">940</td>
-                <td style="border:1px solid;">Datos y aplicaciones móviles</td>
-                <td style="border:1px solid;">Esquema para acceder a la utilizaciónde contenidos, aplicaciones y portales atraves de terminales móviles</td>
-                <td style="border:1px solid;">Significancia nacional</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">947</td>
-                <td style="border:1px solid;">Acceso a Internet</td>
-                <td style="border:1px solid;">Esquema para prestación del serviciode acceso a Internet según lo dispuestoen la Resolución 307 de 2000</td>
-                <td style="border:1px solid;">Significancia local</td>
-              </tr>
-              <tr>
-                <td style="border:1px solid;">948</td>
-                <td style="border:1px solid;">Acceso a Internet por demanda</td>
-                <td style="border:1px solid;">Acceso a internet cuando no se usan losplanes de tarifa reducida o plana, segúnlo dispuesto en el articulo 7.2.1 de la Resolución CRT 087 de 1997</td>
-                <td style="border:1px solid;">Significancia nacional/local</td>
-              </tr>
-            </table>
+        <p style="text-align: justify">
+        <b>Numeración para telecomunicaciones personales universales (UPT).</b><br/>Esta
+        numeración la constituye el conjunto de los números nacionales (significativos)
+        conformados por indicativos nacionales de destino asociados a telecomunicaciones
+        personales universales (UPT), definida en la Recomendación de la Unión Internacional
+        de Telecomunicaciones UIT-T E.168 y sus posteriores modificaciones y/o
+        actualizaciones.
+        </p>
 
-            <p style="text-align: justify; font-size:10px">
-            • Significancia Nacional se refiere al acceso a los números del cuadro anterior, desde cualquier abonado en el territorio nacional<br/>
-            • Significancia local se refiere al acceso a los números del cuadro anterior, desde los abonados en el área de cobertura del operador.<br/>
-            (1) Los operadores de TPBCL, con la motivación respectiva podrán solicitar a la CRT la restricción en el área de cobertura de los servicios específicos.
-            </p>
-            
-            <p>Para información adicional consultar el <a href="http://www.presidencia.gov.co/prensa_new/decretoslinea/2002/enero/11/dec25110102.pdf" target="blank">Decreto 25 de 2002</a> 
-                y la <a href="http://www.crcom.gov.co/?idcategoria=53850" target="blank">Resolución CRT 087 de 1997</a></p>
-        </h:panelGroup>
-    </ui:composition>
-</html>
+        <p style="text-align: justify">
+        <b>Numeración para servicios.</b><br/>La numeración para servicios la constituye el
+        conjunto de los números nacionales (significativos) conformados por indicativos
+        nacionales de destino, asociados a categorías de servicios tales como cobro revertido,
+        tarifa con prima y las demás que la Comisión de Regulación de Telecomunicaciones y
+        la Unión Internacional de Telecomunicaciones incluyan en el futuro y que por sus
+        características no correspondan a ninguna de las categorías anteriores.
+        </p>
 
+        <table style="border:1px solid; border-spacing: 0px;" >
+          <tr style="text-align: center; font-weight:bold">
+            <td style="border:1px solid;">NDC</td>
+            <td style="border:1px solid;">APLICACIÓN</td>
+            <td style="border:1px solid;">DESCRIPCIÓN</td>
+            <td style="border:1px solid;">SIGNIFICANCIA</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">800</td>
+            <td style="border:1px solid;">Cobro revertido</td>
+            <td style="border:1px solid;">Aplica para todos aquellos servicios enlos cuales la llamada se carga alabonado de destino</td>
+            <td style="border:1px solid;">Significancia nacional</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">900, 910 a 919</td>
+            <td style="border:1px solid;">Otros servicios</td>
+            <td style="border:1px solid;">Esquema de numeración para serviciosque no tienen tarifa con prima</td>
+            <td style="border:1px solid;">Significancia nacional (1)</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">901 a 909</td>
+            <td style="border:1px solid;">Tarifa con prima</td>
+            <td style="border:1px solid;">Esquema de numeración para servicioscon cobro de tarifa con prima</td>
+            <td style="border:1px solid;">Significancia nacional (1)</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">940</td>
+            <td style="border:1px solid;">Datos y aplicaciones móviles</td>
+            <td style="border:1px solid;">Esquema para acceder a la utilizaciónde contenidos, aplicaciones y portales atraves de terminales móviles</td>
+            <td style="border:1px solid;">Significancia nacional</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">947</td>
+            <td style="border:1px solid;">Acceso a Internet</td>
+            <td style="border:1px solid;">Esquema para prestación del serviciode acceso a Internet según lo dispuestoen la Resolución 307 de 2000</td>
+            <td style="border:1px solid;">Significancia local</td>
+          </tr>
+          <tr>
+            <td style="border:1px solid;">948</td>
+            <td style="border:1px solid;">Acceso a Internet por demanda</td>
+            <td style="border:1px solid;">Acceso a internet cuando no se usan losplanes de tarifa reducida o plana, segúnlo dispuesto en el articulo 7.2.1 de la Resolución CRT 087 de 1997</td>
+            <td style="border:1px solid;">Significancia nacional/local</td>
+          </tr>
+        </table>
+
+        <p style="text-align: justify; font-size:10px">
+        • Significancia Nacional se refiere al acceso a los números del cuadro anterior, desde cualquier abonado en el territorio nacional<br/>
+        • Significancia local se refiere al acceso a los números del cuadro anterior, desde los abonados en el área de cobertura del operador.<br/>
+        (1) Los operadores de TPBCL, con la motivación respectiva podrán solicitar a la CRT la restricción en el área de cobertura de los servicios específicos.
+        </p>
+
+        <p>Para información adicional consultar el <a href="http://www.presidencia.gov.co/prensa_new/decretoslinea/2002/enero/11/dec25110102.pdf" target="blank">Decreto 25 de 2002</a> 
+            y la <a href="http://www.crcom.gov.co/?idcategoria=53850" target="blank">Resolución CRT 087 de 1997</a></p>
+
+    </ui:define>
+</ui:composition>

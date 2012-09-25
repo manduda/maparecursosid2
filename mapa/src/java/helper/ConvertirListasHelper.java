@@ -9,6 +9,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 
 /**
@@ -118,6 +119,30 @@ public class ConvertirListasHelper {
         for (String s : originList) {
             selectItem = new SelectItem();
             selectItem.setLabel(s);
+            selectItem.setValue(s);
+            selectItemsList.add(selectItem);
+            i = i + 1;
+        }
+        
+        return selectItemsList;
+        
+    }
+    
+    public List createSelectItemsList(List<Integer> originList, Integer defaultValue) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+
+        ArrayList<SelectItem> selectItemsList = new ArrayList();
+        SelectItem selectItem = new SelectItem();
+        
+        int i = 1;
+        selectItem.setValue(defaultValue);
+        selectItem.setLabel("");
+        selectItemsList.add(selectItem);
+        i = i + 1;
+        
+        DecimalFormat format = new DecimalFormat("00");
+        for (Integer s : originList) {
+            selectItem = new SelectItem();
+            selectItem.setLabel(format.format(s));
             selectItem.setValue(s);
             selectItemsList.add(selectItem);
             i = i + 1;

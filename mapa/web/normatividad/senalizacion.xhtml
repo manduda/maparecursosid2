@@ -1,24 +1,134 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:fnc="http://yournamespace.com/fnc">
-    <ui:composition>
-        <h:panelGroup rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'normatividad/senalizacion.xhtml')}">
-            <p style="text-align: center; font-size: 16px; font-weight: bold">
-                SEÑALIZACIÓN
-            </p>
-            
-            <p style="text-align: justify">
-            <b>Página en construcción.</b><br/>
-            Página en construcción
-            </p>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
-            
-        </h:panelGroup>
-    </ui:composition>
-</html>
+    <ui:define name="titulo">
+        <h:outputText value="Estructura"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <p style="text-align: center; font-size: 16px; font-weight: bold">
+            SEÑALIZACIÓN
+        </p>
+        
+        <p style="text-align: justify">
+        <b>PUNTOS DE SEÑALIZACIÓN NACIONAL</b><br/>
+        </p>
+
+        <table>
+          <tr>
+            <td style="text-align: center;">4 bits</td>
+            <td></td>
+            <td style="text-align: center;">4 bits</td>
+            <td></td>
+            <td style="text-align: center;">6 bits</td>
+          </tr>
+          <tr>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de región</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de zona</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de PS</td></tr></table></td>
+          </tr>
+        </table>
+
+        <p style="text-align: justify">
+        <b>Identificador de región</b><br/>
+        Compuesto por los 4 bits mas significativos del código de punto de señalización el cual identifica la región geografica del pais donde 
+        esta ubicado el punto de señalización . Se pueden identificar hasta 16 regiones geograficas.
+        </p>
+
+        <p style="text-align: justify">
+        <b>Identificador de zona</b><br/>
+        Compuesto por los bits séptimo al décimo del código de punto de señalización el cual identifica una zona dentro de la región geografica 
+        correspondiente del pais donde esta ubicado el punto de señalización.Se puede identificar hasta 16 zonas dentro de una region.
+        </p>
+
+        <p style="text-align: justify">
+        <b>Identificador de PS</b><br/>
+        Compuesto por los 6 Bits menos significativos del primero al sexto del código de punto de señalización , el cual identificará el punto 
+        de señalización mismo, dentro de una zona que pertenece a una región geografica del pais. Se pueden identificar 64 puntos de señalización 
+        dentro de una zona.
+        </p>
+
+        <br/>
+
+        <p style="text-align: justify">
+        <b>PUNTOS DE SEÑALIZACIÓN INTERNACIONAL</b><br/>
+        </p>
+
+        <table>
+          <tr>
+            <td style="text-align: center;">3 bits</td>
+            <td></td>
+            <td style="text-align: center;">8 bits</td>
+            <td></td>
+            <td style="text-align: center;">3 bits</td>
+          </tr>
+          <tr>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de región</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de zona</td></tr></table></td>
+            <td></td>
+            <td><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Identificador de PS</td></tr></table></td>
+          </tr>
+          <tr>
+            <td colspan="3"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Codigo de zona/red de señalizacion (SANC)</td></tr></table></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td colspan="5"><table style="border: 1px solid;text-align: center; width:100%" ><tr><td>Codigo de punto de Señalización Internacional (ISPC)</td></tr></table></td>
+          </tr>
+        </table>
+
+        <p style="text-align: justify">
+        * Para la identificacion de puntos de señalizacion se utiliza un codigo binario de 14 bits.
+        </p>
+
+        <p style="text-align: justify">
+        * Se asignara un codigo de punto de señalizacion internacional (ISPC, international signalling point code) a cada punto de señalización 
+        que pertenece a una red de señalización internacional. Para cierto entorno de red, un nodo físico de red puede actuar como más de un punto 
+        de señalización, por lo que puede tener asignados más de un ISPC.
+        </p>
+
+        <p style="text-align: justify">
+        * Todo código de punto de señalizacion internacional (ISPC) debe constar de tres subcampos de identificacion. El subcampo de 3 bits 
+        (Identificador de región) debe identificar una región geográfica del mundo. El subcampo de 8 bits (Identificador de zona) debe identificar una 
+        zona geografica o red en una zona especifica. El subcampo de 3 bits (Identificador de PS) debe identificar un punto de señalizacion en una zona 
+        geografica o red especifica. La combinacion del primero y segundo subcampos podría considerarse como un codigo de zona/red de señalizacion 
+        (SANC, signalling area/network code).
+        </p>
+
+        <p style="text-align: justify">
+        * Cada país (o zona geográfica) debe tener asignado por lo menos un codigo SANC.
+        </p>
+
+        <p style="text-align: justify">
+        * Dos bits de la identificacion de region , a saber, los codigos 0 y 1 estan reservados para futuras atribuciones.
+        </p>
+
+        <p style="text-align: justify">
+        * El sistema de códigos de punto de señalización internacional (ISPC) proporcionará un total de 12.288 ISPC.
+        </p>
+
+        <p style="text-align: justify">
+        * Si un país (o zona geográfica) necesita más de 8 puntos de señalización internacional se le asignaría uno o más códigos de zona/red de 
+        señalización (SANC) adicionales.
+        </p>
+
+        <p>Para información adicional consultar la <a href="http://www.itu.int/rec/T-REC-Q.708/es" target="blank">Recomendación UIT-T Q.708</a></p>
+
+    </ui:define>
+</ui:composition>
+
+
+
+
 

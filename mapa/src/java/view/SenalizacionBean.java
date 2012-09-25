@@ -35,7 +35,9 @@ import vo.EmOperadorVO;
 import vo.EsEstadoVO;
 import vo.MunicipiosVO;
 import vo.ReRegionVO;
+import vo.RtTipoRegionVO;
 import vo.SeSenalizacionVO;
+import vo.TeTipoSenalizacionVO;
 import vo.TsTramiteSenalizacionVO;
 
 /**
@@ -49,12 +51,16 @@ public class SenalizacionBean implements Serializable {
     
     private List<SeSenalizacionVO> sen = null;//new ArrayList<NuNumeracionVO>();
     private Collection<SelectItem> listaRegionSenalizacion;
+    private Collection<SelectItem> listaTipoSenalizacion;
+    private Collection<SelectItem> listaTipoRegionSenalizacion;
     private Collection<SelectItem> listaZona;
     private Collection<SelectItem> listaOperador;
     private Collection<SelectItem> listaEstado;
     private Collection<SelectItem> listaDepartamento;
     private Collection<SelectItem> listaMunicipio;
     private ReRegionVO regionSenalizacionVO = new ReRegionVO();
+    private TeTipoSenalizacionVO tipoSenalizacionVO = new TeTipoSenalizacionVO();
+    private RtTipoRegionVO tipoRegionSenalizacionVO = new RtTipoRegionVO();
     private EmOperadorVO operadorVO = new EmOperadorVO();
     private EsEstadoVO estadoVO = new EsEstadoVO();
     private DepartamentosVO departamentoVO = new DepartamentosVO();
@@ -77,7 +83,7 @@ public class SenalizacionBean implements Serializable {
     public SenalizacionBean() {
         facade fachada = new facade();
         
-        ArrayList selectItemsList = new ArrayList();
+        /*ArrayList selectItemsList = new ArrayList();
         SelectItem selectItem = new SelectItem();
         selectItem.setValue("-1");
         selectItem.setLabel("");
@@ -89,11 +95,24 @@ public class SenalizacionBean implements Serializable {
             selectItem.setLabel(format.format(i));
             selectItemsList.add(selectItem);
         }
-        listaZona = selectItemsList;
+        listaZona = selectItemsList;*/
+        
+        operadorVO.setEmrCodigo("-1");
+        municipioVO.setCodigoMunicipio("-1");
+        departamentoVO.setCodigoDepartamento("-1");
+        estadoVO.setEsnCodigo(-1);
+        regionSenalizacionVO.setRenCodigo(-1);
+        tipoSenalizacionVO.setTenCodigo(-1);
+        tipoRegionSenalizacionVO.setRtnCodigo(1);
+        psSenalizacion="";
+        zonaSenalizacion="-1";
         
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaRegionSenalizacion = convertir.createSelectItemsList(fachada.listaRegionSenalizacion(), null, "getRenCodigo", "getRetNombre", true, "");
+            listaRegionSenalizacion = convertir.createSelectItemsList(fachada.listaRegionSenalizacion(tipoRegionSenalizacionVO.getRtnCodigo()), null, "getRenCodigo", "getRetNombre", true, "");
+            listaZona = convertir.createSelectItemsList(fachada.listaZonaSenalizacion(tipoRegionSenalizacionVO.getRtnCodigo()),-1);
+            listaTipoSenalizacion = convertir.createSelectItemsList(fachada.listaTipoSenalizacion(), null, "getTenCodigo", "getTetNombre", true, "");
+            listaTipoRegionSenalizacion = convertir.createSelectItemsList(fachada.listaTipoRegionSenalizacion(), null, "getRtnCodigo", "getRttNombre", false, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorSenalizacion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
@@ -115,20 +134,12 @@ public class SenalizacionBean implements Serializable {
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
                 List<SeSenalizacionVO> lazySenalizacion = new ArrayList<SeSenalizacionVO>();
                 facade fachada = new facade();
-                lazySenalizacion = fachada.cargarSenalizacion(first, pageSize, "-1", -1, -1, -1, -1, "-1", "-1"); 
+                lazySenalizacion = fachada.cargarSenalizacion(first, pageSize, "-1", -1, -1, -1, -1, "-1", "-1", -1, tipoRegionSenalizacionVO.getRtnCodigo()); 
   
                 return lazySenalizacion;
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarSenalizacion("-1", -1, -1, -1, -1, "-1", "-1"));
-        
-        operadorVO.setEmrCodigo("-1");
-        municipioVO.setCodigoMunicipio("-1");
-        departamentoVO.setCodigoDepartamento("-1");
-        estadoVO.setEsnCodigo(-1);
-        regionSenalizacionVO.setRenCodigo(-1);
-        psSenalizacion="";
-        zonaSenalizacion="";
+        lazyModel.setRowCount(fachada.countCargarSenalizacion("-1", -1, -1, -1, -1, "-1", "-1", -1, tipoRegionSenalizacionVO.getRtnCodigo()));
         
     }
     
@@ -170,12 +181,12 @@ public class SenalizacionBean implements Serializable {
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
                 List<SeSenalizacionVO> lazySenalizacion = new ArrayList<SeSenalizacionVO>();
                 facade fachada = new facade();
-                lazySenalizacion = fachada.cargarSenalizacion(first, pageSize, operadorVO.getEmrCodigo(), regionSenalizacionVO.getRenCodigo(), zona, ps, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento()); 
+                lazySenalizacion = fachada.cargarSenalizacion(first, pageSize, operadorVO.getEmrCodigo(), regionSenalizacionVO.getRenCodigo(), zona, ps, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento(), tipoSenalizacionVO.getTenCodigo(), tipoRegionSenalizacionVO.getRtnCodigo()); 
                 
                 return lazySenalizacion;  
             }  
         };
-        lazyModel.setRowCount(fachada.countCargarSenalizacion(operadorVO.getEmrCodigo(), regionSenalizacionVO.getRenCodigo(), zona, ps, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento())); 
+        lazyModel.setRowCount(fachada.countCargarSenalizacion(operadorVO.getEmrCodigo(), regionSenalizacionVO.getRenCodigo(), zona, ps, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento(), tipoSenalizacionVO.getTenCodigo(), tipoRegionSenalizacionVO.getRtnCodigo())); 
         
         
 //        numeracion = fachada.cargarNumeracion(0, -1, operadorVO.getEmrCodigo(), ndcVO.getNdnCodigo(), inicio, fin);
@@ -188,6 +199,20 @@ public class SenalizacionBean implements Serializable {
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamentoVO.getCodigoDepartamento()), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
+        }
+           
+    }
+    
+    public void cambiarTipoRegionSenalizacion() {
+        facade fachada = new facade();
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            regionSenalizacionVO.setRenCodigo(-1);
+            listaRegionSenalizacion = convertir.createSelectItemsList(fachada.listaRegionSenalizacion(tipoRegionSenalizacionVO.getRtnCodigo()), null, "getRenCodigo", "getRetNombre", true, "");
+            zonaSenalizacion="-1";
+            listaZona = convertir.createSelectItemsList(fachada.listaZonaSenalizacion(tipoRegionSenalizacionVO.getRtnCodigo()),-1);
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Señalización", e);
         }
@@ -517,6 +542,38 @@ public class SenalizacionBean implements Serializable {
 
     public void setSelectedSensPreasignar(Boolean selectedSensPreasignar) {
         this.selectedSensPreasignar = selectedSensPreasignar;
+    }
+
+    public Collection<SelectItem> getListaTipoSenalizacion() {
+        return listaTipoSenalizacion;
+    }
+
+    public void setListaTipoSenalizacion(Collection<SelectItem> listaTipoSenalizacion) {
+        this.listaTipoSenalizacion = listaTipoSenalizacion;
+    }
+
+    public TeTipoSenalizacionVO getTipoSenalizacionVO() {
+        return tipoSenalizacionVO;
+    }
+
+    public void setTipoSenalizacionVO(TeTipoSenalizacionVO tipoSenalizacionVO) {
+        this.tipoSenalizacionVO = tipoSenalizacionVO;
+    }
+
+    public Collection<SelectItem> getListaTipoRegionSenalizacion() {
+        return listaTipoRegionSenalizacion;
+    }
+
+    public void setListaTipoRegionSenalizacion(Collection<SelectItem> listaTipoRegionSenalizacion) {
+        this.listaTipoRegionSenalizacion = listaTipoRegionSenalizacion;
+    }
+
+    public RtTipoRegionVO getTipoRegionSenalizacionVO() {
+        return tipoRegionSenalizacionVO;
+    }
+
+    public void setTipoRegionSenalizacionVO(RtTipoRegionVO tipoRegionSenalizacionVO) {
+        this.tipoRegionSenalizacionVO = tipoRegionSenalizacionVO;
     }
 
 }

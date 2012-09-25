@@ -19,8 +19,8 @@
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloMarcacionAbreviada}" value="Marcación abreviada" url="#{ConfiguracionBean.rutaMarcacionAbreviada}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosNrn}" value="NRN" url="#{ConfiguracionBean.rutaNRN}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:submenu label="Estructura" icon="ui-icon ui-icon-document">
-                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloNumeracion}" value="Numeración" url="#{ConfiguracionBean.rutaNormatividad}?recurso=numeracion"/>
-                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloSenalizacion}" value="Señalización" url="#{ConfiguracionBean.rutaNormatividad}?recurso=senalizacion"/>
+                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloNumeracion}" value="Numeración" url="#{ConfiguracionBean.rutaContexto}normatividad/numeracion.xhtml"/>
+                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloSenalizacion}" value="Señalización" url="#{ConfiguracionBean.rutaContexto}normatividad/senalizacion.xhtml"/>
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosLd}" value="Códigos LD" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosld.xhtml"/>
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosCortos}" value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosCortos.xhtml"/>
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigos1xy}" value="Códigos 1XY" url="#{ConfiguracionBean.rutaContexto}normatividad/codigos1xy.xhtml"/>
