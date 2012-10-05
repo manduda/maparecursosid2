@@ -63,22 +63,37 @@ public class NuNumeracionDAO {
         List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
         
         StringBuilder searchQuery1 = new StringBuilder(
-                "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9), NDN_CODIGO "
+                "select min(min_inicio), max(max_inicio), ndc "
+                + "from "
+                + "( "
+                + "  SELECT min_inicio, max_inicio, ndc "
+                + "  FROM ( "
+                + "    SELECT a.*, ROWNUM rnum "
+                + "    from ( "
+                + "      with get_data as "
+                + "        ( "
+                + "          SELECT n.ndn_codigo, n.nun_inicio, floor(n.nun_inicio/1000) bloque, n.sk_empresa_code, n.sk_region_code, n.esn_codigo, "
+                + "                 ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) - ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.sk_empresa_code, n.sk_region_code, n.esn_codigo, n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) grp "
+                + "          from nu_numeracion n "
+                + "        where 1=1 ");
+/*                + "SELECT RPAD(MIN(NUM),7,0),RPAD(MAX(NUM),7,9), NDN_CODIGO "
                 + "FROM ( "
                 + "      SELECT * "
                 + "        FROM ( SELECT a.*, ROWNUM rnum "
                 + "            from ( "
-                + "              SELECT DISTINCT "
-                + "              SUBSTR(LPAD(nn.NUN_INICIO,7,0),1,4) NUM, "
+                + "              SELECT "
+                + "              nn.NUM, "
                 + "              nn.SK_REGION_CODE, "
                 + "              nn.SK_EMPRESA_CODE, "
                 + "              nn.ESN_CODIGO, "
                 + "              nn.NDN_CODIGO, "
-                + "              (SELECT nd.NDT_NOMBRE FROM ND_NDC nd WHERE nn.NDN_CODIGO = nd.NDN_CODIGO) NDC "
+                + "              nn.NDC "
                 + "              FROM ( "
-                + "                SELECT n.* "
+                + "                SELECT n.*, "
+                + "                SUBSTR(LPAD(n.NUN_INICIO,7,0),1,4) NUM,"
+                + "                (SELECT nd.NDT_NOMBRE FROM ND_NDC nd WHERE n.NDN_CODIGO = nd.NDN_CODIGO) NDC"
                 + "                FROM NU_NUMERACION n "
-                + "                WHERE 1=1 ");
+                + "                WHERE 1=1 ");*/
       
         StringBuilder searchQuery = new StringBuilder(
                 "SELECT n FROM NuNumeracion n " +
@@ -131,17 +146,35 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.codigoMunicipio.codigoDepartamento.codigoDepartamento = ?8 ");
         }
         
-            searchQuery1.append(" "
-                //+ "ORDER BY n.NDN_CODIGO, n.NUN_INICIO "
-                + "    )  nn  "
-                //+ "    ORDER BY nn.NDN_CODIGO, SUBSTR(nn.NUN_INICIO,1,4) "
-                + "    ORDER BY NDC,NUM "
+            searchQuery1.append("), "
+                    + "      sql_data as "
+                    + "      ( "
+                    + "        select a.bloque,a.ndn_codigo,a.nun_inicio, "
+                    + "               min(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) min_inicio, "
+                    + "               max(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) max_inicio "
+                    + "        from get_data a "
+                    + "      ) "
+                    + "      select distinct "
+                    + "             bloque, "
+                    + "             ndn_codigo ndc, "
+                    + "             min_inicio, "
+                    + "             max_inicio "
+                    + "      from sql_data "
+                    + "      order by ndn_codigo,min_inicio "
+                    + "    ) a "
+                    + "    WHERE ROWNUM <= (?10) "
+                    + "  ) "
+                    + "  WHERE rnum  >= ((?9) - 1)+1 "
+                    + ") group by ndc ");
+/*                + "    )  nn  "
+                + "    GROUP BY nn.NUM,nn.SK_REGION_CODE,nn.SK_EMPRESA_CODE,nn.ESN_CODIGO,nn.NDN_CODIGO,nn.NDC "
+                + "    ORDER BY NDC,MIN(NUN_INICIO) "
                 + "  ) a "
                 + "  WHERE ROWNUM <= (?10) "
                 + ") "
                 + "WHERE rnum  >= ((?9) - 1)+1 "
                 + ")"
-                + "GROUP BY NDN_CODIGO ");
+                + "GROUP BY NDN_CODIGO ");*/
         
         Query query1 = em.createNativeQuery(searchQuery1.toString());
 
@@ -179,7 +212,7 @@ public class NuNumeracionDAO {
             searchQuery.append("AND (1=0 ");
             for(int i=0; i<results.size();i++){
                 searchQuery.append("OR (n.nunInicio >= ?").append(10+3*i)
-                    .append(" AND n.nunFin <= ?").append(11+3*i)
+                    .append(" AND n.nunInicio <= ?").append(11+3*i)
                     .append(" AND n.ndnCodigo.ndnCodigo = ?").append(12+3*i).append(" ) ");
             }
             searchQuery.append(" ) ");
@@ -239,14 +272,14 @@ public class NuNumeracionDAO {
     public static int countCargarNumeracion(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
 
         StringBuilder searchQuery = new StringBuilder(
-                "SELECT COUNT(*) FROM (SELECT DISTINCT "
-                + "SUBSTR(LPAD(n.NUN_INICIO,7,0),1,4), "
-                + "n.SK_REGION_CODE, "
-                + "n.SK_EMPRESA_CODE, "
-                + "n.ESN_CODIGO, "
-                + "n.NDN_CODIGO "
-                + "FROM NU_NUMERACION n "
-                + "WHERE 1=1 ");
+                "SELECT COUNT(*) FROM ( "
+                + "      with "
+                + "      get_data as "
+                + "      ( "
+                + "        SELECT n.ndn_codigo, n.nun_inicio, floor(n.nun_inicio/1000) bloque, n.sk_empresa_code, n.sk_region_code, n.esn_codigo, "
+                + "               ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) - ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.sk_empresa_code, n.sk_region_code, n.esn_codigo, n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) grp "
+                + "        from nu_numeracion n "
+                + "        where 1=1 ");
 
         if(!operador.equals("-1")) {
             searchQuery.append("AND n.SK_EMPRESA_CODE = ?1 ");
@@ -287,7 +320,22 @@ public class NuNumeracionDAO {
             searchQuery.append("AND n.SK_REGION_CODE in (SELECT m.CODIGO_MUNICIPIO FROM SA.MUNICIPIOS m WHERE m.CODIGO_DEPARTAMENTO = ?8) ");
         }
         
-        searchQuery.append(" ) a");
+        searchQuery.append("), "
+                    + "      sql_data as "
+                    + "      ( "
+                    + "      select a.bloque,a.ndn_codigo,a.nun_inicio, "
+                    + "             min(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) min_inicio, "
+                    + "             max(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) max_inicio "
+                    + "      from get_data a "
+                    + "      ) "
+                    + "      select distinct "
+                    + "             bloque, "
+                    + "             ndn_codigo ndc, "
+                    + "             min_inicio, "
+                    + "             max_inicio "
+                    + "      from sql_data "
+                    + "      order by ndn_codigo,min_inicio "
+                    + "    ) a ");
         
         Query query = em.createNativeQuery(searchQuery.toString());
 
