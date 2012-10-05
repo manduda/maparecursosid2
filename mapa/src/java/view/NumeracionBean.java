@@ -76,6 +76,9 @@ public class NumeracionBean implements Serializable {
     private NuNumeracionVO[] selectedNumsDetalle;
     private List<TnTramiteNumeracionVO> tramiteNumeracion = null;
     
+    private List<NuNumeracionVO> nume = new ArrayList<NuNumeracionVO>();
+    private ArrayList numer = new ArrayList();
+    
     public NumeracionBean() {
         facade fachada = new facade();
        
@@ -90,7 +93,7 @@ public class NumeracionBean implements Serializable {
         
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", true, "");
+            listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", false, "");
             listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(ndcVO.getNdtNombre()), null, "getNtnCodigo", "getNttNombre", true, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
@@ -129,6 +132,28 @@ public class NumeracionBean implements Serializable {
         NumInicio = "";
         NumFin = "";
         
+        
+        String columna1 = "";
+        facade fachada2 = new facade();
+        List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
+        List<NuNumeracionVO> numBloque = new ArrayList<NuNumeracionVO>();
+        
+        numeracion = fachada2.cargarNumeracionBloque("1", 8300000, 8499999);
+        int x = 0;
+        for(int i = 0; i < numeracion.size()/(10*10); i++){
+            numer.add(new ArrayList());
+            columna1 = Integer.toString(numeracion.get(x).getNunInicio()).substring(0, 3);
+            ((ArrayList)numer.get(i)).add(columna1);
+            for(int y = 0; y < 10; y++){
+                for(int j = 0; j < 10; j++){
+                    numBloque.add(numeracion.get(x));
+                    x = x + 1;             
+                }         
+                ((ArrayList)numer.get(i)).add(agruparNumeracion(numBloque));
+                numBloque = new ArrayList<NuNumeracionVO>();
+            }
+        }         
+        //nume = agruparNumeracion(numeracion); 
         
     }
 
@@ -193,7 +218,7 @@ public class NumeracionBean implements Serializable {
         return null;
     }
     
-    public List<NuNumeracionVO> agruparNumeracion(List<NuNumeracionVO> numeracion){
+    private List<NuNumeracionVO> agruparNumeracion(List<NuNumeracionVO> numeracion){
         List<NuNumeracionVO> numeros = new ArrayList<NuNumeracionVO>();
         
         NuNumeracionVO numera = new NuNumeracionVO();
@@ -639,5 +664,21 @@ public class NumeracionBean implements Serializable {
     public void setTramiteNumeracion(List<TnTramiteNumeracionVO> tramiteNumeracion) {
         this.tramiteNumeracion = tramiteNumeracion;
     }
-    
+
+    public List<NuNumeracionVO> getNume() {
+        return nume;
+    }
+
+    public void setNume(List<NuNumeracionVO> nume) {
+        this.nume = nume;
+    }
+
+    public ArrayList getNumer() {
+        return numer;
+    }
+
+    public void setNumer(ArrayList numer) {
+        this.numer = numer;
+    }
+   
 }

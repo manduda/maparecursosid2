@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
+
+    <ui:define name="titulo">
+        <h:outputText value="Numeración"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGrid style="width:100%" >             
+            <h:form>                 
+                <h:dataTable value="#{NumeracionBean.numer}" var="nu" style="font-size:8px;width:100%" cellpadding="0" cellspacing="0" styleClass="innertable">                     
+                    <h:column > 
+                        <f:facet name="header"><h:outputText value="File" style="color:red;"/></f:facet>
+                        <h:outputText value="#{nu[0]}"/>                     
+                    </h:column>                     
+                    <h:column>
+                        <f:facet name="header">0</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" columns="2" styleClass="innertable2" style="width:100%;height:20px">
+                            <h:outputText value="#{nu[1][0].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][0].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][0].nunFin - nu[1][0].nunInicio + 1}" rendered="#{nu[1][0].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][1].nunFin - nu[1][1].nunInicio + 1}" rendered="#{nu[1][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][2].nunFin - nu[1][2].nunInicio + 1}" rendered="#{nu[1][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][3].nunFin - nu[1][3].nunInicio + 1}" rendered="#{nu[1][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][4].nunFin - nu[1][4].nunInicio + 1}" rendered="#{nu[1][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][5].nunFin - nu[1][5].nunInicio + 1}" rendered="#{nu[1][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][6].nunFin - nu[1][6].nunInicio + 1}" rendered="#{nu[1][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][7].nunFin - nu[1][7].nunInicio + 1}" rendered="#{nu[1][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][8].nunFin - nu[1][8].nunInicio + 1}" rendered="#{nu[1][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[1][9].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[1][9].nunFin - nu[1][9].nunInicio + 1}" rendered="#{nu[1][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                        
+                        
+                    </h:column>
+                    <h:column >
+                        <f:facet name="header">1</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[2][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[2][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[2][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[2][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column >
+                        <f:facet name="header">2</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[3][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[3][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[3][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[3][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column >
+                        <f:facet name="header">3</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[4][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[4][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[4][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[4][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">4</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[5][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[5][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[5][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[5][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">5</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[6][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[6][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[6][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[6][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">6</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[7][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[7][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[7][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[7][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">7</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[8][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[8][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[8][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[8][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">8</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[9][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[9][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[9][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[9][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">9</f:facet>
+                        <h:panelGrid cellpadding="0" cellspacing="0" styleClass="innertable2">
+                            <h:outputText value="#{nu[10][0].codigoMunicipio.nombreMunicipio}"/>
+                            <h:outputText value="#{nu[10][1].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][1].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][2].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][2].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][3].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][3].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][4].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][4].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][5].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][5].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][6].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][6].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][7].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][7].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][8].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][8].codigoMunicipio.nombreMunicipio != null}"/>
+                            <h:outputText value="#{nu[10][9].codigoMunicipio.nombreMunicipio}" rendered="#{nu[10][9].codigoMunicipio.nombreMunicipio != null}"/>
+                        </h:panelGrid>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

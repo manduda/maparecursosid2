@@ -90,7 +90,7 @@
 
                             <h:panelGroup rendered="#{(UserBean.enviarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ENVIAR TRAMITE -->
-                                <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{!TramiteBean.tramiteTieneDetalle}"/>  
+                                <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{!TramiteBean.tramiteTieneDetalle}" style="width: 120px"/>  
                                 <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
                                             showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
@@ -148,7 +148,7 @@
                             <h:panelGroup rendered="#{(UserBean.terminarTramite)and(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 4)}">
                                 <!-- TERMINAR TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Terminar trámite" onclick="dialogTerminar.show()"/>
+                                    <p:commandButton type="button" value="Terminar trámite" onclick="dialogTerminar.show()" style="width: 120px"/>
                                     <p:dialog header="Datos de terminación del trámite" widgetVar="dialogTerminar" resizable="false" modal="true" draggable="false"
                                         width="300" showEffect="fade" hideEffect="fade" position="center">
                                         <h:panelGrid width="100%" style="font-size: 10px;" >
@@ -199,7 +199,7 @@
                             <h:panelGroup rendered="#{(UserBean.cambiarUsuarioTramite)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- CAMBIAR USUARIO TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()" update="datosCambiarUsuario"/>
+                                    <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()" update="datosCambiarUsuario" style="width: 120px"/>
                                 </h:form>
                                 <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
                                             header="Cambiar usuario" widgetVar="confirmarCambiarUsuario">
@@ -234,7 +234,7 @@
                             <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ASIGNAR TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update="datosAsignarUsuario"/>
+                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update="datosAsignarUsuario" style="width: 120px"/>
                                 </h:form>
                                 <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
                                             header="Asignar asesor" widgetVar="confirmarAsignarUsuario">

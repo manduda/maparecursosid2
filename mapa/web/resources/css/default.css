@@ -158,3 +158,24 @@ padding: 5px;
     background-color: FireBrick;
     color: #ffffff;
 }
+
+table.innertable td {
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    width: 9%;
+}
+table.innertable th {
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+}
+table.innertable {
+    border-top: 1px solid;
+    border-left: 1px solid;
+}
+table.innertable2 {
+    height: 100%;
+}
+table.innertable2 td {
+    border: 0;
+    border-right: 1px solid;
+}

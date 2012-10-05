@@ -21,24 +21,62 @@
                 <h:form id="formCodCorto">
                     <h:panelGrid>
                         <h:panelGrid columns="2">
+                            
                             <h:outputText value="Proveedor"/>
-                            <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
-                                <f:selectItems value="#{CodigosCortosBean.listaOperador}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
+                                    <f:selectItems value="#{CodigosCortosBean.listaOperador}" /> 
+                                     <p:ajax update="listaOperador"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.operadorVO.emrCodigo != -1}" update="listaOperador">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.operadorVO.emrCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Estado"/>
-                            <h:selectOneMenu value="#{CodigosCortosBean.estadoVO.esnCodigo}">
-                                <f:selectItems value="#{CodigosCortosBean.listaEstado}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{CodigosCortosBean.estadoVO.esnCodigo}">
+                                    <f:selectItems value="#{CodigosCortosBean.listaEstado}" />  
+                                    <p:ajax update="listaEstado"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.estadoVO.esnCodigo != -1}" update="listaEstado">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Modalidad"/>
-                            <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
-                                <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaModalidad" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
+                                    <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
+                                    <p:ajax update="listaModalidad"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.modalidadVO.mdnCodigo != -1}" update="listaModalidad">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.modalidadVO.mdnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Código Corto"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="codigoCorto" value="#{CodigosCortosBean.codigoCorto}" maxlength="6" size="6" converter="javax.faces.Integer"
                                              converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                                 <p:message for="codigoCorto" />
                             </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="formCodCorto">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.modalidadVO.mdnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{CodigosCortosBean.codigoCorto}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                         </h:panelGrid>
                         <h:panelGrid>
                             <p:commandButton value="Consultar" actionListener="#{CodigosCortosBean.buscar}" ajax="true" update="pgCodigosCortos,formCodCorto">
