@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
@@ -37,7 +37,7 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update="pgMarcacionAbreviada,formMarcacionAbreviada">
+                            <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update=":pgMarcacionAbreviada,formMarcacionAbreviada">
                                 <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selectedsAccion}" value="false"/>
                             </p:commandButton>
                         </h:panelGrid>
@@ -46,21 +46,22 @@
             </p:panel>
 
             <h:panelGrid id="pgMarcacionAbreviada" width="100%">
-                <h:form>
+                <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" action="#{MarcacionAbreviadaBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!MarcacionAbreviadaBean.selectedsAccion}" rendered="#{UserBean.permisos.marcacionAbreviada}"/>
+                            <p:commandButton value="Acción" action="#{MarcacionAbreviadaBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!MarcacionAbreviadaBean.selectedsAccion}" rendered="#{UserBean.permisos.marcacionAbreviada}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{MarcacionAbreviadaBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
                                  selectionMode="#{(UserBean.login == true and UserBean.permisos.marcacionAbreviada == true) ? 'multiple' : null}"
-                                 selection="#{MarcacionAbreviadaBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                                 rowSelectListener="#{MarcacionAbreviadaBean.onRowSelect}" rowUnselectListener="#{MarcacionAbreviadaBean.onRowUnselect}"
+                                 selection="#{MarcacionAbreviadaBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{recurso.manCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{MarcacionAbreviadaBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                        <p:ajax event="rowSelect" listener="#{MarcacionAbreviadaBean.onRowSelect}" update=":frmDatos:opciones" />
+                        <p:ajax event="rowUnselect" listener="#{MarcacionAbreviadaBean.onRowUnselect}" update=":frmDatos:opciones" />
+                        
                         <p:column style="width:25px">
-                            <p:commandButton update="display,datosRecurso" oncomplete="Dialog.show();" image="ui-icon ui-icon-search" action="#{MarcacionAbreviadaBean.detalle}">  
+                            <p:commandButton update=":display,:datosRecurso" oncomplete="Dialog.show();" icon="ui-icon ui-icon-search" action="#{MarcacionAbreviadaBean.detalle}">  
                                 <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selected}" value="#{recurso}"/>  
                             </p:commandButton>
                         </p:column>
@@ -156,15 +157,15 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (MarcacionAbreviadaBean.selectedsLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.marcacionAbreviada and MarcacionAbreviadaBean.selectedsPreasignar)}" update="datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.marcacionAbreviada and MarcacionAbreviadaBean.selectedsPreasignar)}" update=":datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.marcacionAbreviada and MarcacionAbreviadaBean.selectedsRecuperar)}" update="datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
-                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and MarcacionAbreviadaBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgMarcacionAbreviada" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.marcacionAbreviada and MarcacionAbreviadaBean.selectedsRecuperar)}" update=":datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and MarcacionAbreviadaBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgMarcacionAbreviada" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and MarcacionAbreviadaBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgMarcacionAbreviada" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and MarcacionAbreviadaBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgMarcacionAbreviada" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
                                     </p:commandButton>

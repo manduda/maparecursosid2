@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="DETALLE TRÁMITE"/>
@@ -46,7 +46,7 @@
                         <h:panelGroup id="pgOperadorTramite" rendered="#{(UserBean.cambiarOperadorTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}">
                             <h:panelGroup rendered="#{(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)and(!TramiteBean.tramiteTieneDetalle)}">
                                 <h:form>
-                                    <p:commandLink onclick="cambiarOperadorDialog.show();" value="Cambiar operador" update="datosCambiarOperador"/>
+                                    <p:commandLink onclick="cambiarOperadorDialog.show();" value="Cambiar operador" update=":datosCambiarOperador"/>
                                 </h:form>
                                 <p:dialog header="Cambiar operador" widgetVar="cambiarOperadorDialog" resizable="false" modal="true" draggable="false"
                                           width="600" showEffect="fade" hideEffect="fade" position="center">
@@ -60,7 +60,7 @@
                                             </h:panelGrid>
                                             <br/>
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.cambiarOperadorTramite}" ajax="true" update="datosResultadoCambiarOperador,pgDatosTramite,pgMenuTramite,pgHistoriaTramite" oncomplete="cambiarOperadorDialog.hide();resultadoCambiarOperadorDialog.show();"/>
+                                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.cambiarOperadorTramite}" ajax="true" update=":datosResultadoCambiarOperador,:pgDatosTramite,:pgMenuTramite,:pgHistoriaTramite" oncomplete="cambiarOperadorDialog.hide();resultadoCambiarOperadorDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="cambiarOperadorDialog.hide();" />
                                             </h:panelGrid>
                                         </h:form>
@@ -91,8 +91,7 @@
                             <h:panelGroup rendered="#{(UserBean.enviarTramite)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ENVIAR TRAMITE -->
                                 <p:commandButton id="cmdEnviarTramite" type="button" value="Enviar trámite" onclick="confirmarEnviar.show()" disabled="#{!TramiteBean.tramiteTieneDetalle}" style="width: 120px"/>  
-                                <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?"  
-                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                                <p:confirmDialog message="Deseas enviar el trámite para revisión del Coordinador?" 
                                             header="Confirmación" severity="alert" widgetVar="confirmarEnviar">  
                                     <h:form>
                                         <h:panelGrid style="text-align: center;" width="100%">
@@ -111,7 +110,6 @@
                                 <!-- APROBAR TRAMITE -->
                                 <p:commandButton type="button" value="Aprobar" onclick="confirmarAprobar.show()"/>
                                 <p:confirmDialog message="Deseas aprobar el trámite?"  
-                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarAprobar">  
                                     <h:form>
                                         <h:panelGrid style="text-align: center;" width="100%">
@@ -130,7 +128,6 @@
                                 <!-- DEVOLVER TRAMITE -->
                                 <p:commandButton type="button" value="Devolver" onclick="confirmarDevolver.show()"/>
                                 <p:confirmDialog message="Deseas devolver el trámite al Asesor?"  
-                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarDevolver">  
                                     <h:form>
                                         <h:panelGrid style="text-align: center;" width="100%">
@@ -181,7 +178,6 @@
                                 <!-- ARCHIVAR TRAMITE -->
                                 <p:commandButton type="button" value="Archivar" onclick="confirmarArchivar.show()"/>
                                 <p:confirmDialog message="Deseas archivar el trámite?"  
-                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarArchivar">  
                                     <h:form>
                                         <h:panelGrid style="text-align: center;" width="100%">
@@ -199,7 +195,7 @@
                             <h:panelGroup rendered="#{(UserBean.cambiarUsuarioTramite)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 2)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- CAMBIAR USUARIO TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()" update="datosCambiarUsuario" style="width: 120px"/>
+                                    <p:commandButton type="button" value="Cambiar usuario" onclick="confirmarCambiarUsuario.show()" update=":datosCambiarUsuario" style="width: 120px"/>
                                 </h:form>
                                 <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
                                             header="Cambiar usuario" widgetVar="confirmarCambiarUsuario">
@@ -214,7 +210,7 @@
                                             <br/>
                                             
                                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                                <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update="datosResultadoCambiarUsuario,pgDatosTramite,pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
+                                                <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarUsuarioTramite}" ajax="true" update=":datosResultadoCambiarUsuario,:pgDatosTramite,:pgMenuTramite" oncomplete="confirmarCambiarUsuario.hide();resultadoCambiarUsuarioDialog.show();"/>
                                                 <p:commandButton type="button" value="Cancelar" onclick="confirmarCambiarUsuario.hide()" />
                                             </h:panelGrid>
                                         </h:form>
@@ -234,7 +230,7 @@
                             <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ASIGNAR TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update="datosAsignarUsuario" style="width: 120px"/>
+                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update=":datosAsignarUsuario" style="width: 120px"/>
                                 </h:form>
                                 <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
                                             header="Asignar asesor" widgetVar="confirmarAsignarUsuario">
@@ -260,7 +256,6 @@
                                 <!-- SOLICITAR REASIGNAR TRAMITE -->
                                 <p:commandButton type="button" value="Reasignar" onclick="confirmarReasignar.show()"/>
                                 <p:confirmDialog message="Deseas enviar el trámite al Asignador para reasignar?"  
-                                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
                                             header="Confirmación" severity="alert" widgetVar="confirmarReasignar">  
                                     <h:form>
                                         <h:panelGrid style="text-align: center;" width="100%">

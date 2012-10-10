@@ -24,5 +24,15 @@
         <function-class>utils.Functions</function-class>
         <function-signature>java.lang.Integer longitud(java.lang.String)</function-signature>
     </function>
+    <function>
+        <function-name>toColorCode</function-name>
+        <function-class>utils.Functions</function-class>
+        <function-signature>java.lang.String toColorCode(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <function-name>toColorCodeFont</function-name>
+        <function-class>utils.Functions</function-class>
+        <function-signature>java.lang.String toColorCodeFont(java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>
 

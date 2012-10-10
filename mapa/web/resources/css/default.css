@@ -16,18 +16,6 @@ h1 {
     color: #D20005;
 }
 
-a:link, a:visited {
-  color: #045491;
-  font-weight : bold;
-  text-decoration: none;
-}
-
-a:link:hover, a:visited:hover  {
-  color: #045491;
-  font-weight : bold;
-  text-decoration : underline;
-}
-
 .order-table{   
 	border-collapse:collapse;
 }
@@ -128,6 +116,13 @@ padding: 5px;
     width: auto !important;
 }
 
+.estilo.ui-datatable th div.ui-dt-c,
+.estilo.ui-datatable .ui-datatable-data td div.ui-dt-c,
+.estilo.ui-datatable .ui-datatable-data-empty td div.ui-dt-c
+.estilo.ui-datatable tfoot td div.ui-dt-c {
+    padding: 0px;
+}
+
 .modalidad-1 {
     background-color: #00FF00;
     color: #000000
@@ -159,23 +154,11 @@ padding: 5px;
     color: #ffffff;
 }
 
-table.innertable td {
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-    width: 9%;
+.tooltip{
+    background: #CFCFCF;
+    color: #000000;
 }
-table.innertable th {
-    border-bottom: 1px solid;
-    border-right: 1px solid;
-}
-table.innertable {
-    border-top: 1px solid;
-    border-left: 1px solid;
-}
-table.innertable2 {
-    height: 100%;
-}
-table.innertable2 td {
-    border: 0;
-    border-right: 1px solid;
+
+.columna-matriz {
+    background: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0% 0% rgb(196, 196, 196);
 }

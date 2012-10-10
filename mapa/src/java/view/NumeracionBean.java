@@ -10,6 +10,7 @@ import helper.ConvertirListasHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +30,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -77,7 +79,8 @@ public class NumeracionBean implements Serializable {
     private List<TnTramiteNumeracionVO> tramiteNumeracion = null;
     
     private List<NuNumeracionVO> nume = new ArrayList<NuNumeracionVO>();
-    private ArrayList numer = new ArrayList();
+    private List numer = new ArrayList();
+    private Boolean matrizVisible = false;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -105,12 +108,8 @@ public class NumeracionBean implements Serializable {
           
         lazyModel = new LazyDataModel<NuNumeracionVO>() {  
   
-            /** 
-             * Dummy implementation of loading a certain segment of data. 
-             * In a real application, this method should load data from a datasource 
-             */  
             @Override
-            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -132,29 +131,66 @@ public class NumeracionBean implements Serializable {
         NumInicio = "";
         NumFin = "";
         
+        matriz();
         
+        //nume = agruparNumeracion(numeracion); 
+        
+    }
+    
+    public String verMatriz() {
+        Boolean i = matrizVisible;
+        if (!i) {
+            matrizVisible=true;
+            matriz();
+        } else {
+            matrizVisible=false;
+        }
+        return null;
+    }
+    
+    public final String matriz() {
         String columna1 = "";
-        facade fachada2 = new facade();
+        facade fachada = new facade();
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         List<NuNumeracionVO> numBloque = new ArrayList<NuNumeracionVO>();
         
-        numeracion = fachada2.cargarNumeracionBloque("1", 8300000, 8499999);
-        int x = 0;
-        for(int i = 0; i < numeracion.size()/(10*10); i++){
-            numer.add(new ArrayList());
-            columna1 = Integer.toString(numeracion.get(x).getNunInicio()).substring(0, 3);
-            ((ArrayList)numer.get(i)).add(columna1);
-            for(int y = 0; y < 10; y++){
-                for(int j = 0; j < 10; j++){
-                    numBloque.add(numeracion.get(x));
-                    x = x + 1;             
-                }         
-                ((ArrayList)numer.get(i)).add(agruparNumeracion(numBloque));
-                numBloque = new ArrayList<NuNumeracionVO>();
-            }
-        }         
-        //nume = agruparNumeracion(numeracion); 
+        numeracion = fachada.cargarNumeracionAgrupada("1", 8000000, 8999999);
+        //int x = 0;
+        int i = 0;
         
+        while (i < numeracion.size()){
+            List array = new ArrayList();
+            //numer.add(new ArrayList());
+            columna1 = Integer.toString(numeracion.get(i).getNunInicio()).substring(0, 3);
+            //((ArrayList)numer.get(x)).add(columna1);
+            array.add(columna1);
+            for(int y = 0; y < 10; y++){
+                numBloque.add(numeracion.get(i));
+                int bloque = numeracion.get(i).getNunInicio()/1000;
+                i++;
+                if (i >= numeracion.size()){
+                    break;
+                }
+                int bloqueF = numeracion.get(i).getNunInicio()/1000;
+                while (bloque == bloqueF){
+                    numBloque.add(numeracion.get(i));
+                    i++;
+                    if (i >= numeracion.size()){
+                        break;
+                    }
+                    bloqueF = numeracion.get(i).getNunInicio()/1000;
+                }
+                //((ArrayList)numer.get(x)).add(numBloque);
+                array.add(numBloque);
+                numBloque = new ArrayList<NuNumeracionVO>();
+                
+            }
+            numer.add(array);
+            //x++;
+        }
+        
+        
+        return null;
     }
 
     public LazyDataModel<NuNumeracionVO> getLazyModel() {  
@@ -188,7 +224,7 @@ public class NumeracionBean implements Serializable {
              * In a real application, this method should load data from a datasource 
              */  
             @Override
-            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<NuNumeracionVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -312,7 +348,7 @@ public class NumeracionBean implements Serializable {
         detalleSelectedNum = fachada.cargarNumeracionBloque(selectedNum.getNdnCodigo().getNdtNombre(),selectedNum.getNunInicio(), selectedNum.getNunFin());
     }
     
-    public void onRowSelect(SelectEvent event) {
+    public void onRowSelect() {
         if (selectedNums == null){
             selectedNumsAccion = false;
         } else if (selectedNums.length > 0) {
@@ -322,7 +358,7 @@ public class NumeracionBean implements Serializable {
         }
     }
     
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowUnselect() {
         if (selectedNums == null){
             selectedNumsAccion = false;
         } else if (selectedNums.length > 0) {
@@ -673,12 +709,22 @@ public class NumeracionBean implements Serializable {
         this.nume = nume;
     }
 
-    public ArrayList getNumer() {
+    public List getNumer() {
         return numer;
     }
 
-    public void setNumer(ArrayList numer) {
+    public void setNumer(List numer) {
         this.numer = numer;
     }
+
+    public Boolean getMatrizVisible() {
+        return matrizVisible;
+    }
+
+    public void setMatrizVisible(Boolean matrizVisible) {
+        this.matrizVisible = matrizVisible;
+    }
+
+    
    
 }

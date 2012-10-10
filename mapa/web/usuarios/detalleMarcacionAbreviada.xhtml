@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
@@ -69,7 +69,7 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteMarcacionAbreviadaVO.tatObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar,pgMenuTramite,pgMarcacionAbreviada" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update=":datosResultadoAgregar,:pgMenuTramite,:pgMarcacionAbreviada" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="5"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
                                 <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selectedsAccion}" value="false"/>
@@ -111,7 +111,7 @@
                             <h:inputTextarea value="#{TramiteBean.tramiteMarcacionAbreviadaVO.tatObservaciones}" rows="5" cols="80"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update="datosResultadoAgregar,pgMenuTramite,pgMarcacionAbreviada" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.agregarRecurso}" update=":datosResultadoAgregar,:pgMenuTramite,:pgMarcacionAbreviada" oncomplete="cerrarDialogos(xhr, status, args);resultadoAgregarDialog.show();">
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="2"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="marcacionAbreviada"/>
                                 <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.selectedsAccion}" value="false"/>

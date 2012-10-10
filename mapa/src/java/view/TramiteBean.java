@@ -839,7 +839,7 @@ public class TramiteBean implements Serializable {
         return configuracion.getRutaContexto()+"usuarios/mostrarTramites";
     }
         
-    public void onRowSelectUnir(SelectEvent event) {
+    public void onRowSelectUnir() {
         if (selectedUnirTramites == null){
             selectedUnir = false;
         } else if (selectedUnirTramites.length > 1) {
@@ -849,7 +849,7 @@ public class TramiteBean implements Serializable {
         }
     }
     
-    public void onRowUnselectUnir(UnselectEvent event) {
+    public void onRowUnselectUnir() {
         if (selectedUnirTramites == null){
             selectedUnir = false;
         } else if (selectedUnirTramites.length > 1) {

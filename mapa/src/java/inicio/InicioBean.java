@@ -18,7 +18,7 @@ import javax.faces.event.ActionEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.IdleEvent;
+//import org.primefaces.event.IdleEvent;
 import vo.UsUsuariosVO;
 
 /**
@@ -257,7 +257,7 @@ public class InicioBean {
         return configuracion.getRutaContexto()+"resultadoLogin";
     }
     
-    public void idleListener(IdleEvent event) throws IOException {  
+    /*public void idleListener(IdleEvent event) throws IOException {  
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(false);
 
@@ -268,7 +268,7 @@ public class InicioBean {
         String path = servletContext.getContextPath()+configuracion.getRutaContexto();
         facesContext.getExternalContext().redirect(path+"resultadoLogin.xhtml");
         Mensaje = "<br>Sesión cerrada automáticamente por inactividad<br><br>";
-    }  
+    }*/  
     
     public String getMensaje() {
         return Mensaje;

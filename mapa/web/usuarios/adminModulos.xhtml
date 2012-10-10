@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="Administrar modulos"/>
@@ -22,11 +22,12 @@
         <h:panelGroup rendered="#{UserBean.administrarModulos}">
             <h:form id="listaModulos">
                 <h:panelGroup id="pgModulos">
-                    <p:dataTable id="datos" value="#{AdministracionAplicacionBean.modulos}" var="m"
+                    <p:dataTable id="datos" value="#{AdministracionAplicacionBean.modulos}" var="m" rowKey="#{m.cmnCodigo}"
                                  selectionMode="single" selection="#{AdministracionAplicacionBean.selectedModulo}"
-                                 onRowSelectUpdate="datosAdministrar" onRowUnselectUpdate="datosAdministrar"
-                                 onRowSelectComplete="administrarDialog.show();"
                                  style="font-size:10px" rows="10" emptyMessage="No se encontraron modulos" >
+                        <p:ajax event="rowSelect" update=":datosAdministrar" oncomplete="administrarDialog.show();"/>
+                        <p:ajax event="rowUnselect" update=":datosAdministrar" />
+                        
                         <f:facet name="header">Lista de módulos de la aplicación</f:facet>
                         <p:column headerText="CÓDIGO MÓDULO" style="width:20px; text-align: center;">
                             <h:outputText value="#{m.cmnCodigo}"/>
@@ -53,11 +54,11 @@
                             <br/>
                         
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                <h:form>
-                                <p:commandButton value="Activar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'N'}" update="datosResultado,listaModulos,menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                <h:form id="frmDatos">
+                                <p:commandButton value="Activar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'N'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
                                     <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="S"/>
                                 </p:commandButton>
-                                <p:commandButton value="Desactivar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'S'}" update="datosResultado,listaModulos,menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                <p:commandButton value="Desactivar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'S'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
                                     <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="N"/>
                                 </p:commandButton>
                                 <p:commandButton type="button" value="Cancelar" onclick="administrarDialog.hide();"/>

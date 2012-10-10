@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
@@ -41,7 +41,7 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" actionListener="#{Codigos1xyBean.buscar}" ajax="true" update="pgCodigos1xy,formCodigos1xy">
+                            <p:commandButton value="Consultar" actionListener="#{Codigos1xyBean.buscar}" ajax="true" update=":pgCodigos1xy,formCodigos1xy">
                                 <f:setPropertyActionListener target="#{Codigos1xyBean.selectedsAccion}" value="false"/>
                             </p:commandButton>
                         </h:panelGrid>
@@ -50,22 +50,23 @@
             </p:panel>
 
             <h:panelGrid id="pgCodigos1xy" width="100%">
-                <h:form>
+                <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update="datosAccionRecurso,display" oncomplete="AccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}" rendered="#{UserBean.permisos.codigos1xy}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update=":datosAccionRecurso" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}" rendered="#{UserBean.permisos.codigos1xy}"/>
                         </h:panelGroup>
                     </h:panelGrid>
 
                     <p:dataTable id="datos" value="#{Codigos1xyBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
                                  selectionMode="single"
-                                 selection="#{Codigos1xyBean.selected}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                                 rowSelectListener="#{Codigos1xyBean.onRowSelect}" rowUnselectListener="#{Codigos1xyBean.onRowUnselect}"
+                                 selection="#{Codigos1xyBean.selected}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{recurso.ncnCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{Codigos1xyBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                        <p:ajax event="rowSelect" listener="#{Codigos1xyBean.onRowSelect}" update=":frmDatos:opciones" />
+                        <p:ajax event="rowUnselect" listener="#{Codigos1xyBean.onRowUnselect}" update=":frmDatos:opciones" />
+                        
                         <p:column style="width:25px">
-                            <p:commandButton update="display,datosRecurso" oncomplete="Dialog.show();" image="ui-icon ui-icon-search">  
+                            <p:commandButton update=":datosRecurso" oncomplete="Dialog.show();" icon="ui-icon ui-icon-search">  
                                 <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{recurso}"/>  
                             </p:commandButton>
                         </p:column>
@@ -147,7 +148,7 @@
 
                                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                     <h:panelGroup rendered="#{UserBean.login}">
-                                        <p:commandButton value="Editar" action="#{Codigos1xyBean.editarCodigo1xy}" rendered="#{(UserBean.permisos.codigos1xy and Codigos1xyBean.selectedEditar)}" update="datosResultado,pgCodigos1xy,formCodigos1xy" oncomplete="cerrarDialogos(xhr, status, args);resultadoDialog.show();"/>
+                                        <p:commandButton value="Editar" action="#{Codigos1xyBean.editarCodigo1xy}" rendered="#{(UserBean.permisos.codigos1xy and Codigos1xyBean.selectedEditar)}" update=":datosResultado,:pgCodigos1xy,:formCodigos1xy" oncomplete="cerrarDialogos(xhr, status, args);resultadoDialog.show();"/>
                                     </h:panelGroup>
                                 </h:panelGrid>
                             </h:form>
@@ -180,7 +181,7 @@
 
             <h:panelGrid style="text-align: left;font-size:10px">
                 <h:form>
-                    <p:commandButton value="Ver martiz" ajax="true" actionListener="#{Codigos1xyBean.matriz1xy}" update="datosMatriz" oncomplete="Matriz.show();"/>
+                    <p:commandButton value="Ver martiz" ajax="true" actionListener="#{Codigos1xyBean.matriz1xy}" update=":datosMatriz" oncomplete="Matriz.show();"/>
                 </h:form>
             </h:panelGrid>
 
@@ -205,7 +206,7 @@
                                                                                        matriz[1].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[1].nctServicio == null ? matriz[1].esnCodigo.estNombre : matriz[1].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[1]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -216,7 +217,7 @@
                                                                                        matriz[2].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[2].nctServicio == null ? matriz[2].esnCodigo.estNombre : matriz[2].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[2]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -227,7 +228,7 @@
                                                                                        matriz[3].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[3].nctServicio == null ? matriz[3].esnCodigo.estNombre : matriz[3].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[3]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -238,7 +239,7 @@
                                                                                        matriz[4].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[4].nctServicio == null ? matriz[4].esnCodigo.estNombre : matriz[4].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[4]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -249,7 +250,7 @@
                                                                                        matriz[5].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[5].nctServicio == null ? matriz[5].esnCodigo.estNombre : matriz[5].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[5]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -260,7 +261,7 @@
                                                                                        matriz[6].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[6].nctServicio == null ? matriz[6].esnCodigo.estNombre : matriz[6].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[6]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -271,7 +272,7 @@
                                                                                        matriz[7].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[7].nctServicio == null ? matriz[7].esnCodigo.estNombre : matriz[7].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[7]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -282,7 +283,7 @@
                                                                                        matriz[8].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[8].nctServicio == null ? matriz[8].esnCodigo.estNombre : matriz[8].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[8]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -293,7 +294,7 @@
                                                                                        matriz[9].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[9].nctServicio == null ? matriz[9].esnCodigo.estNombre : matriz[9].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[9]}"/>  
                                     </p:commandLink>
                                 </p:column>
@@ -304,7 +305,7 @@
                                                                                        matriz[10].monCodigo.monCodigo == '5' ? 'modalidad-reserva' :
                                                                                        null}">
                                     <p:commandLink value="#{matriz[10].nctServicio == null ? matriz[10].esnCodigo.estNombre : matriz[10].nctServicio}" 
-                                                   update="display,datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
+                                                   update=":datosRecurso" oncomplete="Dialog.show();" style="text-decoration:none; color: #000000">
                                         <f:setPropertyActionListener target="#{Codigos1xyBean.selected}" value="#{matriz[10]}"/>  
                                     </p:commandLink>
                                 </p:column>

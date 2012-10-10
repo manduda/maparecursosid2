@@ -3,16 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <ui:composition>
         <h:form id="menubar">
-            <p:menubar autoSubmenuDisplay="true" styleClass="ui-widget-header">
-                <p:menuitem value="Inicio" url="#{ConfiguracionBean.rutaInicio}"/>
+            <p:menubar autoDisplay="true" styleClass="ui-widget-header" style="float: inherit">
+                <p:menuitem value="Inicio" url="#{ConfiguracionBean.rutaInicio}" icon="ui-icon ui-icon-home"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloNumeracion}" value="Numeración" url="#{ConfiguracionBean.rutaMapaNumeracion}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloSenalizacion}" value="Señalización" url="#{ConfiguracionBean.rutaMapaSenalizacion}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosLd}" value="Códigos LD" url="#{ConfiguracionBean.rutaCodigosLd}" icon="ui-icon ui-icon-carat-1-e"/>
-                <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosCortos}" value="Códigos Cortos SMS/MMS" url="#{ConfiguracionBean.rutaCodigosCortos}" icon="ui-icon ui-icon-carat-1-e"/>
+                <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosCortos}" value="Códigos SMS/MMS" url="#{ConfiguracionBean.rutaCodigosCortos}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigos1xy}" value="Códigos 1XY" url="#{ConfiguracionBean.rutaCodigos1xy}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosIin}" value="Códigos IIN" url="#{ConfiguracionBean.rutaCodigosIIN}" icon="ui-icon ui-icon-carat-1-e"/>
                 <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosMnc}" value="Códigos MNC" url="#{ConfiguracionBean.rutaCodigosMnc}" icon="ui-icon ui-icon-carat-1-e"/>
@@ -27,7 +27,7 @@
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosIin}" value="IIN" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosIIN.xhtml"/>
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosMnc}" value="MNC" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosMNC.xhtml"/>
                     <p:menuitem rendered="#{ConfiguracionModulosBean.moduloMarcacionAbreviada}" value="Marcación abreviada" url="#{ConfiguracionBean.rutaContexto}normatividad/marcacionAbreviada.xhtml"/>
-                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosNrn}" value="NRN" url="#{ConfiguracionBean.rutaContexto}/normatividad/codigosNrn.xhtml"/>
+                    <p:menuitem rendered="#{ConfiguracionModulosBean.moduloCodigosNrn}" value="NRN" url="#{ConfiguracionBean.rutaContexto}normatividad/codigosNrn.xhtml"/>
                 </p:submenu>
             </p:menubar>
         </h:form>

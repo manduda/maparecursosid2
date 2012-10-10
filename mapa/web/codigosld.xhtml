@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="Códigos de Larga Distancia"/>
@@ -36,7 +36,7 @@
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid>
-                            <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update="pgCodigosLd,formLd">
+                            <p:commandButton value="Consultar" action="#{CodigosLdBean.buscar}" ajax="true" update=":pgCodigosLd,formLd">
                                 <f:setPropertyActionListener target="#{CodigosLdBean.selectedLdsAccion}" value="false"/>
                             </p:commandButton>
                         </h:panelGrid>
@@ -45,21 +45,22 @@
             </p:panel>
 
             <h:panelGrid id="pgCodigosLd" width="100%">
-                <h:form>
+                <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosLdBean.detalleAccionLd}" update="datosAccionRecurso,display" oncomplete="ldAccionDialog.show();" image="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}" rendered="#{UserBean.permisos.codigosLd}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosLdBean.detalleAccionLd}" update=":datosAccionRecurso,:display" oncomplete="ldAccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!CodigosLdBean.selectedLdsAccion}" rendered="#{UserBean.permisos.codigosLd}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{CodigosLdBean.coLD}" var="ld" paginator="true" paginatorPosition="top"
                                  selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosLd == true) ? 'multiple' : null}"
-                                 selection="#{CodigosLdBean.selectedLds}" rowIndexVar="rowIndex" widgetVar="datatableVar"
-                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                                 rowSelectListener="#{CodigosLdBean.onRowSelect}" rowUnselectListener="#{CodigosLdBean.onRowUnselect}"
+                                 selection="#{CodigosLdBean.selectedLds}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{ld.clnCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{CodigosLdBean.countCoLD} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                        <p:ajax event="rowSelect" listener="#{CodigosLdBean.onRowSelect}" update=":frmDatos:opciones" />
+                        <p:ajax event="rowUnselect" listener="#{CodigosLdBean.onRowUnselect}" update=":frmDatos:opciones" />
+                        
                         <p:column style="width:25px">
-                            <p:commandButton update="display,datosRecurso" oncomplete="ldDialog.show();" image="ui-icon ui-icon-search" action="#{CodigosLdBean.detalleLd}">  
+                            <p:commandButton update=":display,:datosRecurso" oncomplete="ldDialog.show();" icon="ui-icon ui-icon-search" action="#{CodigosLdBean.detalleLd}">  
                                 <f:setPropertyActionListener target="#{CodigosLdBean.selectedLd}" value="#{ld}"/>  
                             </p:commandButton>
                         </p:column>
@@ -156,15 +157,15 @@
                             <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                 <h:panelGroup rendered="#{UserBean.login}">
                                     <h:outputText value="Los códigos LD en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (CodigosLdBean.selectedLdsLiberar)}" style="color: red;"/>
-                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsPreasignar)}" update="datosPreasignar" oncomplete="ldAccionDialog.hide();preasignarDialog.show();">
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsPreasignar)}" update=":datosPreasignar" oncomplete="ldAccionDialog.hide();preasignarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosCortos"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsRecuperar)}" update="datosRecuperar" oncomplete="ldAccionDialog.hide();recuperarDialog.show();"/>
-                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosLdBean.selectedLdsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosLd" oncomplete="ldAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosLd and CodigosLdBean.selectedLdsRecuperar)}" update=":datosRecuperar" oncomplete="ldAccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosLdBean.selectedLdsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgCodigosLd" oncomplete="ldAccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosLdBean.selectedLdsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update="datosResultadoAgregar,pgCodigosLd" oncomplete="ldAccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosLdBean.selectedLdsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgCodigosLd" oncomplete="ldAccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosld"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
                                     </p:commandButton>

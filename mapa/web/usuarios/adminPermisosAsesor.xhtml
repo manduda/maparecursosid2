@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="Administrar usuarios"/>
@@ -48,10 +48,10 @@
                             <h:outputText value=" #{p.pttNombre}" />
                         </p:column>
                         <p:column style="width:100px; text-align: center;">
-                            <p:commandButton value="Asignar" oncomplete="crearPermiso.show()" update="crearPermiso" rendered="#{p.estado == false}">
+                            <p:commandButton value="Asignar" oncomplete="crearPermiso.show()" update=":pgCrearPermiso" rendered="#{p.estado == false}">
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
                             </p:commandButton>
-                            <p:commandButton value="Eliminar" oncomplete="eliminarPermiso.show()" update="eliminarPermiso" rendered="#{p.estado == true}">
+                            <p:commandButton value="Eliminar" oncomplete="eliminarPermiso.show()" update=":pgEliminarPermiso" rendered="#{p.estado == true}">
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
                             </p:commandButton>
                         </p:column>
@@ -59,24 +59,24 @@
                 </h:form>
                 
                 <!-- CREAR PERMISO -->
-                <p:confirmDialog message="Asignar permiso?" showEffect="fade" hideEffect="fade" modal="true" 
+                <p:confirmDialog message="Asignar permiso?" 
                                  closable="false" header="Confirmación" severity="alert" 
                                  widgetVar="crearPermiso">  
-                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                    <h:panelGrid id="pgCrearPermiso" columns="2" width="100%" style="text-align: center;">
                         <h:form>
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.crearPermiso}" update="datosResultado,listaPermisos" oncomplete="crearPermiso.hide();abrirDialogo(xhr, status, args);"/>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.crearPermiso}" update=":datosResultado,:listaPermisos" oncomplete="crearPermiso.hide();abrirDialogo(xhr, status, args);"/>
                             <p:commandButton type="button" value="Cancelar" onclick="crearPermiso.hide();"/>
                         </h:form>
                     </h:panelGrid>
                 </p:confirmDialog>
                 
                 <!-- BORRAR PERMISO -->
-                <p:confirmDialog message="Eliminar permiso?" showEffect="fade" hideEffect="fade" modal="true" 
+                <p:confirmDialog message="Eliminar permiso?"  
                                  closable="false" header="Confirmación" severity="alert" 
                                  widgetVar="eliminarPermiso">  
-                    <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                    <h:panelGrid id="pgEliminarPermiso" columns="2" width="100%" style="text-align: center;">
                         <h:form>
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.borrarPermiso}" update="datosResultado,listaPermisos" oncomplete="eliminarPermiso.hide();abrirDialogo(xhr, status, args);"/>
+                            <p:commandButton value="Aceptar" action="#{TramiteBean.borrarPermiso}" update=":datosResultado,:listaPermisos" oncomplete="eliminarPermiso.hide();abrirDialogo(xhr, status, args);"/>
                             <p:commandButton type="button" value="Cancelar" onclick="eliminarPermiso.hide();"/>
                         </h:form>
                     </h:panelGrid>

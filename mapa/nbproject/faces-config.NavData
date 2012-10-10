@@ -6,8 +6,8 @@
         <Node id="normatividad/nrn.xhtml" x="900" y="900" zoom="true"/>
         <Node id="usuarios/listaTramites.xhtml" x="650" y="900" zoom="true"/>
         <Node id="resources/Plantillas/header.xhtml" x="400" y="450" zoom="true"/>
-        <Node id="usuarios/detalleCodigosNrn.xhtml" x="150" y="1350" zoom="true"/>
         <Node id="normatividad/numeracion.xhtml" x="150" y="1200" zoom="true"/>
+        <Node id="usuarios/detalleCodigosNrn.xhtml" x="150" y="1350" zoom="true"/>
         <Node id="resultadoLogin.xhtml" x="650" y="600" zoom="true"/>
         <Node id="codigosCortos.xhtml" x="900" y="600" zoom="true"/>
         <Node id="usuarios/consultaReservasTemporales.xhtml" x="400" y="1050" zoom="true"/>
@@ -16,6 +16,7 @@
         <Node id="usuarios/tramiteCodigosLd.xhtml" x="650" y="450" zoom="true"/>
         <Node id="controlSesion.xhtml" x="650" y="300" zoom="true"/>
         <Node id="usuarios/detalleCodigosIin.xhtml" x="2150" y="450" zoom="true"/>
+        <Node id="usuarios/adminPermisosAsesor.xhtml" x="1400" y="900" zoom="true"/>
         <Node id="usuarios/crearTramite.xhtml" x="1650" y="150" zoom="true"/>
         <Node id="error/404.xhtml" x="400" y="900" zoom="true"/>
         <Node id="usuarios/tramiteCodigosIin.xhtml" x="400" y="1350" zoom="true"/>
@@ -41,6 +42,7 @@
         <Node id="resources/Plantillas/footer.xhtml" x="150" y="150" zoom="true"/>
         <Node id="usuarios/detalleMarcacionAbreviada.xhtml" x="1400" y="750" zoom="true"/>
         <Node id="usuarios/detalleCodigosLd.xhtml" x="400" y="300" zoom="true"/>
+        <Node id="prueba.jsp" x="900" y="1200" zoom="true"/>
         <Node id="codigosIIN.xhtml" x="1400" y="600" zoom="true"/>
         <Node id="usuarios/detalleSenalizacion.xhtml" x="150" y="900" zoom="true"/>
         <Node id="marcacionAbreviada.xhtml" x="1650" y="600" zoom="true"/>
@@ -56,9 +58,10 @@
         <Node id="normatividad/codigosIIN.xhtml" x="650" y="1050" zoom="true"/>
         <Node id="usuarios/adminModulos.xhtml" x="1650" y="750" zoom="true"/>
         <Node id="index.xhtml" x="400" y="750" zoom="true"/>
+        <Node id="numeracion-matriz.xhtml" x="1150" y="1050" zoom="true"/>
         <Node id="normatividad/senalizacion.xhtml" x="1900" y="450" zoom="true"/>
-        <Node id="normatividad/codigos1xy.xhtml" x="1900" y="600" zoom="true"/>
         <Node id="senalizacion.xhtml" x="1150" y="150" zoom="true"/>
+        <Node id="normatividad/codigos1xy.xhtml" x="1900" y="600" zoom="true"/>
         <Node id="resources/Plantillas/menu.xhtml" x="150" y="300" zoom="true"/>
         <Node id="normatividad/codigosNrn.xhtml" x="150" y="1500" zoom="true"/>
         <Node id="usuarios/tramiteHistoria.xhtml" x="1150" y="300" zoom="true"/>

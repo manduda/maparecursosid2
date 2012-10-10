@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="Administrar usuarios"/>
@@ -25,7 +25,7 @@
                     <h:outputText value="Escoger usuario"/>
                     <h:selectOneMenu value="#{TramiteBean.usuariosBuscar}">
                         <f:selectItems value="#{TramiteBean.listaUsuariosSIUST}"/>
-                        <p:ajax update="pgAdminUsuarios" listener="#{TramiteBean.buscarUsuario}" />
+                        <p:ajax update=":pgAdminUsuarios" listener="#{TramiteBean.buscarUsuario}" />
                     </h:selectOneMenu>
                 </h:panelGrid>
             </h:form>
@@ -73,7 +73,7 @@
                                         <br/>
                                     </h:panelGrid>
                                     <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                        <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarPerfil}" update="datosResultado" oncomplete="permisosDialog.hide();resultadoDialog.show();"/>
+                                        <p:commandButton value="Aceptar" action="#{TramiteBean.cambiarPerfil}" update=":datosResultado" oncomplete="permisosDialog.hide();resultadoDialog.show();"/>
                                         <p:commandButton type="button" value="Cancelar" onclick="permisosDialog.hide();"/>
                                     </h:panelGrid>
                                 </h:form>
@@ -85,7 +85,7 @@
                             <h:panelGrid id="datosResultado" style="text-align: center; " width="100%">
                                 <h:form>
                                     <h:outputText value="#{TramiteBean.mensajeAdminUsuario}" escape="false"/>
-                                    <p:commandButton value="Aceptar" onclick="resultadoDialog.hide();" update="pgAdminUsuarios,listaUsuarios"/>
+                                    <p:commandButton value="Aceptar" onclick="resultadoDialog.hide();" update=":pgAdminUsuarios,:frmListaUsuarios"/>
                                  </h:form>
                             </h:panelGrid>
                         </p:dialog>
@@ -96,7 +96,7 @@
 
             </h:panelGrid>
 
-            <h:form id="listaUsuarios">
+            <h:form id="frmListaUsuarios">
                 <h:panelGroup id="pgUsuarios">
                     <p:dataTable id="datos" value="#{TramiteBean.usuariosAplicacion}" var="us"
                                  style="font-size:10px" rows="10" emptyMessage="No se encontraron usuarios" >
@@ -117,7 +117,7 @@
                             <h:outputText value="#{us.codigoSIUST.email}"/>
                         </p:column>
                         <p:column style="width:32px; text-align: center;">  
-                            <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="ver permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                            <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="ver permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" icon="ui-icon ui-icon-search" onclick="statusDialog.show();">  
                                 <f:setPropertyActionListener target="#{TramiteBean.asesorEditar}" value="#{us}"/>  
                             </p:commandButton>  
                         </p:column>

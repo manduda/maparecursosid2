@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
@@ -40,21 +40,22 @@
                     </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <p:commandButton value="Consultar" actionListener="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites,pgBustarTramites"/>
+                    <p:commandButton value="Consultar" actionListener="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites,:pgBustarTramites"/>
                 </h:panelGrid>
             </h:panelGrid>
             <p:separator/>
-            
-            <h:panelGrid id="pgBustarTramites" width="100%">
+        </h:form>
+        
+        <h:panelGrid id="pgBustarTramites" width="100%">
+            <h:form >
                 <h:panelGrid columns="2">
                     <h:outputText value="Registros encontrados:"/>
                     <h:outputText value="#{fnc:countLista(TramiteBean.listaBuscarTramite)}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true"
                              rowIndexVar="rowIndex" widgetVar="datatableVar" style="font-size:10px" rows="10"
-                             rowsPerPageTemplate="10,20,30,40,50" emptyMessage="No se encontraron trámites" dblClickSelect="true"
+                             rowsPerPageTemplate="10,20,30,40,50" emptyMessage="No se encontraron trámites"
                              paginatorTemplate="{RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
-                    <f:facet name="header">Trámites</f:facet>
                     <p:column styleClass="tabla-expandir">  
                         <p:rowToggler />  
                     </p:column>
@@ -86,7 +87,7 @@
                         <h:outputText value="&#8226; Códigos IIN" rendered="#{not empty tr.tiTramiteIinCollection}" escape="false"/>
                     </p:column>
                     <p:column style="width:32px">  
-                        <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                        <p:commandButton action="#{TramiteBean.detalleTramite}" ajax="false" icon="ui-icon ui-icon-search" onclick="statusDialog.show();">  
                             <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tr}"/>  
                         </p:commandButton>  
                     </p:column>
@@ -129,8 +130,9 @@
                         </h:dataTable>
                     </p:rowExpansion>
                 </p:dataTable>
-            </h:panelGrid>
-        </h:form>
+            </h:form>
+        </h:panelGrid>
+        
 
     </ui:define>
 </ui:composition>

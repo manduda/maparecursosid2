@@ -4,6 +4,9 @@
  */
 package utils;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /**
@@ -45,5 +48,54 @@ public class Functions {
     
     public static Integer longitud(String texto) {
         return texto.length();
+    }
+    
+    public static String toColorCode(String cadena) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        String resultado = cadena;
+        
+        while (resultado.length() < 6){
+            resultado = '0' + resultado;
+        }
+        
+        byte[] digest = null;
+        byte[] buffer = resultado.getBytes();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.reset();
+            messageDigest.update(buffer);
+            digest = messageDigest.digest();
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("Error creando Digest");
+        }
+        
+        String hash = "";
+        for(byte aux : digest) {
+            int b = aux & 0xff;
+            if (Integer.toHexString(b).length() == 1) hash += "0";
+            hash += Integer.toHexString(b);
+        }
+        
+        String R = hash.substring(2, 4);
+        String G = hash.substring(6, 8);
+        String B = hash.substring(10, 12);
+        
+        return '#'+R+B+G;
+    }
+    
+    public static String toColorCodeFont(String cadena) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        String resultado = toColorCode(cadena).substring(1, 7);
+        int R = Integer.parseInt(resultado.substring(0, 2), 16);
+        int G = Integer.parseInt(resultado.substring(2, 4), 16);
+        int B = Integer.parseInt(resultado.substring(4, 6), 16);
+        
+        double a = 1 - ( 0.299 * R + 0.587 * G + 0.114 * B)/255;
+        
+        if (a < 0.5) {
+            resultado = "000000"; // bright colors - black font
+        } else {
+            resultado = "FFFFFF"; // dark colors - white font
+        }
+      
+        return '#'+resultado;
     }
 }

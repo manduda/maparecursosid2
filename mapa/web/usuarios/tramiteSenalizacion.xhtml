@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:fnc="http://yournamespace.com/fnc">
@@ -52,7 +52,7 @@
                             <h:outputText value="N/A" rendered="#{tramiteSenalizacion.acnCodigo.acnCodigo!=5}"/>
                         </p:column>
                         <p:column styleClass="tabla-eliminar" rendered="#{(UserBean.eliminarRecurso)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
-                            <p:commandLink oncomplete="eliminarSenalizacionDialog.show()" update="eliminarSenalizacionDialog">
+                            <p:commandLink oncomplete="eliminarSenalizacionDialog.show()" >
                                 <f:setPropertyActionListener target="#{TramiteBean.codigoDetalleTramite}" value="#{tramiteSenalizacion.tsnCodigo}"/>
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="senalizacion"/>
                                 <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/eliminar.png" style="border:0px"/>
@@ -89,11 +89,11 @@
 
             <!-- MENÚ ELIMINAR RECURSO -->
             <p:confirmDialog message="Eliminar recurso del trámite?" rendered="#{(UserBean.login)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)}" 
-                             showEffect="fade" hideEffect="fade" modal="true" closable="false"
+                             closable="false"
                              header="Confirmación" severity="alert" widgetVar="eliminarSenalizacionDialog">  
                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                     <h:form>
-                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update="cmdEnviarTramite,pgOperadorTramite,pgTramiteSenalizacion,pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
+                        <p:commandButton value="Aceptar" action="#{TramiteBean.eliminarRecurso}" update=":cmdEnviarTramite,:pgOperadorTramite,:pgTramiteSenalizacion,:pgMenuTramite" oncomplete="eliminarSenalizacionDialog.hide();"/>
                         <p:commandButton type="button" value="Cancelar" onclick="eliminarSenalizacionDialog.hide();"/>
                     </h:form>
                 </h:panelGrid>

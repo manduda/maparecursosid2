@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="Transferencia de recursos entre operadores"/>
@@ -57,7 +57,7 @@
                             <p:commandButton type="button" value="Transferir" onclick="confirmarTransferenciaDialog.show()"/>
                             <!-- Mensaje de confirmación para transferencia de recursos -->
                             <p:confirmDialog message="Esta seguro que quiere realizar esta operación? Recuerde que no puede devolverse una vez se haga"  
-                                             showEffect="fade" hideEffect="fade" modal="true" closable="false"
+                                             closable="false"
                                              header="Confirmación" severity="alert" widgetVar="confirmarTransferenciaDialog">  
                                 <h:panelGrid columns="2" width="100%" style="text-align: center;">
                                     <p:commandButton value="Aceptar" actionListener="#{TramiteBean.transferirRecursos}" oncomplete="confirmarTransferenciaDialog.hide();" ajax="false"/>

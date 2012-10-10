@@ -30,6 +30,7 @@ import org.apache.poi.hssf.util.HSSFColor;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -128,7 +129,7 @@ public class SenalizacionBean implements Serializable {
              * In a real application, this method should load data from a datasource 
              */  
             @Override
-            public List<SeSenalizacionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<SeSenalizacionVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -175,7 +176,7 @@ public class SenalizacionBean implements Serializable {
              * In a real application, this method should load data from a datasource 
              */  
             @Override
-            public List<SeSenalizacionVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<SeSenalizacionVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -224,7 +225,7 @@ public class SenalizacionBean implements Serializable {
         selectedSens[0] = selectedSen;
     }
     
-    public void onRowSelect(SelectEvent event) {
+    public void onRowSelect() {
         if (selectedSens == null){
             selectedSensAccion = false;
         } else if (selectedSens.length > 0) {
@@ -234,7 +235,7 @@ public class SenalizacionBean implements Serializable {
         }
     }
     
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowUnselect() {
         if (selectedSens == null){
             selectedSensAccion = false;
         } else if (selectedSens.length > 0) {

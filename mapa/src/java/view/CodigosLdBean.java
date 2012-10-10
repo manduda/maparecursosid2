@@ -115,7 +115,7 @@ public class CodigosLdBean implements Serializable {
         selectedLds[0] = selectedLd;
     }
     
-    public void onRowSelect(SelectEvent event) {
+    public void onRowSelect() {
         if (selectedLds == null){
             selectedLdsAccion = false;
         } else if (selectedLds.length > 0) {
@@ -125,7 +125,7 @@ public class CodigosLdBean implements Serializable {
         }
     }
     
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowUnselect() {
         if (selectedLds == null){
             selectedLdsAccion = false;
         } else if (selectedLds.length > 0) {

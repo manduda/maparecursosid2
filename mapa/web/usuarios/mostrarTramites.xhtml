@@ -3,7 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.prime.com.tr/ui">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="titulo">
         <h:outputText value="TRÁMITES ACTUALES"/>
@@ -26,13 +26,14 @@
             </h:panelGroup>
             
             <h:panelGroup rendered="#{(TramiteBean.mensajeTramite == '')}">
-                <h:form>
+                <h:form id="frmDatos">
                     <p:dataTable value="#{TramiteBean.tramites}" var="tr" paginator="false"
                                  selectionMode="multiple" selection="#{TramiteBean.selectedUnirTramites}"
-                                 rowIndexVar="rowIndex" widgetVar="datatableVar"
-                                 onRowSelectUpdate="opciones" onRowUnselectUpdate="opciones"
-                                 rowSelectListener="#{TramiteBean.onRowSelectUnir}" rowUnselectListener="#{TramiteBean.onRowUnselectUnir}"
+                                 rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{tr.trnCodigo}"
                                  style="font-size:10px" emptyMessage="No se encontraron trámites">
+                        <p:ajax event="rowSelect" listener="#{TramiteBean.onRowSelectUnir}" update=":frmDatos:opciones" />
+                        <p:ajax event="rowUnselect" listener="#{TramiteBean.onRowUnselectUnir}" update=":frmDatos:opciones" />
+                        
                         <p:column headerText="Tramite ID" sortBy="#{tr.trnCodigo}" style="width:80px; text-align: center;">
                             <h:outputText value="#{tr.trnCodigo}"/>
                         </p:column>
@@ -61,7 +62,7 @@
                             <h:outputText value="Códigos IIN" rendered="#{not empty tr.tiTramiteIinCollection}" escape="false"/>
                         </p:column>
                         <p:column style="width:32px">  
-                            <p:commandButton value="ver" action="#{TramiteBean.detalleTramite}" ajax="false" image="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                            <p:commandButton value="ver" action="#{TramiteBean.detalleTramite}" ajax="false" icon="ui-icon ui-icon-search" onclick="statusDialog.show();">  
                                 <f:setPropertyActionListener target="#{TramiteBean.selectedTramite}" value="#{tr}"/>  
                             </p:commandButton>  
                         </p:column>
@@ -73,8 +74,7 @@
                     </h:panelGrid>
 
                 </h:form>
-                <p:confirmDialog message="Deseas unir los trámites seleccionados?"  
-                            showEffect="fade" hideEffect="fade" modal="true" draggable="false"
+                <p:confirmDialog message="Deseas unir los trámites seleccionados?" 
                             header="Confirmación" severity="alert" widgetVar="confirmarUnirTramites">  
                     <h:form>
                         <h:panelGrid columns="2" width="100%" style="text-align: center;">

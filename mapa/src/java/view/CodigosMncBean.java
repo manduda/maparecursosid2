@@ -19,6 +19,7 @@ import javax.faces.model.SelectItem;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 import vo.CdCodigosMncVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -69,7 +70,7 @@ public class CodigosMncBean implements Serializable {
              * In a real application, this method should load data from a datasource 
              */  
             @Override
-            public List<CdCodigosMncVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<CdCodigosMncVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -105,7 +106,7 @@ public class CodigosMncBean implements Serializable {
              * In a real application, this method should load data from a datasource 
              */  
             @Override
-            public List<CdCodigosMncVO> load(int first, int pageSize, String sortField, boolean sortOrder, Map<String,String> filters) {  
+            public List<CdCodigosMncVO> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String,String> filters) {  
                 //logger.log(Level.INFO, "Loading the lazy car data between {0} and {1}", new Object[]{first, (first+pageSize)});  
   
                 //Sorting and Filtering information are not used for demo purposes just random dummy data is returned  
@@ -129,7 +130,7 @@ public class CodigosMncBean implements Serializable {
         selecteds[0] = selected;
     }
     
-    public void onRowSelect(SelectEvent event) {
+    public void onRowSelect() {
         if (selecteds == null){
             selectedsAccion = false;
         } else if (selecteds.length > 0) {
@@ -139,7 +140,7 @@ public class CodigosMncBean implements Serializable {
         }
     }
     
-    public void onRowUnselect(UnselectEvent event) {
+    public void onRowUnselect() {
         if (selecteds == null){
             selectedsAccion = false;
         } else if (selecteds.length > 0) {
