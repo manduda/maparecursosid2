@@ -41,17 +41,14 @@
                                  style="font-size:10px;width:400px;" rows="10" emptyMessage="No se encontraron permisos" 
                                  rowStyleClass="#{p.estado == true ? 'permiso-asignado' : 'permiso-no-asignado'}">
                         <f:facet name="header">Lista de permisos</f:facet>
-                        <p:column headerText="CÓDIGO" sortBy="#{p.ptnCodigo}" style="width:100px; text-align: center;">
-                            <h:outputText value="#{p.ptnCodigo}"/>
-                        </p:column>
                         <p:column headerText="RECURSO" sortBy="#{p.pttNombre}" style="width:200px; text-align: left;">
                             <h:outputText value=" #{p.pttNombre}" />
                         </p:column>
                         <p:column style="width:100px; text-align: center;">
-                            <p:commandButton value="Asignar" oncomplete="crearPermiso.show()" update=":pgCrearPermiso" rendered="#{p.estado == false}">
+                            <p:commandButton value="Asignar" oncomplete="crearPermiso.show()" update=":pgCrearPermiso" rendered="#{p.estado == false}" icon="ui-icon-check">
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
                             </p:commandButton>
-                            <p:commandButton value="Eliminar" oncomplete="eliminarPermiso.show()" update=":pgEliminarPermiso" rendered="#{p.estado == true}">
+                            <p:commandButton value="Eliminar" oncomplete="eliminarPermiso.show()" update=":pgEliminarPermiso" rendered="#{p.estado == true}" icon="ui-icon-trash">
                                 <f:setPropertyActionListener target="#{TramiteBean.tipoPermiso}" value="#{p.ptnCodigo}"/>
                             </p:commandButton>
                         </p:column>

@@ -36,8 +36,6 @@
                     <h:panelGrid columns="2">
                         <h:outputText value="Usuario" style="font-weight: bold;"/>
                         <h:outputText value="#{TramiteBean.usuariosEncontrado.codigoSIUST.login}"/>
-                        <h:outputText value="Código usuario" style="font-weight: bold;"/>
-                        <h:outputText value="#{TramiteBean.usuariosEncontrado.codigoSIUST.userCode}"/>
                         <h:outputText value="Nombre" style="font-weight: bold;"/>
                         <h:outputText value="#{TramiteBean.usuariosEncontrado.codigoSIUST.name} #{TramiteBean.usuariosEncontrado.codigoSIUST.lastName}"/>
                         <h:outputText value="Email" style="font-weight: bold;"/>
@@ -50,7 +48,7 @@
 
                     <h:panelGrid rendered="#{TramiteBean.usuariosEncontrado.tunCodigo.tunCodigo != 1}">
                         <h:form>
-                            <p:commandButton type="button" value="Cambiar perfil" onclick="permisosDialog.show();"/>
+                            <p:commandButton type="button" value="Cambiar perfil" onclick="permisosDialog.show();" style="width:120px"/>
                         </h:form>
 
                         <p:dialog header="Cambiar perfil" widgetVar="permisosDialog" resizable="false" modal="true" draggable="false"
@@ -101,14 +99,11 @@
                     <p:dataTable id="datos" value="#{TramiteBean.usuariosAplicacion}" var="us"
                                  style="font-size:10px" rows="10" emptyMessage="No se encontraron usuarios" >
                         <f:facet name="header">Lista de usuarios de la aplicación</f:facet>
-                        <p:column headerText="CÓDIGO USUARIO" sortBy="#{us.codigoSIUST.userCode}" style="width:80px; text-align: center;">
-                            <h:outputText value="#{us.codigoSIUST.userCode}"/>
+                        <p:column headerText="NOMBRE" sortBy="#{us.codigoSIUST.name} #{us.codigoSIUST.lastName}">
+                            <h:outputText value="#{us.codigoSIUST.name} #{us.codigoSIUST.lastName}"/>
                         </p:column>
                         <p:column headerText="LOGIN" sortBy="#{us.codigoSIUST.login}" style="width:80px; text-align: center;">
                             <h:outputText value="#{us.codigoSIUST.login}"/>
-                        </p:column>
-                        <p:column headerText="NOMBRE" sortBy="#{us.codigoSIUST.name} #{us.codigoSIUST.lastName}" style="width:80px">
-                            <h:outputText value="#{us.codigoSIUST.name} #{us.codigoSIUST.lastName}"/>
                         </p:column>
                         <p:column headerText="TIPO DE USUARIO" sortBy="#{us.tunCodigo.tutNombre}" style="width:80px">
                             <h:outputText value="#{us.tunCodigo.tutNombre}"/>
@@ -116,8 +111,8 @@
                         <p:column headerText="EMAIL" sortBy="#{us.codigoSIUST.email}" style="width:80px">
                             <h:outputText value="#{us.codigoSIUST.email}"/>
                         </p:column>
-                        <p:column style="width:32px; text-align: center;">  
-                            <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="ver permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" icon="ui-icon ui-icon-search" onclick="statusDialog.show();">  
+                        <p:column style="width:110px; text-align: center;">  
+                            <p:commandButton rendered="#{us.tunCodigo.tunCodigo == 3}" value="Permisos" action="#{TramiteBean.mostrarPermisosAsesor}" ajax="false" icon="ui-icon ui-icon-search" onclick="statusDialog.show();">  
                                 <f:setPropertyActionListener target="#{TramiteBean.asesorEditar}" value="#{us}"/>  
                             </p:commandButton>  
                         </p:column>

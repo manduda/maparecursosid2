@@ -20,18 +20,17 @@
         </h:panelGroup>
         
         <h:panelGroup rendered="#{UserBean.administrarModulos}">
-            <h:form id="listaModulos">
-                <h:panelGroup id="pgModulos">
+            <br/>
+            <h:panelGroup id="pgModulos">
+                <h:form id="listaModulos">
                     <p:dataTable id="datos" value="#{AdministracionAplicacionBean.modulos}" var="m" rowKey="#{m.cmnCodigo}"
                                  selectionMode="single" selection="#{AdministracionAplicacionBean.selectedModulo}"
-                                 style="font-size:10px" rows="10" emptyMessage="No se encontraron modulos" >
+                                 style="font-size:10px;width:400px;" rows="10" emptyMessage="No se encontraron modulos" 
+                                 rowStyleClass="#{m.cmtActivo == 'S' ? 'permiso-asignado' : 'permiso-no-asignado'}">
                         <p:ajax event="rowSelect" update=":datosAdministrar" oncomplete="administrarDialog.show();"/>
                         <p:ajax event="rowUnselect" update=":datosAdministrar" />
                         
                         <f:facet name="header">Lista de módulos de la aplicación</f:facet>
-                        <p:column headerText="CÓDIGO MÓDULO" style="width:20px; text-align: center;">
-                            <h:outputText value="#{m.cmnCodigo}"/>
-                        </p:column>
                         <p:column headerText="NOMBRE DEL MÓDULO" style="text-align: left;">
                             <h:outputText value="#{m.cmtModulo}"/>
                         </p:column>
@@ -39,8 +38,8 @@
                             <h:outputText value="#{m.cmtActivo}"/>
                         </p:column>
                     </p:dataTable>
-                </h:panelGroup>
-            </h:form>
+                </h:form>
+            </h:panelGroup>
             
             <p:dialog header="Administrar módulo" widgetVar="administrarDialog" resizable="false" modal="true" draggable="false"
                       width="200" showEffect="fade" hideEffect="fade" position="center">
@@ -52,18 +51,18 @@
                                 <h:outputText value="#{AdministracionAplicacionBean.selectedModulo.cmtModulo}"/>
                             </h:panelGrid>
                             <br/>
-                        
-                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                <h:form id="frmDatos">
-                                <p:commandButton value="Activar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'N'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
-                                    <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="S"/>
-                                </p:commandButton>
-                                <p:commandButton value="Desactivar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'S'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
-                                    <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="N"/>
-                                </p:commandButton>
-                                <p:commandButton type="button" value="Cancelar" onclick="administrarDialog.hide();"/>
-                                </h:form>
-                            </h:panelGrid>
+                            
+                            <h:form id="frmDatos">
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Activar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'N'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                        <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="S"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Desactivar" action="#{AdministracionAplicacionBean.activarDesactivar}" rendered="#{AdministracionAplicacionBean.selectedModulo.cmtActivo == 'S'}" update=":datosResultado,:listaModulos,:menubar" oncomplete="administrarDialog.hide();resultadoDialog.show();">
+                                        <f:setPropertyActionListener target="#{AdministracionAplicacionBean.activar}" value="N"/>
+                                    </p:commandButton>
+                                    <p:commandButton type="button" value="Cancelar" onclick="administrarDialog.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
                         </h:panelGrid>
                     
                  </h:panelGrid>
