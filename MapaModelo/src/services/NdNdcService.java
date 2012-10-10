@@ -33,7 +33,7 @@ public class NdNdcService {
         return vo;
     }*/
     
-    public NdNdcVO getById(BigDecimal id, EntityManager em){
+    public NdNdcVO getById(int id, EntityManager em){
         NdNdc entity = NdNdcDAO.findbyId(id, em);
         return entity.toVO();
     }

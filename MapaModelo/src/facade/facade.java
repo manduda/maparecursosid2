@@ -186,6 +186,29 @@ public class facade {
         return vo;
     }
     
+    public List<NuNumeracionVO> cargarNumeracionAgrupada(String ndc, int inicio, int fin){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<NuNumeracionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createNuNumeracionService().cargarNumeracionAgrupada(ndc, inicio, fin, em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
     public List<NdNdcVO> listaNDC() {
         EntityManagerFactory emf = null;
         EntityManager em = null;

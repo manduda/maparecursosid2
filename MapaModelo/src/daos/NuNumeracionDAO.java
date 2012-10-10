@@ -4,8 +4,14 @@
  */
 package daos;
 
+import entities.Departamentos;
 import entities.EmOperador;
+import entities.EsEstado;
+import entities.Municipios;
+import entities.NdNdc;
+import entities.NtTipoNdc;
 import entities.NuNumeracion;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -413,6 +419,117 @@ public class NuNumeracionDAO {
         }
         
         numeracion = query.getResultList();        
+        return numeracion;
+    }
+    
+    public static List<NuNumeracion> cargarNumeracionAgrupada(String ndc, int inicio, int fin, EntityManager em){
+        List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
+        StringBuilder searchQuery = new StringBuilder(
+                "select a.min_inicio inicio, "
+                + "       a.max_inicio + 99 fin, "
+                + "       b.*, "
+                + "       rawtohex(c.sk_empresa_code), "
+                + "       c.descripcion, "
+                + "       rawtohex(f.CODIGO_MUNICIPIO), "
+                + "       f.NOMBRE_MUNICIPIO, "
+                + "       rawtohex(f.CODIGO_DEPARTAMENTO), "
+                + "       f.NOMBRE_DEPARTAMENTO , "
+                + "       g.* "
+                + "from "
+                + "( "
+                + "with get_data as "
+                + "  ( "
+                + "  SELECT n.ndn_codigo, n.nun_inicio, floor(n.nun_inicio/1000) bloque, n.sk_empresa_code, n.sk_region_code, n.esn_codigo, "
+                + "         ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) - ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.sk_empresa_code, n.sk_region_code, n.esn_codigo, n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) grp "
+                + "  from nu_numeracion n "
+                + "  where 1=1 "
+                + "  AND n.NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NDT_NOMBRE = ?1) "
+                + "  AND n.NUN_INICIO >= ?2 "
+                + "  AND n.NUN_FIN <= ?3 "
+                + "  ), "
+                + "sql_data as "
+                + "  ( "
+                + "  select a.ndn_codigo,a.nun_inicio, a.sk_empresa_code, a.sk_region_code, a.esn_codigo, "
+                + "         min(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) min_inicio, "
+                + "         max(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) max_inicio "
+                + "  from get_data a "
+                + "  ) "
+                + "select distinct "
+                + "       ndn_codigo ndc, "
+                + "       min_inicio, "
+                + "       max_inicio, "
+                + "       sk_empresa_code, "
+                + "       sk_region_code, "
+                + "       esn_codigo "
+                + "from sql_data "
+                + "order by ndn_codigo,min_inicio "
+                + ") a "
+                + "join nd_ndc b on (a.ndc = b.ndn_codigo) "
+                + "join sa.sk_empresa c on (a.sk_empresa_code = c.sk_empresa_code) "
+                + "join (select d.CODIGO_MUNICIPIO, d.NOMBRE_MUNICIPIO, d.CODIGO_DEPARTAMENTO, e.NOMBRE_DEPARTAMENTO "
+                + "      from sa.municipios d "
+                + "      join sa.departamentos e "
+                + "      on (d.CODIGO_DEPARTAMENTO = e.CODIGO_DEPARTAMENTO)) f on (a.sk_region_code = f.CODIGO_MUNICIPIO) "
+                + "join es_estado g on (a.esn_codigo = g.esn_codigo) "
+                + "order by b.ndt_nombre, a.min_inicio");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+        
+        query.setParameter(1, ndc);
+        query.setParameter(2, inicio);
+        query.setParameter(3, fin);
+        
+        List<Object> results = query.getResultList();
+        
+        if (results != null){
+            int i = 0;
+            for (Object oRow : results) {
+                Object[] value = (Object[]) oRow;
+                Integer inicioF = Integer.valueOf(value[0].toString());
+                Integer finF = Integer.valueOf(value[1].toString());
+
+                //NDC
+                NdNdc ndcF = new NdNdc();
+                ndcF.setNdnCodigo(Integer.valueOf(value[2].toString()));
+                ndcF.setNdtNombre(value[3].toString());
+                NtTipoNdc tipoNdc = new NtTipoNdc();
+                tipoNdc.setNtnCodigo(Integer.valueOf(value[4].toString()));
+                ndcF.setNtnCodigo(tipoNdc);
+
+                //EMPRESA
+                EmOperador empresaF = new EmOperador();
+                empresaF.setEmrCodigo(value[5].toString());
+                empresaF.setEmtNombre(value[6].toString());
+
+                //REGION
+                Municipios municipioF = new Municipios();
+                municipioF.setCodigoMunicipio((String)(value[7]));
+                municipioF.setNombreMunicipio(value[8].toString());
+                Departamentos departamentoF = new Departamentos();
+                departamentoF.setCodigoDepartamento((String)value[9]);
+                departamentoF.setNombreDepartamento(value[10].toString());
+                municipioF.setCodigoDepartamento(departamentoF);
+
+                //ESTADO
+                EsEstado estadoF = new EsEstado();
+                estadoF.setEsnCodigo(Integer.valueOf(value[11].toString()));
+                estadoF.setEstNombre((String)value[12]);
+
+                NuNumeracion num = new NuNumeracion();
+                num.setNunCodigo(i);
+                num.setNdnCodigo(ndcF);
+                num.setNunInicio(inicioF);
+                num.setNunFin(finF);
+                num.setEmrCodigo(empresaF);
+                num.setCodigoMunicipio(municipioF);
+                num.setEsnCodigo(estadoF);
+
+                numeracion.add(num);
+                i++;
+
+            }
+        }
+        
         return numeracion;
     }
     

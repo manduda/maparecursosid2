@@ -102,6 +102,15 @@ public class NuNumeracionService {
         return numeracionVO;
     }
     
+    public List<NuNumeracionVO> cargarNumeracionAgrupada(String ndc, int inicio, int fin, EntityManager em){
+        List<NuNumeracion> numeracion = NuNumeracionDAO.cargarNumeracionAgrupada(ndc, inicio, fin, em);
+        List<NuNumeracionVO> numeracionVO = new ArrayList<NuNumeracionVO>();        
+        for (NuNumeracion n : numeracion) {
+            numeracionVO.add(n.toVO());
+        }
+        return numeracionVO;
+    }
+    
     public List<EmOperadorVO> getListOperadores(EntityManager em){
         List<EmOperador> operador = NuNumeracionDAO.getListOperadores(em);
         List<EmOperadorVO> operadorVO = new ArrayList<EmOperadorVO>();        

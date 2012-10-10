@@ -27,7 +27,7 @@ public class NdNdcDAO {
         em.merge(entity);
     }
 
-    public static NdNdc findbyId(BigDecimal ndnCodigo, EntityManager em){
+    public static NdNdc findbyId(int ndnCodigo, EntityManager em){
         return em.find(NdNdc.class, ndnCodigo);
     }
     

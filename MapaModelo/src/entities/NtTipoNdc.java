@@ -56,9 +56,12 @@ public class NtTipoNdc implements Serializable {
         vo.setNtnCodigo(this.getNtnCodigo());
         vo.setNttNombre(this.getNttNombre());
         
-        NtTipoNdcVO voPadre = new NtTipoNdcVO();
-        voPadre.setNtnCodigo(this.getNtnCodigoPadre().ntnCodigo);
-        vo.setNtnCodigoPadre(voPadre);
+        if (this.getNtnCodigoPadre() != null){
+            NtTipoNdcVO voPadre = new NtTipoNdcVO();
+            voPadre.setNtnCodigo(this.getNtnCodigoPadre().ntnCodigo);
+            vo.setNtnCodigoPadre(voPadre);
+        }
+        
         return vo;
     }
 
