@@ -93,7 +93,7 @@ public class NumeracionBean implements Serializable {
         
         ndcVO.setNdtNombre("1");
         tipoNdcVO.setNtnCodigo(-1);
-        
+        /*
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", false, "");
@@ -130,7 +130,8 @@ public class NumeracionBean implements Serializable {
         estadoVO.setEsnCodigo(-1);
         NumInicio = "";
         NumFin = "";
-        
+        */
+        matrizVisible = true;
         matriz();
         
         //nume = agruparNumeracion(numeracion); 
@@ -154,10 +155,11 @@ public class NumeracionBean implements Serializable {
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         List<NuNumeracionVO> numBloque = new ArrayList<NuNumeracionVO>();
         
-        numeracion = fachada.cargarNumeracionAgrupada("1", 8000000, 8999999);
+        numeracion = fachada.cargarNumeracionAgrupada("1", 8000000, 8199999);
         //int x = 0;
         int i = 0;
         
+        agrupacion:
         while (i < numeracion.size()){
             List array = new ArrayList();
             //numer.add(new ArrayList());
@@ -167,19 +169,18 @@ public class NumeracionBean implements Serializable {
             for(int y = 0; y < 10; y++){
                 numBloque.add(numeracion.get(i));
                 int bloque = numeracion.get(i).getNunInicio()/1000;
-                i++;
-                if (i >= numeracion.size()){
-                    break;
-                }
-                int bloqueF = numeracion.get(i).getNunInicio()/1000;
-                while (bloque == bloqueF){
-                    numBloque.add(numeracion.get(i));
-                    i++;
-                    if (i >= numeracion.size()){
-                        break;
+                i = i + 1;
+                if (i < numeracion.size()){
+                    int bloqueF = numeracion.get(i).getNunInicio()/1000;
+                    while ((bloque == bloqueF) && (i < numeracion.size())){
+                        numBloque.add(numeracion.get(i));
+                        i = i + 1;
+                        if (i < numeracion.size()){
+                            bloqueF = numeracion.get(i).getNunInicio()/1000;
+                        }
                     }
-                    bloqueF = numeracion.get(i).getNunInicio()/1000;
                 }
+                
                 //((ArrayList)numer.get(x)).add(numBloque);
                 array.add(numBloque);
                 numBloque = new ArrayList<NuNumeracionVO>();

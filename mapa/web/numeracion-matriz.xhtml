@@ -9,498 +9,108 @@
     <ui:composition>
         <h:panelGroup id="displayMatriz" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'numeracion-matriz.xhtml')}">
 
-            <h:panelGrid id="datosMatriz" style="width:100%" >             
-                <h:form>                 
-                    <p:dataTable value="#{NumeracionBean.numer}" var="nu" 
-                                 style="font-size:8px;width:100%" styleClass="estilo">                     
-                        <p:column style="text-align: center; height:25px" styleClass="columna-matriz"> 
-                            <f:facet name="header">Rango</f:facet>
-                            <h:outputText value="#{nu[0]}"/>                     
-                        </p:column>                     
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[1]) == 1 and nu[1][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[1][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[1][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[1]) == 1 and nu[1][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">0</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[1]) == 1}">
-                                <h:outputText id="columna1" value="#{nu[1][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna1" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[1][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[1]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[1]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
+            <h:panelGrid id="datosMatriz" style="width:100%" >
+                <h:panelGrid id="pgDatosMatriz" columns="2" >
+                    <h:outputText value="Inicio: "/>
+                    <h:outputText value="#{NumeracionBean.numInicio}"/>
+                    <h:outputText value="Fin: "/>
+                    <h:outputText value="#{NumeracionBean.numFin}"/>
+                </h:panelGrid>
+                
+                <h:panelGroup>
+                    <table border="1" style="font-size:8px;width:100%;border-collapse: collapse;" class="estilo" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr style="text-align: center; height:25px" class="columna-matriz">
+                                <th>Rango</th>
+                                <th>0</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                                <th>9</th>
+                            </tr>
+                        </thead>
+                        <ui:repeat value="#{NumeracionBean.numer}" var="datos">
+                            <tr style="height:27px;">
+                                <td style="text-align: center;" class="columna-matriz">
+                                    <h:outputText value="#{datos[0]}"/>  
+                                </td>
+                                <ui:repeat value="#{datos}" var="nu" offset="1">
+                                    <td id="hola" style="text-align:center; width:9.5%;
+                                        #{fnc:countLista(nu) == 1 and nu[0].esnCodigo.esnCodigo == '3' ? 
+                                          fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[0].emrCodigo.emrCodigo)),
+                                          fnc:concat(';color:',fnc:toColorCodeFont(nu[0].emrCodigo.emrCodigo))) : ''}"
+                                        class="#{fnc:countLista(nu) == 1 and nu[0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
+                                        <h:panelGroup rendered="#{fnc:countLista(nu) == 1}">
+                                            <h:panelGrid id="columna" width="100%">
+                                                <p:ajax event="click" update=":pgDatosMatriz" >
+                                                    <f:setPropertyActionListener target="#{NumeracionBean.numInicio}" value="#{nu[0].nunInicio}" />
+                                                </p:ajax>
+                                                <h:outputText  value="#{nu[0].codigoMunicipio.nombreMunicipio}"/>
+                                            </h:panelGrid>
+                                            
+                                            <p:tooltip for="columna" styleClass="tooltip">
+                                                <h:outputText value="Operador: " style="font-weight: bold"/>
+                                                <h:outputText value="#{nu[0].emrCodigo.emtNombre}"/><br/>
+                                                <h:outputText value="Municipio: " style="font-weight: bold"/>
+                                                <h:outputText value="#{nu[0].codigoMunicipio.nombreMunicipio} (#{nu[0].codigoMunicipio.codigoDepartamento.nombreDepartamento})"/><br/>
+                                                <h:outputText value="Estado: " style="font-weight: bold"/>
+                                                <h:outputText value="#{nu[0].esnCodigo.estNombre}"/>
+                                            </p:tooltip>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{fnc:countLista(nu) > 1}">
+                                            <table style="width:100%;height:27px;border-collapse: collapse;border-style: hidden;" cellpadding="0" cellspacing="0" >
+                                                <tr>
+                                                    <ui:repeat value="#{nu}" var="num">
+                                                        <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
+                                                            <td style="border: 1px solid black;width:#{(num.nunFin - num.nunInicio + 1)/10}%;
+                                                                #{num.esnCodigo.esnCodigo == '3' ? 
+                                                                  fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
+                                                                  fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
+                                                                class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
+                                                                <h:panelGrid id="celda" width="100%" cellpadding="0" cellspacing="0">
+                                                                    <p:ajax event="click" update=":pgDatosMatriz" >
+                                                                        <f:setPropertyActionListener target="#{NumeracionBean.numInicio}" value="#{num.nunInicio}" />
+                                                                    </p:ajax>
+                                                                    <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
+                                                                        <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
+                                                                    </h:panelGroup>
+                                                                    <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
+                                                                        <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
+                                                                    </h:panelGroup>
+                                                                    <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
+                                                                        <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
+                                                                    </h:panelGroup>
+                                                                </h:panelGrid>
+                                                                <p:tooltip for="celda" styleClass="tooltip">
+                                                                    <h:outputText value="Operador: " style="font-weight: bold"/>
+                                                                    <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
+                                                                    <h:outputText value="Municipio: " style="font-weight: bold"/>
+                                                                    <h:outputText value="#{num.codigoMunicipio.nombreMunicipio} (#{num.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/><br/>
+                                                                    <h:outputText value="Estado: " style="font-weight: bold"/>
+                                                                    <h:outputText value="#{num.esnCodigo.estNombre}"/>
+                                                                </p:tooltip>
+                                                            </td>
                                                         </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio} (#{num.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[2]) == 1 and nu[2][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[2][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[2][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[2]) == 1 and nu[2][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">1</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[2]) == 1}">
-                                <h:outputText id="columna2" value="#{nu[2][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna2" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[2][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[2]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[2]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[3]) == 1 and nu[3][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[3][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[3][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[3]) == 1 and nu[3][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">2</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[3]) == 1}">
-                                <h:outputText id="columna3" value="#{nu[3][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna3" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[3][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[3]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[3]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[4]) == 1 and nu[4][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[4][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[4][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[4]) == 1 and nu[4][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">3</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[4]) == 1}">
-                                <h:outputText id="columna4" value="#{nu[4][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna4" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[4][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[4]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[4]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[5]) == 1 and nu[5][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[5][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[5][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[5]) == 1 and nu[5][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">4</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[5]) == 1}">
-                                <h:outputText id="columna5" value="#{nu[5][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna5" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[5][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[5]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[5]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[6]) == 1 and nu[6][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[6][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[6][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[6]) == 1 and nu[6][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">5</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[6]) == 1}">
-                                <h:outputText id="columna6" value="#{nu[6][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna6" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[6][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[6]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[6]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[7]) == 1 and nu[7][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[7][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[7][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[7]) == 1 and nu[7][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">6</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[7]) == 1}">
-                                <h:outputText id="columna7" value="#{nu[7][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna7" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[7][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[7]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[7]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[8]) == 1 and nu[8][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[8][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[8][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[8]) == 1 and nu[8][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">7</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[8]) == 1}">
-                                <h:outputText id="columna8" value="#{nu[8][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna8" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[8][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[8]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[8]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[9]) == 1 and nu[9][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[9][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[9][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[9]) == 1 and nu[9][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">8</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[9]) == 1}">
-                                <h:outputText id="columna9" value="#{nu[9][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna9" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[9][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[9]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[9]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-
-                        <p:column style="text-align:center; width:9.5%;
-                                  #{fnc:countLista(nu[10]) == 1 and nu[10][0].esnCodigo.esnCodigo == '3' ? 
-                                    fnc:concat(fnc:concat('background-color:',fnc:toColorCode(nu[10][0].emrCodigo.emrCodigo)),
-                                    fnc:concat(';color:',fnc:toColorCodeFont(nu[10][0].emrCodigo.emrCodigo))) : ''}"
-                                  styleClass="#{fnc:countLista(nu[10]) == 1 and nu[10][0].esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                            <f:facet name="header">9</f:facet>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[10]) == 1}">
-                                <h:outputText id="columna10" value="#{nu[10][0].codigoMunicipio.nombreMunicipio}"/>
-                                <p:tooltip for="columna10" styleClass="tooltip">
-                                    <h:outputText value="Operador: " style="font-weight: bold"/>
-                                    <h:outputText value="#{nu[10][0].emrCodigo.emtNombre}"/>
-                                </p:tooltip>
-                            </h:panelGroup>
-                            <h:panelGroup rendered="#{fnc:countLista(nu[10]) > 1}">
-                                <table style="width:100%;height:25px;" cellpadding="0" cellspacing="0" >
-                                    <tr>
-                                        <ui:repeat value="#{nu[10]}" var="num">
-                                            <h:panelGroup rendered="#{num.codigoMunicipio.nombreMunicipio != null}">
-                                                <td style="width:#{(num.nunFin - num.nunInicio + 1)/10}%;
-                                                    #{num.esnCodigo.esnCodigo == '3' ? 
-                                                      fnc:concat(fnc:concat('background-color:',fnc:toColorCode(num.emrCodigo.emrCodigo)),
-                                                      fnc:concat(';color:',fnc:toColorCodeFont(num.emrCodigo.emrCodigo))) : ''}"
-                                                    class="#{num.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : ''}">
-                                                    <h:panelGroup id="celda">
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 > 100}">
-                                                            <h:outputText value="#{num.nunFin - num.nunInicio + 1}" converter="javax.faces.Integer"/>
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo == '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{fnc:toColorCodeFont(num.emrCodigo.emrCodigo) == '#000000' ? 'N' : 'B'}.png" />
-                                                        </h:panelGroup>
-                                                        <h:panelGroup rendered="#{num.nunFin - num.nunInicio + 1 == 100 and num.esnCodigo.esnCodigo != '3'}">
-                                                            <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num.esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
-                                                        </h:panelGroup>
-                                                    </h:panelGroup>
-                                                    <p:tooltip for="celda" styleClass="tooltip">
-                                                        <h:outputText value="Operador: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.emrCodigo.emtNombre}"/><br/>
-                                                        <h:outputText value="Municipio: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.codigoMunicipio.nombreMunicipio}"/><br/>
-                                                        <h:outputText value="Estado: " style="font-weight: bold"/>
-                                                        <h:outputText value="#{num.esnCodigo.estNombre}"/>
-                                                    </p:tooltip>
-                                                </td>
-                                            </h:panelGroup>
-                                        </ui:repeat>
-                                    </tr>
-                                </table>
-                            </h:panelGroup>
-                        </p:column>
-                    </p:dataTable>
-                </h:form>
+                                                    </ui:repeat>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                    </td>
+                                </ui:repeat>
+                            </tr>
+                        </ui:repeat>
+                    </table>
+                </h:panelGroup>
+                
+                <p:dialog widgetVar="dialog" >
+                    <h:outputText value="prueba"/>
+                </p:dialog>
+                
             </h:panelGrid>
         </h:panelGroup>
     </ui:composition>
