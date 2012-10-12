@@ -163,3 +163,15 @@ padding: 5px;
     background: -moz-linear-gradient(center top , rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0)) repeat scroll 0% 0% rgb(196, 196, 196);
     font-weight: bold;
 }
+
+.celda:link, .celda:visited {
+  color: inherit;
+  font-weight : inherit;
+  text-decoration: inherit;
+}
+
+.celda:link:hover, .celda:visited:hover  {
+  color: inherit;
+  font-weight : inherit;
+  text-decoration : inherit;
+}

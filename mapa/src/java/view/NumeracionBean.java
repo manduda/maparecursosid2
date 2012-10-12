@@ -8,6 +8,9 @@ import entities.NtTipoNdc;
 import facade.facade;
 import helper.ConvertirListasHelper;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +22,9 @@ import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -27,6 +33,7 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
@@ -81,6 +88,11 @@ public class NumeracionBean implements Serializable {
     private List<NuNumeracionVO> nume = new ArrayList<NuNumeracionVO>();
     private List numer = new ArrayList();
     private Boolean matrizVisible = false;
+    private NuNumeracionVO seleccionNum = new NuNumeracionVO();
+    private NuNumeracionVO seleccionNumAnterior = new NuNumeracionVO();
+    private String seleccionId = "-1";
+    private String seleccionIdAnterior = "-1";
+    private Boolean seleccionRango = false;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -93,7 +105,7 @@ public class NumeracionBean implements Serializable {
         
         ndcVO.setNdtNombre("1");
         tipoNdcVO.setNtnCodigo(-1);
-        /*
+        
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", false, "");
@@ -130,9 +142,9 @@ public class NumeracionBean implements Serializable {
         estadoVO.setEsnCodigo(-1);
         NumInicio = "";
         NumFin = "";
-        */
-        matrizVisible = true;
-        matriz();
+        
+        //matrizVisible = true;
+        //matriz();
         
         //nume = agruparNumeracion(numeracion); 
         
@@ -153,11 +165,14 @@ public class NumeracionBean implements Serializable {
         String columna1 = "";
         facade fachada = new facade();
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
-        List<NuNumeracionVO> numBloque = new ArrayList<NuNumeracionVO>();
+        List numBloque = new ArrayList();
+        List bloqueColor = new ArrayList();
         
         numeracion = fachada.cargarNumeracionAgrupada("1", 8000000, 8199999);
-        //int x = 0;
+        numer = new ArrayList();
+        int x = 0;
         int i = 0;
+        int k = 0;
         
         agrupacion:
         while (i < numeracion.size()){
@@ -167,32 +182,213 @@ public class NumeracionBean implements Serializable {
             //((ArrayList)numer.get(x)).add(columna1);
             array.add(columna1);
             for(int y = 0; y < 10; y++){
-                numBloque.add(numeracion.get(i));
+                k = 0;
+                bloqueColor.add(numeracion.get(i));
+                bloqueColor.add(estiloCelda(numeracion.get(i).getEmrCodigo().getEmrCodigo(),numeracion.get(i).getEsnCodigo().getEsnCodigo()));
+                bloqueColor.add(Integer.toString(x)+Integer.toString(y)+Integer.toString(k));
+                numBloque.add(bloqueColor);
+                bloqueColor = new ArrayList();
                 int bloque = numeracion.get(i).getNunInicio()/1000;
                 i = i + 1;
                 if (i < numeracion.size()){
                     int bloqueF = numeracion.get(i).getNunInicio()/1000;
                     while ((bloque == bloqueF) && (i < numeracion.size())){
-                        numBloque.add(numeracion.get(i));
+                        k=k+1;
+                        bloqueColor.add(numeracion.get(i));
+                        bloqueColor.add(estiloCelda(numeracion.get(i).getEmrCodigo().getEmrCodigo(),numeracion.get(i).getEsnCodigo().getEsnCodigo()));
+                        bloqueColor.add(Integer.toString(x)+Integer.toString(y)+Integer.toString(k));
+                        numBloque.add(bloqueColor);
+                        bloqueColor = new ArrayList();
                         i = i + 1;
                         if (i < numeracion.size()){
                             bloqueF = numeracion.get(i).getNunInicio()/1000;
                         }
                     }
                 }
-                
+
                 //((ArrayList)numer.get(x)).add(numBloque);
                 array.add(numBloque);
-                numBloque = new ArrayList<NuNumeracionVO>();
+                numBloque = new ArrayList();
                 
             }
             numer.add(array);
-            //x++;
+            x++;
         }
         
         
         return null;
     }
+    
+    public void seleccionarNumeracion() {
+        int longitug = seleccionId.length();
+        int x = Integer.parseInt(seleccionId.substring(0, longitug-2));
+        int y = Integer.parseInt(seleccionId.substring(longitug-2, longitug-1));
+        int z = Integer.parseInt(seleccionId.substring(longitug-1, longitug));
+        
+        if ((!seleccionRango) && (seleccionIdAnterior.equals("-1"))){
+            colorCelda(x,y,z,true);
+            Collection lista = FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds();
+            Iterator ir = lista.iterator();
+            while (ir.hasNext()) {
+                System.out.println(ir.next());
+            }
+
+            seleccionIdAnterior = seleccionId;
+            seleccionNumAnterior = seleccionNum;
+        } else if ((!seleccionRango) && (!seleccionIdAnterior.equals("-1"))) {
+            int longitugA = seleccionIdAnterior.length();
+            int xA = Integer.parseInt(seleccionIdAnterior.substring(0, longitugA-2));
+            int yA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
+            int zA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
+            colorCeldas(xA,yA,zA,x,y,z,true);
+            seleccionRango = true;
+            
+        } else {
+            limpiarColorCeldas();
+            colorCelda(x,y,z,true);
+            seleccionRango = false;
+            seleccionIdAnterior = seleccionId;
+            seleccionNumAnterior = seleccionNum;
+
+        }
+
+    }
+    
+    private void colorCelda(int x, int y, int z, boolean seleccionar){
+        String estilo = "background:#828282;color:#000000";
+
+        List array = (ArrayList)numer.get(x);
+        List array2 = (ArrayList)array.get(y+1);
+        List array3 = (ArrayList)array2.get(z);
+        List arrayModificado = array3;
+        if (!seleccionar){
+            estilo = estiloCelda(((NuNumeracionVO)arrayModificado.get(0)).getEmrCodigo().getEmrCodigo(),((NuNumeracionVO)arrayModificado.get(0)).getEsnCodigo().getEsnCodigo());
+        }
+        arrayModificado.set(1, estilo);
+        array2.set(array2.indexOf(array3), arrayModificado);
+        array.set(array.indexOf(array2), array2);
+        numer.set(numer.indexOf(array), array);
+    }
+    
+    private void colorCeldas(int x1, int y1, int z1,int x2, int y2, int z2, boolean seleccionar){
+        //colorCelda(x2,y2,z2,true);
+        
+        for(int i = x1; i <= x2; i++){
+            List array = (ArrayList)numer.get(i);
+            int sizeX1 = 1;
+            int sizeX2 = array.size()-1;
+            if (i == x1){
+                sizeX1 = y1+1;
+            }
+            if (i == x2){
+                sizeX2 = y2+1;
+            }
+            for(int j = sizeX1; j <= sizeX2; j++){
+                List array2 = (ArrayList)array.get(j);
+                int sizeY1 = 0;
+                int sizeY2 = array2.size();
+                if ((i == x1)&&(j-1 == y1)){
+                    sizeY1 = z1;
+                }
+                if ((i == x2)&&(j-1 == y2)){
+                    sizeY2 = z2+1;
+                }
+                for(int k = sizeY1; k < sizeY2; k++){
+                    colorCelda(i,j-1,k,seleccionar);
+                }
+
+            }
+        }
+    }
+    
+    private void limpiarColorCeldas(){
+        //colorCelda(x2,y2,z2,true);
+        
+        for(int i = 0; i < numer.size(); i++){
+            List array = (ArrayList)numer.get(i);
+            int sizeX1 = 1;
+            int sizeX2 = array.size()-1;
+            for(int j = sizeX1; j <= sizeX2; j++){
+                List array2 = (ArrayList)array.get(j);
+                int sizeY1 = 0;
+                int sizeY2 = array2.size();
+                for(int k = sizeY1; k < sizeY2; k++){
+                    colorCelda(i,j-1,k,false);
+                }
+
+            }
+        }
+    }
+    
+    private String estiloCelda(String empresa, int estado) {
+        String background = toColorCode(empresa);
+        String color = toColorCodeFont(empresa);
+        
+        if(estado == 3){
+            background = toColorCode(empresa);
+            color = toColorCodeFont(empresa);
+        } else if (estado == 4) {
+            background = "gray";
+            color = "#FFFFFF";
+        } else {
+            background = "#FFFFFF";
+            color = "#000000";
+        }
+        
+        
+        return "background:"+background+";color:"+color;
+    }
+    
+    private String toColorCode(String cadena) {
+        String resultado = cadena;
+        
+        while (resultado.length() < 6){
+            resultado = '0' + resultado;
+        }
+        
+        byte[] digest = null;
+        byte[] buffer = resultado.getBytes();
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+            messageDigest.reset();
+            messageDigest.update(buffer);
+            digest = messageDigest.digest();
+        } catch (NoSuchAlgorithmException ex) {
+            System.out.println("Error creando Digest");
+        }
+        
+        String hash = "";
+        for(byte aux : digest) {
+            int b = aux & 0xff;
+            if (Integer.toHexString(b).length() == 1) hash += "0";
+            hash += Integer.toHexString(b);
+        }
+        
+        String R = hash.substring(2, 4);
+        String G = hash.substring(6, 8);
+        String B = hash.substring(10, 12);
+        
+        return '#'+R+B+G;
+    }
+    
+    private String toColorCodeFont(String cadena) {
+        String resultado = toColorCode(cadena).substring(1, 7);
+        int R = Integer.parseInt(resultado.substring(0, 2), 16);
+        int G = Integer.parseInt(resultado.substring(2, 4), 16);
+        int B = Integer.parseInt(resultado.substring(4, 6), 16);
+        
+        double a = 1 - ( 0.299 * R + 0.587 * G + 0.114 * B)/255;
+        
+        if (a < 0.5) {
+            resultado = "000000"; // bright colors - black font
+        } else {
+            resultado = "FFFFFF"; // dark colors - white font
+        }
+      
+        return '#'+resultado;
+    }
+    
+    
 
     public LazyDataModel<NuNumeracionVO> getLazyModel() {  
         return lazyModel;  
@@ -726,6 +922,28 @@ public class NumeracionBean implements Serializable {
         this.matrizVisible = matrizVisible;
     }
 
+    public NuNumeracionVO getSeleccionNum() {
+        return seleccionNum;
+    }
+
+    public void setSeleccionNum(NuNumeracionVO seleccionNum) {
+        this.seleccionNum = seleccionNum;
+    }
+
+    public String getSeleccionId() {
+        return seleccionId;
+    }
+
+    public void setSeleccionId(String seleccionId) {
+        this.seleccionId = seleccionId;
+    }
+
+    public NuNumeracionVO getSeleccionNumAnterior() {
+        return seleccionNumAnterior;
+    }
+
+    public void setSeleccionNumAnterior(NuNumeracionVO seleccionNumAnterior) {
+        this.seleccionNumAnterior = seleccionNumAnterior;
+    }
     
-   
 }

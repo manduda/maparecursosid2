@@ -273,10 +273,10 @@
             <h:panelGroup id="datosAccionRecurso">
 
                 <p:dialog header="Detalle" widgetVar="senAccionDialog" resizable="false" modal="true" draggable="false"
-                          width="700" showEffect="fade" hideEffect="fade" position="center">
-                    <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                          showEffect="fade" hideEffect="fade" position="center" style="position: absolute;">
+                    <h:panelGrid cellpadding="1" style="font-size: 8px;" width="100%">
                         <h:form>
-                            <p:dataTable id="datosAccionSen" value="#{SenalizacionBean.selectedSens}" var="detalleSen" paginator="false" style="font-size:10px">
+                            <p:dataTable id="datosAccionSen" value="#{SenalizacionBean.selectedSens}" var="detalleSen" paginator="false" style="font-size:8px">
                                 <f:facet name="header">Detalle señalización</f:facet>
                                 <p:column headerText="PUNTO" styleClass="tabla-recurso">
                                     <h:outputText value="#{detalleSen.renCodigo.retNombre} - #{fnc:rellenarCerosIzquierda(detalleSen.senZona,2)} - #{fnc:rellenarCerosIzquierda(detalleSen.senPs,2)}"/>
