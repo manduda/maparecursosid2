@@ -89,8 +89,10 @@ public class NumeracionBean implements Serializable {
     private List numer = new ArrayList();
     private Boolean matrizVisible = false;
     private NuNumeracionVO seleccionNum = new NuNumeracionVO();
+    private NuNumeracionVO seleccionNumActual = new NuNumeracionVO();
     private NuNumeracionVO seleccionNumAnterior = new NuNumeracionVO();
     private String seleccionId = "-1";
+    private String seleccionIdActual = "-1";
     private String seleccionIdAnterior = "-1";
     private Boolean seleccionRango = false;
     private String mensajeMatriz = "";
@@ -199,9 +201,12 @@ public class NumeracionBean implements Serializable {
             return null;
         }
         
+        seleccionNum = new NuNumeracionVO();
+        seleccionNumActual = new NuNumeracionVO();
+        seleccionNumAnterior = new NuNumeracionVO();
         
-        int inicio = Integer.parseInt(NumInicio.substring(0,2)+"00000");
-        int fin = Integer.parseInt(NumFin.substring(0,2)+"99999");
+        int inicio = Integer.parseInt(NumInicio.substring(0,3)+"0000");
+        int fin = Integer.parseInt(NumFin.substring(0,3)+"9999");
         
         String columna1 = "";
         facade fachada = new facade();
@@ -263,36 +268,136 @@ public class NumeracionBean implements Serializable {
     
     public void seleccionarNumeracion() {
         int longitug = seleccionId.length();
-        int x = Integer.parseInt(seleccionId.substring(0, longitug-2));
-        int y = Integer.parseInt(seleccionId.substring(longitug-2, longitug-1));
-        int z = Integer.parseInt(seleccionId.substring(longitug-1, longitug));
+        Integer x = Integer.parseInt(seleccionId.substring(0, longitug-2));
+        Integer y = Integer.parseInt(seleccionId.substring(longitug-2, longitug-1));
+        Integer z = Integer.parseInt(seleccionId.substring(longitug-1, longitug));
         
         if ((!seleccionRango) && (seleccionIdAnterior.equals("-1"))){
             //colorCelda(x,y,z,true);
+            RequestContext.getCurrentInstance().execute("colorCelda("+x+", "+y+", "+z+", "+true+");");
 
-            seleccionIdAnterior = seleccionId;
-            seleccionNumAnterior = seleccionNum;
+            //seleccionIdAnterior = seleccionId;
+            seleccionIdActual = seleccionId;
+            seleccionIdAnterior = seleccionIdActual;
+            
+            //seleccionNumAnterior = seleccionNum;
+            seleccionNumActual = seleccionNum;
+            seleccionNumAnterior = seleccionNumActual;
+            
+            
         } else if ((!seleccionRango) && (!seleccionIdAnterior.equals("-1"))) {
             int longitugA = seleccionIdAnterior.length();
-            int xA = Integer.parseInt(seleccionIdAnterior.substring(0, longitugA-2));
-            int yA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
-            int zA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
+            Integer xA = Integer.parseInt(seleccionIdAnterior.substring(0, longitugA-2));
+            Integer yA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
+            Integer zA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
             //colorCeldas(xA,yA,zA,x,y,z,true);
+            
+            Boolean orden = true;
+            if (xA < x){
+                orden = true;
+            } else if (xA > x) {
+                orden = false;
+            } else {
+                if (yA < y) {
+                    orden = true;
+                } else if (yA > y) {
+                    orden = false;
+                } else {
+                    if (zA < z) {
+                        orden = true;
+                    } else if (zA > z) {
+                        orden = false;
+                    } else {
+                        orden = true;
+                    }
+                }
+            }
+
+            if (orden) {
+                RequestContext.getCurrentInstance().execute("colorCeldas("+xA+", "+yA+", "+zA+", "+x+", "+y+", "+z+", "+true+");");
+            } else {
+                RequestContext.getCurrentInstance().execute("colorCeldas("+x+", "+y+", "+z+", "+xA+", "+yA+", "+zA+", "+true+");");
+            }
+            
+            System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
+            
             seleccionRango = true;
+            
+            seleccionIdAnterior = seleccionIdActual;
+            seleccionIdActual = seleccionId;
+            
+            if (orden){
+                seleccionNumAnterior = seleccionNumActual;
+                seleccionNumActual = seleccionNum;
+            } else {
+                seleccionNumActual = seleccionNumAnterior;
+                seleccionNumAnterior = seleccionNum;
+            }
+            
             
         } else {
             //limpiarColorCeldas();
             //colorCelda(x,y,z,true);
-            seleccionRango = false;
-            seleccionIdAnterior = seleccionId;
-            seleccionNumAnterior = seleccionNum;
+            
+            longitug = seleccionIdActual.length();
+            x = Integer.parseInt(seleccionIdActual.substring(0, longitug-2));
+            y = Integer.parseInt(seleccionIdActual.substring(longitug-2, longitug-1));
+            z = Integer.parseInt(seleccionIdActual.substring(longitug-1, longitug));
+            
+            int longitugA = seleccionIdAnterior.length();
+            Integer xA = Integer.parseInt(seleccionIdAnterior.substring(0, longitugA-2));
+            Integer yA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
+            Integer zA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
+            
+            Boolean orden = true;
+            if (xA < x){
+                orden = true;
+            } else if (xA > x) {
+                orden = false;
+            } else {
+                if (yA < y) {
+                    orden = true;
+                } else if (yA > y) {
+                    orden = false;
+                } else {
+                    if (zA < z) {
+                        orden = true;
+                    } else if (zA > z) {
+                        orden = false;
+                    } else {
+                        orden = true;
+                    }
+                }
+            }
 
+            if (orden) {
+                RequestContext.getCurrentInstance().execute("colorCeldas("+xA+", "+yA+", "+zA+", "+x+", "+y+", "+z+", "+false+");");
+            } else {
+                RequestContext.getCurrentInstance().execute("colorCeldas("+x+", "+y+", "+z+", "+xA+", "+yA+", "+zA+", "+false+");");
+            }
+            
+            System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
+            
+            longitug = seleccionId.length();
+            x = Integer.parseInt(seleccionId.substring(0, longitug-2));
+            y = Integer.parseInt(seleccionId.substring(longitug-2, longitug-1));
+            z = Integer.parseInt(seleccionId.substring(longitug-1, longitug));
+            
+            RequestContext.getCurrentInstance().execute("colorCelda("+x+", "+y+", "+z+", "+true+");");
+            seleccionRango = false;
+            //seleccionIdAnterior = seleccionId;
+            seleccionIdAnterior = seleccionId;
+            seleccionIdActual = seleccionId;
+            
+            //seleccionNumAnterior = seleccionNum;
+            seleccionNumAnterior = seleccionNum;
+            seleccionNumActual = seleccionNum;
         }
 
     }
     
-    private void colorCelda(int x, int y, int z, boolean seleccionar){
-        String estilo = "background:#828282;color:#000000";
+    private void colorCelda(Integer x, Integer y, Integer z, boolean seleccionar){
+        /*String estilo = "background:#828282;color:#000000";
 
         List array = (ArrayList)numer.get(x);
         List array2 = (ArrayList)array.get(y+1);
@@ -304,7 +409,11 @@ public class NumeracionBean implements Serializable {
         arrayModificado.set(1, estilo);
         array2.set(array2.indexOf(array3), arrayModificado);
         array.set(array.indexOf(array2), array2);
-        numer.set(numer.indexOf(array), array);
+        numer.set(numer.indexOf(array), array);*/
+        String update = x.toString()+y.toString()+z.toString();
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("colorCelda("+x+", "+y+", "+z+", "+seleccionar+");");
+        
     }
     
     private void colorCeldas(int x1, int y1, int z1,int x2, int y2, int z2, boolean seleccionar){
@@ -989,6 +1098,14 @@ public class NumeracionBean implements Serializable {
 
     public void setMensajeMatriz(String mensajeMatriz) {
         this.mensajeMatriz = mensajeMatriz;
+    }
+
+    public NuNumeracionVO getSeleccionNumActual() {
+        return seleccionNumActual;
+    }
+
+    public void setSeleccionNumActual(NuNumeracionVO seleccionNumActual) {
+        this.seleccionNumActual = seleccionNumActual;
     }
     
 }

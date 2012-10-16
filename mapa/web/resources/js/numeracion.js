@@ -1,4 +1,4 @@
-seleccionId = "";
+/*seleccionId = "";
 seleccionIdAnterior = "-1";
 seleccionRango = false;
 function seleccionarNumeracion(id){
@@ -98,7 +98,7 @@ function seleccionarNumeracion(id){
     }
 
 
-}
+}*/
 
 function colorCelda(x, y, z, seleccionar){
     estilo = "background:#828282;color:#000000";
