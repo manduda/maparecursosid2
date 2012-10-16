@@ -77,7 +77,7 @@
                                                         <h:panelGroup rendered="#{num[0].codigoMunicipio.nombreMunicipio != null}">
                                                             <td id="columna#{num[2]}" style="border: 1px solid black;width:#{(num[0].nunFin - num[0].nunInicio + 1)/10}%;#{num[1]}">
                                                                 <h:panelGrid id="subcelda" width="100%" cellpadding="0" cellspacing="0">
-                                                                    <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatos,:pgDatosMatriz" styleClass="celda">
+                                                                    <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" oncomplete="seleccionarNumeracion('#{num[2]}');">
                                                                         <f:setPropertyActionListener target="#{NumeracionBean.seleccionNum}" value="#{num[0]}" />
                                                                         <f:setPropertyActionListener target="#{NumeracionBean.seleccionId}" value="#{num[2]}" />
                                                                         <h:panelGroup rendered="#{num[0].nunFin - num[0].nunInicio + 1 > 100}">
