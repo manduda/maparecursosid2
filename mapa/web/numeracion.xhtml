@@ -17,10 +17,74 @@
             <h:outputText value="Este módulo está desactivado" style="color: red;"/>
         </h:panelGroup>
         <h:panelGroup rendered="#{ConfiguracionModulosBean.moduloNumeracion}">
-            <h:form>
-                <p:commandButton value="Ver #{NumeracionBean.matrizVisible ? 'Lista' : 'Matriz'}" style="font-size: 10px" ajax="false" actionListener="#{NumeracionBean.verMatriz}"/>
-            </h:form>
-            <br/>
+            
+            <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
+                <h:form id="frmNum">
+                    <h:panelGrid id="pgNum">
+                        <h:panelGrid columns="2">
+                            <h:outputText value="Operador" rendered="#{!NumeracionBean.matrizVisible}"/>
+                            <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
+                                <f:selectItems value="#{NumeracionBean.listaOperador}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="Departamento" rendered="#{!NumeracionBean.matrizVisible}"/>
+                            <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
+                                <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
+                                <p:ajax update="municipios" listener="#{NumeracionBean.cambiarDepartamento}" />
+                            </h:selectOneMenu>
+                            <h:outputText value="Municipio" rendered="#{!NumeracionBean.matrizVisible}"/>
+                            <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}" rendered="#{!NumeracionBean.matrizVisible}">
+                                <f:selectItems value="#{NumeracionBean.listaMunicipio}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="Estado" rendered="#{!NumeracionBean.matrizVisible}"/>
+                            <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
+                                <f:selectItems value="#{NumeracionBean.listaEstado}" />  
+                            </h:selectOneMenu>
+                            <h:outputText value="NDC" />
+                            <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
+                                <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndtNombre}">
+                                    <f:selectItems value="#{NumeracionBean.listaNDC}" /> 
+                                    <p:ajax update="tipoNumeracion" listener="#{NumeracionBean.cambiarNdc}" disabled="#{NumeracionBean.matrizVisible}"/>
+                                </h:selectOneMenu>
+                                <h:outputText value="&#160;&#160;&#160;&#160;&#160;" />
+                                <h:panelGroup id="tipoNumeracion" rendered="#{!NumeracionBean.matrizVisible}">
+                                    <h:panelGrid rendered="#{NumeracionBean.ndcVO.ndtNombre == '-1' ? false : true}" columns="3" cellpadding="0" cellspacing="0" >
+                                        <h:outputText value="Tipo numeración"  />
+                                        <h:outputText value="&#160;" />
+                                        <h:selectOneMenu value="#{NumeracionBean.tipoNdcVO.ntnCodigo}" disabled="#{NumeracionBean.matrizVisible}">
+                                            <f:selectItems value="#{NumeracionBean.listaTipoNdc}" />  
+                                        </h:selectOneMenu>
+                                    </h:panelGrid>
+                               </h:panelGroup>
+                            </h:panelGrid>
+                            <h:outputText value="Número inicio (&gt;)"/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:inputText id="numeroInicio" value="#{NumeracionBean.numInicio}" maxlength="7" size="7" converter="javax.faces.Integer"
+                                             converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                                <p:message for="numeroInicio" />
+                            </h:panelGrid>
+                            <h:outputText value="Número Fin (&lt;)"/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:inputText id="numeroFin" value="#{NumeracionBean.numFin}" maxlength="7" size="7" converter="javax.faces.Integer"
+                                             converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                                <p:message for="numeroFin" />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" ajax="true" update=":pgNumeracion,frmNum" rendered="#{!NumeracionBean.matrizVisible}">
+                                <f:setPropertyActionListener target="#{NumeracionBean.selectedNumsAccion}" value="false"/>
+                                <f:setPropertyActionListener target="#{NumeracionBean.mensajeMatriz}" value=""/>
+                            </p:commandButton>
+                            <p:commandButton value="Consultar" actionListener="#{NumeracionBean.matriz}" ajax="true" update="frmNum" rendered="#{NumeracionBean.matrizVisible}"/>
+                            <p:commandLink value="Ver #{NumeracionBean.matrizVisible ? 'Lista' : 'Matriz'}" ajax="true" actionListener="#{NumeracionBean.verMatriz}" update=":frmNum:pgNum"/>
+                            
+                        </h:panelGrid>
+                        <h:panelGrid id="mensajeMatriz">
+                            <h:outputText value="#{NumeracionBean.mensajeMatriz}" escape="false" style="color: red; font-weight: bold;" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+            
             <h:panelGroup id="contenido">
                 <h:panelGroup rendered="#{!NumeracionBean.matrizVisible}">
                     <ui:include src="#{ConfiguracionBean.rutaContexto}numeracion-lista.xhtml"/>

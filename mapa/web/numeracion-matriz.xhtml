@@ -8,101 +8,7 @@
       xmlns:fnc="http://yournamespace.com/fnc">
     <ui:composition>
         <h:panelGroup id="displayMatriz" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'numeracion-matriz.xhtml')}">
-            <script language="javascript">
-                <!--
-                seleccionId = "";
-                seleccionIdAnterior = "-1";
-                seleccionRango = false;
-                function seleccionar(id){
-                    seleccionId = id;
-                    
-                    longitug = seleccionId.length();
-                    x = parseInt(seleccionId.substring(0, longitug-2));
-                    y = parseInt(seleccionId.substring(longitug-2, longitug-1));
-                    z = parseInt(seleccionId.substring(longitug-1, longitug));
-
-                    if ((!seleccionRango) && (seleccionIdAnterior.equals("-1"))){
-                        colorCelda(x,y,z,true);
-                        //RequestContext.getCurrentInstance().update("columna"+seleccionId);
-                        seleccionIdAnterior = seleccionId;
-                    } else if ((!seleccionRango) && (!seleccionIdAnterior.equals("-1"))) {
-                        longitugA = seleccionIdAnterior.length();
-                        xA = parseInt(seleccionIdAnterior.substring(0, longitugA-2));
-                        yA = parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
-                        zA = parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
-                        colorCeldas(xA,yA,zA,x,y,z,true);
-                        seleccionRango = true;
-                    } else {
-                        limpiarColorCeldas();
-                        colorCelda(x,y,z,true);
-                        seleccionRango = false;
-                        seleccionIdAnterior = seleccionId;
-                    }
-                    
-                    /*backgroud = 'rgb(0, 0, 0)';
-                    color = 'rgb(255, 255, 255)';
-                    border = 'rgb(255, 255, 255)';
-                    //alert(document.getElementById('h'+id).style.border);
-                    if (document.getElementById(id).style.background == backgroud){
-                        backgroud = document.getElementById('h'+id).style.background;
-                        color = document.getElementById('h'+id).style.color;
-                        border = document.getElementById('h'+id).style.border;
-                    }
-                    document.getElementById(id).style.background = backgroud;
-                    document.getElementById(id).style.color = color;
-                    document.getElementById(id).style.border = border;*/
-                    //alert(document.getElementById(id).style.background);
-                }
-    
-                function colorCelda(id, seleccionar){
-                    estilo = "background:#828282;color:#000000";
-                    
-                    backgroud = 'rgb(0, 0, 0)';
-                    color = 'rgb(255, 255, 255)';
-                    border = 'rgb(255, 255, 255)';
-                    //alert(document.getElementById('h'+id).style.border);
-                    if (!seleccionar){
-                        backgroud = document.getElementById('h'+id).style.background;
-                        color = document.getElementById('h'+id).style.color;
-                        border = document.getElementById('h'+id).style.border;
-                    }
-                    document.getElementById(id).style.background = backgroud;
-                    document.getElementById(id).style.color = color;
-                    document.getElementById(id).style.border = border;
-                }
-    
-            /*function colorCeldas(x1, y1, z1,x2, y2, z2, seleccionar){
-                //colorCelda(x2,y2,z2,true);
-
-                for(i = x1; i <= x2; i++){
-                    List array = (ArrayList)numer.get(i);
-                    sizeX1 = 1;
-                    sizeX2 = array.size()-1;
-                    if (i == x1){
-                        sizeX1 = y1+1;
-                    }
-                    if (i == x2){
-                        sizeX2 = y2+1;
-                    }
-                    for(int j = sizeX1; j <= sizeX2; j++){
-                        List array2 = (ArrayList)array.get(j);
-                        int sizeY1 = 0;
-                        int sizeY2 = array2.size();
-                        if ((i == x1)&&(j-1 == y1)){
-                            sizeY1 = z1;
-                        }
-                        if ((i == x2)&&(j-1 == y2)){
-                            sizeY2 = z2+1;
-                        }
-                        for(int k = sizeY1; k < sizeY2; k++){
-                            colorCelda(i,j-1,k,seleccionar);
-                        }
-
-                    }
-                }
-            }*/
-                -->
-            </script>
+            <h:outputScript library="js" name="numeracion.js" target="head"/>
             <h:panelGrid id="datosMatriz" style="width:100%" >
                 
                 <h:panelGrid id="pgDatosMatriz" columns="3" >
@@ -140,11 +46,12 @@
                                     <h:outputText value="#{datos[0]}"/>  
                                 </td>
                                 <ui:repeat value="#{datos}" var="nu" offset="1">
-                                    <td id="columna#{nu[0][2]}" style="border: 1px solid black;text-align:center; width:9.5%;#{fnc:countLista(nu) == 1 ? nu[0][1] : ''}">
-                                        <input id="hcolumna#{nu[0][2]}" type="hidden" style="#{fnc:countLista(nu) == 1 ? nu[0][1] : ''}"/>
+                                    <td id="#{fnc:countLista(nu) == 1 ? fnc:concat('columna',nu[0][2]) : ''}" style="border: 1px solid black;text-align:center; width:9.5%;#{fnc:countLista(nu) == 1 ? nu[0][1] : ''}">
+                                        <input id="lista#{nu[0][2]}" type="hidden" value="#{fnc:countLista(nu)}"/>
                                         <h:panelGroup id="colum" rendered="#{fnc:countLista(nu) == 1}">
+                                            <input id="hcolumna#{nu[0][2]}" type="hidden" style="#{fnc:countLista(nu) == 1 ? nu[0][1] : ''}"/>
                                             <h:panelGrid id="celda" width="100%" cellpadding="0" cellspacing="0" style="height:27px">
-                                                <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatos,:pgDatosMatriz" styleClass="celda" >
+                                                <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" oncomplete="seleccionarNumeracion('#{nu[0][2]}');">
                                                     <h:outputText  value="#{nu[0][0].codigoMunicipio.nombreMunicipio}" />
                                                     <f:setPropertyActionListener target="#{NumeracionBean.seleccionNum}" value="#{nu[0][0]}" />
                                                     <f:setPropertyActionListener target="#{NumeracionBean.seleccionId}" value="#{nu[0][2]}" />
@@ -166,8 +73,9 @@
                                             <table style="width:100%;height:27px;border-collapse: collapse;border-style: hidden;" cellpadding="0" cellspacing="0" >
                                                 <tr>
                                                     <ui:repeat value="#{nu}" var="num">
+                                                        <input id="hcolumna#{num[2]}" type="hidden" style="#{num[1]}"/>
                                                         <h:panelGroup rendered="#{num[0].codigoMunicipio.nombreMunicipio != null}">
-                                                            <td style="border: 1px solid black;width:#{(num[0].nunFin - num[0].nunInicio + 1)/10}%;#{num[1]}">
+                                                            <td id="columna#{num[2]}" style="border: 1px solid black;width:#{(num[0].nunFin - num[0].nunInicio + 1)/10}%;#{num[1]}">
                                                                 <h:panelGrid id="subcelda" width="100%" cellpadding="0" cellspacing="0">
                                                                     <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatos,:pgDatosMatriz" styleClass="celda">
                                                                         <f:setPropertyActionListener target="#{NumeracionBean.seleccionNum}" value="#{num[0]}" />

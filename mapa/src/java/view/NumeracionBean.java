@@ -93,6 +93,7 @@ public class NumeracionBean implements Serializable {
     private String seleccionId = "-1";
     private String seleccionIdAnterior = "-1";
     private Boolean seleccionRango = false;
+    private String mensajeMatriz = "";
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -151,24 +152,64 @@ public class NumeracionBean implements Serializable {
     }
     
     public String verMatriz() {
-        Boolean i = matrizVisible;
-        if (!i) {
-            matrizVisible=true;
+        mensajeMatriz = "";
+        Boolean m = matrizVisible;
+        if (!m) {
+            if (NumInicio.equals("") || (NumFin.equals(""))) {
+                mensajeMatriz = "Debes ingresar los valores de inicio y fin";
+                return null;
+            } else if (NumInicio.length() < 7 || (NumFin.length() < 7)){
+                mensajeMatriz = "Debes ingresar un total de 7 dígitos para inicio y fin";
+                return null;
+            } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > 2){
+                mensajeMatriz = "El rango de la matriz no puede ser mayor de 200 mil números";
+                return null;
+            } else if (Integer.parseInt(NumInicio) >= Integer.parseInt(NumFin)){
+                mensajeMatriz = "El número inicio debe ser menor que el número fin";
+                return null;
+            }
+            matrizVisible = true;
+            operadorVO.setEmrCodigo("-1");
+            municipioVO.setCodigoMunicipio("-1");
+            departamentoVO.setCodigoDepartamento("-1");
+            estadoVO.setEsnCodigo(-1);
+            tipoNdcVO.setNtnCodigo(-1);
+            RequestContext.getCurrentInstance().update("contenido");
             matriz();
         } else {
+            RequestContext.getCurrentInstance().update("contenido");
             matrizVisible=false;
         }
         return null;
     }
     
     public final String matriz() {
+        mensajeMatriz = "";
+        if (NumInicio.equals("") || (NumFin.equals(""))) {
+            mensajeMatriz = "Debes ingresar los valores de inicio y fin";
+            return null;
+        } else if (NumInicio.length() < 7 || (NumFin.length() < 7)){
+            mensajeMatriz = "Debes ingresar un total de 7 dígitos para inicio y fin";
+            return null;
+        } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > 2){
+            mensajeMatriz = "El rango de la matriz no puede ser mayor de 200 mil números";
+            return null;
+        } else if (Integer.parseInt(NumInicio) > Integer.parseInt(NumFin)){
+            mensajeMatriz = "El número inicio debe ser menor que el número fin";
+            return null;
+        }
+        
+        
+        int inicio = Integer.parseInt(NumInicio.substring(0,2)+"00000");
+        int fin = Integer.parseInt(NumFin.substring(0,2)+"99999");
+        
         String columna1 = "";
         facade fachada = new facade();
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
         List numBloque = new ArrayList();
         List bloqueColor = new ArrayList();
         
-        numeracion = fachada.cargarNumeracionAgrupada("1", 8000000, 8199999);
+        numeracion = fachada.cargarNumeracionAgrupada(ndcVO.getNdtNombre(), inicio, fin);
         numer = new ArrayList();
         int x = 0;
         int i = 0;
@@ -215,6 +256,7 @@ public class NumeracionBean implements Serializable {
             x++;
         }
         
+        RequestContext.getCurrentInstance().update("contenido");
         
         return null;
     }
@@ -226,12 +268,7 @@ public class NumeracionBean implements Serializable {
         int z = Integer.parseInt(seleccionId.substring(longitug-1, longitug));
         
         if ((!seleccionRango) && (seleccionIdAnterior.equals("-1"))){
-            colorCelda(x,y,z,true);
-            Collection lista = FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds();
-            Iterator ir = lista.iterator();
-            while (ir.hasNext()) {
-                System.out.println(ir.next());
-            }
+            //colorCelda(x,y,z,true);
 
             seleccionIdAnterior = seleccionId;
             seleccionNumAnterior = seleccionNum;
@@ -240,12 +277,12 @@ public class NumeracionBean implements Serializable {
             int xA = Integer.parseInt(seleccionIdAnterior.substring(0, longitugA-2));
             int yA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-2, longitugA-1));
             int zA = Integer.parseInt(seleccionIdAnterior.substring(longitugA-1, longitugA));
-            colorCeldas(xA,yA,zA,x,y,z,true);
+            //colorCeldas(xA,yA,zA,x,y,z,true);
             seleccionRango = true;
             
         } else {
-            limpiarColorCeldas();
-            colorCelda(x,y,z,true);
+            //limpiarColorCeldas();
+            //colorCelda(x,y,z,true);
             seleccionRango = false;
             seleccionIdAnterior = seleccionId;
             seleccionNumAnterior = seleccionNum;
@@ -944,6 +981,14 @@ public class NumeracionBean implements Serializable {
 
     public void setSeleccionNumAnterior(NuNumeracionVO seleccionNumAnterior) {
         this.seleccionNumAnterior = seleccionNumAnterior;
+    }
+
+    public String getMensajeMatriz() {
+        return mensajeMatriz;
+    }
+
+    public void setMensajeMatriz(String mensajeMatriz) {
+        this.mensajeMatriz = mensajeMatriz;
     }
     
 }
