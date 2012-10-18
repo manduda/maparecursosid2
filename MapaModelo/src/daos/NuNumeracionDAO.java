@@ -61,8 +61,40 @@ public class NuNumeracionDAO {
     }
     
     public static List<EmOperador> getListOperadores(EntityManager em){
-        Query query = em.createQuery("SELECT DISTINCT e FROM EmOperador e JOIN e.nuNumeracionCollection n ORDER BY e.emtNombre ASC");
-        return query.getResultList();
+        //Query query = em.createQuery("SELECT DISTINCT e FROM EmOperador e JOIN e.nuNumeracionCollection n ORDER BY e.emtNombre ASC");
+        //return query.getResultList();
+        
+        List<EmOperador> operadores = new ArrayList<EmOperador>();
+        
+
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT N.SK_EMPRESA_CODE, "
+                + "       (SELECT E.DESCRIPCION FROM SA.SK_EMPRESA E WHERE N.SK_EMPRESA_CODE = E.SK_EMPRESA_CODE) "
+                + "FROM (SELECT DISTINCT SK_EMPRESA_CODE "
+                + "      FROM NU_NUMERACION N) N "
+                + "ORDER BY (SELECT E.DESCRIPCION FROM SA.SK_EMPRESA E WHERE N.SK_EMPRESA_CODE = E.SK_EMPRESA_CODE) ASC");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+
+        List<Object[]> results = query.getResultList();
+        
+        for(int i=0; i < results.size(); i++){
+            EmOperador operador = new EmOperador();
+            String hex = "";
+            String cadena = "";
+            for(byte b : (byte[])results.get(i)[0]){
+                cadena = Integer.toHexString(0xFF & b).toUpperCase();
+                if(cadena.length() < 2){
+                    cadena = "0"+cadena;
+                }
+                hex = hex + cadena;
+            }
+            operador.setEmrCodigo(hex);
+            operador.setEmtNombre((String)results.get(i)[1]);
+            operadores.add(operador);
+        }
+        
+        return operadores;
     }
     
     public static List<NuNumeracion> cargarNumeracion(int first, int max, String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
