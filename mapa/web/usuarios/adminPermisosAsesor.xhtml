@@ -56,28 +56,48 @@
                 </h:form>
                 
                 <!-- CREAR PERMISO -->
-                <p:confirmDialog message="Asignar permiso?" 
-                                 closable="false" header="Confirmación" severity="alert" 
-                                 widgetVar="crearPermiso">  
-                    <h:panelGrid id="pgCrearPermiso" columns="2" width="100%" style="text-align: center;">
-                        <h:form>
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.crearPermiso}" update=":datosResultado,:listaPermisos" oncomplete="crearPermiso.hide();abrirDialogo(xhr, status, args);"/>
-                            <p:commandButton type="button" value="Cancelar" onclick="crearPermiso.hide();"/>
-                        </h:form>
+                <p:dialog closable="false" header="Confirmación" widgetVar="crearPermiso" resizable="false">  
+                    <h:panelGrid id="pgCrearPermiso" width="100%" style="font-size: 12px;" >
+                    
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Asignar permiso?" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <br/>
+                            
+                            <h:form>
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{TramiteBean.crearPermiso}" update=":datosResultado,:listaPermisos" oncomplete="crearPermiso.hide();abrirDialogo(xhr, status, args);"/>
+                                    <p:commandButton type="button" value="Cancelar" onclick="crearPermiso.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </h:panelGrid>
+                    
                     </h:panelGrid>
-                </p:confirmDialog>
+                    
+                </p:dialog>
                 
                 <!-- BORRAR PERMISO -->
-                <p:confirmDialog message="Eliminar permiso?"  
-                                 closable="false" header="Confirmación" severity="alert" 
-                                 widgetVar="eliminarPermiso">  
-                    <h:panelGrid id="pgEliminarPermiso" columns="2" width="100%" style="text-align: center;">
-                        <h:form>
-                            <p:commandButton value="Aceptar" action="#{TramiteBean.borrarPermiso}" update=":datosResultado,:listaPermisos" oncomplete="eliminarPermiso.hide();abrirDialogo(xhr, status, args);"/>
-                            <p:commandButton type="button" value="Cancelar" onclick="eliminarPermiso.hide();"/>
-                        </h:form>
+                <p:dialog closable="false" header="Confirmación" widgetVar="eliminarPermiso" resizable="false">  
+                    <h:panelGrid id="pgEliminarPermiso" width="100%" style="font-size: 12px;" >
+                    
+                        <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:outputText value="Eliminar permiso?" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <br/>
+                            
+                            <h:form>
+                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                    <p:commandButton value="Aceptar" action="#{TramiteBean.borrarPermiso}" update=":datosResultado,:listaPermisos" oncomplete="eliminarPermiso.hide();abrirDialogo(xhr, status, args);"/>
+                                    <p:commandButton type="button" value="Cancelar" onclick="eliminarPermiso.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </h:panelGrid>
+                    
                     </h:panelGrid>
-                </p:confirmDialog>
+
+                </p:dialog>
                 
                 <!-- RESULTADO -->
                 <p:dialog header="Resultado" widgetVar="resultadoDialog" resizable="false" modal="true" draggable="false"

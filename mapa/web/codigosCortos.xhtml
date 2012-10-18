@@ -26,9 +26,9 @@
                             <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{CodigosCortosBean.operadorVO.emrCodigo}">
                                     <f:selectItems value="#{CodigosCortosBean.listaOperador}" /> 
-                                     <p:ajax update="listaOperador"/>
+                                     <p:ajax update="listaOperador" global="false"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.operadorVO.emrCodigo != -1}" update="listaOperador">
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosCortosBean.operadorVO.emrCodigo}" value="-1"/>
                                 </p:commandLink>
@@ -38,9 +38,9 @@
                             <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{CodigosCortosBean.estadoVO.esnCodigo}">
                                     <f:selectItems value="#{CodigosCortosBean.listaEstado}" />  
-                                    <p:ajax update="listaEstado"/>
+                                    <p:ajax update="listaEstado" global="false"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.estadoVO.esnCodigo != -1}" update="listaEstado">
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosCortosBean.estadoVO.esnCodigo}" value="-1"/>
                                 </p:commandLink>
@@ -50,9 +50,9 @@
                             <h:panelGrid id="listaModalidad" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{CodigosCortosBean.modalidadVO.mdnCodigo}">
                                     <f:selectItems value="#{CodigosCortosBean.listaModalidad}" />  
-                                    <p:ajax update="listaModalidad"/>
+                                    <p:ajax update="listaModalidad" global="false"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.modalidadVO.mdnCodigo != -1}" update="listaModalidad">
+                                <p:commandLink ajax="true" rendered="#{CodigosCortosBean.modalidadVO.mdnCodigo != -1}" update="listaModalidad" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosCortosBean.modalidadVO.mdnCodigo}" value="-1"/>
                                 </p:commandLink>
@@ -68,7 +68,7 @@
                             <h:outputText value=" "/>
                             <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
                                 <h:outputText value="Borrar todos los filtros &nbsp;" />
-                                <p:commandLink ajax="true" update="formCodCorto">
+                                <p:commandLink ajax="true" update="formCodCorto" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosCortosBean.operadorVO.emrCodigo}" value="-1"/>
                                     <f:setPropertyActionListener target="#{CodigosCortosBean.estadoVO.esnCodigo}" value="-1"/>
@@ -91,11 +91,11 @@
                 <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update=":datosAccionRecurso,:display" oncomplete="ccAccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}" rendered="#{UserBean.permisos.codigosCortos}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosCortosBean.detalleAccionCC}" update=":datosAccionRecurso,:display" oncomplete="ccAccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!CodigosCortosBean.selectedCCsAccion}" rendered="#{UserBean.permisos.codigosCortos or (UserBean.liberar or UserBean.reservar)}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{CodigosCortosBean.lazyModel}" var="cc" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosCortos == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosCortos == true) or (UserBean.liberar or UserBean.reservar) ? 'multiple' : null}"
                                  selection="#{CodigosCortosBean.selectedCCs}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{cc.ccnCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{CodigosCortosBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">

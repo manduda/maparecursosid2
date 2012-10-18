@@ -11,12 +11,13 @@
             
             <!-- MENÚ RECUPERAR --> 
             <p:dialog header="Recuperar" widgetVar="recuperarDialog" resizable="false" modal="true" draggable="false"
-                      width="500" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.permisos.numeracion}">
+                      width="500" showEffect="fade" hideEffect="fade" position="center" style="position: absolute;" rendered="#{UserBean.permisos.numeracion}">
 
-                <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 10px;" >
+                <h:panelGrid id="datosRecuperar" width="100%" style="font-size: 9px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" paginator="false" style="font-size:10px">
+                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" style="font-size:8px"
+                                         paginator="true" rows="10" emptyMessage="No se encontraron registros">
                                 <f:facet name="header">Detalle numeración</f:facet>
                                 <p:column headerText="NDC" >
                                     <h:outputText value="#{detalleNum.ndnCodigo.ndtNombre}"/>
@@ -89,11 +90,12 @@
 
             <!-- MENÚ PREASIGNAR --> 
             <p:dialog header="Preasignar" widgetVar="preasignarDialog" resizable="false" modal="true" draggable="false"
-                      width="400" showEffect="fade" hideEffect="fade" position="center" rendered="#{UserBean.permisos.numeracion}">
-                <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 10px;" >
+                      width="400" showEffect="fade" hideEffect="fade" style="position: absolute;" rendered="#{UserBean.permisos.numeracion}">
+                <h:panelGrid id="datosPreasignar" width="100%" style="font-size: 9px;" >
                     <h:form>
                         <h:panelGrid width="100%"  cellpadding="0" cellspacing="0">
-                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" paginator="false" style="font-size:9px">
+                            <p:dataTable value="#{NumeracionBean.selectedNums}" var="detalleNum" style="font-size:9px"
+                                         paginator="true" rows="10" emptyMessage="No se encontraron registros">
                                 <f:facet name="header">Detalle numeración</f:facet>
                                 <p:column headerText="NDC" styleClass="tabla-expandir">
                                     <h:outputText value="#{detalleNum.ndnCodigo.ndtNombre}"/>
@@ -104,9 +106,8 @@
                                 <p:column headerText="CANTIDAD">
                                     <h:outputText value="#{detalleNum.nunFin-detalleNum.nunInicio+1}"/>
                                 </p:column>
-                                <p:column headerText="MUNICIPIO" styleClass="tabla-municipio">
+                                <p:column headerText="MUNICIPIO" >
                                     <h:outputText value="#{detalleNum.codigoMunicipio.nombreMunicipio}"/>
-                                    <br/>
                                     <h:outputText value="(#{detalleNum.codigoMunicipio.codigoDepartamento.nombreDepartamento})"/>
                                 </p:column>
                             </p:dataTable>

@@ -21,24 +21,64 @@
                 <h:form id="formCodigos1xy">
                     <h:panelGrid>
                         <h:panelGrid columns="2">
+                            
                             <h:outputText value="Modalidad"/>
-                            <h:selectOneMenu value="#{Codigos1xyBean.modalidadVO.monCodigo}">
-                                <f:selectItems value="#{Codigos1xyBean.listaModalidad}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaModalidad" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{Codigos1xyBean.modalidadVO.monCodigo}">
+                                    <f:selectItems value="#{Codigos1xyBean.listaModalidad}" />
+                                    <p:ajax update="listaModalidad" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{Codigos1xyBean.modalidadVO.monCodigo != -1}" update="listaModalidad" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.modalidadVO.monCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Estado"/>
-                            <h:selectOneMenu value="#{Codigos1xyBean.estadoVO.esnCodigo}">
-                                <f:selectItems value="#{Codigos1xyBean.listaEstado}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{Codigos1xyBean.estadoVO.esnCodigo}">
+                                    <f:selectItems value="#{Codigos1xyBean.listaEstado}" />
+                                    <p:ajax update="listaEstado" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{Codigos1xyBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Servicio"/>
-                            <h:selectOneMenu value="#{Codigos1xyBean.servicio}">
-                                <f:selectItems value="#{Codigos1xyBean.listaServicios}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaServicio" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{Codigos1xyBean.servicio}">
+                                    <f:selectItems value="#{Codigos1xyBean.listaServicios}" />
+                                    <p:ajax update="listaServicio" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{Codigos1xyBean.servicio != -1}" update="listaServicio" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.servicio}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Código 1XY"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="codigo1xy" value="#{Codigos1xyBean.codigo1xy}" maxlength="3" size="3" converter="javax.faces.Integer"
                                              converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                                 <p:message for="codigo1xy" />
                             </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="formCodigos1xy" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.modalidadVO.monCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.servicio}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{Codigos1xyBean.codigo1xy}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            
+                            
                         </h:panelGrid>
                         <h:panelGrid>
                             <p:commandButton value="Consultar" actionListener="#{Codigos1xyBean.buscar}" ajax="true" update=":pgCodigos1xy,formCodigos1xy">
@@ -53,7 +93,7 @@
                 <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update=":datosAccionRecurso" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}" rendered="#{UserBean.permisos.codigos1xy}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{Codigos1xyBean.detalleAccion}" update=":datosAccionRecurso" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!Codigos1xyBean.selectedsAccion}" rendered="#{UserBean.permisos.codigos1xy or (UserBean.liberar or UserBean.reservar)}"/>
                         </h:panelGroup>
                     </h:panelGrid>
 

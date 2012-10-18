@@ -21,20 +21,49 @@
                 <h:form id="formMarcacionAbreviada">
                     <h:panelGrid>
                         <h:panelGrid columns="2">
+                            
                             <h:outputText value="Operador"/>
-                            <h:selectOneMenu value="#{MarcacionAbreviadaBean.operadorVO.emrCodigo}">
-                                <f:selectItems value="#{MarcacionAbreviadaBean.listaOperador}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{MarcacionAbreviadaBean.operadorVO.emrCodigo}">
+                                    <f:selectItems value="#{MarcacionAbreviadaBean.listaOperador}" />
+                                    <p:ajax update="listaOperador" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{MarcacionAbreviadaBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.operadorVO.emrCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Estado"/>
-                            <h:selectOneMenu value="#{MarcacionAbreviadaBean.estadoVO.esnCodigo}">
-                                <f:selectItems value="#{MarcacionAbreviadaBean.listaEstado}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{MarcacionAbreviadaBean.estadoVO.esnCodigo}">
+                                    <f:selectItems value="#{MarcacionAbreviadaBean.listaEstado}" />
+                                    <p:ajax update="listaEstado" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{MarcacionAbreviadaBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Código marcación"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="codigoMarcacionAbreviada" value="#{MarcacionAbreviadaBean.codigoMarcacionAbreviada}" maxlength="3" size="3" converter="javax.faces.Integer"
                                              converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                                 <p:message for="codigoMarcacionAbreviada" />
                             </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="formMarcacionAbreviada" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{MarcacionAbreviadaBean.codigoMarcacionAbreviada}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                         </h:panelGrid>
                         <h:panelGrid>
                             <p:commandButton value="Consultar" actionListener="#{MarcacionAbreviadaBean.buscar}" ajax="true" update=":pgMarcacionAbreviada,formMarcacionAbreviada">
@@ -49,11 +78,11 @@
                 <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" action="#{MarcacionAbreviadaBean.detalleAccion}" update=":datosAccionRecurso,:display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!MarcacionAbreviadaBean.selectedsAccion}" rendered="#{UserBean.permisos.marcacionAbreviada}"/>
+                            <p:commandButton value="Acción" action="#{MarcacionAbreviadaBean.detalleAccion}" update=":datosAccionRecurso,:display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!MarcacionAbreviadaBean.selectedsAccion}" rendered="#{UserBean.permisos.marcacionAbreviada or (UserBean.liberar or UserBean.reservar)}"/>
                         </h:panelGroup>
                     </h:panelGrid>
                     <p:dataTable id="datos" value="#{MarcacionAbreviadaBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.marcacionAbreviada == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.marcacionAbreviada == true) or (UserBean.liberar or UserBean.reservar) ? 'multiple' : null}"
                                  selection="#{MarcacionAbreviadaBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{recurso.manCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{MarcacionAbreviadaBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">

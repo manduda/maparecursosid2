@@ -22,23 +22,56 @@
                 <h:form id="frmNum">
                     <h:panelGrid id="pgNum">
                         <h:panelGrid columns="2">
+                            
                             <h:outputText value="Operador" rendered="#{!NumeracionBean.matrizVisible}"/>
-                            <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
-                                <f:selectItems value="#{NumeracionBean.listaOperador}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
+                                    <f:selectItems value="#{NumeracionBean.listaOperador}" />
+                                    <p:ajax update="listaOperador" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.operadorVO.emrCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Departamento" rendered="#{!NumeracionBean.matrizVisible}"/>
-                            <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
-                                <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
-                                <p:ajax update="municipios" listener="#{NumeracionBean.cambiarDepartamento}" />
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
+                                    <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
+                                    <p:ajax update="listaDepartamento,listaMunicipio" listener="#{NumeracionBean.cambiarDepartamento}" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio" global="false" action="#{NumeracionBean.cambiarDepartamento}">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.departamentoVO.codigoDepartamento}" value="-1" />
+                                    <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Municipio" rendered="#{!NumeracionBean.matrizVisible}"/>
-                            <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}" rendered="#{!NumeracionBean.matrizVisible}">
-                                <f:selectItems value="#{NumeracionBean.listaMunicipio}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaMunicipio" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}" rendered="#{!NumeracionBean.matrizVisible}">
+                                    <f:selectItems value="#{NumeracionBean.listaMunicipio}" />
+                                    <p:ajax update="listaMunicipio" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.municipioVO.codigoMunicipio != -1}" update="listaMunicipio" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="Estado" rendered="#{!NumeracionBean.matrizVisible}"/>
-                            <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
-                                <f:selectItems value="#{NumeracionBean.listaEstado}" />  
-                            </h:selectOneMenu>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
+                                    <f:selectItems value="#{NumeracionBean.listaEstado}" />
+                                    <p:ajax update="listaEstado" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
                             <h:outputText value="NDC" />
                             <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
                                 <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndtNombre}">
@@ -47,15 +80,21 @@
                                 </h:selectOneMenu>
                                 <h:outputText value="&#160;&#160;&#160;&#160;&#160;" />
                                 <h:panelGroup id="tipoNumeracion" rendered="#{!NumeracionBean.matrizVisible}">
-                                    <h:panelGrid rendered="#{NumeracionBean.ndcVO.ndtNombre == '-1' ? false : true}" columns="3" cellpadding="0" cellspacing="0" >
+                                    <h:panelGrid rendered="#{NumeracionBean.ndcVO.ndtNombre == '-1' ? false : true}" columns="4" cellpadding="0" cellspacing="0" >
                                         <h:outputText value="Tipo numeración"  />
                                         <h:outputText value="&#160;" />
                                         <h:selectOneMenu value="#{NumeracionBean.tipoNdcVO.ntnCodigo}" disabled="#{NumeracionBean.matrizVisible}">
-                                            <f:selectItems value="#{NumeracionBean.listaTipoNdc}" />  
+                                            <f:selectItems value="#{NumeracionBean.listaTipoNdc}" />
+                                            <p:ajax update="tipoNumeracion" global="false"/>
                                         </h:selectOneMenu>
+                                        <p:commandLink ajax="true" rendered="#{NumeracionBean.tipoNdcVO.ntnCodigo != -1}" update="tipoNumeracion" global="false">
+                                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                            <f:setPropertyActionListener target="#{NumeracionBean.tipoNdcVO.ntnCodigo}" value="-1"/>
+                                        </p:commandLink>
                                     </h:panelGrid>
                                </h:panelGroup>
                             </h:panelGrid>
+                            
                             <h:outputText value="Número inicio (&gt;)"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="numeroInicio" value="#{NumeracionBean.numInicio}" maxlength="7" size="7" converter="javax.faces.Integer"
@@ -68,6 +107,23 @@
                                              converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                                 <p:message for="numeroFin" />
                             </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="frmNum" action="#{NumeracionBean.cambiarDepartamento}" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.departamentoVO.codigoDepartamento}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.tipoNdcVO.ntnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.numInicio}" value=""/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.numFin}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" ajax="true" update=":pgNumeracion,frmNum" rendered="#{!NumeracionBean.matrizVisible}">
@@ -92,6 +148,10 @@
                 <h:panelGroup rendered="#{NumeracionBean.matrizVisible}">
                     <ui:include src="#{ConfiguracionBean.rutaContexto}numeracion-matriz.xhtml"/>
                 </h:panelGroup>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{UserBean.permisos.numeracion}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleNumeracion.xhtml"/>
             </h:panelGroup>
             
         </h:panelGroup>

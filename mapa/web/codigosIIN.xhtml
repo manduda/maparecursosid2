@@ -26,9 +26,9 @@
                             <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{CodigosIinBean.operadorVO.emrCodigo}">
                                     <f:selectItems value="#{CodigosIinBean.listaOperador}" />
-                                    <p:ajax update="listaOperador"/>
+                                    <p:ajax update="listaOperador" global="false"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{CodigosIinBean.operadorVO.emrCodigo != -1}" update="listaOperador">
+                                <p:commandLink ajax="true" rendered="#{CodigosIinBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosIinBean.operadorVO.emrCodigo}" value="-1"/>
                                 </p:commandLink>
@@ -38,9 +38,9 @@
                             <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{CodigosIinBean.estadoVO.esnCodigo}">
                                     <f:selectItems value="#{CodigosIinBean.listaEstado}" />
-                                    <p:ajax update="listaEstado"/>
+                                    <p:ajax update="listaEstado" global="false"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{CodigosIinBean.estadoVO.esnCodigo != -1}" update="listaEstado">
+                                <p:commandLink ajax="true" rendered="#{CodigosIinBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosIinBean.estadoVO.esnCodigo}" value="-1"/>
                                 </p:commandLink>
@@ -56,7 +56,7 @@
                             <h:outputText value=" "/>
                             <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
                                 <h:outputText value="Borrar todos los filtros &nbsp;" />
-                                <p:commandLink ajax="true" update="formCodigosIin">
+                                <p:commandLink ajax="true" update="formCodigosIin" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{CodigosIinBean.operadorVO.emrCodigo}" value="-1"/>
                                     <f:setPropertyActionListener target="#{CodigosIinBean.estadoVO.esnCodigo}" value="-1"/>
@@ -78,12 +78,12 @@
                 <h:form id="frmDatos">
                     <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
                         <h:panelGroup id="opciones">
-                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosIinBean.detalleAccion}" update=":datosAccionRecurso,:display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!CodigosIinBean.selectedsAccion}" rendered="#{UserBean.permisos.codigosIin}"/>
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{CodigosIinBean.detalleAccion}" update=":datosAccionRecurso,:display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!CodigosIinBean.selectedsAccion}" rendered="#{UserBean.permisos.codigosIin or (UserBean.liberar or UserBean.reservar)}"/>
                         </h:panelGroup>
                     </h:panelGrid>
 
                     <p:dataTable id="datos" value="#{CodigosIinBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
-                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosIin == true) ? 'multiple' : null}"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosIin == true) or (UserBean.liberar or UserBean.reservar) ? 'multiple' : null}"
                                  selection="#{CodigosIinBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{recurso.cinCodigo}"
                                  rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
                                  paginatorTemplate=" #{CodigosIinBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
@@ -197,11 +197,11 @@
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
                                     </p:commandButton>
                                     <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.codigosIin and CodigosIinBean.selectedsRecuperar)}" update=":datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
-                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosIinBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,pgCodigosIin" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and CodigosIinBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgCodigosIin" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
                                     </p:commandButton>
-                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosIinBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,pgCodigosIin" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and CodigosIinBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgCodigosIin" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
                                         <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
                                         <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
                                     </p:commandButton>

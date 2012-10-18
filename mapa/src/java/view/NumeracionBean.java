@@ -96,6 +96,7 @@ public class NumeracionBean implements Serializable {
     private String seleccionIdAnterior = "-1";
     private Boolean seleccionRango = false;
     private String mensajeMatriz = "";
+    private static Integer RangoMatriz = 3;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -163,10 +164,10 @@ public class NumeracionBean implements Serializable {
             } else if (NumInicio.length() < 7 || (NumFin.length() < 7)){
                 mensajeMatriz = "Debes ingresar un total de 7 dígitos para inicio y fin";
                 return null;
-            } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > 2){
-                mensajeMatriz = "El rango de la matriz no puede ser mayor de 200 mil números";
+            } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > RangoMatriz){
+                mensajeMatriz = "El rango de la matriz no puede ser mayor de "+RangoMatriz+"00 mil números";
                 return null;
-            } else if (Integer.parseInt(NumInicio) >= Integer.parseInt(NumFin)){
+            } else if (Integer.parseInt(NumInicio) > Integer.parseInt(NumFin)){
                 mensajeMatriz = "El número inicio debe ser menor que el número fin";
                 return null;
             }
@@ -193,8 +194,8 @@ public class NumeracionBean implements Serializable {
         } else if (NumInicio.length() < 7 || (NumFin.length() < 7)){
             mensajeMatriz = "Debes ingresar un total de 7 dígitos para inicio y fin";
             return null;
-        } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > 2){
-            mensajeMatriz = "El rango de la matriz no puede ser mayor de 200 mil números";
+        } else if (Integer.parseInt(NumFin.substring(0,2))-Integer.parseInt(NumInicio.substring(0,2))+1 > RangoMatriz){
+            mensajeMatriz = "El rango de la matriz no puede ser mayor de "+RangoMatriz+"00 mil números";
             return null;
         } else if (Integer.parseInt(NumInicio) > Integer.parseInt(NumFin)){
             mensajeMatriz = "El número inicio debe ser menor que el número fin";
@@ -764,6 +765,75 @@ public class NumeracionBean implements Serializable {
             selectedNumsReservar = false;
             selectedNumsLiberar = false;
         }
+    }
+    
+    public void detalleAccionNumMatriz(){
+        facade fachada = new facade();
+        List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
+        numeracion = fachada.cargarNumeracionAgrupada(ndcVO.getNdtNombre(), seleccionNumAnterior.getNunInicio(), seleccionNumActual.getNunFin());
+        
+        selectedNums = numeracion.toArray(new NuNumeracionVO[numeracion.size()]);
+        
+        detalleAccionNum();
+        /*
+        if (!numeracion.isEmpty()){
+            selectedNumsCantidad = 0;
+            selectedNumsPreasignar = true;
+            selectedNumsRecuperar = true;
+            selectedNumsReservar = true;
+            selectedNumsLiberar = true;
+            
+            String operador = numeracion.get(0).getEmrCodigo().getEmrCodigo();
+            
+            selectedNums = null;
+            selectedNums = numeracion.toArray(new NuNumeracionVO[numeracion.size()]);
+            
+            for (NuNumeracionVO n : numeracion) {
+                selectedNumsCantidad = selectedNumsCantidad + (n.getNunFin()-n.getNunInicio()+1);
+                
+                //--- Activar / desactivar botón Pre-Asignar
+                if (selectedNumsPreasignar == true) {
+                    if((n.getEsnCodigo().getEsnCodigo() == 1) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
+                        selectedNumsPreasignar = true;
+                    } else {
+                        selectedNumsPreasignar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Recuperar
+                if (selectedNumsRecuperar == true) {
+                    if((n.getEsnCodigo().getEsnCodigo() == 3) && (operador.equals(n.getEmrCodigo().getEmrCodigo()))) {
+                        selectedNumsRecuperar = true;
+                    } else {
+                        selectedNumsRecuperar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Reservar
+                if (selectedNumsReservar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 1) {
+                        selectedNumsReservar = true;
+                    } else {
+                        selectedNumsReservar = false;
+                    }
+                }
+                //--- Activar / desactivar botón Liberar
+                if (selectedNumsLiberar == true) {
+                    if(n.getEsnCodigo().getEsnCodigo() == 4) {
+                        selectedNumsLiberar = true;
+                    } else {
+                        selectedNumsLiberar = false;
+                    }
+                }
+                
+            }
+        } else {
+            selectedNums = null;
+            selectedNumsCantidad = 0;
+            selectedNumsPreasignar = false;
+            selectedNumsRecuperar = false;
+            selectedNumsReservar = false;
+            selectedNumsLiberar = false;
+        }
+         */
     }
     
     public void postProcessXLS(Object document) {
