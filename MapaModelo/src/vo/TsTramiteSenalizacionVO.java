@@ -20,6 +20,7 @@ public class TsTramiteSenalizacionVO implements Serializable {
     private int tsnRadicado;
     private MunicipiosVO codigoMunicipio;
     private EmOperadorVO emrCodigo;
+    private TeTipoSenalizacionVO tenCodigo;
     private String tstNombreNodo;
     private String tstMarcaModelo;
     private String tstDireccion;
@@ -132,6 +133,14 @@ public class TsTramiteSenalizacionVO implements Serializable {
 
     public void setTstReservaTemporal(char tstReservaTemporal) {
         this.tstReservaTemporal = tstReservaTemporal;
+    }
+
+    public TeTipoSenalizacionVO getTenCodigo() {
+        return tenCodigo;
+    }
+
+    public void setTenCodigo(TeTipoSenalizacionVO tenCodigo) {
+        this.tenCodigo = tenCodigo;
     }
     
 }

@@ -44,6 +44,7 @@ import entities.RsReservasTemporales;
 import entities.SeSenalizacion;
 import entities.TaTramiteMa;
 import entities.TcTramiteCc;
+import entities.TeTipoSenalizacion;
 import entities.TiTramiteIin;
 import entities.TkTramiteNrn;
 import entities.TlTramiteLd;
@@ -300,6 +301,7 @@ public class TrTramitesService {
                     EsEstado estadoRecurso = new EsEstado();
                     estadoRecurso.setEsnCodigo(2);
                     senalizacion.setEsnCodigo(estadoRecurso);
+                    senalizacion.setTenCodigo(t.getTenCodigo());
                     senalizacion.setSetNombreNodo(t.getTstNombreNodo());
                     senalizacion.setSetMarcaModelo(t.getTstMarcaModelo());
                     senalizacion.setSetDireccion(t.getTstDireccion());
@@ -496,6 +498,7 @@ public class TrTramitesService {
                 
                 senalizacion.setCodigoMunicipio(t.getCodigoMunicipio());
                 senalizacion.setEmrCodigo(t.getEmrCodigo());
+                senalizacion.setTenCodigo(t.getTenCodigo());
                 senalizacion.setSetNombreNodo(t.getTstNombreNodo());
                 senalizacion.setSetMarcaModelo(t.getTstMarcaModelo());
                 senalizacion.setSetDireccion(t.getTstDireccion());
@@ -1189,6 +1192,7 @@ public class TrTramitesService {
         Municipios municipio = new Municipios();
         EmOperador operador = new EmOperador();
         AcAccion accion = new AcAccion();
+        TeTipoSenalizacion tipoSenalizacion = new TeTipoSenalizacion();
         String nombreNodo = "";
         String marcaModelo = "";
         String direccion = "";
@@ -1204,6 +1208,7 @@ public class TrTramitesService {
                 }
                 municipio.setCodigoMunicipio(vo.getCodigoMunicipio().getCodigoMunicipio());
                 operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                tipoSenalizacion.setTenCodigo(vo.getTenCodigo().getTenCodigo());
                 nombreNodo = vo.getTstNombreNodo();
                 marcaModelo = vo.getTstMarcaModelo();
                 direccion = vo.getTstDireccion();
@@ -1223,6 +1228,7 @@ public class TrTramitesService {
                 }
                 municipio.setCodigoMunicipio(senalizacion.getCodigoMunicipio().getCodigoMunicipio());
                 operador.setEmrCodigo(vo.getEmrCodigo().getEmrCodigo());
+                tipoSenalizacion.setTenCodigo(6);
                 nombreNodo = "";
                 marcaModelo = "";
                 direccion = "";
@@ -1244,6 +1250,7 @@ public class TrTramitesService {
         entity.setTsnRadicado(vo.getTsnRadicado());
         entity.setCodigoMunicipio(municipio);
         entity.setEmrCodigo(operador);
+        entity.setTenCodigo(tipoSenalizacion);
         entity.setTstNombreNodo(nombreNodo);
         entity.setTstMarcaModelo(marcaModelo);
         entity.setTstDireccion(direccion);

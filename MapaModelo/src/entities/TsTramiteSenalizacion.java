@@ -59,6 +59,10 @@ public class TsTramiteSenalizacion implements Serializable {
     @ManyToOne(optional = false)
     private EmOperador emrCodigo;
     
+    @JoinColumn(name = "TEN_CODIGO", referencedColumnName = "TEN_CODIGO")
+    @ManyToOne(optional = false)
+    private TeTipoSenalizacion tenCodigo;
+    
     @Column(name = "TST_NOMBRE_NODO")
     private String tstNombreNodo;
     
@@ -89,6 +93,7 @@ public class TsTramiteSenalizacion implements Serializable {
         vo.setTsnRadicado(this.getTsnRadicado());
         vo.setCodigoMunicipio(this.getCodigoMunicipio().toVO());
         vo.setEmrCodigo(this.getEmrCodigo().toVO());
+        vo.setTenCodigo(this.getTenCodigo().toVO());
         vo.setTstNombreNodo(this.getTstNombreNodo());
         vo.setTstMarcaModelo(this.getTstMarcaModelo());
         vo.setTstDireccion(this.getTstDireccion());
@@ -202,6 +207,13 @@ public class TsTramiteSenalizacion implements Serializable {
     public void setTstReservaTemporal(char tstReservaTemporal) {
         this.tstReservaTemporal = tstReservaTemporal;
     }
-    
 
+    public TeTipoSenalizacion getTenCodigo() {
+        return tenCodigo;
+    }
+
+    public void setTenCodigo(TeTipoSenalizacion tenCodigo) {
+        this.tenCodigo = tenCodigo;
+    }
+    
 }
