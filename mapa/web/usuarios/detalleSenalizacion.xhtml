@@ -125,6 +125,10 @@
                             </h:panelGrid>
                             <br/>
                             <h:panelGrid columns="2" >
+                                <h:outputText value="Tipo señalizacion:&#160;" style="font-weight: bold;"/>
+                                <h:selectOneMenu value="#{TramiteBean.tramiteSenalizacionVO.tenCodigo.tenCodigo}">
+                                    <f:selectItems value="#{SenalizacionBean.listaTipoSenalizacion}" />
+                                </h:selectOneMenu>
                                 <h:outputText value="Nombre Nodo:&#160;" style="font-weight: bold;"/>
                                 <h:inputText value="#{TramiteBean.tramiteSenalizacionVO.tstNombreNodo}" size="25" maxlength="20"/>
                                 <h:outputText value="Marca/Modelo:&#160;" style="font-weight: bold;"/>

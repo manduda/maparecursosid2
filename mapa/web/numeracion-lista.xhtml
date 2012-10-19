@@ -71,14 +71,6 @@
                             </p:column>
                         </p:dataTable>
 
-                        <p:panel header="Exportar datos">
-                            <h:commandLink >
-                                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/excel.png" style="border:0px"/>
-                                <p:dataExporter type="XLS" target="datos" fileName="numeracion" pageOnly="true" excludeColumns="0" postProcessor="#{NumeracionBean.postProcessXLS}"/>
-                            </h:commandLink>
-                            <br/>
-                            <h:outputText value="Excel"/>
-                        </p:panel>
                     </h:form>
                 </h:panelGrid>
 

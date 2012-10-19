@@ -43,6 +43,7 @@ import vo.RsReservasTemporalesVO;
 import vo.SeSenalizacionVO;
 import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
+import vo.TeTipoSenalizacionVO;
 import vo.TiTramiteIinVO;
 import vo.TkTramiteNrnVO;
 import vo.TlTramiteLdVO;
@@ -1015,6 +1016,7 @@ public class TramiteBean implements Serializable {
 
                     MunicipiosVO municipio = new MunicipiosVO();
                     EmOperadorVO operador = new EmOperadorVO();
+                    TeTipoSenalizacionVO tipoSenalizacion = new TeTipoSenalizacionVO();
                     String nombreNodo = "";
                     String marcaModelo = "";
                     String direccion = "";
@@ -1026,6 +1028,11 @@ public class TramiteBean implements Serializable {
                     switch(codigoAccion){
                         case 2: //Preasignar
                             
+                            if((tramiteSenalizacionVO.getTenCodigo().getTenCodigo() == -1) || (tramiteSenalizacionVO.getTenCodigo().getTenCodigo() == 6)){
+                                mensaje = "Debes escoger el tipo se señalización.";
+                                error = true;
+                                break forSenalizacion;
+                            }
                             if(tramiteSenalizacionVO.getTstNombreNodo().equals("")){
                                 mensaje = "Debes ingresar el nombre del nodo.";
                                 error = true;
@@ -1048,6 +1055,7 @@ public class TramiteBean implements Serializable {
                                     break;
                                 }
                             }
+                            tipoSenalizacion.setTenCodigo(tramiteSenalizacionVO.getTenCodigo().getTenCodigo());
                             nombreNodo = tramiteSenalizacionVO.getTstNombreNodo();
                             marcaModelo = tramiteSenalizacionVO.getTstMarcaModelo();
                             direccion = tramiteSenalizacionVO.getTstDireccion();
@@ -1059,6 +1067,7 @@ public class TramiteBean implements Serializable {
                             }
                             municipio.setCodigoMunicipio(s.getCodigoMunicipio().getCodigoMunicipio());
                             operador.setEmrCodigo(configuracion.getOperadorNinguno());
+                            tipoSenalizacion.setTenCodigo(6);
                             nombreNodo = "";
                             marcaModelo = "";
                             direccion = "";
@@ -1072,6 +1081,7 @@ public class TramiteBean implements Serializable {
                     tsVO.setTsnRadicado(radicado);
                     tsVO.setCodigoMunicipio(municipio);
                     tsVO.setEmrCodigo(operador);
+                    tsVO.setTenCodigo(tipoSenalizacion);
                     tsVO.setTstNombreNodo(nombreNodo);
                     tsVO.setTstMarcaModelo(marcaModelo);
                     tsVO.setTstDireccion(direccion);
@@ -1829,6 +1839,8 @@ public class TramiteBean implements Serializable {
             
             cambiarDepartamento();
             tramiteSenalizacionVO.setCodigoMunicipio(municipio);
+            
+            tramiteSenalizacionVO.setTenCodigo(senalizacion[0].getTenCodigo());
             
         }else if(tipoRecurso.equals("numeracion")){
             NumeracionBean num = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
