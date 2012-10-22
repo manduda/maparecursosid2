@@ -29,11 +29,12 @@
                             <h:outputText value="Operador origen"/>
                             <h:selectOneMenu value="#{TramiteBean.operadorOrigen}">
                                 <f:selectItems value="#{TramiteBean.listaOperador}" />
-                                <p:ajax update="opcionesRecursos" listener="#{TramiteBean.cambioOperadorOrigen}" />
+                                <p:ajax update="opcionesRecursos,pgTransferir" listener="#{TramiteBean.cambioOperadorOrigen}" />
                             </h:selectOneMenu>
                             <h:outputText value="Operador destino"/>
                             <h:selectOneMenu value="#{TramiteBean.operadorDestino}">
-                                <f:selectItems value="#{TramiteBean.listaOperador}" />  
+                                <f:selectItems value="#{TramiteBean.listaOperador}" />
+                                <p:ajax update="pgTransferir" />
                             </h:selectOneMenu>
                         </h:panelGrid>
                         <br/>
@@ -43,33 +44,75 @@
                             </h:panelGrid>
                             <h:panelGrid columns="2" width="100%" id="opcionesRecursos" style="border: 1px solid;">
                                 <h:outputText value="Numeración"/>
-                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionNumeracion}" disabled="#{!TramiteBean.opcionNumeracion}"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionNumeracion}" disabled="#{!TramiteBean.opcionNumeracion}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
                                 <h:outputText value="Señalización"/>
-                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionSenalizacion}" disabled="#{!TramiteBean.opcionSenalizacion}"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionSenalizacion}" disabled="#{!TramiteBean.opcionSenalizacion}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
                                 <h:outputText value="Códigos IIN"/>
-                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionIin}" disabled="#{!TramiteBean.opcionIin}"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionIin}" disabled="#{!TramiteBean.opcionIin}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
                                 <h:outputText value="Códigos MNC"/>
-                                <h:selectBooleanCheckbox value="#{TramiteBean.seleccionMnc}" disabled="#{!TramiteBean.opcionMnc}"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionMnc}" disabled="#{!TramiteBean.opcionMnc}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:outputText value="Códigos Cortos"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosCortos}" disabled="#{!TramiteBean.opcionCodigosCortos}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:outputText value="Marcación Abreviadaa"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionMarcacionAbreviada}" disabled="#{!TramiteBean.opcionMarcacionAbreviada}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:outputText value="Códigos Ld"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosLd}" disabled="#{!TramiteBean.opcionCodigosLd}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
+                                <h:outputText value="Códigos Nrn"/>
+                                <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosNrn}" disabled="#{!TramiteBean.opcionCodigosNrn}">
+                                    <p:ajax update="pgTransferir" />
+                                </p:selectBooleanCheckbox>
+                                
+
                             </h:panelGrid>
                         </h:panelGrid>
                         <br/>
-                        <h:panelGrid>
-                            <p:commandButton type="button" value="Transferir" onclick="confirmarTransferenciaDialog.show()"/>
-                            <!-- Mensaje de confirmación para transferencia de recursos -->
-                            <p:confirmDialog message="Esta seguro que quiere realizar esta operación? Recuerde que no puede devolverse una vez se haga"  
-                                             closable="false"
-                                             header="Confirmación" severity="alert" widgetVar="confirmarTransferenciaDialog">  
-                                <h:panelGrid columns="2" width="100%" style="text-align: center;">
-                                    <p:commandButton value="Aceptar" actionListener="#{TramiteBean.transferirRecursos}" oncomplete="confirmarTransferenciaDialog.hide();" ajax="false"/>
-                                    <p:commandButton type="button" value="Cancelar" onclick="confirmarTransferenciaDialog.hide();"/>
-                                </h:panelGrid>
-                            </p:confirmDialog>
-                            <p:ajaxStatus onstart="statusDialog.show();" onsuccess="statusDialog.hide();"/>
-                            <p:dialog modal="true" widgetVar="statusDialog" header="Procesando" draggable="false" closable="false">
-                                <p:graphicImage value="/resources/images/ajaxloadingbar.gif" />
-                            </p:dialog>
+                        <h:panelGrid id="pgTransferir">
+                            <p:commandButton type="button" value="Transferir" onclick="confirmarTransferenciaDialog.show()" 
+                                             disabled="#{(!TramiteBean.seleccionNumeracion and !TramiteBean.seleccionSenalizacion and !TramiteBean.seleccionIin 
+                                                         and !TramiteBean.seleccionMnc and !TramiteBean.seleccionCodigosCortos and !TramiteBean.seleccionCodigosLd 
+                                                         and !TramiteBean.seleccionMarcacionAbreviada and !TramiteBean.seleccionCodigosNrn)
+                                                         or (TramiteBean.operadorDestino == '-1')
+                                                         or (TramiteBean.operadorDestino == TramiteBean.operadorOrigen)}"/>
                         </h:panelGrid>
                     </h:panelGrid>
+                    <!-- Mensaje de confirmación para transferencia de recursos -->
+                    <p:dialog header="Confirmación" widgetVar="confirmarTransferenciaDialog" resizable="false" modal="true" draggable="false"
+                              width="400" showEffect="fade" hideEffect="fade" position="center" closable="false">
+                        <h:panelGrid style="text-align: center; " width="100%">
+                            <h:panelGrid style="text-align: center; " width="100%" columns="2">
+                                <p:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/alert.png" height="50px" width="50px"/>
+                                <h:outputText value="¿Está seguro que quiere realizar esta operación?"/>
+                            </h:panelGrid>
+                            <h:outputText value="Recuerde que esta operación no se puede deshacer." style="color:red; font-weight: bold"/>
+                            <br/>
+                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                <p:commandButton value="Aceptar" actionListener="#{TramiteBean.transferirRecursos}" oncomplete="confirmarTransferenciaDialog.hide();" ajax="false"/>
+                                <p:commandButton type="button" value="Cancelar" onclick="confirmarTransferenciaDialog.hide();"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:dialog>
+
                 </h:panelGroup>
                 <h:panelGroup rendered="#{!(TramiteBean.mensajeTransferirRecursos == '')}">
                     <h:panelGrid width="100%">

@@ -309,7 +309,7 @@
                 </p:dialog>
             </h:panelGroup>
             
-            <h:panelGroup rendered="#{UserBean.permisos.senalizacion}">
+            <h:panelGroup rendered="#{UserBean.permisos.senalizacion or (UserBean.liberar or UserBean.reservar)}">
                 <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleSenalizacion.xhtml"/>
             </h:panelGroup>
         

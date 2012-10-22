@@ -150,7 +150,7 @@
                 </h:panelGroup>
             </h:panelGroup>
             
-            <h:panelGroup rendered="#{UserBean.permisos.numeracion}">
+            <h:panelGroup rendered="#{UserBean.permisos.numeracion or (UserBean.liberar or UserBean.reservar)}">
                 <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleNumeracion.xhtml"/>
             </h:panelGroup>
             

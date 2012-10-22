@@ -230,7 +230,7 @@
                             <h:panelGroup rendered="#{(UserBean.asignarTramites)and(UserBean.userVO.codigoSIUST.userCode == TramiteBean.selectedTramite.usnCodigo.codigoSIUST.userCode)and((TramiteBean.selectedTramite.etnCodigo.etnCodigo == 1)or(TramiteBean.selectedTramite.etnCodigo.etnCodigo == 3))}">
                                 <!-- ASIGNAR TRAMITE -->
                                 <h:form>
-                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update=":datosAsignarUsuario" style="width: 120px"/>
+                                    <p:commandButton type="button" value="Asignar trámite" onclick="confirmarAsignarUsuario.show()" update=":datosAsignarUsuario" style="width: 130px"/>
                                 </h:form>
                                 <p:dialog showEffect="fade" hideEffect="fade" modal="true" draggable="false" resizable="false"
                                             header="Asignar asesor" widgetVar="confirmarAsignarUsuario">

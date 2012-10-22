@@ -61,6 +61,7 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     private boolean reasignarTramite = false;
     
     private boolean consultarTramite = false;
+    private boolean consultarReservas = false;
         
     private boolean transferirRecursos = false;
     private boolean administrarUsuarios = false;
@@ -281,6 +282,14 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
         this.reasignarTramite = reasignarTramite;
     }
 
+    public boolean isConsultarReservas() {
+        return consultarReservas;
+    }
+
+    public void setConsultarReservas(boolean consultarReservas) {
+        this.consultarReservas = consultarReservas;
+    }
+    
     public inicio.Permisos getPermisos() {
         return permisos;
     }

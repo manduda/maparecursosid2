@@ -97,6 +97,7 @@ public class InicioBean {
                         userBean.setAdministrarModulos(true);
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(false);
+                        userBean.setConsultarReservas(true);
                         break;
                     case 2: // COORDINADOR
                         //userBean.setRecuperar(false);
@@ -119,6 +120,7 @@ public class InicioBean {
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(false);
+                        userBean.setConsultarReservas(false);
                         break;
                     case 3: // ASESOR
                         //userBean.setRecuperar(true);
@@ -141,6 +143,7 @@ public class InicioBean {
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(true);
+                        userBean.setConsultarReservas(true);
                         
                         Permisos permisos = new Permisos();
                         permisos.setNumeracion(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),1));
@@ -177,6 +180,7 @@ public class InicioBean {
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(true);
                         userBean.setReasignarTramite(false);
+                        userBean.setConsultarReservas(false);
                         break;
                 }
                 

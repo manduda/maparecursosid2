@@ -10,22 +10,21 @@
         <h:panelGroup id="displayMatriz" rendered="#{facesContext.externalContext.requestServletPath != fnc:concat(ConfiguracionBean.rutaContexto,'numeracion-matriz.xhtml')}">
             <h:outputScript library="js" name="numeracion.js" target="head"/>
             <h:panelGrid id="datosMatriz" style="width:100%" >
-                
-                <h:panelGrid id="pgDatosMatriz" columns="3" rendered="#{UserBean.permisos.numeracion}">
-                    <h:outputText value=""/>
-                    <h:outputText value="NDC"/>
-                    <h:outputText value="Número"/>
-                    <h:outputText value="Inicio: "/>
-                    <h:outputText value="#{NumeracionBean.seleccionNumAnterior.ndnCodigo.ndtNombre}"/>
-                    <h:outputText value="#{NumeracionBean.seleccionNumAnterior.nunInicio}"/>
-                    <h:outputText value="Fin: "/>
-                    <h:outputText value="#{NumeracionBean.seleccionNumActual.ndnCodigo.ndtNombre}"/>
-                    <h:outputText value="#{NumeracionBean.seleccionNumActual.nunFin}"/>
-                </h:panelGrid>
-                <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.permisos.numeracion}">
+                <h:panelGrid style="text-align: left;font-size:10px" columns="2" rendered="#{UserBean.permisos.numeracion or (UserBean.liberar or UserBean.reservar)}">
                     <h:panelGroup id="opciones">
                         <p:commandButton value="Acción" ajax="true" actionListener="#{NumeracionBean.detalleAccionNumMatriz}" update=":datosAccionRecursoMatriz" oncomplete="numAccionMatrizDialog.show();" icon="ui-icon ui-icon-cart"  />
                     </h:panelGroup>
+                    <h:panelGrid id="pgDatosMatriz" columns="5" >
+                        <h:outputText value="Selección: " style="font-weight: bold;" rendered="#{NumeracionBean.seleccionNumActual.nunFin != '0'}"/>
+                        <h:panelGrid columns="2" style="border:1px solid; background: darkgreen; color: white;" rendered="#{NumeracionBean.seleccionNumAnterior.nunInicio != '0'}">
+                            <h:outputText value="Inicio: "/>
+                            <h:outputText value="(#{NumeracionBean.seleccionNumAnterior.ndnCodigo.ndtNombre}) #{NumeracionBean.seleccionNumAnterior.nunInicio}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="border:1px solid; background: darkgreen; color: white;" rendered="#{NumeracionBean.seleccionNumActual.nunFin != '0'}">
+                            <h:outputText value="Fin: "/>
+                            <h:outputText value="(#{NumeracionBean.seleccionNumActual.ndnCodigo.ndtNombre}) #{NumeracionBean.seleccionNumActual.nunFin}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGroup id="pgDatos">
                     <table border="1" style="font-size:8px;width:100%;border-collapse: collapse;" class="estilo" cellpadding="0" cellspacing="0">
@@ -55,12 +54,12 @@
                                         <h:panelGroup id="colum" rendered="#{fnc:countLista(nu) == 1}">
                                             <input id="hcolumna#{nu[0][2]}" type="hidden" style="#{fnc:countLista(nu) == 1 ? nu[0][1] : ''}"/>
                                             <h:panelGrid id="celda" width="100%" cellpadding="0" cellspacing="0" style="height:27px">
-                                                <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" rendered="#{UserBean.permisos.numeracion}">
+                                                <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" rendered="#{UserBean.permisos.numeracion or (UserBean.liberar or UserBean.reservar)}">
                                                     <h:outputText  value="#{nu[0][0].codigoMunicipio.nombreMunicipio}" />
                                                     <f:setPropertyActionListener target="#{NumeracionBean.seleccionNum}" value="#{nu[0][0]}" />
                                                     <f:setPropertyActionListener target="#{NumeracionBean.seleccionId}" value="#{nu[0][2]}" />
                                                 </p:commandLink>
-                                                <h:outputText value="#{nu[0][0].codigoMunicipio.nombreMunicipio}" rendered="#{!UserBean.permisos.numeracion}"/>
+                                                <h:outputText value="#{nu[0][0].codigoMunicipio.nombreMunicipio}" rendered="#{!UserBean.permisos.numeracion and (!UserBean.liberar or !UserBean.reservar)}"/>
                                             </h:panelGrid>
                                             
                                             <p:tooltip for="celda" styleClass="tooltip">
@@ -80,7 +79,7 @@
                                                         <h:panelGroup rendered="#{num[0].codigoMunicipio.nombreMunicipio != null}">
                                                             <td id="columna#{num[2]}" style="border: 1px solid black;width:#{(num[0].nunFin - num[0].nunInicio + 1)/10}%;#{num[1]}">
                                                                 <h:panelGrid id="subcelda" width="100%" cellpadding="0" cellspacing="0">
-                                                                    <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" rendered="#{UserBean.permisos.numeracion}">
+                                                                    <p:commandLink action="#{NumeracionBean.seleccionarNumeracion}" update=":pgDatosMatriz" styleClass="celda" rendered="#{UserBean.permisos.numeracion or (UserBean.liberar or UserBean.reservar)}">
                                                                         <f:setPropertyActionListener target="#{NumeracionBean.seleccionNum}" value="#{num[0]}" />
                                                                         <f:setPropertyActionListener target="#{NumeracionBean.seleccionId}" value="#{num[2]}" />
                                                                         <h:panelGroup rendered="#{num[0].nunFin - num[0].nunInicio + 1 > 100}">
@@ -93,7 +92,7 @@
                                                                             <p:graphicImage style="border:0px" value="#{ConfiguracionBean.rutaContexto}resources/images/100-#{num[0].esnCodigo.esnCodigo == '4' ? 'B' : 'N'}.png" />
                                                                         </h:panelGroup>
                                                                     </p:commandLink>
-                                                                    <h:panelGroup styleClass="celda" rendered="#{!UserBean.permisos.numeracion}">
+                                                                    <h:panelGroup styleClass="celda" rendered="#{!UserBean.permisos.numeracion and (!UserBean.liberar or !UserBean.reservar)}">
                                                                         <h:panelGroup rendered="#{num[0].nunFin - num[0].nunInicio + 1 > 100}">
                                                                             <h:outputText value="#{num[0].nunFin - num[0].nunInicio + 1}" converter="javax.faces.Integer"/>
                                                                         </h:panelGroup>

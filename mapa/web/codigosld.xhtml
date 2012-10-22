@@ -205,7 +205,7 @@
                 </p:dialog>
             </h:panelGroup>
             
-            <h:panelGroup rendered="#{UserBean.permisos.codigosLd}">
+            <h:panelGroup rendered="#{UserBean.permisos.codigosLd or (UserBean.liberar or UserBean.reservar)}">
                 <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleCodigosLd.xhtml"/>
             </h:panelGroup>
 

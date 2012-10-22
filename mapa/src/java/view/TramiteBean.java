@@ -137,10 +137,18 @@ public class TramiteBean implements Serializable {
     private Boolean seleccionSenalizacion;
     private Boolean seleccionIin;
     private Boolean seleccionMnc;
+    private Boolean seleccionCodigosCortos;
+    private Boolean seleccionCodigosLd;
+    private Boolean seleccionMarcacionAbreviada;
+    private Boolean seleccionCodigosNrn;
     private Boolean opcionNumeracion;
     private Boolean opcionSenalizacion;
     private Boolean opcionIin;
     private Boolean opcionMnc;
+    private Boolean opcionCodigosCortos;
+    private Boolean opcionCodigosLd;
+    private Boolean opcionMarcacionAbreviada;
+    private Boolean opcionCodigosNrn;
     private String observacionesTramite;
     private String resolucionTerminarTramite;
     private Date fechaResolucionTerminarTramite;
@@ -1573,6 +1581,7 @@ public class TramiteBean implements Serializable {
                         + "</tr>"
                         + "<tr>"
                         + "<td colspan=\"2\"><br>" + mensaje + "<td>"
+                        + "</tr>"
                         + "</table>"
                         + "<br><br>";
         } else {
@@ -1583,6 +1592,7 @@ public class TramiteBean implements Serializable {
                         + "</tr>"
                         + "<tr>"
                         + "<td colspan=\"2\"><br>" + mensaje + "<td>"
+                        + "</tr>"
                         + "</table>"
                         + "<br><br>";
         }
@@ -1598,109 +1608,145 @@ public class TramiteBean implements Serializable {
     }
     
     public String liberarReservarRecurso() {
-        if ((codigoAccion <= 0)||(tipoRecurso.equals(""))){
-            mensajeRecurso = "<br><b>Error al liberar/reservar el recurso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
-            return null;
-        }
-        
-        mensajeRecurso = "";
-        
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        
-        facade fachada = new facade();
-        
-        Integer resultado = 0;
-        
-        ArrayList vo = new ArrayList();
-        if (tipoRecurso.equals("senalizacion")) {
-            SenalizacionBean bean = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);
-            
-            int size = bean.getSelectedSens().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelectedSens()[i]);
-            }
-            bean.setSelectedSensAccion(false);
-        } else if (tipoRecurso.equals("numeracion")) {
-            NumeracionBean bean = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
-            
-            int size = bean.getSelectedNums().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelectedNums()[i]);
-            }
-            bean.setSelectedNumsAccion(false);
-        } else if (tipoRecurso.equals("codigosld")) {
-            CodigosLdBean bean = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);
-            
-            int size = bean.getSelectedLds().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelectedLds()[i]);
-            }
-            bean.setSelectedLdsAccion(false);
-        } else if (tipoRecurso.equals("codigosCortos")) {
-            CodigosCortosBean bean = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);
-            
-            int size = bean.getSelectedCCs().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelectedCCs()[i]);
-            }
-            bean.setSelectedCCsAccion(false);
-            bean.buscar();
-        } else if (tipoRecurso.equals("marcacionAbreviada")) {
-            MarcacionAbreviadaBean bean = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);
-            
-            int size = bean.getSelecteds().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelecteds()[i]);
-            }
-            bean.setSelectedsAccion(false);
-        } else if (tipoRecurso.equals("codigosMnc")) {
-            CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);
-            
-            int size = bean.getSelecteds().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelecteds()[i]);
-            }
-            bean.setSelectedsAccion(false);
-        } else if (tipoRecurso.equals("codigosNrn")) {
-            CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);
-            
-            int size = bean.getSelecteds().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelecteds()[i]);
-            }
-            bean.setSelectedsAccion(false);
-        } else if (tipoRecurso.equals("codigosIin")) {
-            CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);
-            
-            int size = bean.getSelecteds().length;
-            for (int i = 0; i < size; i++) {
-                vo.add(bean.getSelecteds()[i]);
-            }
-            bean.setSelectedsAccion(false);
-        }
-        
+        String mensaje = "";
+        boolean error = false;
         String accion = "";
-        if (codigoAccion == 1) {
-            accion = "Liberación";
-            resultado = fachada.reservarLiberarRecurso(vo,0);
-        } else if (codigoAccion == 4) {
-            accion = "Reserva";
-            resultado = fachada.reservarLiberarRecurso(vo,1);
+        if ((codigoAccion <= 0)||(tipoRecurso.equals(""))){
+            mensaje = "Si el error persiste, por favor contacte al Aministrador.";
+            error = true;
         }
         
-        switch(resultado){
-            case 0:
-                mensajeRecurso = "<br><b>Error de "+ accion + " del recurso.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
-                break;
-            case 1:
-                mensajeRecurso = "<br><b>" + accion + " exitosa de recursos</b><br><br>";
-                break;
-            case 2:
-                mensajeRecurso = "<br><b>Falta diligenciar un dato.</b><br><br>";
-                break;
-            case 3:
-                mensajeRecurso = "<br><b>El recurso no se puede liberar porque está reservado temporalmente</b><br><br>";
-                break;
+        if(!error) {
+            mensajeRecurso = "";
+        
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+
+            ArrayList vo = new ArrayList();
+            if (tipoRecurso.equals("senalizacion")) {
+                SenalizacionBean bean = (SenalizacionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{SenalizacionBean}", SenalizacionBean.class);
+
+                int size = bean.getSelectedSens().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelectedSens()[i]);
+                }
+                bean.setSelectedSensAccion(false);
+            } else if (tipoRecurso.equals("numeracion")) {
+                NumeracionBean bean = (NumeracionBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{NumeracionBean}", NumeracionBean.class);
+
+                int size = bean.getSelectedNums().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelectedNums()[i]);
+                }
+                bean.setSelectedNumsAccion(false);
+            } else if (tipoRecurso.equals("codigosld")) {
+                CodigosLdBean bean = (CodigosLdBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosLdBean}", CodigosLdBean.class);
+
+                int size = bean.getSelectedLds().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelectedLds()[i]);
+                }
+                bean.setSelectedLdsAccion(false);
+            } else if (tipoRecurso.equals("codigosCortos")) {
+                CodigosCortosBean bean = (CodigosCortosBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosCortosBean}", CodigosCortosBean.class);
+
+                int size = bean.getSelectedCCs().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelectedCCs()[i]);
+                }
+                bean.setSelectedCCsAccion(false);
+                bean.buscar();
+            } else if (tipoRecurso.equals("marcacionAbreviada")) {
+                MarcacionAbreviadaBean bean = (MarcacionAbreviadaBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{MarcacionAbreviadaBean}", MarcacionAbreviadaBean.class);
+
+                int size = bean.getSelecteds().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelecteds()[i]);
+                }
+                bean.setSelectedsAccion(false);
+            } else if (tipoRecurso.equals("codigosMnc")) {
+                CodigosMncBean bean = (CodigosMncBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosMncBean}", CodigosMncBean.class);
+
+                int size = bean.getSelecteds().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelecteds()[i]);
+                }
+                bean.setSelectedsAccion(false);
+            } else if (tipoRecurso.equals("codigosNrn")) {
+                CodigosNrnBean bean = (CodigosNrnBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosNrnBean}", CodigosNrnBean.class);
+
+                int size = bean.getSelecteds().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelecteds()[i]);
+                }
+                bean.setSelectedsAccion(false);
+            } else if (tipoRecurso.equals("codigosIin")) {
+                CodigosIinBean bean = (CodigosIinBean) facesContext.getApplication().evaluateExpressionGet(facesContext, "#{CodigosIinBean}", CodigosIinBean.class);
+
+                int size = bean.getSelecteds().length;
+                for (int i = 0; i < size; i++) {
+                    vo.add(bean.getSelecteds()[i]);
+                }
+                bean.setSelectedsAccion(false);
+            }
+            
+            facade fachada = new facade();
+            Integer resultado = 0;
+            
+            if (codigoAccion == 1) {
+                accion = "Liberación";
+                resultado = fachada.reservarLiberarRecurso(vo,0);
+            } else if (codigoAccion == 4) {
+                accion = "Reserva";
+                resultado = fachada.reservarLiberarRecurso(vo,1);
+            }
+            
+            switch(resultado){
+                case 0:
+                    mensaje = "Si el error persiste, por favor contacte al Aministrador.";
+                    error = true;
+                    break;
+                case 1:
+                    mensaje = "";
+                    error = false;
+                    break;
+                case 2:
+                    mensaje = "Falta diligenciar un dato.";
+                    error = true;
+                    break;
+                case 3:
+                    mensaje = "El recurso no se puede liberar porque está reservado temporalmente.";
+                    error = true;
+                    break;
+            }
+        }
+        
+        if (!error) {
+            
+        }
+        
+        
+        if (error){
+            mensajeRecurso = "<table>"
+                        + "<tr>"
+                        + "<td><img src=\"" + rutaImagenError + "\" width=\"50\" height=\"50\" /></td>"
+                        + "<td><b><font color=\"red\">Error de "+ accion + " del recurso.</font></b></td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td colspan=\"2\"><br>" + mensaje + "<td>"
+                        + "</tr>"
+                        + "</table>"
+                        + "<br><br>";
+        } else {
+            mensajeRecurso = "<table>"
+                        + "<tr>"
+                        + "<td><img src=\"" + rutaImagenOk + "\" width=\"50\" height=\"50\" /></td>"
+                        + "<td><b>" + accion + " exitosa de recursos.</b></td>"
+                        + "</tr>"
+                        + "<tr>"
+                        + "<td colspan=\"2\"><br>" + mensaje + "<td>"
+                        + "</tr>"
+                        + "</table>"
+                        + "<br><br>";
         }
 
         return null;
@@ -1896,14 +1942,22 @@ public class TramiteBean implements Serializable {
         // limpia las opciones de las variables en la transferencia de recursos
         operadorOrigen = "-1";
         operadorDestino = "-1";
-        seleccionNumeracion=false;
-        seleccionSenalizacion=false;
-        seleccionIin=false;
-        seleccionMnc=false;
-        opcionNumeracion=false;
-        opcionSenalizacion=false;
-        opcionIin=false;
-        opcionMnc=false;
+        seleccionNumeracion = false;
+        seleccionSenalizacion = false;
+        seleccionIin = false;
+        seleccionMnc = false;
+        seleccionCodigosCortos = false;
+        seleccionCodigosLd = false;
+        seleccionMarcacionAbreviada = false;
+        seleccionCodigosNrn = false;
+        opcionNumeracion = false;
+        opcionSenalizacion = false;
+        opcionIin = false;
+        opcionMnc = false;
+        opcionCodigosCortos = false;
+        opcionCodigosLd = false;
+        opcionMarcacionAbreviada = false;
+        opcionCodigosNrn = false;
         
         mensajeTransferirRecursos = "";
         try {
@@ -1927,7 +1981,7 @@ public class TramiteBean implements Serializable {
             return null;
         }
 
-        if((!seleccionNumeracion) && (!seleccionSenalizacion) && (!seleccionIin) && (!seleccionMnc)){
+        if((!seleccionNumeracion) && (!seleccionSenalizacion) && (!seleccionIin) && (!seleccionMnc) && (!seleccionCodigosCortos) && (!seleccionCodigosLd) && (!seleccionMarcacionAbreviada) && (!seleccionCodigosNrn)){
             mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>Debes seleccionar por lo menos un recurso a transferir<br><br>";
             return null;
         }
@@ -1936,17 +1990,17 @@ public class TramiteBean implements Serializable {
                 
         mensajeTransferirRecursos = "";
         
-        transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc);
+        transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc, seleccionCodigosCortos, seleccionCodigosLd, seleccionMarcacionAbreviada, seleccionCodigosNrn);
        
         if (transferencia){
             mensajeTransferirRecursos = "<br><b>Recursos transferidos exitosamente.</b><br>";
-            if(seleccionNumeracion){
+            /*if(seleccionNumeracion){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("NumeracionBean");
             }
             if(seleccionSenalizacion){
-                //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("SenalizacionBean");
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("SenalizacionBean");
             }
-            /*if(seleccionIin){
+            if(seleccionIin){
                 FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("IinBean");
             }
             if(seleccionMnc){
@@ -1959,11 +2013,23 @@ public class TramiteBean implements Serializable {
     }
     
     public void cambioOperadorOrigen(){
-        int countRecurso=0;
-        opcionNumeracion=false;
-        opcionSenalizacion=false;
-        opcionIin=false;
-        opcionMnc=false;
+        int countRecurso = 0;
+        opcionNumeracion = false;
+        opcionSenalizacion = false;
+        opcionIin = false;
+        opcionMnc = false;
+        opcionCodigosCortos = false;
+        opcionCodigosLd = false;
+        opcionMarcacionAbreviada = false;
+        opcionCodigosNrn = false;
+        seleccionNumeracion = false;
+        seleccionSenalizacion = false;
+        seleccionIin = false;
+        seleccionMnc = false;
+        seleccionCodigosCortos = false;
+        seleccionCodigosLd = false;
+        seleccionMarcacionAbreviada = false;
+        seleccionCodigosNrn = false;
         
         facade fachada = new facade();
         
@@ -1976,6 +2042,36 @@ public class TramiteBean implements Serializable {
         countRecurso = fachada.countCargarSenalizacion(operadorOrigen, -1, -1, -1, -1, "-1", "-1", -1, -1);
         if(countRecurso > 0){
             opcionSenalizacion = true;
+        }
+        // Activa el campo de códigos IIN en transferencia de recursos
+        countRecurso = fachada.countCargarCodigosIin(operadorOrigen, -1, -1);
+        if(countRecurso > 0){
+            opcionIin = true;
+        }
+        // Activa el campo de códigos MNC en transferencia de recursos
+        countRecurso = fachada.countCargarCodigosMnc(operadorOrigen, -1, -1);
+        if(countRecurso > 0){
+            opcionMnc = true;
+        }
+        // Activa el campo de códigos Cortos en transferencia de recursos
+        countRecurso = fachada.countCargarCodigosCortos(operadorOrigen, -1, -1, -1);
+        if(countRecurso > 0){
+            opcionCodigosCortos = true;
+        }
+        // Activa el campo de códigos Ld en transferencia de recursos
+        countRecurso = fachada.countCargarCodigosLd(operadorOrigen, -1, -1);
+        if(countRecurso > 0){
+            opcionCodigosLd = true;
+        }
+        // Activa el campo de marcación abreviada en transferencia de recursos
+        countRecurso = fachada.countCargarMarcacionAbreviada(operadorOrigen, -1, -1);
+        if(countRecurso > 0){
+            opcionMarcacionAbreviada = true;
+        }
+        // Activa el campo de códigos Nrn en transferencia de recursos
+        countRecurso = fachada.countCargarCodigosNrn(operadorOrigen, -1, -1);
+        if(countRecurso > 0){
+            opcionCodigosNrn = true;
         }
             
     }
@@ -2252,6 +2348,14 @@ public class TramiteBean implements Serializable {
         this.seleccionSenalizacion = seleccionSenalizacion;
     }
 
+    public Boolean getSeleccionCodigosCortos() {
+        return seleccionCodigosCortos;
+    }
+
+    public void setSeleccionCodigosCortos(Boolean seleccionCodigosCortos) {
+        this.seleccionCodigosCortos = seleccionCodigosCortos;
+    }
+
     public Boolean getOpcionIin() {
         return opcionIin;
     }
@@ -2284,6 +2388,14 @@ public class TramiteBean implements Serializable {
         this.opcionSenalizacion = opcionSenalizacion;
     }
 
+    public Boolean getOpcionCodigosCortos() {
+        return opcionCodigosCortos;
+    }
+
+    public void setOpcionCodigosCortos(Boolean opcionCodigosCortos) {
+        this.opcionCodigosCortos = opcionCodigosCortos;
+    }
+    
     public Collection<SelectItem> getListaDepartamento() {
         return listaDepartamento;
     }
@@ -2674,6 +2786,54 @@ public class TramiteBean implements Serializable {
 
     public void setSelectedUnir(Boolean selectedUnir) {
         this.selectedUnir = selectedUnir;
+    }
+
+    public Boolean getOpcionCodigosLd() {
+        return opcionCodigosLd;
+    }
+
+    public void setOpcionCodigosLd(Boolean opcionCodigosLd) {
+        this.opcionCodigosLd = opcionCodigosLd;
+    }
+
+    public Boolean getOpcionCodigosNrn() {
+        return opcionCodigosNrn;
+    }
+
+    public void setOpcionCodigosNrn(Boolean opcionCodigosNrn) {
+        this.opcionCodigosNrn = opcionCodigosNrn;
+    }
+
+    public Boolean getOpcionMarcacionAbreviada() {
+        return opcionMarcacionAbreviada;
+    }
+
+    public void setOpcionMarcacionAbreviada(Boolean opcionMarcacionAbreviada) {
+        this.opcionMarcacionAbreviada = opcionMarcacionAbreviada;
+    }
+
+    public Boolean getSeleccionCodigosLd() {
+        return seleccionCodigosLd;
+    }
+
+    public void setSeleccionCodigosLd(Boolean seleccionCodigosLd) {
+        this.seleccionCodigosLd = seleccionCodigosLd;
+    }
+
+    public Boolean getSeleccionCodigosNrn() {
+        return seleccionCodigosNrn;
+    }
+
+    public void setSeleccionCodigosNrn(Boolean seleccionCodigosNrn) {
+        this.seleccionCodigosNrn = seleccionCodigosNrn;
+    }
+
+    public Boolean getSeleccionMarcacionAbreviada() {
+        return seleccionMarcacionAbreviada;
+    }
+
+    public void setSeleccionMarcacionAbreviada(Boolean seleccionMarcacionAbreviada) {
+        this.seleccionMarcacionAbreviada = seleccionMarcacionAbreviada;
     }
 
 }

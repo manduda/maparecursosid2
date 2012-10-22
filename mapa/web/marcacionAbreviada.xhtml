@@ -206,7 +206,7 @@
                 </p:dialog>
             </h:panelGroup>
             
-            <h:panelGroup rendered="#{UserBean.permisos.marcacionAbreviada}">
+            <h:panelGroup rendered="#{UserBean.permisos.marcacionAbreviada or (UserBean.liberar or UserBean.reservar)}">
                 <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleMarcacionAbreviada.xhtml"/>
             </h:panelGroup>
             

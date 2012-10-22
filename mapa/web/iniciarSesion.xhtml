@@ -12,16 +12,18 @@
     <ui:define name="content">
         <h:panelGroup rendered="#{!UserBean.login}">
             <h:form id="frmLogin">
-                <h:panelGrid>
-                    <h:panelGrid columns="2" width="100%">
-                        <h:outputText value="Usuario"/>
+                <h:panelGrid style="margin: 12px 0 0 12px; padding: 20px 25px 15px;">
+                    
+                    <h:panelGrid columns="1" width="100%" cellspacing="0" cellpadding="0">
+                        <h:outputText value="Nombre de usuario" style="font-weight: bold;"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputText id="user" value="#{inicioBean.user}" maxlength="15" size="15" required="true" style="width: 120px;"/>
+                            <p:inputText id="user" value="#{inicioBean.user}" maxlength="30" size="30" required="true" style="width: 200px;"/>
                             <p:message for="user" />
                         </h:panelGrid>
-                        <h:outputText value="Contraseña"/>
+                        <br/>
+                        <h:outputText value="Contraseña" style="font-weight: bold;"/>
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:inputSecret id="pass" value="#{inicioBean.password}" maxlength="15" size="15" required="true" style="width: 120px;"/>
+                            <p:password id="pass" value="#{inicioBean.password}" maxlength="30" size="30" required="true" style="width: 200px;"/>
                             <p:message for="pass" />
                         </h:panelGrid>
                     </h:panelGrid>
@@ -30,9 +32,10 @@
                         <p:commandButton value="Iniciar sesión" action="#{inicioBean.validarUsuario}" onclick="statusLoginDialog.show();"
                                          oncomplete="statusLoginDialog.hide();" ajax="false" style="width: 120px"/>
                     </h:panelGrid>
+                    <h:outputText value="#{inicioBean.mensaje}" escape="false" style="color: red; font-weight: bold;"/>
                 </h:panelGrid>
             </h:form>
-            <h:outputText value="#{inicioBean.mensaje}" escape="false" style="color: red; font-weight: bold;"/>
+            
             <p:dialog modal="true" widgetVar="statusLoginDialog" header="Procesando" draggable="false" closable="false" resizable="false">
                 <h:panelGrid style="text-align: center; margin: 0px auto;" cellspacing="0" cellpadding="0">
                     <h:panelGrid width="100%">

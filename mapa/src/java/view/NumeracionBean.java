@@ -177,6 +177,13 @@ public class NumeracionBean implements Serializable {
             departamentoVO.setCodigoDepartamento("-1");
             estadoVO.setEsnCodigo(-1);
             tipoNdcVO.setNtnCodigo(-1);
+            seleccionNum = new NuNumeracionVO();
+            seleccionNumActual = new NuNumeracionVO();
+            seleccionNumAnterior = new NuNumeracionVO();
+            seleccionId = "-1";
+            seleccionIdActual = "-1";
+            seleccionIdAnterior = "-1";
+            seleccionRango = false;
             RequestContext.getCurrentInstance().update("contenido");
             matriz();
         } else {
