@@ -78,6 +78,10 @@ public class ClCodigosLdService {
         }
         return operadorVO;
     }
+    
+    public void transferirCodigosLd (String operadorOrigen, String operadorDestino, EntityManager em){
+        ClCodigosLdDAO.transferirCodigosLd(operadorOrigen, operadorDestino, em);
+    }
 
     public int reservarLiberarCodigoLd (ClCodigosLdVO vo, EntityManager em,int accion){
         //si la accion es 0 se libera

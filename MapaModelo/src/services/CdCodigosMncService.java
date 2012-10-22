@@ -68,6 +68,10 @@ public class CdCodigosMncService {
         }
         return operadorVO;
     }
+    
+    public void transferirCodigosMnc (String operadorOrigen, String operadorDestino, EntityManager em){
+        CdCodigosMncDAO.transferirCodigosMnc(operadorOrigen, operadorDestino, em);
+    }
 
     public int reservarLiberarCodigosMnc (CdCodigosMncVO vo, EntityManager em,int accion){
         //si la accion es 0 se libera

@@ -58,6 +58,10 @@ public class CcCodigosCortosService {
         }
         return modalidadVO;
     }
+    
+    public void transferirCodigosCortos (String operadorOrigen, String operadorDestino, EntityManager em){
+        CcCodigosCortosDAO.transferirCodigosCortos(operadorOrigen, operadorDestino, em);
+    }
 
     public Integer reservarLiberarCodigoCorto(CcCodigosCortosVO vo, EntityManager em, int accion) {
         //si la accion es 0 se libera

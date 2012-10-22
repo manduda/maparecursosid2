@@ -2190,7 +2190,7 @@ public class facade {
         return vo;
     }
     
-    public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc){
+    public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc, boolean codigosCortos, boolean codigosLd, boolean marcacionAbreviada, boolean codigosNrn){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -2207,14 +2207,24 @@ public class facade {
             if (sen){
                ServiceFactory.createSeSenalizacionService().transferirSenalizacion(operadorOrigen, operadorDestino, em);
             }              
-            
-            /*if (iin){
-               ServiceFactory.createSeSenalizacionService().transferirIIN(operadorOrigen, operadorDestino, em);
+            if (iin){
+               ServiceFactory.createCiCodigosIinService().transferirCodigosIin(operadorOrigen, operadorDestino, em);
             }              
             if (mnc){
-               ServiceFactory.createSeSenalizacionService().transferirMNC(operadorOrigen, operadorDestino, em);
-            }              
-             */
+               ServiceFactory.createCdCodigosMncService().transferirCodigosMnc(operadorOrigen, operadorDestino, em);
+            }
+            if (codigosCortos){
+               ServiceFactory.createCcCodigosCortosService().transferirCodigosCortos(operadorOrigen, operadorDestino, em);
+            }
+            if (codigosLd){
+               ServiceFactory.createClCodigosLdService().transferirCodigosLd(operadorOrigen, operadorDestino, em);
+            }
+            if (marcacionAbreviada){
+               ServiceFactory.createMaMarcacionAbreviadaService().transferirMarcacionAbreviada(operadorOrigen, operadorDestino, em);
+            }
+            if (codigosNrn){
+               ServiceFactory.createNrCodigosNrnService().transferirCodigosNrn(operadorOrigen, operadorDestino, em);
+            }
             
             resultado=true;
             tx.commit();

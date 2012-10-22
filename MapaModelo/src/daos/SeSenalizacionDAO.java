@@ -199,7 +199,7 @@ public class SeSenalizacionDAO {
         return cResults.intValue();
     }
     
-    public static void transferirSenalizacionDAO(String operadorOrigen, String operadorDestino, EntityManager em){
+    public static void transferirSenalizacion(String operadorOrigen, String operadorDestino, EntityManager em){
 
         String searchQuery = "UPDATE SE_SENALIZACION SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
                 

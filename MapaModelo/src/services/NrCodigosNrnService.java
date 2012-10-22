@@ -69,6 +69,10 @@ public class NrCodigosNrnService {
         }
         return operadorVO;
     }
+    
+    public void transferirCodigosNrn (String operadorOrigen, String operadorDestino, EntityManager em){
+        NrCodigosNrnDAO.transferirCodigosNrn(operadorOrigen, operadorDestino, em);
+    }
 
     public int reservarLiberarCodigosNrn (NrCodigosNrnVO vo, EntityManager em,int accion){
         //si la accion es 0 se libera

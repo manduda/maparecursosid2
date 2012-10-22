@@ -121,4 +121,17 @@ public class NrCodigosNrnDAO {
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();
     }
+    
+    public static void transferirCodigosNrn(String operadorOrigen, String operadorDestino, EntityManager em){
+
+        String searchQuery = "UPDATE NR_CODIGOS_NRN SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
+                
+        Query query = em.createNativeQuery(searchQuery);
+
+        query.setParameter(1, operadorDestino);
+        query.setParameter(2, operadorOrigen);
+        
+        query.executeUpdate();
+        
+    }
 }

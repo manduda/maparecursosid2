@@ -128,7 +128,7 @@ public class NuNumeracionService {
     }*/
    
     public void transferirNumeracion (String operadorOrigen, String operadorDestino, EntityManager em){
-        NuNumeracionDAO.transferirNumeracionDAO(operadorOrigen, operadorDestino, em);
+        NuNumeracionDAO.transferirNumeracion(operadorOrigen, operadorDestino, em);
     }
 
     public Integer reservarLiberarNumeracion(NuNumeracionVO vo, EntityManager em, int accion) {

@@ -143,7 +143,7 @@ public class SeSenalizacionService {
     }*/
     
     public void transferirSenalizacion (String operadorOrigen, String operadorDestino, EntityManager em){
-        SeSenalizacionDAO.transferirSenalizacionDAO(operadorOrigen, operadorDestino, em);
+        SeSenalizacionDAO.transferirSenalizacion(operadorOrigen, operadorDestino, em);
     }
     
     public int reservarLiberarSenalizacion (SeSenalizacionVO vo, EntityManager em, int accion){

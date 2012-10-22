@@ -565,7 +565,7 @@ public class NuNumeracionDAO {
         return numeracion;
     }
     
-    public static void transferirNumeracionDAO(String operadorOrigen, String operadorDestino, EntityManager em){
+    public static void transferirNumeracion(String operadorOrigen, String operadorDestino, EntityManager em){
 
         String searchQuery = "UPDATE NU_NUMERACION SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
                 

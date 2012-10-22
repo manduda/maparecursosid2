@@ -122,4 +122,17 @@ public class ClCodigosLdDAO {
         return cResults.intValue();
     }
     
+    public static void transferirCodigosLd(String operadorOrigen, String operadorDestino, EntityManager em){
+
+        String searchQuery = "UPDATE CL_CODIGOS_LD SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
+                
+        Query query = em.createNativeQuery(searchQuery);
+
+        query.setParameter(1, operadorDestino);
+        query.setParameter(2, operadorOrigen);
+        
+        query.executeUpdate();
+        
+    }
+    
 }

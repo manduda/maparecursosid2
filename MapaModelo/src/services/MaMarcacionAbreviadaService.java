@@ -77,6 +77,10 @@ public class MaMarcacionAbreviadaService {
         }
         return operadorVO;
     }
+    
+    public void transferirMarcacionAbreviada (String operadorOrigen, String operadorDestino, EntityManager em){
+        MaMarcacionAbreviadaDAO.transferirMarcacionAbreviada(operadorOrigen, operadorDestino, em);
+    }
 
     public int reservarLiberarMarcacionAbreviada (MaMarcacionAbreviadaVO vo, EntityManager em,int accion){
         //si la accion es 0 se libera

@@ -118,4 +118,17 @@ public class CcCodigosCortosDAO {
         Number cResults = (Number) query.getSingleResult();
         return cResults.intValue();
     }
+    
+    public static void transferirCodigosCortos(String operadorOrigen, String operadorDestino, EntityManager em){
+
+        String searchQuery = "UPDATE CC_CODIGOS_CORTOS SET SK_EMPRESA_CODE = ?1 WHERE SK_EMPRESA_CODE = ?2";
+                
+        Query query = em.createNativeQuery(searchQuery);
+
+        query.setParameter(1, operadorDestino);
+        query.setParameter(2, operadorOrigen);
+        
+        query.executeUpdate();
+        
+    }
 }
