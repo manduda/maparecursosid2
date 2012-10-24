@@ -232,7 +232,12 @@ public class NumeracionBean implements Serializable {
         while (i < numeracion.size()){
             List array = new ArrayList();
             //numer.add(new ArrayList());
-            columna1 = Integer.toString(numeracion.get(i).getNunInicio()).substring(0, 3);
+            String rango = Integer.toString(numeracion.get(i).getNunInicio());
+            while (rango.length() < 7){
+                rango = "0" + rango;
+            }
+            columna1 = "(" + numeracion.get(i).getNdnCodigo().getNdtNombre() + ") -" + rango.substring(0, 3);
+            
             //((ArrayList)numer.get(x)).add(columna1);
             array.add(columna1);
             for(int y = 0; y < 10; y++){

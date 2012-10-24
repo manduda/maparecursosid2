@@ -35,13 +35,22 @@ public class Validador {
     }
     
     public void enteroMayorIgualCero(FacesContext context, UIComponent uIComponent, Object object) throws ValidatorException {
-        Integer numero = (Integer)object;
-        if (numero < 0) {
-            FacesMessage Mensaje = new FacesMessage();
-            Mensaje.setDetail("Debes ingresar un número entero mayor o igual a cero");
+        FacesMessage Mensaje = new FacesMessage();
+        try {
+            String cadena = (String)object;
+            Integer numero = Integer.parseInt(cadena);
+            if (numero < 0) {
+                Mensaje.setDetail("Debes ingresar un número entero mayor o igual a cero");
+                Mensaje.setSummary("Error");
+                Mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
+                throw new ValidatorException(Mensaje);
+            }
+        } catch (NumberFormatException e) {
+            Mensaje.setDetail("Debes ingresar un número entero");
             Mensaje.setSummary("Error");
             Mensaje.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(Mensaje);
         }
+        
     }
 }
