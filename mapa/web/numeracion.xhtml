@@ -39,9 +39,9 @@
                             <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
-                                    <p:ajax update="listaDepartamento,listaMunicipio" listener="#{NumeracionBean.cambiarDepartamento}" global="false"/>
+                                    <p:ajax update="listaDepartamento,listaMunicipio,listaNdc" listener="#{NumeracionBean.cambiarDepartamento}"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio" global="false" action="#{NumeracionBean.cambiarDepartamento}">
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio,listaNdc" action="#{NumeracionBean.cambiarDepartamento}">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.departamentoVO.codigoDepartamento}" value="-1" />
                                     <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1" />
@@ -73,7 +73,7 @@
                             </h:panelGrid>
                             
                             <h:outputText value="NDC" />
-                            <h:panelGrid columns="3" cellpadding="0" cellspacing="0">
+                            <h:panelGrid id="listaNdc" columns="3" cellpadding="0" cellspacing="0">
                                 <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndtNombre}">
                                     <f:selectItems value="#{NumeracionBean.listaNDC}" /> 
                                     <p:ajax update="tipoNumeracion" listener="#{NumeracionBean.cambiarNdc}" disabled="#{NumeracionBean.matrizVisible}"/>
@@ -109,7 +109,7 @@
                             <h:outputText value=" "/>
                             <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
                                 <h:outputText value="Borrar todos los filtros &nbsp;" />
-                                <p:commandLink ajax="true" update="frmNum" action="#{NumeracionBean.cambiarDepartamento}" global="false">
+                                <p:commandLink ajax="true" update="frmNum" action="#{NumeracionBean.cambiarDepartamento}" >
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.operadorVO.emrCodigo}" value="-1"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.departamentoVO.codigoDepartamento}" value="-1"/>

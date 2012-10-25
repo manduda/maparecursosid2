@@ -112,7 +112,7 @@ public class NumeracionBean implements Serializable {
         
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaNDC = convertir.createSelectItemsList(fachada.listaNDC(), null, "getNdnCodigo", "getNdtNombre", false, "");
+            listaNDC = convertir.createSelectItemsList(fachada.listaNDC("-1"), null, "getNdnCodigo", "getNdtNombre", false, "");
             listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(ndcVO.getNdtNombre()), null, "getNtnCodigo", "getNttNombre", true, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
@@ -175,6 +175,13 @@ public class NumeracionBean implements Serializable {
             operadorVO.setEmrCodigo("-1");
             municipioVO.setCodigoMunicipio("-1");
             departamentoVO.setCodigoDepartamento("-1");
+            try {
+                ConvertirListasHelper convertir = new ConvertirListasHelper();
+                facade fachada = new facade();
+                listaNDC = convertir.createSelectItemsList(fachada.listaNDC(departamentoVO.getCodigoDepartamento()), null, "getNdnCodigo", "getNdtNombre", false, "");
+            } catch (Exception e) {
+                Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
+            }
             estadoVO.setEsnCodigo(-1);
             tipoNdcVO.setNtnCodigo(-1);
             seleccionNum = new NuNumeracionVO();
@@ -681,6 +688,7 @@ public class NumeracionBean implements Serializable {
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(departamentoVO.getCodigoDepartamento()), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
+            listaNDC = convertir.createSelectItemsList(fachada.listaNDC(departamentoVO.getCodigoDepartamento()), null, "getNdnCodigo", "getNdtNombre", false, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
