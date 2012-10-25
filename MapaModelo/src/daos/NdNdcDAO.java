@@ -31,8 +31,27 @@ public class NdNdcDAO {
         return em.find(NdNdc.class, ndnCodigo);
     }
     
-    public static List<String> getList(EntityManager em){
-        Query query = em.createQuery("SELECT DISTINCT e.ndtNombre FROM NdNdc e ORDER BY e.ndtNombre ASC");
+    public static List<String> getList(String departamento, EntityManager em){
+        //Query query = em.createQuery("SELECT DISTINCT e.ndtNombre FROM NdNdc e ORDER BY e.ndtNombre ASC");
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT DISTINCT C.NDT_NOMBRE FROM ND_NDC C "
+                + "WHERE C.NDN_CODIGO IN "
+                + "( "
+                + "SELECT DISTINCT A.NDN_CODIGO "
+                + "FROM MAPA.NU_NUMERACION A "
+                + "WHERE 1=1 ");
+        
+        if(!departamento.equals("-1")) {
+            searchQuery.append("AND A.SK_REGION_CODE IN (SELECT B.CODIGO_MUNICIPIO FROM SA.MUNICIPIOS B WHERE B.CODIGO_DEPARTAMENTO = ?1) ");
+        }
+        searchQuery.append(") ORDER BY C.NDT_NOMBRE");
+                
+        Query query = em.createNativeQuery(searchQuery.toString());
+        
+        if(!departamento.equals("-1")) {
+            query.setParameter(1, departamento);
+        }
+        
         return query.getResultList();
     }
     

@@ -38,8 +38,8 @@ public class NdNdcService {
         return entity.toVO();
     }
 
-    public List<NdNdcVO> getList(EntityManager em){
-        List<String> ndc = NdNdcDAO.getList(em);
+    public List<NdNdcVO> getList(String departamento, EntityManager em){
+        List<String> ndc = NdNdcDAO.getList(departamento, em);
         List<NdNdcVO> ndcVO = new ArrayList<NdNdcVO>();        
         NdNdcVO vo = new NdNdcVO();
         int size = ndc.size();

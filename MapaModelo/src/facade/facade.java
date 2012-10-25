@@ -209,7 +209,7 @@ public class facade {
         return vo;
     }
     
-    public List<NdNdcVO> listaNDC() {
+    public List<NdNdcVO> listaNDC(String departamento) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -219,7 +219,7 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            vo = ServiceFactory.createNdNdcService().getList(em);
+            vo = ServiceFactory.createNdNdcService().getList(departamento, em);
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);
