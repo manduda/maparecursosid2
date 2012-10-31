@@ -174,4 +174,16 @@ public class NuNumeracionService {
             return 2;
         }
     }
+    
+    public List<String> exportarCSV(EntityManager em){
+        List<String> numeracion = NuNumeracionDAO.exportarCSV(em);
+        return numeracion;
+    }
+    
+    public List<String> cargarNumeracionAgrupacionTotal(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
+        List<String> numeracion = NuNumeracionDAO.cargarNumeracionAgrupacionTotal(operador, ndc, tipoNdc, inicio, fin, estado, municipio, departamento, em);
+        return numeracion;
+    }
+    
+    
 }

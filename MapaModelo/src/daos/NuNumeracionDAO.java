@@ -603,4 +603,213 @@ public class NuNumeracionDAO {
         
     }
     
+    public static List<String> exportarCSV(EntityManager em){
+        StringBuilder searchQuery = new StringBuilder(
+                "select (select b.ndt_nombre from ND_NDC b WHERE b.NDN_CODIGO = a.NDC) NDC, "
+                + "       LPAD(a.min_inicio,7,'0') inicio, "
+                + "       LPAD(a.max_inicio + 99,7,'0')  fin, "
+                + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
+                + "       (select (select d.NOMBRE_DEPARTAMENTO from SA.DEPARTAMENTOS d WHERE d.CODIGO_DEPARTAMENTO = md.CODIGO_DEPARTAMENTO) "
+                + "         from SA.MUNICIPIOS md WHERE md.CODIGO_MUNICIPIO = a.SK_REGION_CODE) DEPARTAMENTO, "
+                + "       (select m.descripcion from SA.SK_REGION m WHERE m.SK_REGION_CODE = a.SK_REGION_CODE) MUNICIPIO, "
+                + "       (select g.EST_NOMBRE from ES_ESTADO g WHERE g.ESN_CODIGO = a.ESN_CODIGO) estado "
+                + "from "
+                + "( "
+                + "with get_data as "
+                + "  ( "
+                + "  SELECT n.ndn_codigo, n.nun_inicio, floor(n.nun_inicio/1000) bloque, n.sk_empresa_code, n.sk_region_code, n.esn_codigo, "
+                + "         ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) - ROW_NUMBER() OVER(PARTITION BY floor(n.nun_inicio/1000), n.sk_empresa_code, n.sk_region_code, n.esn_codigo, n.ndn_codigo ORDER BY n.ndn_codigo, n.nun_inicio) grp "
+                + "  from nu_numeracion n "
+                + "  where 1=1 "
+                //+ "  AND n.NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NDT_NOMBRE = '800') "
+                + "  AND (n.ESN_CODIGO = 2 OR n.ESN_CODIGO = 3) "
+                + "  ), "
+                + "sql_data as "
+                + "  ( "
+                + "  select a.ndn_codigo,a.nun_inicio, a.sk_empresa_code, a.sk_region_code, a.esn_codigo, "
+                + "         min(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) min_inicio, "
+                + "         max(nun_inicio) over (partition by bloque,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo,grp) max_inicio "
+                + "  from get_data a "
+                + "  ) "
+                + "select distinct "
+                + "       ndn_codigo ndc, "
+                + "       min_inicio, "
+                + "       max_inicio, "
+                + "       sk_empresa_code, "
+                + "       sk_region_code, "
+                + "       esn_codigo "
+                + "from sql_data "
+                + "order by ndn_codigo,min_inicio "
+                + ") a ");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+        
+        List<Object> results = query.getResultList();
+        
+        List<String> numeracion = new ArrayList<String>();
+        
+        numeracion.add("NDC;INICIO;FIN;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
+                
+        if (results != null){
+            int i = 0;
+            for (Object oRow : results) {
+                Object[] value = (Object[]) oRow;
+                numeracion.add(value[0].toString() + ";" 
+                        + value[1].toString() + ";"
+                        + value[2].toString() + ";"
+                        + value[3].toString() + ";"
+                        + value[4].toString() + ";"
+                        + value[5].toString() + ";"
+                        + value[6].toString() + "");
+                i++;
+
+            }
+        }
+        
+        return numeracion;
+    }
+    
+    public static List<String> cargarNumeracionAgrupacionTotal(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento, EntityManager em){
+        StringBuilder searchQuery = new StringBuilder(
+                  "select (select b.ndt_nombre from ND_NDC b WHERE b.NDN_CODIGO = a.ndn_codigo) NDC, "
+                + "       inicio, "
+                + "       fin, "
+                + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
+                + "       f.NOMBRE_DEPARTAMENTO DEPARTAMENTO, "
+                + "       f.NOMBRE_MUNICIPIO MUNICIPIO, "
+                + "       (select g.EST_NOMBRE from ES_ESTADO g WHERE g.ESN_CODIGO = a.esn_codigo) estado "
+                + "from "
+                + "( "
+                + "  with get_data as "
+                + "    ( "
+                + "      select nun_inicio, sk_empresa_code,sk_region_code,ndn_codigo,esn_codigo, "
+                + "             lag(sk_empresa_code) over (order by ndn_codigo,nun_inicio) prev_empresa, "
+                + "             lag(sk_region_code) over (order by ndn_codigo,nun_inicio) prev_region, "
+                + "             lag(ndn_codigo) over (order by ndn_codigo,nun_inicio) prev_ndc, "
+                + "             lag(nun_inicio) over (order by ndn_codigo,nun_inicio) prev_nun_inicio, "
+                + "             lag(esn_codigo) over (order by ndn_codigo,nun_inicio) prev_esn_codigo "
+                + "      from nu_numeracion "
+                + "      where 1=1 ");
+        
+        if(!operador.equals("-1")) {
+            searchQuery.append("AND SK_EMPRESA_CODE = ?1 ");
+        }
+        if(!ndc.equals("-1")) {
+            searchQuery.append("AND NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NDT_NOMBRE = ?2) ");
+        }
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
+            searchQuery.append("AND NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NTN_CODIGO = ?3) ");
+        }
+        if(inicio != -1) {
+            String numero = String.valueOf(inicio);
+            do {
+                if(numero.length() < 7){
+                    numero = numero + "0";
+                }
+            } while (numero.length() < 7);
+            inicio = Integer.parseInt(numero);
+            searchQuery.append("AND NUN_INICIO >= ?4 ");
+        }
+        if(fin != -1) {
+            String numero = String.valueOf(fin);
+            do {
+                if(numero.length() < 7){
+                    numero = numero + "0";
+                }
+            } while (numero.length() < 7);
+            fin = Integer.parseInt(numero);
+            searchQuery.append("AND NUN_FIN <= ?5 ");
+        }
+        if(estado != -1) {
+            searchQuery.append("AND ESN_CODIGO = ?6 ");
+        }
+        if(!municipio.equals("-1")) {
+            searchQuery.append("AND SK_REGION_CODE = ?7 ");
+        }
+        if(!departamento.equals("-1")) {
+            searchQuery.append("AND SK_REGION_CODE in (SELECT m.CODIGO_MUNICIPIO FROM SA.MUNICIPIOS m WHERE m.CODIGO_DEPARTAMENTO = ?8) ");
+        }
+        
+        searchQuery.append(
+                  "    ), "
+                + "    slq_data as "
+                + "    ( "
+                + "    select nun_inicio,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo, "
+                + "           sum(case when (sk_empresa_code = prev_empresa) "
+                + "                     and (sk_region_code = prev_region) "
+                + "                     and (ndn_codigo = prev_ndc) "
+                + "                     and (nun_inicio = prev_nun_inicio + 100) "
+                + "                     and (esn_codigo = prev_esn_codigo) "
+                + "               then 0 "
+                + "               else 1 "
+                + "               end "
+                + "           ) over (order by nun_inicio) grps "
+                + "    from get_data "
+                + "    ) "
+                + "    select LPAD(min(nun_inicio),7,'0') inicio, "
+                + "           LPAD(max(nun_inicio) + 99,7,'0') fin, "
+                + "           sk_empresa_code, "
+                + "           sk_region_code, "
+                + "           ndn_codigo, "
+                + "           esn_codigo"
+                + "    from slq_data "
+                + "    group by grps, ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo "
+                + "    order by min(nun_inicio) "
+                + ") a "
+                + "join (select d.CODIGO_MUNICIPIO, d.NOMBRE_MUNICIPIO, (select e.NOMBRE_DEPARTAMENTO from sa.departamentos e where e.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO) NOMBRE_DEPARTAMENTO "
+                + "      from sa.municipios d  "
+                + "      ) f on (a.sk_region_code = f.CODIGO_MUNICIPIO)");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+        
+        if(!operador.equals("-1")) {
+            query.setParameter(1, operador);
+        }
+        if(!ndc.equals("-1")) {
+            query.setParameter(2, ndc);
+        }
+        if((tipoNdc != -1) && (!ndc.equals("-1"))) {
+            query.setParameter(3, tipoNdc);
+        }
+        if(inicio != -1) {
+            query.setParameter(4, inicio);
+        }
+        if(fin != -1) {
+            query.setParameter(5, fin);
+        }
+        if(estado != -1) {
+            query.setParameter(6, estado);
+        }
+        if(!municipio.equals("-1")) {
+            query.setParameter(7, municipio);
+        }
+        if(!departamento.equals("-1")) {
+            query.setParameter(8, departamento);
+        }
+        
+        List<Object> results = query.getResultList();
+        
+        List<String> numeracion = new ArrayList<String>();
+        
+        numeracion.add("NDC;INICIO;FIN;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
+                
+        if (results != null){
+            int i = 0;
+            for (Object oRow : results) {
+                Object[] value = (Object[]) oRow;
+                numeracion.add(value[0].toString() + ";" 
+                        + value[1].toString() + ";"
+                        + value[2].toString() + ";"
+                        + value[3].toString() + ";"
+                        + value[4].toString() + ";"
+                        + value[5].toString() + ";"
+                        + value[6].toString() + "");
+                i++;
+
+            }
+        }
+        
+        return numeracion;
+    }
+    
 }

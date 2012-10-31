@@ -209,6 +209,40 @@ public class facade {
         return vo;
     }
     
+    public List<String> exportarNumeracionCSV(){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<String> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createNuNumeracionService().exportarCSV(em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<String> cargarNumeracionAgrupacionTotal(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<String> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createNuNumeracionService().cargarNumeracionAgrupacionTotal(operador, ndc, tipoNdc, inicio, fin, estado, municipio, departamento, em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
     public List<NdNdcVO> listaNDC(String departamento) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
