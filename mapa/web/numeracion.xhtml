@@ -27,11 +27,12 @@
                             <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaOperador}" />
-                                    <p:ajax update="listaOperador" global="false"/>
+                                    <p:ajax update="listaOperador,pDescargar" global="false" listener="#{NumeracionBean.descargarConsultaAccion}"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{NumeracionBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.operadorVO.emrCodigo != -1}" update="listaOperador,pDescargar" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
                             
@@ -39,12 +40,13 @@
                             <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
-                                    <p:ajax update="listaDepartamento,listaMunicipio,listaNdc" listener="#{NumeracionBean.cambiarDepartamento}"/>
+                                    <p:ajax update="listaDepartamento,listaMunicipio,listaNdc,pDescargar" listener="#{NumeracionBean.cambiarDepartamento}" />
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio,listaNdc" action="#{NumeracionBean.cambiarDepartamento}">
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio,listaNdc,pDescargar" action="#{NumeracionBean.cambiarDepartamento}">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.departamentoVO.codigoDepartamento}" value="-1" />
                                     <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1" />
+                                    <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
                             
@@ -52,11 +54,12 @@
                             <h:panelGrid id="listaMunicipio" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaMunicipio}" />
-                                    <p:ajax update="listaMunicipio" global="false"/>
+                                    <p:ajax update="listaMunicipio,pDescargar" global="false" listener="#{NumeracionBean.descargarConsultaAccion}"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{NumeracionBean.municipioVO.codigoMunicipio != -1}" update="listaMunicipio" global="false">
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.municipioVO.codigoMunicipio != -1}" update="listaMunicipio,pDescargar" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
                             
@@ -64,11 +67,12 @@
                             <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaEstado}" />
-                                    <p:ajax update="listaEstado" global="false"/>
+                                    <p:ajax update="listaEstado,pDescargar" global="false" listener="#{NumeracionBean.descargarConsultaAccion}"/>
                                 </h:selectOneMenu>
-                                <p:commandLink ajax="true" rendered="#{NumeracionBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
+                                <p:commandLink ajax="true" rendered="#{NumeracionBean.estadoVO.esnCodigo != -1}" update="listaEstado,pDescargar" global="false">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
                             
@@ -76,7 +80,7 @@
                             <h:panelGrid id="listaNdc" columns="3" cellpadding="0" cellspacing="0">
                                 <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndtNombre}">
                                     <f:selectItems value="#{NumeracionBean.listaNDC}" /> 
-                                    <p:ajax update="tipoNumeracion" listener="#{NumeracionBean.cambiarNdc}" disabled="#{NumeracionBean.matrizVisible}"/>
+                                    <p:ajax update="tipoNumeracion,pDescargar" listener="#{NumeracionBean.cambiarNdc}" disabled="#{NumeracionBean.matrizVisible}"/>
                                 </h:selectOneMenu>
                                 <h:outputText value="&#160;&#160;&#160;&#160;&#160;" />
                                 <h:panelGroup id="tipoNumeracion" rendered="#{!NumeracionBean.matrizVisible}">
@@ -85,11 +89,12 @@
                                         <h:outputText value="&#160;" />
                                         <h:selectOneMenu value="#{NumeracionBean.tipoNdcVO.ntnCodigo}" disabled="#{NumeracionBean.matrizVisible}">
                                             <f:selectItems value="#{NumeracionBean.listaTipoNdc}" />
-                                            <p:ajax update="tipoNumeracion" global="false"/>
+                                            <p:ajax update="tipoNumeracion,pDescargar" global="false" listener="#{NumeracionBean.descargarConsultaAccion}"/>
                                         </h:selectOneMenu>
-                                        <p:commandLink ajax="true" rendered="#{NumeracionBean.tipoNdcVO.ntnCodigo != -1}" update="tipoNumeracion" global="false">
+                                        <p:commandLink ajax="true" rendered="#{NumeracionBean.tipoNdcVO.ntnCodigo != -1}" update="tipoNumeracion,pDescargar" global="false">
                                             <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
                                             <f:setPropertyActionListener target="#{NumeracionBean.tipoNdcVO.ntnCodigo}" value="-1"/>
+                                            <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                         </p:commandLink>
                                     </h:panelGrid>
                                </h:panelGroup>
@@ -118,6 +123,7 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.tipoNdcVO.ntnCodigo}" value="-1"/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.numInicio}" value=""/>
                                     <f:setPropertyActionListener target="#{NumeracionBean.numFin}" value=""/>
+                                    <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
                             
@@ -127,6 +133,7 @@
                             <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" ajax="true" update=":pgNumeracion,frmNum" rendered="#{!NumeracionBean.matrizVisible}">
                                 <f:setPropertyActionListener target="#{NumeracionBean.selectedNumsAccion}" value="false"/>
                                 <f:setPropertyActionListener target="#{NumeracionBean.mensajeMatriz}" value=""/>
+                                <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="false"/>
                             </p:commandButton>
                             <p:commandButton value="Consultar" actionListener="#{NumeracionBean.matriz}" ajax="true" update="frmNum" rendered="#{NumeracionBean.matrizVisible}"/>
                             <p:commandLink value="Ver #{NumeracionBean.matrizVisible ? 'Lista' : 'Matriz'}" ajax="true" actionListener="#{NumeracionBean.verMatriz}" update=":frmNum:pgNum"/>
@@ -135,6 +142,31 @@
                         <h:panelGrid id="mensajeMatriz">
                             <h:outputText value="#{NumeracionBean.mensajeMatriz}" escape="false" style="color: red; font-weight: bold;" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
                         </h:panelGrid>
+                        
+                        <h:panelGrid id="pDescargar" style="width: 100%" border="1">
+                            <h:panelGrid  style="width: 200px" border ="1">
+                            <h:panelGrid style="vertical-align: middle;" columns="2">
+                                <p:commandLink actionListener="#{NumeracionBean.exportarCSV}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)" >  
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
+                                    <p:fileDownload value="#{NumeracionBean.archivoZIP}" />
+                                </p:commandLink>
+                                <h:outputText value="Exportar mapa completo"/>
+                                
+                                <p:commandLink actionListener="#{NumeracionBean.descargarConsultaCSV}" ajax="false" id="descargarCosulta"
+                                               onclick="PrimeFaces.monitorDownload(start, stop)" disabled="#{NumeracionBean.descargarConsulta}">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
+                                    <p:fileDownload value="#{NumeracionBean.archivoCSV}" />
+                                </p:commandLink>
+                                <h:outputText value="Exportar consulta"/>
+                            </h:panelGrid>
+                            
+                            <script type="text/javascript">  
+                                function start() { statusDialog.show(); }
+                                function stop() { statusDialog.hide(); }  
+                            </script>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        
                     </h:panelGrid>
                 </h:form>
             </p:panel>

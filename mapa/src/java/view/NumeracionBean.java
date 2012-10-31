@@ -7,10 +7,20 @@ package view;
 import entities.NtTipoNdc;
 import facade.facade;
 import helper.ConvertirListasHelper;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
@@ -27,6 +39,9 @@ import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -36,8 +51,11 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
+import org.primefaces.model.StreamedContent;
+import utils.Functions;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -81,6 +99,8 @@ public class NumeracionBean implements Serializable {
     private Boolean selectedNumsLiberar;
     private Boolean selectedNumsAccion;
     
+    private Boolean descargarConsulta;
+    
     private List<NuNumeracionVO> detalleSelectedNum = new ArrayList<NuNumeracionVO>();
     private NuNumeracionVO[] selectedNumsDetalle;
     private List<TnTramiteNumeracionVO> tramiteNumeracion = null;
@@ -97,6 +117,9 @@ public class NumeracionBean implements Serializable {
     private Boolean seleccionRango = false;
     private String mensajeMatriz = "";
     private static Integer RangoMatriz = 3;
+    
+    private StreamedContent archivoZIP;
+    private StreamedContent archivoCSV;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -692,7 +715,7 @@ public class NumeracionBean implements Serializable {
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
-           
+        descargarConsulta = true;
     }
     
     public void cambiarNdc() {
@@ -703,7 +726,7 @@ public class NumeracionBean implements Serializable {
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
-           
+        descargarConsulta = true;
     }
     
     public void detalleNum(){
@@ -925,6 +948,140 @@ public class NumeracionBean implements Serializable {
         sheet.autoSizeColumn((short) 7);
         sheet.autoSizeColumn((short) 8);
     }
+
+    public void exportarCSV() {
+        try {
+            boolean cargarDatos = false;
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+            String path = servletContext.getRealPath("/");
+            //System.out.println(path);
+            
+            String pFile = path + "exports\\numeracion.csv";
+            String pZipFile = path + "exports\\numeracion.zip";
+            
+            //Comprobar archivo existe
+            File archivo = new File(pZipFile);
+            if (!archivo.exists()){
+                cargarDatos = true;
+            } else {
+                long ms = archivo.lastModified();
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date d = sdf.parse(sdf.format(new Date(ms)));
+                Date ahora = sdf.parse(sdf.format(new Date()));
+                
+                if (ahora.before(d)) {
+                    cargarDatos = true;
+                } else {
+                    cargarDatos = false;
+                }
+                
+            }
+            
+            //Generar archivo csv
+            
+            if (cargarDatos) {
+                facade fachada = new facade();
+            
+                List<String> numeracion = fachada.exportarNumeracionCSV();
+
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "UNICODE"));
+
+                for(String s : numeracion){
+                    bw.write(s);
+                    bw.newLine();
+                }
+
+                bw.flush();
+                bw.close();
+
+                //Comprimir archivo csv
+
+                Functions.zippear(pFile,pZipFile,"numeracion.csv");
+                
+                archivo = new File(pFile);
+                archivo.delete();
+            }
+            
+            
+            //Descargar archivo comprimido
+            
+            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion.zip");  
+            archivoZIP = new DefaultStreamedContent(stream, "application/zip", "numeracion.zip");
+            
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+        } 
+    }
+    
+    public void descargarConsultaCSV() {
+        try {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+            String path = servletContext.getRealPath("/");
+            //System.out.println(path);
+            
+            String pFile = path + "exports\\numeracion.csv";
+            
+            
+            //Generar archivo csv
+            
+            facade fachada = new facade();
+            
+            final Integer inicio;
+            final Integer fin;
+
+            if (NumInicio.equals("")) {
+                inicio = -1;
+            } else {
+                inicio = Integer.parseInt(NumInicio);
+            }
+
+            if (NumFin.equals("")) {
+                fin = -1;
+            } else {
+                fin = Integer.parseInt(NumFin);
+            }
+
+            List<String> numeracion = fachada.cargarNumeracionAgrupacionTotal(operadorVO.getEmrCodigo(), ndcVO.getNdtNombre(), tipoNdcVO.getNtnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento());
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "UNICODE"));
+
+            for(String s : numeracion){
+                bw.write(s);
+                bw.newLine();
+            }
+
+            bw.flush();
+            bw.close();
+
+            //Descargar archivo csv
+            
+            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion.csv");  
+            archivoCSV = new DefaultStreamedContent(stream, "text/csv", "numeracion.csv");
+            
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (java.lang.Exception e) {
+            e.printStackTrace();
+        } 
+    }
+    
+    public void descargarConsultaAccion() {
+        descargarConsulta = true;
+    }
+    
     
     public List<NuNumeracionVO> getNum() {
         return num;
@@ -1196,6 +1353,22 @@ public class NumeracionBean implements Serializable {
 
     public void setSeleccionNumActual(NuNumeracionVO seleccionNumActual) {
         this.seleccionNumActual = seleccionNumActual;
+    }
+    
+    public StreamedContent getArchivoZIP() {
+        return archivoZIP;
+    }
+
+    public StreamedContent getArchivoCSV() {
+        return archivoCSV;
+    }
+
+    public Boolean getDescargarConsulta() {
+        return descargarConsulta;
+    }
+
+    public void setDescargarConsulta(Boolean descargarConsulta) {
+        this.descargarConsulta = descargarConsulta;
     }
     
 }
