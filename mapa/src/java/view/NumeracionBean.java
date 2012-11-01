@@ -9,10 +9,8 @@ import facade.facade;
 import helper.ConvertirListasHelper;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
@@ -29,19 +27,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRichTextString;
@@ -49,8 +39,6 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -136,7 +124,7 @@ public class NumeracionBean implements Serializable {
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
             listaNDC = convertir.createSelectItemsList(fachada.listaNDC("-1"), null, "getNdnCodigo", "getNdtNombre", false, "");
-            listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(ndcVO.getNdtNombre()), null, "getNtnCodigo", "getNttNombre", true, "");
+            listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(), null, "getNtnCodigo", "getNttNombre", true, "");
             listaOperador = convertir.createSelectItemsList(fachada.listaOperadorNumeracion(), "getEmrCodigo", null, "getEmtNombre", true, "");
             listaEstado = convertir.createSelectItemsList(fachada.listaEstado(), null, "getEsnCodigo", "getEstNombre", true, "");
             listaDepartamento = convertir.createSelectItemsList(fachada.listaDepartamentos(), "getCodigoDepartamento", null, "getNombreDepartamento", true, "");
@@ -722,7 +710,7 @@ public class NumeracionBean implements Serializable {
         facade fachada = new facade();
         try {
             ConvertirListasHelper convertir = new ConvertirListasHelper();
-            listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(ndcVO.getNdtNombre()), null, "getNtnCodigo", "getNttNombre", true, "");
+            listaTipoNdc = convertir.createSelectItemsList(fachada.listaTipoNdc(), null, "getNtnCodigo", "getNttNombre", true, "");
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Numeración", e);
         }
@@ -986,7 +974,7 @@ public class NumeracionBean implements Serializable {
             
                 List<String> numeracion = fachada.exportarNumeracionCSV();
 
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "UNICODE"));
+                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "ISO-8859-1"));
 
                 for(String s : numeracion){
                     bw.write(s);
@@ -1011,13 +999,13 @@ public class NumeracionBean implements Serializable {
             archivoZIP = new DefaultStreamedContent(stream, "application/zip", "numeracion.zip");
             
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
         } catch (java.lang.Exception e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
         } 
     }
     
@@ -1026,7 +1014,14 @@ public class NumeracionBean implements Serializable {
         ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
         String path = servletContext.getRealPath("/");
         //System.out.println(path);
-        String pFile = path + "exports\\numeracion-consulta.csv";
+        
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd-H-mm-ss-SSS");
+        String cadenaFecha = formato.format(new Date());
+        
+        String nFile = "num-" + cadenaFecha + ".csv";
+        String directorio = "exports";
+        
+        String pFile = path + directorio + "\\" + nFile;
         
         try {
             //Generar archivo csv
@@ -1050,7 +1045,7 @@ public class NumeracionBean implements Serializable {
 
             List<String> numeracion = fachada.cargarNumeracionAgrupacionTotal(operadorVO.getEmrCodigo(), ndcVO.getNdtNombre(), tipoNdcVO.getNtnCodigo(), inicio, fin, estadoVO.getEsnCodigo(), municipioVO.getCodigoMunicipio(), departamentoVO.getCodigoDepartamento());
 
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "UNICODE"));
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "ISO-8859-1"));
 
             for(String s : numeracion){
                 bw.write(s);
@@ -1062,19 +1057,19 @@ public class NumeracionBean implements Serializable {
 
             //Descargar archivo csv
             
-            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion-consulta.csv");  
+            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/" + directorio + "/"+nFile);  
             archivoCSV = new DefaultStreamedContent(stream, "text/csv", "numeracion.csv");
             
             
             
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa consulta", e);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa consulta", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa consulta", e);
         } catch (java.lang.Exception e) {
-            e.printStackTrace();
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa consulta", e);
         } finally {
             File archivo = new File(pFile);
             if (archivo.exists()){
