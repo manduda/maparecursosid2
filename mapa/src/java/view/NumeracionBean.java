@@ -1022,15 +1022,13 @@ public class NumeracionBean implements Serializable {
     }
     
     public void descargarConsultaCSV() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String path = servletContext.getRealPath("/");
+        //System.out.println(path);
+        String pFile = path + "exports\\numeracion-consulta.csv";
+        
         try {
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-            String path = servletContext.getRealPath("/");
-            //System.out.println(path);
-            
-            String pFile = path + "exports\\numeracion.csv";
-            
-            
             //Generar archivo csv
             
             facade fachada = new facade();
@@ -1064,8 +1062,10 @@ public class NumeracionBean implements Serializable {
 
             //Descargar archivo csv
             
-            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion.csv");  
+            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion-consulta.csv");  
             archivoCSV = new DefaultStreamedContent(stream, "text/csv", "numeracion.csv");
+            
+            
             
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -1075,7 +1075,13 @@ public class NumeracionBean implements Serializable {
             e.printStackTrace();
         } catch (java.lang.Exception e) {
             e.printStackTrace();
-        } 
+        } finally {
+            File archivo = new File(pFile);
+            if (archivo.exists()){
+                archivo.delete();
+            }
+            
+        }
     }
     
     public void descargarConsultaAccion() {

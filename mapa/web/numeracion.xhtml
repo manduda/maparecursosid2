@@ -20,9 +20,9 @@
             
             <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
                 <h:form id="frmNum">
-                    <h:panelGrid id="pgNum">
+                    <h:panelGrid id="pgNum" style="width:100%">
                         <h:panelGrid columns="2">
-                            
+
                             <h:outputText value="Operador" rendered="#{!NumeracionBean.matrizVisible}"/>
                             <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.operadorVO.emrCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
@@ -35,12 +35,12 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                            
+
                             <h:outputText value="Departamento" rendered="#{!NumeracionBean.matrizVisible}"/>
                             <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.departamentoVO.codigoDepartamento}" rendered="#{!NumeracionBean.matrizVisible}">
                                     <f:selectItems value="#{NumeracionBean.listaDepartamento}" />
-                                    <p:ajax update="listaDepartamento,listaMunicipio,listaNdc,pDescargar" listener="#{NumeracionBean.cambiarDepartamento}" />
+                                    <p:ajax update="listaDepartamento,listaMunicipio,listaNdc,tipoNumeracion,pDescargar" listener="#{NumeracionBean.cambiarDepartamento}" />
                                 </h:selectOneMenu>
                                 <p:commandLink ajax="true" rendered="#{NumeracionBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio,listaNdc,pDescargar" action="#{NumeracionBean.cambiarDepartamento}">
                                     <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
@@ -49,7 +49,7 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                            
+
                             <h:outputText value="Municipio" rendered="#{!NumeracionBean.matrizVisible}"/>
                             <h:panelGrid id="listaMunicipio" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu id="municipios" value="#{NumeracionBean.municipioVO.codigoMunicipio}" rendered="#{!NumeracionBean.matrizVisible}">
@@ -62,7 +62,7 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                            
+
                             <h:outputText value="Estado" rendered="#{!NumeracionBean.matrizVisible}"/>
                             <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
                                 <h:selectOneMenu value="#{NumeracionBean.estadoVO.esnCodigo}" rendered="#{!NumeracionBean.matrizVisible}">
@@ -75,7 +75,7 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                            
+
                             <h:outputText value="NDC" />
                             <h:panelGrid id="listaNdc" columns="3" cellpadding="0" cellspacing="0">
                                 <h:selectOneMenu value="#{NumeracionBean.ndcVO.ndtNombre}">
@@ -99,7 +99,7 @@
                                     </h:panelGrid>
                                </h:panelGroup>
                             </h:panelGrid>
-                            
+
                             <h:outputText value="Número inicio (&gt;)"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="numeroInicio" value="#{NumeracionBean.numInicio}" maxlength="7" size="7" validator="#{Validador.enteroMayorIgualCero}"/>
@@ -110,7 +110,7 @@
                                 <h:inputText id="numeroFin" value="#{NumeracionBean.numFin}" maxlength="7" size="7" validator="#{Validador.enteroMayorIgualCero}"/>
                                 <p:message for="numeroFin" />
                             </h:panelGrid>
-                            
+
                             <h:outputText value=" "/>
                             <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
                                 <h:outputText value="Borrar todos los filtros &nbsp;" />
@@ -126,10 +126,9 @@
                                     <f:setPropertyActionListener target="#{NumeracionBean.descargarConsulta}" value="true"/>
                                 </p:commandLink>
                             </h:panelGrid>
-                            
-                            
                         </h:panelGrid>
-                        <h:panelGrid columns="2">
+
+                        <h:panelGrid columns="3" style="width:100%" columnClasses="tabla-accion,tabla-accion" cellpadding="0" cellspacing="0">
                             <p:commandButton value="Consultar" actionListener="#{NumeracionBean.buscar}" ajax="true" update=":pgNumeracion,frmNum" rendered="#{!NumeracionBean.matrizVisible}">
                                 <f:setPropertyActionListener target="#{NumeracionBean.selectedNumsAccion}" value="false"/>
                                 <f:setPropertyActionListener target="#{NumeracionBean.mensajeMatriz}" value=""/>
@@ -137,36 +136,38 @@
                             </p:commandButton>
                             <p:commandButton value="Consultar" actionListener="#{NumeracionBean.matriz}" ajax="true" update="frmNum" rendered="#{NumeracionBean.matrizVisible}"/>
                             <p:commandLink value="Ver #{NumeracionBean.matrizVisible ? 'Lista' : 'Matriz'}" ajax="true" actionListener="#{NumeracionBean.verMatriz}" update=":frmNum:pgNum"/>
-                            
+
+                            <h:panelGrid id="pDescargar" style="width: 100%;" cellpadding="0" cellspacing="0">
+                                <h:panelGrid style="vertical-align: middle; margin-left: auto; margin-right: 0; font-size: 12px" columns="2" >
+                                    <h:panelGrid styleClass="ui-widget-header" columns="2">
+                                        <p:commandLink actionListener="#{NumeracionBean.exportarCSV}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)" >  
+                                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
+                                            <p:fileDownload value="#{NumeracionBean.archivoZIP}" />
+                                        </p:commandLink>
+                                        <h:outputText value="Exportar mapa &lt;br/&gt; completo" escape="false"/>
+                                    </h:panelGrid>
+                                    
+                                    <h:panelGrid styleClass="ui-widget-header" columns="2">
+                                        <p:commandLink actionListener="#{NumeracionBean.descargarConsultaCSV}" ajax="false" id="descargarCosulta"
+                                                       onclick="PrimeFaces.monitorDownload(start, stop)" disabled="#{NumeracionBean.descargarConsulta}">
+                                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
+                                            <p:fileDownload value="#{NumeracionBean.archivoCSV}" />
+                                        </p:commandLink>
+                                        <h:outputText value="Exportar &lt;br/&gt; consulta" escape="false" style="color: #{NumeracionBean.descargarConsulta ? '#A8A8A8' : '#000000'}"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+                                <script type="text/javascript">  
+                                    function start() { statusDialog.show(); }
+                                    function stop() { statusDialog.hide(); }  
+                                </script>
+                            </h:panelGrid>
+                                
                         </h:panelGrid>
+
                         <h:panelGrid id="mensajeMatriz">
                             <h:outputText value="#{NumeracionBean.mensajeMatriz}" escape="false" style="color: red; font-weight: bold;" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
                         </h:panelGrid>
-                        
-                        <h:panelGrid id="pDescargar" style="width: 100%" border="1">
-                            <h:panelGrid  style="width: 200px" border ="1">
-                            <h:panelGrid style="vertical-align: middle;" columns="2">
-                                <p:commandLink actionListener="#{NumeracionBean.exportarCSV}" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop)" >  
-                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
-                                    <p:fileDownload value="#{NumeracionBean.archivoZIP}" />
-                                </p:commandLink>
-                                <h:outputText value="Exportar mapa completo"/>
-                                
-                                <p:commandLink actionListener="#{NumeracionBean.descargarConsultaCSV}" ajax="false" id="descargarCosulta"
-                                               onclick="PrimeFaces.monitorDownload(start, stop)" disabled="#{NumeracionBean.descargarConsulta}">
-                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px"/>
-                                    <p:fileDownload value="#{NumeracionBean.archivoCSV}" />
-                                </p:commandLink>
-                                <h:outputText value="Exportar consulta"/>
-                            </h:panelGrid>
-                            
-                            <script type="text/javascript">  
-                                function start() { statusDialog.show(); }
-                                function stop() { statusDialog.hide(); }  
-                            </script>
-                            </h:panelGrid>
-                        </h:panelGrid>
-                        
                     </h:panelGrid>
                 </h:form>
             </p:panel>
