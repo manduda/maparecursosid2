@@ -21,5 +21,12 @@ public class NtTipoNdcDAO {
                 + "ORDER BY nt.nttNombre");
         query.setParameter("ndc", ndc);
         return query.getResultList();
-    }    
+    }
+    
+    public static List<NtTipoNdc> getListaTipoNdc(EntityManager em){
+        Query query = em.createQuery("SELECT nt FROM NtTipoNdc nt "
+                + "WHERE nt.ntnCodigoPadre.ntnCodigo IN (1,6,7) "
+                + "ORDER BY nt.nttNombre");
+        return query.getResultList();
+    } 
 }

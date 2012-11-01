@@ -53,8 +53,8 @@ public class NdNdcService {
         return ndcVO;
     }
     
-    public List<NtTipoNdcVO> getListTipoNdc(String ndc, EntityManager em){
-        List<NtTipoNdc> tipoNdc = NtTipoNdcDAO.getList(ndc, em);
+    public List<NtTipoNdcVO> getListTipoNdc(EntityManager em){
+        List<NtTipoNdc> tipoNdc = NtTipoNdcDAO.getListaTipoNdc(em);
         List<NtTipoNdcVO> tipoNdcVO = new ArrayList<NtTipoNdcVO>();
         for (NtTipoNdc nt : tipoNdc) {
             tipoNdcVO.add(nt.toVO());

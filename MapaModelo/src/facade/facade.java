@@ -266,7 +266,7 @@ public class facade {
         return vo;
     }
     
-    public List<NtTipoNdcVO> listaTipoNdc(String nombreNdc) {
+    public List<NtTipoNdcVO> listaTipoNdc() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -276,7 +276,7 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            vo = ServiceFactory.createNdNdcService().getListTipoNdc(nombreNdc, em);
+            vo = ServiceFactory.createNdNdcService().getListTipoNdc(em);
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);
