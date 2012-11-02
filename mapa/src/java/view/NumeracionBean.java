@@ -108,6 +108,7 @@ public class NumeracionBean implements Serializable {
     
     private StreamedContent archivoZIP;
     private StreamedContent archivoCSV;
+    private boolean existeArchivoZIP = false;
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -231,9 +232,11 @@ public class NumeracionBean implements Serializable {
         seleccionNumActual = new NuNumeracionVO();
         seleccionNumAnterior = new NuNumeracionVO();
         
-        int inicio = Integer.parseInt(NumInicio.substring(0,3)+"0000");
-        int fin = Integer.parseInt(NumFin.substring(0,3)+"9999");
+        NumInicio = NumInicio.substring(0,3)+"0000";
+        NumFin = NumFin.substring(0,3)+"9999";
         
+        int inicio = Integer.parseInt(NumInicio);
+        int fin = Integer.parseInt(NumFin);
         String columna1 = "";
         facade fachada = new facade();
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
@@ -938,75 +941,25 @@ public class NumeracionBean implements Serializable {
     }
 
     public void exportarCSV() {
-        try {
-            boolean cargarDatos = false;
-            FacesContext facesContext = FacesContext.getCurrentInstance();
-            ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
-            String path = servletContext.getRealPath("/");
-            //System.out.println(path);
-            
-            String pFile = path + "exports\\numeracion.csv";
-            String pZipFile = path + "exports\\numeracion.zip";
-            
-            //Comprobar archivo existe
-            File archivo = new File(pZipFile);
-            if (!archivo.exists()){
-                cargarDatos = true;
+        InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion.zip");
+        archivoZIP = new DefaultStreamedContent(stream, "application/zip", "numeracion.zip");
+    }
+    
+    public boolean isExisteArchivoZIP() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String path = servletContext.getRealPath("/");
+        
+        String pFile = path + "exports\\numeracion.zip";
+        
+        File archivo = new File(pFile);
+            if (archivo.exists()){
+                existeArchivoZIP = true;
             } else {
-                long ms = archivo.lastModified();
-                
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = sdf.parse(sdf.format(new Date(ms)));
-                Date ahora = sdf.parse(sdf.format(new Date()));
-                
-                if (ahora.before(d)) {
-                    cargarDatos = true;
-                } else {
-                    cargarDatos = false;
-                }
-                
+                existeArchivoZIP = false;
             }
             
-            //Generar archivo csv
-            
-            if (cargarDatos) {
-                facade fachada = new facade();
-            
-                List<String> numeracion = fachada.exportarNumeracionCSV();
-
-                BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "ISO-8859-1"));
-
-                for(String s : numeracion){
-                    bw.write(s);
-                    bw.newLine();
-                }
-
-                bw.flush();
-                bw.close();
-
-                //Comprimir archivo csv
-
-                Functions.zippear(pFile,pZipFile,"numeracion.csv");
-                
-                archivo = new File(pFile);
-                archivo.delete();
-            }
-            
-            
-            //Descargar archivo comprimido
-            
-            InputStream stream = ((ServletContext)FacesContext.getCurrentInstance().getExternalContext().getContext()).getResourceAsStream("/exports/numeracion.zip");  
-            archivoZIP = new DefaultStreamedContent(stream, "application/zip", "numeracion.zip");
-            
-        } catch (UnsupportedEncodingException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
-        } catch (FileNotFoundException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
-        } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
-        } catch (java.lang.Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
-        } 
+        return existeArchivoZIP;
     }
     
     public void descargarConsultaCSV() {
@@ -1371,5 +1324,5 @@ public class NumeracionBean implements Serializable {
     public void setDescargarConsulta(Boolean descargarConsulta) {
         this.descargarConsulta = descargarConsulta;
     }
-    
+
 }

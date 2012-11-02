@@ -29,6 +29,9 @@
         <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
         <param-value>6LdQhdgSAAAAAIkFre-boAOqt0zJtGSn3xVQdx5y</param-value>
     </context-param>
+    <listener>
+        <listener-class>tareas.TareaNumeracion</listener-class>
+    </listener>
     <filter>
         <description>Require that the user log in before accessing any page other than the entry pages</description>
         <filter-name>LoginFilter</filter-name>

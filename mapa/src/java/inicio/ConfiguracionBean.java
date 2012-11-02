@@ -76,7 +76,6 @@ public class ConfiguracionBean implements Serializable {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros", e);
         }
         
-        Properties Correo = new Properties();
         try {
             InputStream input = ConfiguracionBean.class.getResourceAsStream("../properties/Correo.properties");
             properties.load(input);
