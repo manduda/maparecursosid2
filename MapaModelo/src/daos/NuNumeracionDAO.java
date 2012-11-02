@@ -608,6 +608,7 @@ public class NuNumeracionDAO {
                 "select (select b.ndt_nombre from ND_NDC b WHERE b.NDN_CODIGO = a.NDC) NDC, "
                 + "       LPAD(a.min_inicio,7,'0') inicio, "
                 + "       LPAD(a.max_inicio + 99,7,'0')  fin, "
+                + "       a.max_inicio + 99 - a.min_inicio + 1 cantidad, "
                 + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
                 + "       (select (select d.NOMBRE_DEPARTAMENTO from SA.DEPARTAMENTOS d WHERE d.CODIGO_DEPARTAMENTO = md.CODIGO_DEPARTAMENTO) "
                 + "         from SA.MUNICIPIOS md WHERE md.CODIGO_MUNICIPIO = a.SK_REGION_CODE) DEPARTAMENTO, "
@@ -648,7 +649,7 @@ public class NuNumeracionDAO {
         
         List<String> numeracion = new ArrayList<String>();
         
-        numeracion.add("NDC;INICIO;FIN;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
+        numeracion.add("NDC;INICIO;FIN;CANTIDAD;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
                 
         if (results != null){
             int i = 0;
@@ -660,7 +661,8 @@ public class NuNumeracionDAO {
                         + value[3].toString() + ";"
                         + value[4].toString() + ";"
                         + value[5].toString() + ";"
-                        + value[6].toString() + "");
+                        + value[6].toString() + ";"
+                        + value[7].toString() + "");
                 i++;
 
             }
