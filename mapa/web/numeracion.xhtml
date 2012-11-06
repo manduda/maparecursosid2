@@ -97,12 +97,12 @@
                                 </p:commandLink>
                             </h:panelGrid>
 
-                            <h:outputText value="Número inicio (&gt;)"/>
+                            <h:outputText value="Número inicio ( ≥ )"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="numeroInicio" value="#{NumeracionBean.numInicio}" maxlength="7" size="7" validator="#{Validador.enteroMayorIgualCero}"/>
                                 <p:message for="numeroInicio" />
                             </h:panelGrid>
-                            <h:outputText value="Número Fin (&lt;)"/>
+                            <h:outputText value="Número Fin ( ≤ )"/>
                             <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
                                 <h:inputText id="numeroFin" value="#{NumeracionBean.numFin}" maxlength="7" size="7" validator="#{Validador.enteroMayorIgualCero}"/>
                                 <p:message for="numeroFin" />
@@ -135,23 +135,9 @@
                             <p:commandLink value="Ver #{NumeracionBean.matrizVisible ? 'Lista' : 'Matriz'}" ajax="true" actionListener="#{NumeracionBean.verMatriz}" update=":frmNum:pgNum"/>
 
                             <h:panelGrid id="pDescargar" style="width: 100%;" cellpadding="0" cellspacing="0">
-                                <h:panelGrid style="vertical-align: middle; margin-left: auto; margin-right: 0; font-size: 10px" columns="2">
-
-                                    <h:panelGrid styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only #{!NumeracionBean.existeArchivoZIP ? 'ui-state-disabled' : ''}" columns="2" 
-                                                 onmouseover="#{NumeracionBean.existeArchivoZIP ? '$(this).toggleClass( \'ui-state-hover\', true);' : ''}"
-                                                 onmouseout="#{NumeracionBean.existeArchivoZIP ? '$(this).toggleClass( \'ui-state-hover\', false);' : ''}"
-                                                 onclick="#{NumeracionBean.existeArchivoZIP ? 'PrimeFaces.monitorDownload(start, stop);PrimeFaces.addSubmitParam(\'frmNum\',{\'frmNum:descargarCompleta\':\'frmNum:descargarCompleta\'}).submit(\'frmNum\');' : ''}">
-                                            <p:commandLink type="button" id="descargarCompleta" actionListener="#{NumeracionBean.exportarCSV}" ajax="false" 
-                                                           onclick="PrimeFaces.monitorDownload(start, stop)" disabled="#{!NumeracionBean.existeArchivoZIP}">  
-                                                <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px;" width="20"/>
-                                                <p:fileDownload value="#{NumeracionBean.archivoZIP}" />
-                                            </p:commandLink>
-                                            <h:outputText value="Exportar mapa &lt;br/&gt; completo" escape="false"/>
-                                        
-                                    </h:panelGrid>
+                                <h:panelGrid style="vertical-align: middle; margin-left: auto; margin-right: 0; font-size: 10px" columns="3">
                                     
                                     <h:panelGrid styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only #{NumeracionBean.descargarConsulta ? 'ui-state-disabled' : ''}" columns="2"
-                                                 
                                                  onmouseover="#{!NumeracionBean.descargarConsulta ? '$(this).toggleClass( \'ui-state-hover\', true);' : ''}"
                                                  onmouseout="#{!NumeracionBean.descargarConsulta ? '$(this).toggleClass( \'ui-state-hover\', false);' : ''}"
                                                  onclick="#{!NumeracionBean.descargarConsulta ? 'PrimeFaces.monitorDownload(start, stop);PrimeFaces.addSubmitParam(\'frmNum\',{\'frmNum:descargarCosulta\':\'frmNum:descargarCosulta\'}).submit(\'frmNum\');' : ''}">
@@ -162,8 +148,32 @@
                                         </p:commandLink>
                                         <h:outputText value="Exportar &lt;br/&gt; consulta" escape="false" />
                                     </h:panelGrid>
+                                    
+                                    <h:panelGrid styleClass="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only #{!NumeracionBean.existeArchivoZIP ? 'ui-state-disabled' : ''}" columns="2" 
+                                                 onmouseover="#{NumeracionBean.existeArchivoZIP ? '$(this).toggleClass( \'ui-state-hover\', true);' : ''}"
+                                                 onmouseout="#{NumeracionBean.existeArchivoZIP ? '$(this).toggleClass( \'ui-state-hover\', false);' : ''}"
+                                                 onclick="#{NumeracionBean.existeArchivoZIP ? 'exportarDialog.show();' : ''}">
+                                            <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/csv.png" style="border:0px;" width="20"/>
+                                        <h:outputText value="Exportar mapa &lt;br/&gt; completo" escape="false"/>
+                                        
+                                    </h:panelGrid>
                                 </h:panelGrid>
-
+                                
+                                <p:dialog widgetVar="exportarDialog" header="Descargar archivo" modal="true" resizable="false" draggable="false" closable="false">
+                                    <h:panelGrid style="text-align: center;">
+                                        <h:outputText value="El archivo fue generado en la siguiente fecha:"/>
+                                        <h:outputText value="#{NumeracionBean.fechaArchivoZip}" style="font-weight: bold; color: red"/>
+                                        <br/>
+                                        <h:panelGrid columns="2" style="width: 100%">
+                                            <p:commandButton value="Descargar" actionListener="#{NumeracionBean.exportarCSV}" ajax="false" 
+                                                           onclick="exportarDialog.hide();PrimeFaces.monitorDownload(start, stop)">
+                                                <p:fileDownload value="#{NumeracionBean.archivoZIP}" />
+                                            </p:commandButton>
+                                            <p:commandButton type="button" value="Cancelar" onclick="exportarDialog.hide();"/>
+                                        </h:panelGrid>
+                                    </h:panelGrid>
+                                </p:dialog>
+                                
                                 <script type="text/javascript">  
                                     function start() { statusDialog.show(); }
                                     function stop() { statusDialog.hide(); }  
@@ -172,8 +182,11 @@
                                 
                         </h:panelGrid>
 
-                        <h:panelGrid id="mensajeMatriz">
-                            <h:outputText value="#{NumeracionBean.mensajeMatriz}" escape="false" style="color: red; font-weight: bold;" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
+                        <h:panelGrid id="mensajeMatriz" >
+                            <h:panelGrid styleClass="#{NumeracionBean.mensajeMatriz != '' ? 'ui-message-error ui-widget ui-corner-all' : ''} " columns="2" cellspacing="0" cellpadding="0">
+                                <h:panelGrid styleClass="ui-message-error-icon" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
+                                <h:outputText value="#{NumeracionBean.mensajeMatriz}" escape="false" styleClass="ui-message-error-detail" rendered="#{NumeracionBean.mensajeMatriz != ''}"/>
+                            </h:panelGrid>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:form>

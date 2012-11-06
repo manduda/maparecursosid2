@@ -109,6 +109,7 @@ public class NumeracionBean implements Serializable {
     private StreamedContent archivoZIP;
     private StreamedContent archivoCSV;
     private boolean existeArchivoZIP = false;
+    private String fechaArchivoZip = "";
     
     public NumeracionBean() {
         facade fachada = new facade();
@@ -960,6 +961,23 @@ public class NumeracionBean implements Serializable {
             }
             
         return existeArchivoZIP;
+    }
+
+    public String getFechaArchivoZip() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ServletContext servletContext = (ServletContext) facesContext.getExternalContext().getContext();
+        String path = servletContext.getRealPath("/");
+        String pFile = path + "exports\\numeracion.zip";
+        String fecha = "";
+        File archivo = new File(pFile);
+        if (archivo.exists()){
+            long ms = archivo.lastModified();
+            Date d = new Date(ms);
+            SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd h:mm a zzzz");
+            fechaArchivoZip = formato.format(d);
+        }
+        
+        return fechaArchivoZip;
     }
     
     public void descargarConsultaCSV() {

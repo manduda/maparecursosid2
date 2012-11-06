@@ -90,11 +90,10 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
             
             //Generar archivo csv
             if (cargarDatos) {
-                System.out.println("Exportando archivo " + new Date());
                 facade fachada = new facade();
                 
                 List<String> numeracion = fachada.exportarNumeracionCSV();
-
+                
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(pFile), "ISO-8859-1"));
 
                 for(String s : numeracion){
@@ -104,7 +103,7 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
 
                 bw.flush();
                 bw.close();
-
+                
                 //Generar archivo zip
                 Functions.zippear(pFile,pZipFile,"numeracion.csv");
 
@@ -114,16 +113,16 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
             }
             
         } catch (UnsupportedEncodingException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "1 - Error al descargar archivo - mapa completo", e);
             error = true;
         } catch (FileNotFoundException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "2 - Error al descargar archivo - mapa completo", e);
             error = true;
         } catch (IOException e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "3 - Error al descargar archivo - mapa completo", e);
             error = true;
         } catch (java.lang.Exception e) {
-            Logger.getAnonymousLogger().log(Level.SEVERE, "Error al descargar archivo - mapa completo", e);
+            Logger.getAnonymousLogger().log(Level.SEVERE, "4 - Error al descargar archivo - mapa completo", e);
             error = true;
         } finally {
             if (error) {

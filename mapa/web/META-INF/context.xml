@@ -14,7 +14,7 @@
         name="ldap/OracleOID"
         type="com.sun.jndi.ldap.LdapCtx"/>
      
-     <!--<Resource auth="Container"
+    <!--<Resource auth="Container"
         com.sun.jndi.ldap.connect.pool="true"
         factory="com.sun.jndi.ldap.LdapCtxFactory"
         java.naming.factory.initial="com.sun.jndi.ldap.LdapCtxFactory"
