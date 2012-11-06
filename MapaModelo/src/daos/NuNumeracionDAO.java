@@ -14,6 +14,8 @@ import entities.NuNumeracion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -652,19 +654,16 @@ public class NuNumeracionDAO {
         numeracion.add("NDC;INICIO;FIN;CANTIDAD;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
                 
         if (results != null){
-            int i = 0;
             for (Object oRow : results) {
                 Object[] value = (Object[]) oRow;
-                numeracion.add(value[0].toString() + ";" 
-                        + value[1].toString() + ";"
-                        + value[2].toString() + ";"
-                        + value[3].toString() + ";"
-                        + value[4].toString() + ";"
-                        + value[5].toString() + ";"
-                        + value[6].toString() + ";"
-                        + value[7].toString() + "");
-                i++;
-
+                numeracion.add(value[0] + ";" 
+                        + value[1] + ";"
+                        + value[2] + ";"
+                        + value[3] + ";"
+                        + value[4] + ";"
+                        + value[5] + ";"
+                        + value[6] + ";"
+                        + value[7]);
             }
         }
         
@@ -800,14 +799,14 @@ public class NuNumeracionDAO {
             int i = 0;
             for (Object oRow : results) {
                 Object[] value = (Object[]) oRow;
-                numeracion.add(value[0].toString() + ";" 
-                        + value[1].toString() + ";"
-                        + value[2].toString() + ";"
-                        + value[3].toString() + ";"
-                        + value[4].toString() + ";"
-                        + value[5].toString() + ";"
-                        + value[6].toString() + ";"
-                        + value[7].toString() + "");
+                numeracion.add(value[0] + ";" 
+                        + value[1] + ";"
+                        + value[2] + ";"
+                        + value[3] + ";"
+                        + value[4] + ";"
+                        + value[5] + ";"
+                        + value[6] + ";"
+                        + value[7] + "");
                 i++;
 
             }

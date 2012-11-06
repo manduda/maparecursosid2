@@ -4,7 +4,6 @@
  */
 package facade;
 
-import entities.TeTipoSenalizacion;
 import facade.helpers.CloseEntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,7 +31,6 @@ import vo.NdNdcVO;
 import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
-import vo.PaPermisosAsesorVO;
 import vo.PtTipoPermisoVO;
 import vo.ReRegionVO;
 import vo.RsReservasTemporalesVO;
@@ -56,44 +54,15 @@ import vo.UsersVO;
  * @author miguel.duran
  */
 public class facade {
-    /*private ClCodigosLdService codigosld;
-    private NuNumeracionService numeracion;
-    private SeSenalizacionService senalizacion;
-    private CcCodigosCortosService codigosCortos;
-    private MaMarcacionAbreviadaService marcacionAbreviada;
-    private CdCodigosMncService codigosMnc;
-    private NrCodigosNrnService codigosNrn;
-    private CiCodigosIinService codigosIin;
-    private Nc1xyService codigos1xy;
-    private NdNdcService ndc;
-    private MunicipiosService municipios;
-    private ReRegionService regionSenalizacion;
-    private EsEstadoService estado;
-    private UsUsuariosService usuario;
-    private TrTramitesService tramites;
-    private RsReservasTemporalesService reservasTemporales;
-    private CmConfiguracionModulosService configuracionModulos;*/
 
     public facade(){
-        /*codigosld = new ClCodigosLdService();
-        numeracion = new NuNumeracionService();
-        senalizacion = new SeSenalizacionService();
-        codigosCortos = new CcCodigosCortosService();
-        marcacionAbreviada = new MaMarcacionAbreviadaService();
-        codigosMnc = new CdCodigosMncService();
-        codigosNrn = new NrCodigosNrnService();
-        codigosIin = new CiCodigosIinService();
-        codigos1xy = new Nc1xyService();
-        ndc = new NdNdcService();
-        municipios = new MunicipiosService();
-        regionSenalizacion = new ReRegionService();
-        estado = new EsEstadoService();
-        usuario = new UsUsuariosService();
-        tramites = new TrTramitesService();
-        reservasTemporales = new RsReservasTemporalesService();
-        configuracionModulos = new CmConfiguracionModulosService();*/
-    }
 
+    }
+    
+    /**
+     * Obtener el listado de códigos de larga distancia
+     * @return Retorna el listado de códigos cortos
+     */
     public List<ClCodigosLdVO> ListaCodigosLd(){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -116,7 +85,21 @@ public class facade {
         }
         return vo;
     }
-
+    
+    /**
+     * Obtener el listado de numeración, en bloques de 100 números
+     * @param first Bloque inicial a retornar
+     * @param max Cantidad máxima de bloques a retornar
+     * @param operador Código de empresa
+     * @param ndc Nombre del NDC
+     * @param tipoNdc Tipo de NDC
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @param estado Código del estado
+     * @param municipio Código del municipio
+     * @param departamento Código del departamento
+     * @return Retorna el listado de numeración, en bloques de 100 números
+     */
     public List<NuNumeracionVO> cargarNumeracion(int first, int max, String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -140,6 +123,18 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener la cantidad de numeración, en bloques de 100 números, para paginación
+     * @param operador Código de empresa
+     * @param ndc Nombre del NDC
+     * @param tipoNdc Tipo de NDC
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @param estado Código del estado
+     * @param municipio Código del municipio
+     * @param departamento Código del departamento
+     * @return Retorna la cantidad de numeración, en bloques de 100 números
+     */
     public int countCargarNumeracion(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -163,6 +158,13 @@ public class facade {
         return cantidad;
     }
     
+    /**
+     * Obtener el listado de numeración, en bloques de 100 números, para paginación
+     * @param ndc Nombre del NDC
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @return Retorna el listado de numeración, en bloques de 100 números
+     */
     public List<NuNumeracionVO> cargarNumeracionBloque(String ndc, int inicio, int fin){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -186,6 +188,13 @@ public class facade {
         return vo;
     }
     
+    /** Obtener la cantidad de numeración, en forma agrupada en bloques de 100 números
+     * Obtener el listado de numeración, en bloques de 100 números
+     * @param ndc Nombre del NDC
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @return Retorna la cantidad de numeración, en forma agrupada en bloques de 100 números
+     */
     public List<NuNumeracionVO> cargarNumeracionAgrupada(String ndc, int inicio, int fin){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -209,6 +218,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de numeración, en bloques de 1000 y los campos separados por ;
+     * @return Retorna el listado de numeración, en bloques de 1000 y los campos separados por ;
+     */
     public List<String> exportarNumeracionCSV(){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -226,6 +239,18 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de numeración, con los campos separados por ;
+     * @param operador Código de la empresa
+     * @param ndc Nombre del NDC
+     * @param tipoNdc Código de tipo de numeración
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @param estado Código del estado
+     * @param municipio Código del municipio
+     * @param departamento Código del departamento
+     * @return Retorna el listado de numeración, con los campos separados por ;
+     */
     public List<String> cargarNumeracionAgrupacionTotal(String operador, String ndc, int tipoNdc, int inicio, int fin, int estado, String municipio, String departamento){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -243,6 +268,11 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de NDC
+     * @param departamento Código del departamento
+     * @return retorna el listado de NDC
+     */
     public List<NdNdcVO> listaNDC(String departamento) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -266,6 +296,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de tipos de NDC
+     * @return Retorna el listado de tipos de NDC
+     */
     public List<NtTipoNdcVO> listaTipoNdc() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -288,7 +322,11 @@ public class facade {
         }
         return vo;
     }
-        
+    
+    /**
+     * Obtener el listado de operadores que tienen numeración
+     * @return Retorna el llistado de operadores que tiene numeración
+     */
     public List<EmOperadorVO> listaOperadorNumeracion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -312,6 +350,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de estados
+     * @return Retorna el listado de estados
+     */
     public List<EsEstadoVO> listaEstado() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -335,6 +377,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de estados de la numeración 1XY
+     * @return Obtener el listado de estados de numeración 1XY
+     */
     public List<EsEstadoVO> listaEstado1xy() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -358,6 +404,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listados de servicios de numeración 1XY
+     * @return Retorna el listado de servicios de numeración 1XY
+     */
     public List<String> listaServicios1xy() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -381,6 +431,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de estados de trámites
+     * @return Retorna el listado de estados de trámites
+     */
     public List<EtEstadoTramiteVO> listaEstadoTramites() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -404,6 +458,21 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de señalización, para paginación
+     * @param first Bloque inicial a retornar
+     * @param max Cantidad máxima de bloques a retornar
+     * @param operador Código de la empresa
+     * @param region Código de la región de señalización
+     * @param zona Código de la zona de señalización
+     * @param ps Código de punto de señalización
+     * @param estado Código del estado
+     * @param municipio Código del municipio
+     * @param departamento Código del departamento
+     * @param tipoSenalizacion Código del tipo de señalización
+     * @param tipoRegion Código del tipo de región de señalización
+     * @return Retorna el listado de señalización
+     */
     public List<SeSenalizacionVO> cargarSenalizacion(int first, int max, String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -427,6 +496,20 @@ public class facade {
         return vo;
     }
     
+    /**
+     * 
+     * Obtener la cantidad códigos de señalización, para paginación
+     * @param operador Código de la empresa
+     * @param region Código de la región de señalización
+     * @param zona Código de la zona de señalización
+     * @param ps Código de punto de señalización
+     * @param estado Código del estado
+     * @param municipio Código del municipio
+     * @param departamento Código del departamento
+     * @param tipoSenalizacion Código del tipo de señalización
+     * @param tipoRegion Código del tipo de región de señalización
+     * @return Retorna la cantidad de códigos de señalización 
+     */
     public int countCargarSenalizacion(String operador, int region, int zona, int ps, int estado, String municipio, String departamento, int tipoSenalizacion, int tipoRegion){
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -450,6 +533,11 @@ public class facade {
         return cantidad;
     }
     
+    /**
+     * Obtener el listado de regiones de señalización
+     * @param tipoRegion Código del tipo de región de señalización
+     * @return Retorna el listado de regiones de señalización
+     */
     public List<ReRegionVO> listaRegionSenalizacion(int tipoRegion) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -473,6 +561,11 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de zonas de señalización
+     * @param tipoRegion Código del tipo de región de señalización
+     * @return Retorna el listado de zonas de señalización
+     */
     public List<Integer> listaZonaSenalizacion(int tipoRegion) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -496,6 +589,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de tipos de señalización
+     * @return Retorna el listado de tipos de señalización
+     */
     public List<TeTipoSenalizacionVO> listaTipoSenalizacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -519,6 +616,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de tipos de regiones de señalización
+     * @return Retorna el listado de tipos de regiones de señalización
+     */
     public List<RtTipoRegionVO> listaTipoRegionSenalizacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -542,6 +643,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de empresas que tienen señalización
+     * @return Retorna el listado de empresas que tienen señalización
+     */
     public List<EmOperadorVO> listaOperadorSenalizacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -565,6 +670,10 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listados de departamentos
+     * @return Retorna el listado de departamentos
+     */
     public List<DepartamentosVO> listaDepartamentos() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -588,6 +697,11 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el listado de municipios
+     * @param departamento Código del departamento
+     * @return Retorna el listado de municipios
+     */
     public List<MunicipiosVO> listaMunicipios(String departamento) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -611,6 +725,12 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Obtener el usuario para iniciar sesión
+     * @param user Nombre de usuario
+     * @param contrasena Contraseña
+     * @return usuario si las credenciales son correctas
+     */
     public UsUsuariosVO iniciarSesion(String user, String contrasena) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -651,6 +771,14 @@ public class facade {
         return vo;
     }
     
+    /**
+     * Cambiar el perfil de un usuario
+     * @param user Nombre de usuario
+     * @param perfil Código del perfil que se va a asignar al usuario
+     * @return Retorna 0: Error al cambiar el perfil
+     *                 1: Perfil cambiado correctamente
+     *                 2: El perfil actual y el nuevo son iguales
+     */
     public Integer cambiarPerfil(UsUsuariosVO user, int perfil){
         /*
          * 0: Error al cambiar el perfil
