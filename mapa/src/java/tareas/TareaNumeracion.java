@@ -77,10 +77,10 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
                 long ms = archivo.lastModified();
                 
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date d = sdf.parse(sdf.format(new Date(ms)));
+                Date fechaArchivo = sdf.parse(sdf.format(new Date(ms)));
                 Date ahora = sdf.parse(sdf.format(new Date()));
                 
-                if (ahora.before(d)) {
+                if (fechaArchivo.before(ahora)) {
                     cargarDatos = true;
                 } else {
                     cargarDatos = false;
@@ -142,7 +142,7 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
     
     private static Date getTime(){
         Calendar fecha = new GregorianCalendar();
-        fecha.add(Calendar.DATE, 1);
+        //fecha.add(Calendar.DATE, 1);
         Calendar result = new GregorianCalendar(
             fecha.get(Calendar.YEAR),
             fecha.get(Calendar.MONTH),
