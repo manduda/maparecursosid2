@@ -612,9 +612,8 @@ public class NuNumeracionDAO {
                 + "       LPAD(a.max_inicio + 99,7,'0')  fin, "
                 + "       a.max_inicio + 99 - a.min_inicio + 1 cantidad, "
                 + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
-                + "       (select (select d.NOMBRE_DEPARTAMENTO from SA.DEPARTAMENTOS d WHERE d.CODIGO_DEPARTAMENTO = md.CODIGO_DEPARTAMENTO) "
-                + "         from SA.MUNICIPIOS md WHERE md.CODIGO_MUNICIPIO = a.SK_REGION_CODE) DEPARTAMENTO, "
-                + "       (select m.descripcion from SA.SK_REGION m WHERE m.SK_REGION_CODE = a.SK_REGION_CODE) MUNICIPIO, "
+                + "       f.NOMBRE_DEPARTAMENTO DEPARTAMENTO, "
+                + "       f.NOMBRE_MUNICIPIO MUNICIPIO, "
                 + "       (select g.EST_NOMBRE from ES_ESTADO g WHERE g.ESN_CODIGO = a.ESN_CODIGO) estado "
                 + "from "
                 + "( "
@@ -643,7 +642,10 @@ public class NuNumeracionDAO {
                 + "       esn_codigo "
                 + "from sql_data "
                 + "order by ndn_codigo,min_inicio "
-                + ") a ");
+                + ") a "
+                + "join (select d.CODIGO_MUNICIPIO, d.NOMBRE_MUNICIPIO, (select e.NOMBRE_DEPARTAMENTO from sa.departamentos e where e.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO) NOMBRE_DEPARTAMENTO "
+                + "      from sa.municipios d "
+                + "      ) f on (a.sk_region_code = f.CODIGO_MUNICIPIO)");
         
         Query query = em.createNativeQuery(searchQuery.toString());
         
