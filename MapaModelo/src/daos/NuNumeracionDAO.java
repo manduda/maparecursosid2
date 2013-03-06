@@ -611,6 +611,7 @@ public class NuNumeracionDAO {
                 + "       LPAD(a.min_inicio,7,'0') inicio, "
                 + "       LPAD(a.max_inicio + 99,7,'0')  fin, "
                 + "       a.max_inicio + 99 - a.min_inicio + 1 cantidad, "
+                + "       (select ntt_nombre from nt_tipondc where ntn_codigo = (select b.ntn_codigo from ND_NDC b WHERE b.NDN_CODIGO = a.ndc)) tipo, "
                 + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
                 + "       f.NOMBRE_DEPARTAMENTO DEPARTAMENTO, "
                 + "       f.NOMBRE_MUNICIPIO MUNICIPIO, "
@@ -653,7 +654,7 @@ public class NuNumeracionDAO {
         
         List<String> numeracion = new ArrayList<String>();
         
-        numeracion.add("NDC;INICIO;FIN;CANTIDAD;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
+        numeracion.add("NDC;INICIO;FIN;CANTIDAD;TIPO NUMERACION;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
                 
         if (results != null){
             for (Object oRow : results) {
@@ -665,7 +666,8 @@ public class NuNumeracionDAO {
                         + value[4] + ";"
                         + value[5] + ";"
                         + value[6] + ";"
-                        + value[7]);
+                        + value[7] + ";"
+                        + value[8]);
             }
         }
         
@@ -678,6 +680,7 @@ public class NuNumeracionDAO {
                 + "       inicio, "
                 + "       fin, "
                 + "       (fin - inicio + 1) cantidad, "
+                + "       (select ntt_nombre from nt_tipondc where ntn_codigo = (select b.ntn_codigo from ND_NDC b WHERE b.NDN_CODIGO = a.ndn_codigo)) tipo, "
                 + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
                 + "       f.NOMBRE_DEPARTAMENTO DEPARTAMENTO, "
                 + "       f.NOMBRE_MUNICIPIO MUNICIPIO, "
@@ -795,7 +798,7 @@ public class NuNumeracionDAO {
         
         List<String> numeracion = new ArrayList<String>();
         
-        numeracion.add("NDC;INICIO;FIN;CANTIDAD;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
+        numeracion.add("NDC;INICIO;FIN;CANTIDAD;TIPO NUMERACION;EMPRESA;DEPARTAMENTO;MUNICIPIO;ESTADO");
                 
         if (results != null){
             int i = 0;
@@ -808,7 +811,8 @@ public class NuNumeracionDAO {
                         + value[4] + ";"
                         + value[5] + ";"
                         + value[6] + ";"
-                        + value[7] + "");
+                        + value[7] + ";"
+                        + value[8] + "");
                 i++;
 
             }
