@@ -43,6 +43,21 @@ public class TcTramiteCcDAO {
         }
     }
     
+    public static boolean findIdCodigosCortosSinActual(int ccnCodigo, int trnCodigo, EntityManager em){
+        List<TcTramiteCc> tramiteCodigosCortos;
+        Query query = em.createQuery("SELECT t FROM TcTramiteCc t WHERE t.ccnCodigo.ccnCodigo = :codigo "
+                + "AND t.trnCodigo.etnCodigo.etnCodigo NOT IN (5,6)"
+                + "AND t.trnCodigo.trnCodigo != :tramite");
+        query.setParameter("codigo", ccnCodigo);
+        query.setParameter("tramite", trnCodigo);
+        tramiteCodigosCortos = query.getResultList();
+        if (tramiteCodigosCortos.isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
     public static int getMaxId(EntityManager em){
         Query query = em.createQuery("SELECT MAX(t.tcnCodigo) FROM TcTramiteCc t");
         Integer n = (Integer)query.getSingleResult();

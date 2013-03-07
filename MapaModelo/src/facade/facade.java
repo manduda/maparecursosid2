@@ -1714,22 +1714,34 @@ public class facade {
         return resultado;
     }
     
-    public boolean aprobarTramite(TrTramitesVO vo){
+    public Integer aprobarTramite(TrTramitesVO vo){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+         * 7: Revisar trámite. Las opciones de asignar, liberar y reservar no está disponibles en esta etapa del trámite.
+        */
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
-        boolean resultado = false;
+        Integer resultado = 0;
         try {
             emf = Persistence.createEntityManagerFactory("MapaModeloPU");
             em = emf.createEntityManager();
             tx = em.getTransaction();
             tx.begin();
-            ServiceFactory.createTrTramitesService().aprobarTramite(vo, em);
-            tx.commit();
-            resultado = true;
+            resultado = ServiceFactory.createTrTramitesService().aprobarTramite(vo, em);
+            if(resultado == 1){
+                tx.commit();
+            } else {
+                tx.rollback();
+            }
         } catch (Exception e) {
             System.out.println(e);
-            resultado = false;
+            resultado = 0;
             if(em != null && tx != null){
                 tx.rollback();
             }

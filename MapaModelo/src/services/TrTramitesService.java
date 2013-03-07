@@ -258,33 +258,20 @@ public class TrTramitesService {
         GtGestionTramiteDAO.persist(gestionTramite, em);
     }
     
-    public void aprobarTramite(TrTramitesVO vo, EntityManager em){
+    public Integer aprobarTramite(TrTramitesVO vo, EntityManager em){
+        /*
+         * 1: Recurso agregado correctamente
+         * 2: Falta un dato del VO
+         * 3: El operador del recurso es diferente al del trámite
+         * 4: El recurso ya tiene un tramite
+         * 5: El estado del recurso debe ser "ASIGNADO" (para el trámite de recuperación)
+         * 6: El estado del recurso debe ser "LIBRE" (para el trámite de preasignación)
+         * 7: Revisar trámite. Las opciones de asignar, liberar y reservar no está disponibles en esta etapa del trámite.
+        */
+        
         TrTramites entity = new TrTramites();
         
         entity = TrTramitesDAO.findbyId(vo.getTrnCodigo(), em);
-        
-        EtEstadoTramite estado = new EtEstadoTramite();
-        estado.setEtnCodigo(4);
-        
-        UsUsuarios usuario = new UsUsuarios();
-        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
-        
-        //entity.setTrnCodigo(vo.getTrnCodigo());
-        entity.setEtnCodigo(estado);
-        //entity.setUsnCodigo(usuario);
-        entity.setTrfFecha(vo.getTrfFecha());
-        
-        TrTramitesDAO.merge(entity, em);
-        
-        GtGestionTramite gestionTramite = new GtGestionTramite();
-        gestionTramite.setEtnCodigo(estado);
-        gestionTramite.setGtfFecha(vo.getTrfFecha());
-        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
-        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
-        gestionTramite.setUsnCodigo(usuario);
-        gestionTramite.setTrnCodigo(entity);
-        
-        GtGestionTramiteDAO.persist(gestionTramite, em);
         
         if (!entity.getTsTramiteSenalizacionCollection().isEmpty()) {
             Collection<TsTramiteSenalizacion> recursos = entity.getTsTramiteSenalizacionCollection();
@@ -358,19 +345,45 @@ public class TrTramitesService {
         if (!entity.getTcTramiteCcCollection().isEmpty()) {
             Collection<TcTramiteCc> recursos = entity.getTcTramiteCcCollection();
             for (TcTramiteCc t : recursos) {
-                if (t.getAcnCodigo().getAcnCodigo() == 2) {
-                    AcAccion accion = new AcAccion();
-                    accion.setAcnCodigo(3);
-                    t.setAcnCodigo(accion);
-                    TcTramiteCcDAO.merge(t, em);
-                    
-                    CcCodigosCortos codigosCortos = CcCodigosCortosDAO.findbyId(t.getCcnCodigo().getCcnCodigo(), em);
-                    codigosCortos.setEmrCodigo(t.getEmrCodigo());
-                    EsEstado estadoRecurso = new EsEstado();
-                    estadoRecurso.setEsnCodigo(2);
-                    codigosCortos.setEsnCodigo(estadoRecurso);
-                    codigosCortos.setCctObservaciones(t.getTctObservaciones());
-                    CcCodigosCortosDAO.merge(codigosCortos, em);
+                if((t.getTrnCodigo().getTrnCodigo()==0)||(t.getCcnCodigo().getCcnCodigo()==0)||(t.getAcnCodigo().getAcnCodigo()==0)||(t.getEmrCodigo().getEmrCodigo().equals(""))){
+                    return 2;
+                }
+                if (TcTramiteCcDAO.findIdCodigosCortosSinActual(t.getCcnCodigo().getCcnCodigo(), t.getTrnCodigo().getTrnCodigo(), em)) {
+                    return 4;
+                }
+                switch(t.getAcnCodigo().getAcnCodigo()){
+                    case 1: //LIBERAR
+                        return 7;
+                    case 2: //PREASIGNAR
+                        if(t.getCcnCodigo().getEsnCodigo().getEsnCodigo()!=1){ // El estado del recurso no es libre
+                            return 6;
+                        }
+                        AcAccion accion = new AcAccion();
+                        accion.setAcnCodigo(3);
+                        t.setAcnCodigo(accion);
+                        TcTramiteCcDAO.merge(t, em);
+
+                        CcCodigosCortos codigosCortos = CcCodigosCortosDAO.findbyId(t.getCcnCodigo().getCcnCodigo(), em);
+                        codigosCortos.setEmrCodigo(t.getEmrCodigo());
+                        EsEstado estadoRecurso = new EsEstado();
+                        estadoRecurso.setEsnCodigo(2);
+                        codigosCortos.setEsnCodigo(estadoRecurso);
+                        codigosCortos.setCctObservaciones(t.getTctObservaciones());
+                        CcCodigosCortosDAO.merge(codigosCortos, em);
+                        break;
+                    case 3: //ASIGNAR
+                        return 7;
+                    case 4: //RESERVAR
+                        return 7;
+                    case 5: //RECUPERAR
+                        if(t.getCcnCodigo().getEsnCodigo().getEsnCodigo()!=3){ // El estado del recurso no es asignado
+                            return 5;
+                        }
+
+                        if(!t.getEmrCodigo().getEmrCodigo().equals(t.getCcnCodigo().getEmrCodigo().getEmrCodigo())){ // El operador del trámite es diferente al del recurso
+                            return 3;
+                        }
+                        break;
                 }
             }
         }
@@ -435,7 +448,7 @@ public class TrTramitesService {
             }
         }
        
-       if (!entity.getTiTramiteIinCollection().isEmpty()) {
+        if (!entity.getTiTramiteIinCollection().isEmpty()) {
             Collection<TiTramiteIin> recursos = entity.getTiTramiteIinCollection();
             for (TiTramiteIin t : recursos) {
                 if (t.getAcnCodigo().getAcnCodigo() == 2) {
@@ -443,7 +456,7 @@ public class TrTramitesService {
                     accion.setAcnCodigo(3);
                     t.setAcnCodigo(accion);
                     TiTramiteIinDAO.merge(t, em);
-                    
+
                     CiCodigosIin codigoIin = CiCodigosIinDAO.findbyId(t.getCinCodigo().getCinCodigo(), em);
                     codigoIin.setEmrCodigo(t.getEmrCodigo());
                     EsEstado estadoRecurso = new EsEstado();
@@ -454,6 +467,31 @@ public class TrTramitesService {
                 }
             }
         }
+        
+        EtEstadoTramite estado = new EtEstadoTramite();
+        estado.setEtnCodigo(4);
+        
+        UsUsuarios usuario = new UsUsuarios();
+        usuario.setUsnCodigo(vo.getUsnCodigo().getUsnCodigo());
+        
+        //entity.setTrnCodigo(vo.getTrnCodigo());
+        entity.setEtnCodigo(estado);
+        //entity.setUsnCodigo(usuario);
+        entity.setTrfFecha(vo.getTrfFecha());
+        
+        TrTramitesDAO.merge(entity, em);
+        
+        GtGestionTramite gestionTramite = new GtGestionTramite();
+        gestionTramite.setEtnCodigo(estado);
+        gestionTramite.setGtfFecha(vo.getTrfFecha());
+        gestionTramite.setGttObservaciones(vo.getTrtObservaciones());
+        gestionTramite.setGtnCodigo(GtGestionTramiteDAO.getMaxId(em)+1);
+        gestionTramite.setUsnCodigo(usuario);
+        gestionTramite.setTrnCodigo(entity);
+        
+        GtGestionTramiteDAO.persist(gestionTramite, em);
+        
+        return 1;
         
     }
     
