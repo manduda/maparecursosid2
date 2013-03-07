@@ -654,26 +654,43 @@ public class TramiteBean implements Serializable {
         vo.setTrfFecha(fecha);
         vo.setTrtObservaciones(observacionesTramite);
    
-        boolean resultado = fachada.aprobarTramite(vo);
+        Integer resultado = fachada.aprobarTramite(vo);
         
-        if (resultado == true){
-            tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
-            mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
+        switch(resultado){
+            case 0:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                break;
+            case 1:
+                tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
+                mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
-            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
 
-            List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
-            for(UsUsuariosVO u: administradores){
-                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") ha aprobado un trámite.<br/><br/>"
-                        + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
-                        + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
-                enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
-            }
-            
-        } else {
-            mensajeTramite = "<br><b>Error al aprobar el trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
+                List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
+                for(UsUsuariosVO u: administradores){
+                    String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") ha aprobado un trámite.<br/><br/>"
+                            + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
+                            + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
+                    enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
+                }
+                break;
+            case 2:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>Falta un dato en el trámite.<br><br>";
+                break;
+            case 3:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>El operador del recurso debe ser el mismo del trámite.<br><br>";
+                break;
+            case 4:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>Hay un recurso que ya tiene un trámite asociado.<br><br>";
+                break;
+            case 5:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>Los recursos deben tener estado \"ASIGNADO\".<br><br>";
+                break;
+            case 6:
+                mensajeTramite = "<br><b><font color=\"red\">Error al aprobar el trámite.</font></b><br><br>Los recursos deben tener estado \"LIBRE\".<br><br>";
+                break;
         }
-        
+
         observacionesTramite = "";
         
         return null;

@@ -74,7 +74,7 @@
                             <h:commandLink value="Buscar trámite" action="#{TramiteBean.opcionesBuscarTramite}" rendered="#{UserBean.consultarTramite}"/>
                             
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.consultarReservas}"/>
-                            <h:commandLink value="Ver reservas temporales" action="#{TramiteBean.consultaReservasTemporales}"/>
+                            <h:commandLink value="Ver reservas temporales" action="#{TramiteBean.consultaReservasTemporales}" rendered="#{UserBean.consultarReservas}"/>
                         </h:panelGrid>
                     </h:form>
                 </h:panelGrid>

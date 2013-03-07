@@ -120,7 +120,7 @@ public class InicioBean {
                         userBean.setAdministrarModulos(false);
                         userBean.setAsignarTramites(false);
                         userBean.setReasignarTramite(false);
-                        userBean.setConsultarReservas(false);
+                        userBean.setConsultarReservas(true);
                         break;
                     case 3: // ASESOR
                         //userBean.setRecuperar(true);
