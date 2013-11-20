@@ -7,6 +7,7 @@ package daos;
 import entities.TuTipoUsuario;
 import entities.UsUsuarios;
 import entities.Users;
+import entities.Usuarios;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -39,13 +40,14 @@ public class UsUsuariosDAO {
         return n;
     }
     
-    public static UsUsuarios cargar(String usuario, EntityManager em) {
+    public static UsUsuarios cargar(String email, EntityManager em) {
         
         Query query = em.createQuery("SELECT u FROM UsUsuarios u "
-                + "WHERE u.codigoSIUST.login = :usuario "
+                + "WHERE u.codigoSIUST.email = :email "
+                + "AND u.usnEstado = 1 "
                 + "ORDER BY u.usnCodigo DESC");
         
-        query.setParameter("usuario", usuario);
+        query.setParameter("email", email);
         //query.setMaxResults(1);
         
         UsUsuarios u = null;
@@ -55,48 +57,28 @@ public class UsUsuariosDAO {
     }
     
     public static List<UsUsuarios> getList(EntityManager em){
-        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1 ORDER BY u.codigoSIUST.login");
+        Query query = em.createQuery("SELECT u FROM UsUsuarios u WHERE u.usnEstado = 1 ORDER BY u.codigoSIUST.email");
         return query.getResultList();
     }
     
     public static List<Users> getUsuariosNoAplicacion(EntityManager em) {
         
-        Query query = em.createQuery("SELECT us FROM Users us "
-                + "WHERE us.userCode NOT IN (SELECT u.codigoSIUST.userCode FROM UsUsuarios u WHERE u.usnEstado = 1) us.login");
+        Query query = em.createQuery("SELECT us FROM Usuarios us "
+                + "WHERE us.userCode NOT IN (SELECT u.codigoSIUST.userCode FROM UsUsuarios u WHERE u.usnEstado = 1) us.email");
         
         return query.getResultList();
     }
     
-    public static List<Users> getUsuariosSIUST(EntityManager em) {
-        
-        //Query query = em.createQuery("SELECT us FROM Users us ORDER BY us.login");
-        
-        Query query = em.createNativeQuery("SELECT A.USER_CODE, A.NAME, A.LAST_NAME, A.EMAIL, A.LOGIN FROM SA.USERS A, SA.TMPCOVERAGE B "
-                + "WHERE A.LOGIN = B.OBJECT_NAME "
-                + "AND   B.OBJECT_TYPE = 'USUARIOS'"
-                + "AND   B.DIMENSION_NAME = 'EMPRESA' "
-                + "AND   B.DIMENSION_CATEGORY_NAME = 'CRT' "
-                + "ORDER BY A.LOGIN");
-        
-        List<Object[]> results = query.getResultList();
-        List<Users> usuarios = new ArrayList<Users>();
-        for(int i=0; i < results.size(); i++){
-            Users user = new Users();
-            user.setUserCode( Integer.parseInt(results.get(i)[0].toString()) );
-            user.setName((String)results.get(i)[1]);
-            user.setLastName((String)results.get(i)[2]);
-            user.setEmail((String)results.get(i)[3]);
-            user.setLogin((String)results.get(i)[4]);
-            usuarios.add(user);
-        }
-        
-        return usuarios;
+    public static List<Usuarios> getUsuariosSIUST(EntityManager em) {
+        Query query = em.createQuery("SELECT u FROM Usuarios u ORDER BY u.email");
+        return query.getResultList();
+
     }
     
     public static UsUsuarios buscarUsuario(int userCode, EntityManager em) {
-        Query query = em.createNativeQuery("SELECT US.USER_CODE, US.NAME, US.LAST_NAME, US.EMAIL, US.LOGIN, U.TUN_CODIGO, U.TUT_NOMBRE, U.USN_ESTADO, U.USN_CODIGO, U.USF_FECHA "
+        Query query = em.createNativeQuery("SELECT US.USER_CODE, US.EMAIL, U.TUN_CODIGO, U.TUT_NOMBRE, U.USN_ESTADO, U.USN_CODIGO, U.USF_FECHA "
                 + "FROM (SELECT U.*, TU.TUT_NOMBRE FROM US_USUARIOS U, TU_TIPO_USUARIO TU WHERE U.USN_ESTADO = 1 AND U.TUN_CODIGO = TU.TUN_CODIGO) U "
-                + "RIGHT JOIN SA.USERS US "
+                + "RIGHT JOIN MAPA.USERS US "
                 + "ON (U.CODIGO_SIUST = US.USER_CODE) "
                 + "WHERE US.USER_CODE = ?1");
         
@@ -106,19 +88,16 @@ public class UsUsuariosDAO {
         
         UsUsuarios user = new UsUsuarios();
         
-        Users usuario = new Users();
+        Usuarios usuario = new Usuarios();
         usuario.setUserCode( Integer.parseInt(results[0].toString()) );
-        usuario.setName((String)results[1]);
-        usuario.setLastName((String)results[2]);
-        usuario.setEmail((String)results[3]);
-        usuario.setLogin((String)results[4]);
+        usuario.setEmail((String)results[1]);
         
         TuTipoUsuario tipousuario = new TuTipoUsuario();
-        if (results[8] != null) {
-            tipousuario.setTunCodigo( Integer.parseInt(results[5].toString()) );
-            tipousuario.setTutNombre((String)results[6]);
-            user.setUsnEstado( Integer.parseInt(results[7].toString()) );
-            user.setUsnCodigo( Integer.parseInt(results[8].toString()) );
+        if (results[5] != null) {
+            tipousuario.setTunCodigo( Integer.parseInt(results[2].toString()) );
+            tipousuario.setTutNombre((String)results[3]);
+            user.setUsnEstado( Integer.parseInt(results[4].toString()) );
+            user.setUsnCodigo( Integer.parseInt(results[5].toString()) );
         }
         
         user.setTunCodigo(tipousuario);
@@ -126,6 +105,25 @@ public class UsUsuariosDAO {
         
         return user;
 
+    }
+    
+    public static boolean buscarEmail(String email, EntityManager em) {
+        boolean resultado = false;
+        Query query = em.createNativeQuery("SELECT COUNT(*) "
+                + "FROM (SELECT U.*, TU.TUT_NOMBRE FROM US_USUARIOS U, TU_TIPO_USUARIO TU WHERE U.USN_ESTADO = 1 AND U.TUN_CODIGO = TU.TUN_CODIGO) U "
+                + "RIGHT JOIN MAPA.USERS US "
+                + "ON (U.CODIGO_SIUST = US.USER_CODE) "
+                + "WHERE US.EMAIL = ?1");
+        
+        query.setParameter(1, email);
+        
+        Number result = (Number) query.getSingleResult();
+        if (result.intValue() > 0) {
+            resultado = true;
+        }
+        
+        return resultado;
+        
     }
     
     public static List<UsUsuarios> getAsesores(EntityManager em){

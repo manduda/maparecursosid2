@@ -44,6 +44,7 @@
     <class>entities.Users</class>
     <class>entities.PaPermisosAsesor</class>
     <class>entities.PtTipoPermiso</class>
+    <class>entities.Usuarios</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <!--<properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>

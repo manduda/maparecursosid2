@@ -12,6 +12,7 @@ import daos.UsUsuariosDAO;
 import entities.TuTipoUsuario;
 import entities.UsUsuarios;
 import entities.Users;
+import entities.Usuarios;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ import javax.persistence.EntityManager;
 import vo.TuTipoUsuarioVO;
 import vo.UsUsuariosVO;
 import vo.UsersVO;
+import vo.UsuariosVO;
 
 /**
  *
@@ -66,19 +68,32 @@ public class UsUsuariosService {
         return vo;
     }*/
     
-    public boolean autenticar(String usuario, String contrasena) {
+    public boolean autenticar(String usuario, String contrasena, EntityManager em) {
         /*
          * 1 - JDNI a través de Resource Reference
          * 2 - JDNI a través de Archivo Properties
          * 3 - Archivo properties con librería LDAP
+         * 4 - Configuración guardad en BD. Tabla CO_CONFIGURACION
          */
         boolean resultado = false;
-        resultado = AutenticacionLDAP.autenticar(usuario, contrasena, 2);
+        resultado = AutenticacionLDAP.autenticar(usuario, contrasena, 4, em);
         return resultado;
     }
     
-    public UsUsuariosVO cargarUsuario(String usuario, EntityManager em) {
-        UsUsuarios u = UsUsuariosDAO.cargar(usuario, em);
+    public boolean autenticarEmail(String email, EntityManager em) {
+        /*
+         * 1 - JDNI a través de Resource Reference
+         * 2 - JDNI a través de Archivo Properties
+         * 3 - Archivo properties con librería LDAP
+         * 4 - Configuración guardad en BD. Tabla CO_CONFIGURACION
+         */
+        boolean resultado = false;
+        resultado = UsUsuariosDAO.buscarEmail(email, em);
+        return resultado;
+    }
+    
+    public UsUsuariosVO cargarUsuario(String email, EntityManager em) {
+        UsUsuarios u = UsUsuariosDAO.cargar(email, em);
         
         if(u!=null){
             UsUsuariosVO uVO = new UsUsuariosVO();
@@ -124,10 +139,10 @@ public class UsUsuariosService {
         return usuariosVO;
     }
     
-    public List<UsersVO> getUsuariosSIUST(EntityManager em){
-        List<Users> usuarios = UsUsuariosDAO.getUsuariosSIUST(em);
-        List<UsersVO> usuariosVO = new ArrayList<UsersVO>();
-        for (Users u : usuarios) {
+    public List<UsuariosVO> getUsuariosSIUST(EntityManager em){
+        List<Usuarios> usuarios = UsUsuariosDAO.getUsuariosSIUST(em);
+        List<UsuariosVO> usuariosVO = new ArrayList<UsuariosVO>();
+        for (Usuarios u : usuarios) {
             usuariosVO.add(u.toVO());
         }
         return usuariosVO;
@@ -157,9 +172,9 @@ public class UsUsuariosService {
         if(perfil != 0){
             UsUsuarios newEntity = new UsUsuarios();
             newEntity.setUsnEstado(1);
-            Users userSIUST = new Users();
-            userSIUST.setUserCode(user.getCodigoSIUST().getUserCode());
-            newEntity.setCodigoSIUST(userSIUST);
+            Usuarios userGOOGLE = new Usuarios();
+            userGOOGLE.setUserCode(user.getCodigoSIUST().getUserCode());
+            newEntity.setCodigoSIUST(userGOOGLE);
             TuTipoUsuario tipousuario = new TuTipoUsuario();
             tipousuario.setTunCodigo(perfil);
             newEntity.setTunCodigo(tipousuario);

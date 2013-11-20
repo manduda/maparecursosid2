@@ -379,8 +379,10 @@ public class TrTramitesService {
                         if(t.getCcnCodigo().getEsnCodigo().getEsnCodigo()!=3){ // El estado del recurso no es asignado
                             return 5;
                         }
+                        
+                        CcCodigosCortos codigo = CcCodigosCortosDAO.findbyId(t.getCcnCodigo().getCcnCodigo(), em);
 
-                        if(!t.getEmrCodigo().getEmrCodigo().equals(t.getCcnCodigo().getEmrCodigo().getEmrCodigo())){ // El operador del trámite es diferente al del recurso
+                        if(!codigo.getEmrCodigo().getEmrCodigo().equals(t.getCcnCodigo().getEmrCodigo().getEmrCodigo())){ // El operador del trámite es diferente al del recurso
                             return 3;
                         }
                         break;

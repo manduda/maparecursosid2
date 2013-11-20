@@ -49,8 +49,8 @@ public class Users implements Serializable {
     @Column(name = "PASSWORD")
     private String password;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSIUST")
-    private Collection<UsUsuarios> usUsuariosCollection;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "codigoSIUST")
+    //private Collection<UsUsuarios> usUsuariosCollection;
 
     public Users(){
     }
@@ -108,13 +108,13 @@ public class Users implements Serializable {
         this.password = password;
     }
 
-    public Collection<UsUsuarios> getUsUsuariosCollection() {
+    /*public Collection<UsUsuarios> getUsUsuariosCollection() {
         return usUsuariosCollection;
     }
 
     public void setUsUsuariosCollection(Collection<UsUsuarios> usUsuariosCollection) {
         this.usUsuariosCollection = usUsuariosCollection;
-    }
+    }*/
 
     public int getUserCode() {
         return userCode;

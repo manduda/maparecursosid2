@@ -6,6 +6,9 @@ package daos;
 
 import entities.MaMarcacionAbreviada;
 import entities.RsReservasTemporales;
+import entities.TrTramites;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -45,6 +48,37 @@ public class RsReservasTemporalesDAO {
         Query query = em.createQuery("SELECT e FROM RsReservasTemporales e");
         return query.getResultList();
     }
+    
+    public static List<RsReservasTemporales> getListRecuperar(EntityManager em){
+        List<RsReservasTemporales> reservasTemporales = new ArrayList<RsReservasTemporales>();
+        StringBuilder searchQuery = new StringBuilder(
+                "SELECT A.*"
+                + "  FROM MAPA.RS_RESERVAS_TEMPORALES A"
+                + "  WHERE A.RSF_FECHA_LIBERACION <= TO_DATE(TO_CHAR(sysdate,'DD/MM/YYYY'),'DD/MM/YYYY')"
+                + "  AND   A.RST_ESTADO = 'S'");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+
+        List<Object[]> results = new ArrayList<Object[]>();
+        results = query.getResultList();
+        
+        for(int i=0; i < results.size(); i++){
+            RsReservasTemporales reserva = new RsReservasTemporales();
+            reserva.setRsnCodigo(Integer.valueOf(results.get(i)[0].toString()));
+            reserva.setRsnCodigoRecurso(Integer.valueOf(results.get(i)[1].toString()));
+            reserva.setRstTipoRecurso((String)results.get(i)[2]);
+            
+            TrTramites tramite = new TrTramites();
+            tramite.setTrnCodigo(Integer.valueOf(results.get(i)[3].toString()));
+            reserva.setTrnCodigo(tramite);
+            reserva.setRstEstado(((String)results.get(i)[4]).charAt(0));
+            reserva.setRsfFechaLiberacion((Date)results.get(i)[5]);
+            reservasTemporales.add(reserva);
+        }
+        
+        return reservasTemporales;
+    }
+    
     
     public static Boolean consultaReservaTemporal(int codigoRecurso, String tipoRecurso, EntityManager em){
         Boolean respuesta = false;

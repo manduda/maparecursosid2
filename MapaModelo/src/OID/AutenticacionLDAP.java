@@ -5,6 +5,7 @@
 package OID;
 
 import com.novell.ldap.LDAPConnection;
+import daos.CoConfiguracionDAO;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -21,17 +22,21 @@ import javax.naming.RefAddr;
 import javax.naming.Reference;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
  * @author miguel.duran
  */
 public class AutenticacionLDAP {
-    public static boolean autenticar (String usuario, String contrasena, int tipo) {
+    public static boolean autenticar (String usuario, String contrasena, int tipo, EntityManager em) {
         /*
          * 1 - JDNI a través de Resource Reference
          * 2 - JDNI a través de Archivo Properties
          * 3 - Archivo properties con librería LDAP
+         * 4 - Configuración guardad en BD. Tabla CO_CONFIGURACION
          */
         boolean resultado = false;
         switch (tipo) {
@@ -43,6 +48,9 @@ public class AutenticacionLDAP {
                 break;
             case 3:
                 autenticarLibreriaLDAP(usuario, contrasena);
+                break;
+            case 4:
+                resultado = autenticarBD(usuario, contrasena, em);
                 break;
         }
         
@@ -186,5 +194,37 @@ public class AutenticacionLDAP {
         return resultado;
     }
     
+    public static boolean autenticarBD(String usuario, String contrasena, EntityManager em){
+        //Autenticación con BD
+        boolean resultado = false;
+        String factory = CoConfiguracionDAO.findbyName("ldap.factory.initial", em).getCotValor();
+        String pool = CoConfiguracionDAO.findbyName("com.sun.jndi.ldap.connect.pool", em).getCotValor();
+        String url = CoConfiguracionDAO.findbyName("ldap.provider.url", em).getCotValor();
+        String authentication = CoConfiguracionDAO.findbyName("ldap.security.authentication", em).getCotValor();
+        String principal = "cn="+usuario+","+CoConfiguracionDAO.findbyName("ldap.security.principal", em).getCotValor();
+
+        Properties env = new Properties();
+        env.put("java.naming.factory.initial", factory);
+        env.put("com.sun.jndi.ldap.connect.pool", pool);
+        env.put("java.naming.provider.url", url);
+        env.put("java.naming.security.authentication", authentication);
+        env.put("java.naming.security.principal", principal);
+        env.put("java.naming.security.credentials", contrasena);
+
+        try {
+            DirContext authContext = new InitialDirContext(env);
+            authContext.close();
+            //System.out.println("Atenticación exitosa");
+            resultado = true;
+        } catch (AuthenticationException authEx) {
+            //System.out.println("Atenticación fallida");
+            resultado = false;
+        } catch (NamingException namEx) {
+            System.out.println("Error en la autenticación con LDAP a través del archivo properties");
+            resultado = false;
+        }
+        
+        return resultado;
+    }
     
 }

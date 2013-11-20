@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import vo.CoConfiguracionVO;
 
 /**
  *
@@ -36,6 +37,15 @@ public class CoConfiguracion implements Serializable {
     private String cotValor;
     
     public CoConfiguracion() {
+    }
+    
+    public CoConfiguracionVO toVO() {
+        CoConfiguracionVO vo = new CoConfiguracionVO();
+        
+        vo.setConCodigo(this.getConCodigo());
+        vo.setCotDescripcion(this.getCotDescripcion());
+        vo.setCotValor(this.getCotValor());
+        return vo;
     }
 
     public int getConCodigo() {

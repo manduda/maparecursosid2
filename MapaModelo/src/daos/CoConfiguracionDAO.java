@@ -6,6 +6,7 @@ package daos;
 
 import entities.CoConfiguracion;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  *
@@ -17,5 +18,11 @@ public class CoConfiguracionDAO {
      */
     public static CoConfiguracion findbyId(int conCodigo, EntityManager em){
         return em.find(CoConfiguracion.class, conCodigo);
+    }
+    
+    public static CoConfiguracion findbyName(String cotDescripcion, EntityManager em){
+        Query query = em.createQuery("SELECT c FROM CoConfiguracion c WHERE c.cotDescripcion = :descripcion");
+        query.setParameter("descripcion", cotDescripcion);
+        return (CoConfiguracion) query.getSingleResult();
     }
 }

@@ -5,6 +5,7 @@
 package vo;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -19,19 +20,20 @@ public class UsUsuariosVO implements Serializable {
     //public static final int ASESOR = 3;
     
     private int usnCodigo;
-    private UsersVO codigoSIUST;
+    private UsuariosVO codigoSIUST;
     private TuTipoUsuarioVO tunCodigo;
     private int usnEstado;
     private Date usfFecha;
+    private Collection<PaPermisosAsesorVO> paPermisosAsesorCollection;
 
     public UsUsuariosVO() {
     }
 
-    public UsersVO getCodigoSIUST() {
+    public UsuariosVO getCodigoSIUST() {
         return codigoSIUST;
     }
 
-    public void setCodigoSIUST(UsersVO codigoSIUST) {
+    public void setCodigoSIUST(UsuariosVO codigoSIUST) {
         this.codigoSIUST = codigoSIUST;
     }
 
@@ -65,6 +67,14 @@ public class UsUsuariosVO implements Serializable {
 
     public void setUsfFecha(Date usfFecha) {
         this.usfFecha = usfFecha;
+    }
+
+    public Collection<PaPermisosAsesorVO> getPaPermisosAsesorCollection() {
+        return paPermisosAsesorCollection;
+    }
+
+    public void setPaPermisosAsesorCollection(Collection<PaPermisosAsesorVO> paPermisosAsesorCollection) {
+        this.paPermisosAsesorCollection = paPermisosAsesorCollection;
     }
     
 }

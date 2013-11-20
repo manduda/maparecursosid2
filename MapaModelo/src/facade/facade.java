@@ -18,6 +18,7 @@ import vo.CdCodigosMncVO;
 import vo.CiCodigosIinVO;
 import vo.ClCodigosLdVO;
 import vo.CmConfiguracionModulosVO;
+import vo.CoConfiguracionVO;
 import vo.DepartamentosVO;
 import vo.EmOperadorVO;
 import vo.EsEstadoVO;
@@ -48,6 +49,7 @@ import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 import vo.UsersVO;
+import vo.UsuariosVO;
 
 /**
  *
@@ -731,7 +733,7 @@ public class facade {
      * @param contrasena Contraseña
      * @return usuario si las credenciales son correctas
      */
-    public UsUsuariosVO iniciarSesion(String user, String contrasena) {
+    public UsUsuariosVO iniciarSesion(String email) {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -742,9 +744,10 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            login = ServiceFactory.createUsUsuariosService().autenticar(user, contrasena);
+            //login = ServiceFactory.createUsUsuariosService().autenticar(user, contrasena, em);
+            login = ServiceFactory.createUsUsuariosService().autenticarEmail(email, em);
             if (login){
-                vo = ServiceFactory.createUsUsuariosService().cargarUsuario(user.toUpperCase(), em);
+                vo = ServiceFactory.createUsUsuariosService().cargarUsuario(email, em);
             }
             //tx.commit();
             
@@ -1544,11 +1547,11 @@ public class facade {
         return vo;
     }
     
-    public List<UsersVO> listaUsuariosSIUST() {
+    public List<UsuariosVO> listaUsuariosSIUST() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
-        List<UsersVO> vo = null;
+        List<UsuariosVO> vo = null;
         try {
             emf = Persistence.createEntityManagerFactory("MapaModeloPU");
             em = emf.createEntityManager();
@@ -2539,7 +2542,32 @@ public class facade {
             CloseEntityManager.close(em);
         }
         return resultado;
-    } 
+    }
+    
+    public Boolean recuperarReservaTemporal(){
+        Boolean resultado = false;
+        
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        EntityTransaction tx = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
+            ServiceFactory.createRsReservasTemporalesService().recuperarReservasTemporales(em);
+            tx.commit();
+            resultado = true;
+        } catch (Exception e) {
+            System.out.println(e);
+            if(em != null && tx != null){
+                tx.rollback();
+            }
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return resultado;
+    }
 
     //-------- CONFIGURACIÓN MÓDULOS --------
 
@@ -2608,6 +2636,38 @@ public class facade {
             //if(em != null && tx != null){
             //    tx.rollback();
             //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public CoConfiguracionVO buscarConfiguracion(Integer conCodigo) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        CoConfiguracionVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createCoConfiguracionService().getById(conCodigo, em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public CoConfiguracionVO buscarConfiguracionNombre(String parametro) {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        CoConfiguracionVO vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createCoConfiguracionService().getByName(parametro, em);
+        } catch (Exception e) {
+            System.out.println(e);
         } finally {
             CloseEntityManager.close(em);
         }

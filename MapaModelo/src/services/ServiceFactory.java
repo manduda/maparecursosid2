@@ -24,6 +24,9 @@ public class ServiceFactory {
     public static CmConfiguracionModulosService createCmConfiguracionModulosService() {
            return (new CmConfiguracionModulosService());
     }
+    public static CoConfiguracionService createCoConfiguracionService() {
+           return (new CoConfiguracionService());
+    }
     public static EsEstadoService createEsEstadoService() {
            return (new EsEstadoService());
     }
