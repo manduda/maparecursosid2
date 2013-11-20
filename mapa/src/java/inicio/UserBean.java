@@ -38,6 +38,8 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     
     private UsUsuariosVO userVO = new UsUsuariosVO();
     private Boolean login = false;
+    private String email;
+    private String name;
     
     // --- OPCIONES AGREGAR RECURSOS DE UN TRAMITE
     //private boolean recuperar = false;
@@ -90,12 +92,12 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
     
     @Override
     public boolean equals(Object other) {
-        return (other instanceof UserBean) && (userVO.getCodigoSIUST() != null) ? userVO.getCodigoSIUST().getLogin().equals(((UserBean) other).getUserVO().getCodigoSIUST().getLogin()) : (other == this);
+        return (other instanceof UserBean) && (userVO.getCodigoSIUST() != null) ? userVO.getCodigoSIUST().getEmail().equals(((UserBean) other).getUserVO().getCodigoSIUST().getEmail()) : (other == this);
     }
 
     @Override
     public int hashCode() {
-        return (userVO.getCodigoSIUST() != null) ? (this.getClass().hashCode() + userVO.getCodigoSIUST().getLogin().hashCode()) : super.hashCode();
+        return (userVO.getCodigoSIUST() != null) ? (this.getClass().hashCode() + userVO.getCodigoSIUST().getEmail().hashCode()) : super.hashCode();
     }
 
     public UsUsuariosVO getUserVO() {
@@ -296,6 +298,22 @@ public class UserBean implements Serializable, HttpSessionBindingListener {
 
     public void setPermisos(inicio.Permisos permisos) {
         this.permisos = permisos;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

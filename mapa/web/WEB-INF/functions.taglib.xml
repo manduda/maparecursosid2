@@ -34,5 +34,10 @@
         <function-class>utils.Functions</function-class>
         <function-signature>java.lang.String toColorCodeFont(java.lang.String)</function-signature>
     </function>
+    <function>
+        <function-name>userEmail</function-name>
+        <function-class>utils.Functions</function-class>
+        <function-signature>java.lang.String userEmail(java.lang.String)</function-signature>
+    </function>
 </facelet-taglib>
 

@@ -36,19 +36,19 @@ import vo.UsUsuariosVO;
  */
 public class TareaNumeracion extends TimerTask implements ServletContextListener {
     private Timer timer;
-    private String contextPath;
+    //private String contextPath;
     private String realPath;
     
-    private String servidorCorreo;
+    /*private String servidorCorreo;
     private String correoAplicacion;
     private String passwordCorreo;
     private String puertoServidor;
     private String firmaCorreo;
-    private String logoCorreo;
+    private String logoCorreo;*/
  
     @Override
     public void contextInitialized(ServletContextEvent evt) {
-        contextPath = evt.getServletContext().getContextPath();
+        //contextPath = evt.getServletContext().getContextPath();
         realPath = evt.getServletContext().getRealPath("/"); 
         // Iniciamos el timer
         timer = new Timer();
@@ -130,7 +130,7 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
                 List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
                 for(UsUsuariosVO u: administradores){
                     String mensaje = "Error al generar el archivo del mapa completo " + new Date() + "<br/><br/>";
-                   enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, "Error");
+                    helperTareas.enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, "Error");
                 }
             }
         }
@@ -153,7 +153,7 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
         return result.getTime();
     }
     
-    public void enviarCorreo(String usuarioTo, String mensaje, String Asunto){
+    /*public void enviarCorreo(String usuarioTo, String mensaje, String Asunto){
         confguracionCorreo();
         Correo correo = new Correo();
         correo.setServidor(servidorCorreo);
@@ -187,7 +187,7 @@ public class TareaNumeracion extends TimerTask implements ServletContextListener
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros del correo", e);
         }
-    }
+    }*/
             
             
             

@@ -53,6 +53,7 @@ import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
 import vo.UsUsuariosVO;
 import vo.UsersVO;
+import vo.UsuariosVO;
 
 /**
  *
@@ -217,22 +218,34 @@ public class TramiteBean implements Serializable {
             listaMunicipio = convertir.createSelectItemsList(fachada.listaMunicipios(seleccionDepartamento), "getCodigoMunicipio", null, "getNombreMunicipio", true, "");
             listaEstadoTramite = convertir.createSelectItemsList(fachada.listaEstadoTramites(), null, "getEtnCodigo", "getEttNombre", true, "");
             usuariosAplicacion = fachada.listaUsuariosAplicacion();
-            List<UsersVO> usr = new ArrayList<UsersVO>();
+            List<UsuariosVO> usr = new ArrayList<UsuariosVO>();
             for (UsUsuariosVO u : usuariosAplicacion){
                 usr.add(u.getCodigoSIUST());
             }
-            listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
+            listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getEmail", true, "");
+            
+            for (SelectItem c : listaUsuariosAplicacion) {
+                c.setLabel(Functions.userEmail(c.getLabel()));
+            }
 
             usuariosAsesores = fachada.listaAsesores();
-            List<UsersVO> usrAsesores = new ArrayList<UsersVO>();
+            List<UsuariosVO> usrAsesores = new ArrayList<UsuariosVO>();
             for (UsUsuariosVO u : usuariosAsesores){
                 usrAsesores.add(u.getCodigoSIUST());
             }
-            listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
+            listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getEmail", true, "");
+            
+            for (SelectItem c : listaAsesores) {
+                c.setLabel(Functions.userEmail(c.getLabel()));
+            }
             
             //listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
             
-            listaUsuariosSIUST = convertir.createSelectItemsList(fachada.listaUsuariosSIUST(), null, "getUserCode", "getLogin", true, "");
+            listaUsuariosSIUST = convertir.createSelectItemsList(fachada.listaUsuariosSIUST(), null, "getUserCode", "getEmail", true, "");
+            
+            for (SelectItem c : listaUsuariosSIUST) {
+                c.setLabel(Functions.userEmail(c.getLabel()));
+            }
             
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Tramites", e);
@@ -256,6 +269,28 @@ public class TramiteBean implements Serializable {
     }*/
     
     // ---- Funciones para administrar usuarios ---
+    
+    public String opcionesAdministrarUsuarios() {
+        facade fachada = new facade();
+        
+        usuariosAplicacion = fachada.listaUsuariosAplicacion();
+        List<UsuariosVO> usr = new ArrayList<UsuariosVO>();
+        for (UsUsuariosVO u : usuariosAplicacion){
+            usr.add(u.getCodigoSIUST());
+        }
+        
+        try {
+            ConvertirListasHelper convertir = new ConvertirListasHelper();
+            listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getEmail", true, "");
+            for (SelectItem c : listaUsuariosAplicacion) {
+                c.setLabel(Functions.userEmail(c.getLabel()));
+            }
+        } catch (Exception e) {
+            Logger.getAnonymousLogger().log(Level.SEVERE, "Error en el bean de Transferencia de recursos", e);
+        }
+        return configuracion.getRutaContexto()+"usuarios/adminUsuarios";
+    }
+    
     public String buscarUsuario() {
         facade fachada = new facade();
 
@@ -290,18 +325,22 @@ public class TramiteBean implements Serializable {
                 try {
                     ConvertirListasHelper convertir = new ConvertirListasHelper();
                     usuariosAplicacion = fachada.listaUsuariosAplicacion();
-                    List<UsersVO> usr = new ArrayList<UsersVO>();
+                    List<UsuariosVO> usr = new ArrayList<UsuariosVO>();
                     for (UsUsuariosVO u : usuariosAplicacion){
                         usr.add(u.getCodigoSIUST());
                     }
-                    listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getLogin", true, "");
+                    listaUsuariosAplicacion = convertir.createSelectItemsList(usr, null, "getUserCode", "getEmail", true, "");
 
                     usuariosAsesores = fachada.listaAsesores();
-                    List<UsersVO> usrAsesores = new ArrayList<UsersVO>();
+                    List<UsuariosVO> usrAsesores = new ArrayList<UsuariosVO>();
                     for (UsUsuariosVO u : usuariosAsesores){
                         usrAsesores.add(u.getCodigoSIUST());
                     }
-                    listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getLogin", true, "");
+                    listaAsesores = convertir.createSelectItemsList(usrAsesores, null, "getUserCode", "getEmail", true, "");
+                    
+                    for (SelectItem c : listaAsesores) {
+                        c.setLabel(Functions.userEmail(c.getLabel()));
+                    }
 
                     //listaUsuariosNoAplicacion = convertir.createSelectItemsList(fachada.listaUsuariosNoAplicacion(), null, "getUserCode", "getLogin", true, "");
 
@@ -311,7 +350,7 @@ public class TramiteBean implements Serializable {
                 
                 usuariosEncontrado = fachada.buscarUsuario(usuariosEncontrado.getCodigoSIUST().getUserCode());
                 mensajeAdminUsuario  = "<br><b>Perfil cambiado correctamente al usuario "
-                        + usuariosEncontrado.getCodigoSIUST().getLogin() + ".</b><br><br>";
+                        + usuariosEncontrado.getCodigoSIUST().getEmail() + ".</b><br><br>";
                 break;
             case 2:
                 mensajeAdminUsuario = "<br><b>El perfil a asignar no puede ser igual al que tiene actualmente del usuario.</b><br><br>";
@@ -564,7 +603,7 @@ public class TramiteBean implements Serializable {
             
             List<UsUsuariosVO> coordinadores = fachada.getUsuarios(2);
             for(UsUsuariosVO u: coordinadores){
-                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha enviado un trámite.<br/><br/>"
+                String mensaje = "El usuario "+userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha enviado un trámite.<br/><br/>"
                         + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
                         + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
                 enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
@@ -624,7 +663,7 @@ public class TramiteBean implements Serializable {
             vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
             
             String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
-            String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha devuelto un trámite.<br/><br/>"
+            String mensaje = "El usuario "+userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha devuelto un trámite.<br/><br/>"
                         + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
                         + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
             enviarCorreo(email, mensaje, selectedTramite.getTrnCodigo());
@@ -668,7 +707,7 @@ public class TramiteBean implements Serializable {
 
                 List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
                 for(UsUsuariosVO u: administradores){
-                    String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") ha aprobado un trámite.<br/><br/>"
+                    String mensaje = "El usuario "+userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ") ha aprobado un trámite.<br/><br/>"
                             + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
                             + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
                     enviarCorreo(u.getCodigoSIUST().getEmail(), mensaje, selectedTramite.getTrnCodigo());
@@ -762,8 +801,8 @@ public class TramiteBean implements Serializable {
         vo.setTrnCodigo(selectedTramite.getTrnCodigo());
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
-        vo.setTrtObservaciones("Usuario anterior: " + selectedTramite.getUsnCodigo().getCodigoSIUST().getLogin()
-                + ". Nuevo usuario: " + fachada.buscarUsuario(nuevoUsuarioTramite).getCodigoSIUST().getLogin()+".");
+        vo.setTrtObservaciones("Usuario anterior: " + selectedTramite.getUsnCodigo().getCodigoSIUST().getEmail()
+                + ". Nuevo usuario: " + fachada.buscarUsuario(nuevoUsuarioTramite).getCodigoSIUST().getEmail()+".");
    
         Integer resultado = fachada.cambiarUsuarioTramite(vo, nuevoUsuarioTramite);
         
@@ -803,7 +842,7 @@ public class TramiteBean implements Serializable {
         vo.setTrnCodigo(selectedTramite.getTrnCodigo());
         vo.setUsnCodigo(usuario);
         vo.setTrfFecha(fecha);
-        vo.setTrtObservaciones("Trámite asignado por el usuario: " + userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ").");
+        vo.setTrtObservaciones("Trámite asignado por el usuario: " + userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ").");
    
         Integer resultado = fachada.cambiarUsuarioTramite(vo, nuevoUsuarioTramite);
         
@@ -816,10 +855,10 @@ public class TramiteBean implements Serializable {
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 
                 vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
-                mensajeTramite  = "<br><b>Trámite asignado correctamente al usuario " + vo.getUsnCodigo().getCodigoSIUST().getLogin() + ".</b><br><br>";
+                mensajeTramite  = "<br><b>Trámite asignado correctamente al usuario " + vo.getUsnCodigo().getCodigoSIUST().getEmail() + ".</b><br><br>";
                 
                 String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
-                String mensaje = "El usuario "+userVO.getCodigoSIUST().getLogin() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha asignado un trámite.<br/><br/>"
+                String mensaje = "El usuario "+userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha asignado un trámite.<br/><br/>"
                             + "Código del trámite: "+vo.getTrnCodigo()+"<br/><br/>"
                             + "Empresa: "+vo.getEmrCodigo().getEmtNombre()+"<br/><br/>";
                 enviarCorreo(email, mensaje, selectedTramite.getTrnCodigo());
@@ -1162,7 +1201,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1230,7 +1269,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1291,7 +1330,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1352,7 +1391,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1409,7 +1448,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1466,7 +1505,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }
@@ -1523,7 +1562,7 @@ public class TramiteBean implements Serializable {
                             }
                             break;
                         case 5: //Recuperar
-                            if (reservaTemporal=true){
+                            if (reservaTemporal == true){
                                 resTemp='S';                    
                                 mesesResTemp=mesesReserva;
                             }

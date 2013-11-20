@@ -1,29 +1,56 @@
-<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:f="http://java.sun.com/jsf/core">
-
-    <ui:define name="titulo">
-        <h:outputText value=""/>
-    </ui:define>
-
-    <ui:define name="content">
-        <h:panelGroup rendered="#{!empty inicioBean.mensaje}">
-            <h:panelGrid width="100%">
-                <br/><br/><br/>
-                <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
-                    <h:panelGrid style="border-bottom: 1px solid; background:#acbece;" width="100%">
-                        <h:outputText value="Mapa de recursos de ID&#160;" style="font-weight: bold;"/>
-                    </h:panelGrid>
-                    <h:panelGrid width="100%" style="background:#D8D8D8;">
-                        <h:outputText value="#{inicioBean.mensaje}" escape="false"/>
-                    </h:panelGrid>
-                </h:panelGrid>
-                <br/><br/><br/>
-            </h:panelGrid>
-        </h:panelGroup>
-    </ui:define>
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
     
-</ui:composition>
+    <f:event listener="#{inicioBean.cargar}" type="preRenderView" />
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:panelGroup rendered="#{UserBean.login}">
+            <meta http-equiv="refresh" content="1; url=#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}index.xhtml"/>
+        </h:panelGroup>
+        <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/error.css" rel="stylesheet" type="text/css" />
+        <link rel="icon" href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/images/favicon.ico"/>
+        <title>Mapa Recursos ID</title>
+    </h:head>
+
+    <h:body>
+        <div id="main">
+            <h:panelGrid width="100%">
+                <h:panelGrid style="margin: 0 auto;">
+                    <h:graphicImage url="#{ConfiguracionBean.rutaContexto}resources/images/logo.png" />
+                </h:panelGrid>
+                <h:panelGroup rendered="#{!empty inicioBean.mensaje}">
+                    <h:panelGrid width="100%">
+                        <br/>
+                        <h:panelGrid style="text-align: center; border: 1px solid; margin: 0px auto;" cellspacing="0" cellpadding="0">
+                            <h:panelGrid style="border-bottom: 1px solid; background:#acbece;" width="100%">
+                                <h:outputText value="SISTEMA DE INFORMACIÓN Y GESTIÓN DE RECURSOS DE IDENTIFICACIÓN&#160;" style="font-weight: bold;"/>
+                            </h:panelGrid>
+                            <h:panelGrid width="100%" style="background:#D8D8D8;">
+                                <h:outputText value="#{inicioBean.mensaje}" escape="false"/>
+                                <h:panelGroup rendered="#{!UserBean.login}">
+                                    <h:outputLink value="https://mail.google.com/mail/u/0/?logout&amp;hl=es">
+                                        <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/GoogleLogout.png" style="border:0px"/>
+                                    </h:outputLink>
+                                    <br/><br/>
+                                    <h:outputText value="Para ir a la página de inicio pulsa "/>
+                                    <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}index.xhtml">
+                                        <h:outputText value="AQUÍ"/>
+                                    </h:outputLink>
+                                    <br/><br/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <br/><br/><br/>
+                    </h:panelGrid>
+                </h:panelGroup>
+            </h:panelGrid>
+        </div>
+    </h:body>
+</html>
+
 

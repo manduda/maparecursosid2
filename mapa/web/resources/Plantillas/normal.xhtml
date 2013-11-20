@@ -11,17 +11,21 @@
         <link href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
         <link rel="icon" href="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}resources/images/favicon.ico"/>
         <title>Mapa Recursos ID</title>
-        <script type="text/javascript">
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-35893915-1']);
-            _gaq.push(['_trackPageview']);
-            
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-        </script>
+        
+        <h:panelGroup rendered="#{ConfiguracionBean.googleAnalytics}">
+            <script type="text/javascript">
+                var _gaq = _gaq || [];
+                _gaq.push(['_setAccount', 'UA-35893915-1']);
+                _gaq.push(['_trackPageview']);
+
+                (function() {
+                    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                })();
+            </script>
+        </h:panelGroup>
+
     </h:head>
 
     <h:body>
@@ -38,7 +42,7 @@
                 <h:panelGroup rendered="#{!UserBean.login}">
                     <h:panelGrid cellpadding="0" cellspacing="0">
                         <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
-                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}iniciarSesion.xhtml">     
+                            <h:outputLink value="#{inicioBean.code}">     
                                 <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/login.png" style="border:0px"/>
                             </h:outputLink>
                         </h:panelGrid>

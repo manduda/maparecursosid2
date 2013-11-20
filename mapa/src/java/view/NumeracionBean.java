@@ -209,6 +209,7 @@ public class NumeracionBean implements Serializable {
         } else {
             RequestContext.getCurrentInstance().update("contenido");
             matrizVisible=false;
+            buscar();
         }
         return null;
     }
@@ -505,7 +506,7 @@ public class NumeracionBean implements Serializable {
         String background = toColorCode(empresa);
         String color = toColorCodeFont(empresa);
         
-        if(estado == 3){
+        if((estado == 3) || (estado == 2)){
             background = toColorCode(empresa);
             color = toColorCodeFont(empresa);
         } else if (estado == 4) {

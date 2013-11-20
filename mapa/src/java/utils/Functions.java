@@ -135,4 +135,8 @@ public class Functions {
                 fos.close();
         } // end try
     }
+    
+    public static String userEmail(String email) {
+        return email.split("@crcom.gov.co")[0];
+    }
 }

@@ -4,6 +4,7 @@
  */
 package inicio;
 
+import facade.facade;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -37,6 +38,7 @@ public class ConfiguracionBean implements Serializable {
     private String rutaNRN;
     private String rutaNormatividad;
     private String tiempoSesion;
+    private boolean googleAnalytics;
     
     private String servidorCorreo;
     private String correoAplicacion;
@@ -44,18 +46,31 @@ public class ConfiguracionBean implements Serializable {
     private String puertoServidor;
     private String firmaCorreo;
     private String logoCorreo;
+    
+    private String callbackUri;
+    private String clientId;
+    private String clientSecret;
     /** Creates a new instance of ConfiguracionBean */
     public ConfiguracionBean() {
-        
+        facade fachada = new facade();
         Properties properties = new Properties();
         try {
             InputStream input = ConfiguracionBean.class.getResourceAsStream("../properties/parametros.properties");
             properties.load(input);
             input.close();
+
+            operadorNinguno = fachada.buscarConfiguracionNombre("operadorNinguno").getCotValor();//properties.getProperty("operadorNinguno");
+            municipioNinguno = fachada.buscarConfiguracionNombre("municipioNinguno").getCotValor();//properties.getProperty("municipioNinguno");
+            rutaContexto = fachada.buscarConfiguracionNombre("rutaContexto").getCotValor();//properties.getProperty("rutaContexto");
             
-            operadorNinguno = properties.getProperty("operadorNinguno");
-            municipioNinguno = properties.getProperty("municipioNinguno");
-            rutaContexto = properties.getProperty("rutaContexto");
+            String google = fachada.buscarConfiguracionNombre("googleAnalytics").getCotValor();
+            
+            if (google.equals("1")){
+                googleAnalytics = true;
+            } else {
+                googleAnalytics = false;
+            }
+            
             tiempoSesion = properties.getProperty("tiempoSesion");
             
             rutaInicio = rutaContexto + "index.xhtml";
@@ -81,19 +96,22 @@ public class ConfiguracionBean implements Serializable {
             properties.load(input);
             input.close();
             
-            servidorCorreo = properties.getProperty("servidorCorreo");
-            correoAplicacion = properties.getProperty("correoAplicacion");
-            passwordCorreo = properties.getProperty("passwordCorreo");
-            puertoServidor = properties.getProperty("puertoServidor");
-            firmaCorreo = properties.getProperty("firmaCorreo");
-            logoCorreo = properties.getProperty("logoCorreo");
+            servidorCorreo = fachada.buscarConfiguracionNombre("servidorCorreo").getCotValor();//properties.getProperty("servidorCorreo");
+            correoAplicacion = fachada.buscarConfiguracionNombre("correoAplicacion").getCotValor();//properties.getProperty("correoAplicacion");
+            passwordCorreo = fachada.buscarConfiguracionNombre("passwordCorreo").getCotValor();//properties.getProperty("passwordCorreo");
+            puertoServidor = fachada.buscarConfiguracionNombre("puertoServidor").getCotValor();//properties.getProperty("puertoServidor");
+            firmaCorreo = fachada.buscarConfiguracionNombre("firmaCorreo").getCotValor();//properties.getProperty("firmaCorreo");
+            logoCorreo = fachada.buscarConfiguracionNombre("logoCorreo").getCotValor();//properties.getProperty("logoCorreo");
             
         } catch (IOException e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Archivo Correo.properties no encontrado", e);
         } catch (Exception e) {
             Logger.getAnonymousLogger().log(Level.SEVERE, "Error inicializando el builder de parámetros del correo", e);
         }
-
+        
+        callbackUri = fachada.buscarConfiguracionNombre("callbackUri").getCotValor();
+        clientId = fachada.buscarConfiguracionNombre("clientId").getCotValor();
+        clientSecret = fachada.buscarConfiguracionNombre("clientSecret").getCotValor();
 
     }
 
@@ -235,6 +253,38 @@ public class ConfiguracionBean implements Serializable {
 
     public void setRutaCodigosMnc(String rutaCodigosMnc) {
         this.rutaCodigosMnc = rutaCodigosMnc;
+    }
+
+    public boolean isGoogleAnalytics() {
+        return googleAnalytics;
+    }
+
+    public void setGoogleAnalytics(boolean googleAnalytics) {
+        this.googleAnalytics = googleAnalytics;
+    }
+
+    public String getCallbackUri() {
+        return callbackUri;
+    }
+
+    public void setCallbackUri(String callbackUri) {
+        this.callbackUri = callbackUri;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+        this.clientSecret = clientSecret;
     }
     
 }

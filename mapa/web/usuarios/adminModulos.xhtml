@@ -35,7 +35,9 @@
                             <h:outputText value="#{m.cmtModulo}"/>
                         </p:column>
                         <p:column headerText="ACTIVO" style="width:80px; text-align: center;">
-                            <h:outputText value="#{m.cmtActivo}"/>
+                            <p:graphicImage rendered="#{m.cmtActivo == 'S'}" value="#{ConfiguracionBean.rutaContexto}resources/images/visto_bueno.png" style="border:0px" height="15"/>
+                            <p:graphicImage rendered="#{m.cmtActivo == 'N'}" value="#{ConfiguracionBean.rutaContexto}resources/images/error.png" style="border:0px" height="15"/>
+
                         </p:column>
                     </p:dataTable>
                 </h:form>

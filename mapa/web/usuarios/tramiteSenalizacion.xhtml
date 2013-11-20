@@ -17,7 +17,7 @@
                         <h:outputText value="SEÑALIZACIÓN" style="font-size:11px; font-weight: bold;"/>
                     </h:panelGrid>
                     <p:dataTable value="#{TramiteBean.selectedTramite.tsTramiteSenalizacionCollection}"
-                                 var="tramiteSenalizacion" style="font-size:9px" >
+                                 var="tramiteSenalizacion" style="font-size:9px" paginator="true" rows="10">
                         <p:column styleClass="tabla-expandir">  
                             <p:rowToggler />  
                         </p:column>

@@ -16,7 +16,7 @@
                         <h:outputText value="Usuario" style="font-weight: bold;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="1" width="100%" >
-                        <h:outputText value="#{UserBean.userVO.codigoSIUST.name} #{UserBean.userVO.codigoSIUST.lastName}"/>
+                        <h:outputText value="#{UserBean.name}"/>
                     </h:panelGrid>
                     
                     <br/>
@@ -29,20 +29,19 @@
                     
                     <h:panelGroup rendered="#{UserBean.userVO.tunCodigo.tunCodigo == 3}">
                         <br/>
-                        <h:panelGrid columns="1" style="background-color: #acbece; text-align: center;" width="100%" >
-                            <h:outputText value="Permisos asignados" style="font-weight: bold;"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="1" width="100%" >
-                            <h:outputText value="Numeración" rendered="#{UserBean.permisos.numeracion}"/>
-                            <h:outputText value="Señalizacion" rendered="#{UserBean.permisos.senalizacion}"/>
-                            <h:outputText value="Códigos LD" rendered="#{UserBean.permisos.codigosLd}"/>
-                            <h:outputText value="Códigos Cortos" rendered="#{UserBean.permisos.codigosCortos}"/>
-                            <h:outputText value="Códigos 1XY" rendered="#{UserBean.permisos.codigos1xy}"/>
-                            <h:outputText value="Códigos IIN" rendered="#{UserBean.permisos.codigosIin}"/>
-                            <h:outputText value="Códigos MNC" rendered="#{UserBean.permisos.codigosMnc}"/>
-                            <h:outputText value="Marcación Abreviada" rendered="#{UserBean.permisos.marcacionAbreviada}"/>
-                            <h:outputText value="Códigos NRN" rendered="#{UserBean.permisos.codigosMnc}"/>
-                        </h:panelGrid>
+                        <p:panel header="Permisos asignados" rendered="#{UserBean.login}" toggleable="true" toggleSpeed="100" collapsed="true">
+                            <h:panelGrid columns="2" width="100%" >
+                                <h:outputText value="Numeración" style="color: #{UserBean.permisos.numeracion == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Señalizacion" style="color: #{UserBean.permisos.senalizacion == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos LD" style="color: #{UserBean.permisos.codigosLd == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos Cortos" style="color: #{UserBean.permisos.codigosCortos == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos 1XY" style="color: #{UserBean.permisos.codigos1xy == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos IIN" style="color: #{UserBean.permisos.codigosIin == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos MNC" style="color: #{UserBean.permisos.codigosMnc == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Marcación Abreviada" style="color: #{UserBean.permisos.marcacionAbreviada == true ? 'green' : 'red'}"/>
+                                <h:outputText value="Códigos NRN" style="color: #{UserBean.permisos.codigosNrn == true ? 'green' : 'red'}"/>
+                            </h:panelGrid>
+                        </p:panel>
                     </h:panelGroup>
                     
                     <br/>
@@ -52,9 +51,7 @@
                     <h:form style="font-size:10px">
                         <h:panelGrid columns="2">
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarUsuarios}"/>
-                            <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminUsuarios.xhtml" rendered="#{UserBean.administrarUsuarios}">
-                                <h:outputText value="Administrar usuarios"/>
-                            </h:outputLink>
+                            <h:commandLink value="Administrar usuarios" action="#{TramiteBean.opcionesAdministrarUsuarios}" rendered="#{UserBean.administrarUsuarios}"/>
                             
                             <h:outputText value="&#8226;" style="color: #045491;" rendered="#{UserBean.administrarModulos}"/>
                             <h:outputLink value="#{facesContext.externalContext.requestContextPath}#{ConfiguracionBean.rutaContexto}usuarios/adminModulos.xhtml" rendered="#{UserBean.administrarModulos}">

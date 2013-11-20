@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
 
     <ui:define name="titulo">
         <h:outputText value="DETALLE TRÁMITE"/>
@@ -29,7 +30,7 @@
                         <h:outputText value="Trámite ID:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.trnCodigo}" style="font-weight: bold;"/>
                         <h:outputText value="Usuario:"/>
-                        <h:outputText value="#{TramiteBean.selectedTramite.usnCodigo.codigoSIUST.login}" style="font-weight: bold;"/>
+                        <h:outputText value="#{fnc:userEmail(TramiteBean.selectedTramite.usnCodigo.codigoSIUST.email)}" style="font-weight: bold;"/>
                         <h:outputText value="Estado:"/>
                         <h:outputText value="#{TramiteBean.selectedTramite.etnCodigo.ettNombre}" style="font-weight: bold;"/>
                         <h:outputText value="Empresa:"/>
