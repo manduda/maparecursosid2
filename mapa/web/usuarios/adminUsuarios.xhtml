@@ -92,7 +92,7 @@
             <h:form id="frmListaUsuarios">
                 <h:panelGroup id="pgUsuarios">
                     <p:dataTable id="datos" value="#{TramiteBean.usuariosAplicacion}" var="us"
-                                 style="font-size:10px" rows="10" emptyMessage="No se encontraron usuarios" >
+                                 style="font-size:10px" emptyMessage="No se encontraron usuarios" >
                         <f:facet name="header">Lista de usuarios de la aplicación</f:facet>
                         <p:column headerText="USUARIO" sortBy="#{us.codigoSIUST.email}" style="width:80px; text-align: center;">
                             <h:outputText value="#{fnc:userEmail(us.codigoSIUST.email)}"/>

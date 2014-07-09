@@ -25,7 +25,7 @@
                             <h:outputText value="(#{NumeracionBean.seleccionNumActual.ndnCodigo.ndtNombre}) #{NumeracionBean.seleccionNumActual.nunFin}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" style="border:1px solid; background: darkgreen; color: white;" rendered="#{NumeracionBean.seleccionNumActual.nunFin != '0'}">
-                            <h:outputText value="Número seleccionados: "/>
+                            <h:outputText value="Cantidad de números seleccionados: "/>
                             <h:outputText value="#{NumeracionBean.seleccionNumActual.nunFin - NumeracionBean.seleccionNumAnterior.nunInicio + 1}"/>
                         </h:panelGrid>
                     </h:panelGrid>

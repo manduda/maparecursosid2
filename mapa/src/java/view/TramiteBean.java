@@ -599,7 +599,7 @@ public class TramiteBean implements Serializable {
             tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
             mensajeTramite = "<br><b>Trámite enviado al Coordinador.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
-            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
             
             List<UsUsuariosVO> coordinadores = fachada.getUsuarios(2);
             for(UsUsuariosVO u: coordinadores){
@@ -660,7 +660,7 @@ public class TramiteBean implements Serializable {
             } else {
                 mensajeTramite = "<br><b>Trámite devuelto al Asesor.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             }
-            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+            vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
             
             String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
             String mensaje = "El usuario "+userVO.getCodigoSIUST().getEmail() + " (" + userVO.getTunCodigo().getTutNombre() + ") te ha devuelto un trámite.<br/><br/>"
@@ -703,7 +703,7 @@ public class TramiteBean implements Serializable {
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 mensajeTramite = "<br><b>Trámite aprobado.</b><br><br>Código del trámite: "+selectedTramite.getTrnCodigo()+"<br><br>";
             
-                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
 
                 List<UsUsuariosVO> administradores = fachada.getUsuarios(1);
                 for(UsUsuariosVO u: administradores){
@@ -811,7 +811,7 @@ public class TramiteBean implements Serializable {
                 mensajeCambiarUsuarioTramite = "<br><b>Error al cambiar el usuario del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
-                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 mensajeCambiarUsuarioTramite  = "<br><b>Usuario cambiado correctamente al trámite.</b><br><br>";
                 break;
@@ -851,10 +851,10 @@ public class TramiteBean implements Serializable {
                 mensajeTramite = "<br><b>Error al asignar el usuario del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
-                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 
-                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                vo = fachada.cargarTramites(0, 1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
                 mensajeTramite  = "<br><b>Trámite asignado correctamente al usuario " + vo.getUsnCodigo().getCodigoSIUST().getEmail() + ".</b><br><br>";
                 
                 String email = vo.getUsnCodigo().getCodigoSIUST().getEmail();
@@ -953,7 +953,7 @@ public class TramiteBean implements Serializable {
                 mensajeCambiarOperadorTramite = "<br><b>Error al cambiar el operador del trámite.</b><br><br>Si el error persiste, por favor contacte al Aministrador<br><br>";
                 break;
             case 1:
-                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1).get(0);
+                selectedTramite = fachada.cargarTramites(0, -1, selectedTramite.getTrnCodigo(), -1, "-1", -1, -1, new ArrayList<Boolean>()).get(0);
                 tramites = fachada.cargarTramites(tipoUsuario, userVO.getCodigoSIUST().getUserCode());
                 mensajeCambiarOperadorTramite  = "<br><b>Operador cambiado correctamente al trámite.</b><br><br>";
                 break;
@@ -977,12 +977,29 @@ public class TramiteBean implements Serializable {
         seleccionBuscarTramite = null;
         listaBuscarTramite = null;
         radicadoBuscarTramite = "";
+        seleccionNumeracion = false;
+        seleccionSenalizacion = false;
+        seleccionIin = false;
+        seleccionMnc = false;
+        seleccionCodigosCortos = false;
+        seleccionCodigosLd = false;
+        seleccionMarcacionAbreviada = false;
+        seleccionCodigosNrn = false;
         //String a = buscarTramite();
         return configuracion.getRutaContexto()+"usuarios/buscarTramite";
     }
     
     public String buscarTramite() {
-        List<SeSenalizacionVO> senalizacion = new ArrayList<SeSenalizacionVO>();
+        List<Boolean> recursos = new ArrayList<Boolean>();
+        recursos.add(this.seleccionNumeracion);
+        recursos.add(this.seleccionSenalizacion);
+        recursos.add(this.seleccionCodigosLd);
+        recursos.add(this.seleccionCodigosCortos);
+        recursos.add(this.seleccionIin);
+        recursos.add(this.seleccionMnc);
+        recursos.add(this.seleccionMarcacionAbreviada);
+        recursos.add(this.seleccionCodigosNrn);
+        
         facade fachada = new facade();
 
         final Integer id;
@@ -1000,7 +1017,7 @@ public class TramiteBean implements Serializable {
             rad = Integer.parseInt(radicadoBuscarTramite);
         }
 
-        listaBuscarTramite = fachada.cargarTramites(0, -1, id, usuarioBuscarTramite, operadorBuscarTramite, estadoBuscarTramite, rad);
+        listaBuscarTramite = fachada.cargarTramites(0, -1, id, usuarioBuscarTramite, operadorBuscarTramite, estadoBuscarTramite, rad, recursos);
         //countListaBuscarTramite = fachada.countCargarCodigosLd(operadorVO.getEmrCodigo(), ld, estadoVO.getEsnCodigo());
 
         return null;

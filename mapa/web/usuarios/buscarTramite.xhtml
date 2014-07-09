@@ -38,6 +38,32 @@
                                      converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
                         <p:message for="radicado" />
                     </h:panelGrid>
+                    <h:outputText value="Recursos"/>
+                    <h:panelGrid columns="6" width="100%" id="opcionesRecursos" >
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionNumeracion}" />
+                        <h:outputText value="Numeración"/>
+                        
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionSenalizacion}" />
+                        <h:outputText value="Señalización"/>
+                        
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionIin}" />
+                        <h:outputText value="Códigos IIN"/>
+
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionMnc}" />
+                        <h:outputText value="Códigos MNC"/>
+
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosCortos}" />
+                        <h:outputText value="Códigos Cortos"/>
+
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionMarcacionAbreviada}" />
+                        <h:outputText value="Marcación Abreviadaa"/>
+                        
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosLd}" />
+                        <h:outputText value="Códigos Ld"/>
+                        
+                        <p:selectBooleanCheckbox value="#{TramiteBean.seleccionCodigosNrn}" />
+                        <h:outputText value="Códigos Nrn"/>
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid>
                     <p:commandButton value="Consultar" actionListener="#{TramiteBean.buscarTramite}" ajax="true" update="formBuscarTramites,:pgBustarTramites"/>
@@ -49,7 +75,7 @@
         <h:panelGrid id="pgBustarTramites" width="100%">
             <h:form >
                 <h:panelGrid columns="2">
-                    <h:outputText value="Registros encontrados:"/>
+                    <h:outputText value="Trámites encontrados:"/>
                     <h:outputText value="#{fnc:countLista(TramiteBean.listaBuscarTramite)}"/>
                 </h:panelGrid>
                 <p:dataTable id="datos" value="#{TramiteBean.listaBuscarTramite}" var="tr" paginator="true"
@@ -71,7 +97,7 @@
                         <h:outputText value="#{tr.etnCodigo.ettNombre}"/>
                     </p:column>
                     <p:column headerText="Usuario" sortBy="#{tr.usnCodigo.codigoSIUST.email}" style="width:80px">
-                        <h:outputText value="#{tr.usnCodigo.codigoSIUST.email}"/>
+                        <h:outputText value="#{fnc:userEmail(tr.usnCodigo.codigoSIUST.email)}"/>
                     </p:column>
                     <p:column headerText="Operador" sortBy="#{tr.emrCodigo.emtNombre}">
                         <h:outputText value="#{tr.emrCodigo.emtNombre}"/>
@@ -113,7 +139,7 @@
                                 <f:facet name="header">
                                     <h:outputText value="USUARIO"/>
                                 </f:facet>
-                                <h:outputText value="#{selTramite.usnCodigo.codigoSIUST.email}"/>
+                                <h:outputText value="#{fnc:userEmail(selTramite.usnCodigo.codigoSIUST.email)}"/>
                             </h:column>
                             <h:column>
                                 <f:facet name="header">
