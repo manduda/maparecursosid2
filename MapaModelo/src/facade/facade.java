@@ -270,6 +270,29 @@ public class facade {
         return vo;
     }
     
+    /** Obtener el listado de numeración, en bloques consecutivos
+     * @param ndc Nombre del NDC
+     * @param inicio Número de inicio
+     * @param fin Número fin
+     * @return Retorna el listado de numeración, en bloques consecutivos
+     */
+    public List<NuNumeracionVO> cargarNumeracionAgrupadaTotal(String ndc, int inicio, int fin){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<NuNumeracionVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            vo = ServiceFactory.createNuNumeracionService().cargarNumeracionAgrupadaTotal(ndc, inicio, fin, em);
+        } catch (Exception e) {
+            System.out.println(e);
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
     /**
      * Obtener el listado de NDC
      * @param departamento Código del departamento
@@ -2136,7 +2159,7 @@ public class facade {
         return vo;
     }
     
-    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado){
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, List<Boolean> recursos){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         //EntityTransaction tx = null;
@@ -2146,7 +2169,7 @@ public class facade {
             em = emf.createEntityManager();
             //tx = em.getTransaction();
             //tx.begin();
-            vo = ServiceFactory.createTrTramitesService().cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, em);
+            vo = ServiceFactory.createTrTramitesService().cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, recursos, em);
             //tx.commit();
         } catch (Exception e) {
             System.out.println(e);

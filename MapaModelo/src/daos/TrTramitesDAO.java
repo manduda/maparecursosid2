@@ -77,7 +77,7 @@ public class TrTramitesDAO {
         return query.getResultList();
     }
     
-    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, EntityManager em){
+    public static List<TrTramites> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, List<Boolean> recursos, EntityManager em){
         List<TrTramites> tramites = new ArrayList<TrTramites>();
 
         StringBuilder searchQuery = new StringBuilder(
@@ -119,6 +119,33 @@ public class TrTramitesDAO {
                     + "(t.trnCodigo IN (SELECT DISTINCT ti.trnCodigo.trnCodigo FROM TiTramiteIin ti where ti.tinRadicado = ?5))"
                     + ") ");
         }
+        if (!recursos.isEmpty()){
+            if(recursos.get(0)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT tn.trnCodigo.trnCodigo FROM TnTramiteNumeracion tn) ");
+            }
+            if(recursos.get(1)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT ts.trnCodigo.trnCodigo FROM TsTramiteSenalizacion ts) ");
+            }
+            if(recursos.get(2)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT tld.trnCodigo.trnCodigo FROM TlTramiteLd tld) ");
+            }
+            if(recursos.get(3)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT tc.trnCodigo.trnCodigo FROM TcTramiteCc tc) ");
+            }
+            if(recursos.get(4)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT ti.trnCodigo.trnCodigo FROM TiTramiteIin ti) ");
+            }
+            if(recursos.get(5)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT tm.trnCodigo.trnCodigo FROM TmTramiteMnc tm) ");
+            }
+            if(recursos.get(6)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT ta.trnCodigo.trnCodigo FROM TaTramiteMa ta) ");
+            }
+            if(recursos.get(7)) {
+                searchQuery.append("AND t.trnCodigo IN (SELECT DISTINCT tk.trnCodigo.trnCodigo FROM TkTramiteNrn tk) ");
+            } 
+        }
+        
         
         searchQuery.append("ORDER BY t.trnCodigo ASC");
         
@@ -147,7 +174,7 @@ public class TrTramitesDAO {
         tramites = query.getResultList();        
         return tramites;
     }
-    
+   
     /*public static void cambiarOperadorTramite(int trnCodigo, String emrCodigo, EntityManager em) {
         EmOperador operador = new EmOperador();
         operador.setEmrCodigo(emrCodigo);

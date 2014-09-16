@@ -86,6 +86,7 @@ public class TrTramites implements Serializable {
     private Collection<TsTramiteSenalizacion> tsTramiteSenalizacionCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    @OrderBy("tnnInicio ASC")
     private Collection<TnTramiteNumeracion> tnTramiteNumeracionCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")

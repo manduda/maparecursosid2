@@ -185,5 +185,14 @@ public class NuNumeracionService {
         return numeracion;
     }
     
+    public List<NuNumeracionVO> cargarNumeracionAgrupadaTotal(String ndc, int inicio, int fin, EntityManager em){
+        List<NuNumeracion> numeracion = NuNumeracionDAO.cargarNumeracionAgrupadaTotal(ndc, inicio, fin, em);
+        List<NuNumeracionVO> numeracionVO = new ArrayList<NuNumeracionVO>();        
+        for (NuNumeracion n : numeracion) {
+            numeracionVO.add(n.toVO());
+        }
+        return numeracionVO;
+    }
+    
     
 }

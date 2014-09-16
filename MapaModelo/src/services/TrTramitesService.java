@@ -1180,8 +1180,8 @@ public class TrTramitesService {
         return tramitesVO;
     }
     
-    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, EntityManager em){
-        List<TrTramites> tramites = TrTramitesDAO.cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, em);
+    public List<TrTramitesVO> cargarTramites(int first, int max, int tramiteId, int usuario, String operador, int estado, int radicado, List<Boolean> recursos, EntityManager em){
+        List<TrTramites> tramites = TrTramitesDAO.cargarTramites(first, max, tramiteId, usuario, operador, estado, radicado, recursos, em);
         List<TrTramitesVO> tramitesVO = new ArrayList<TrTramitesVO>();        
         for (TrTramites t : tramites) {
             tramitesVO.add(t.toVO());

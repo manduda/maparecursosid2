@@ -821,4 +821,153 @@ public class NuNumeracionDAO {
         return numeracion;
     }
     
+    public static List<NuNumeracion> cargarNumeracionAgrupadaTotal(String ndc, int inicio, int fin, EntityManager em){
+        List<NuNumeracion> numeracion = new ArrayList<NuNumeracion>();
+        StringBuilder searchQuery = new StringBuilder(
+                  "select inicio, "
+                + "       fin, "
+                + "       (select b.ndn_codigo from ND_NDC b WHERE b.NDN_CODIGO = a.ndn_codigo) ndnCodigo, "
+                + "       (select b.ndt_nombre from ND_NDC b WHERE b.NDN_CODIGO = a.ndn_codigo) ndtNombre, "
+                + "       (select b.ntn_codigo from ND_NDC b WHERE b.NDN_CODIGO = a.ndn_codigo) ntnNombre, "
+                + "       (select rawtohex(c.sk_empresa_code) from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresa, "
+                + "       (select c.descripcion from SA.SK_EMPRESA c WHERE c.SK_EMPRESA_CODE = a.SK_EMPRESA_CODE) empresaNombre, "
+                + "       rawtohex(f.CODIGO_MUNICIPIO) codMunicipio, "
+                + "       f.NOMBRE_MUNICIPIO nomMunicipio, "
+                + "       rawtohex(f.CODIGO_DEPARTAMENTO) codDepartamento, "
+                + "       f.NOMBRE_DEPARTAMENTO nomDepartamento, "
+                + "       (select g.ESN_CODIGO from ES_ESTADO g WHERE g.ESN_CODIGO = a.esn_codigo) esnCodigo, "
+                + "       (select g.EST_NOMBRE from ES_ESTADO g WHERE g.ESN_CODIGO = a.esn_codigo) estNombre "
+                + "from "
+                + "( "
+                + "  with get_data as "
+                + "    ( "
+                + "      select nun_inicio, sk_empresa_code,sk_region_code,ndn_codigo,esn_codigo, "
+                + "             lag(sk_empresa_code) over (order by ndn_codigo,nun_inicio) prev_empresa, "
+                + "             lag(sk_region_code) over (order by ndn_codigo,nun_inicio) prev_region, "
+                + "             lag(ndn_codigo) over (order by ndn_codigo,nun_inicio) prev_ndc, "
+                + "             lag(nun_inicio) over (order by ndn_codigo,nun_inicio) prev_nun_inicio, "
+                + "             lag(esn_codigo) over (order by ndn_codigo,nun_inicio) prev_esn_codigo "
+                + "      from nu_numeracion "
+                + "      where 1=1 ");
+        
+        if(!ndc.equals("-1")) {
+            searchQuery.append("AND NDN_CODIGO IN (SELECT nd.NDN_CODIGO FROM ND_NDC nd WHERE nd.NDT_NOMBRE = ?2) ");
+        }
+        if(inicio != -1) {
+            String numero = String.valueOf(inicio);
+            do {
+                if(numero.length() < 7){
+                    numero = numero + "0";
+                }
+            } while (numero.length() < 7);
+            inicio = Integer.parseInt(numero);
+            searchQuery.append("AND NUN_INICIO >= ?4 ");
+        }
+        if(fin != -1) {
+            String numero = String.valueOf(fin);
+            do {
+                if(numero.length() < 7){
+                    numero = numero + "0";
+                }
+            } while (numero.length() < 7);
+            fin = Integer.parseInt(numero);
+            searchQuery.append("AND NUN_FIN <= ?5 ");
+        }
+        
+        searchQuery.append(
+                  "    ), "
+                + "    slq_data as "
+                + "    ( "
+                + "    select nun_inicio,ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo, "
+                + "           sum(case when (sk_empresa_code = prev_empresa) "
+                + "                     and (sk_region_code = prev_region) "
+                + "                     and (ndn_codigo = prev_ndc) "
+                + "                     and (nun_inicio = prev_nun_inicio + 100) "
+                + "                     and (esn_codigo = prev_esn_codigo) "
+                + "               then 0 "
+                + "               else 1 "
+                + "               end "
+                + "           ) over (order by nun_inicio) grps "
+                + "    from get_data "
+                + "    ) "
+                + "    select LPAD(min(nun_inicio),7,'0') inicio, "
+                + "           LPAD(max(nun_inicio) + 99,7,'0') fin, "
+                + "           sk_empresa_code, "
+                + "           sk_region_code, "
+                + "           ndn_codigo, "
+                + "           esn_codigo"
+                + "    from slq_data "
+                + "    group by grps, ndn_codigo,sk_empresa_code,sk_region_code,esn_codigo "
+                + "    order by min(nun_inicio) "
+                + ") a "
+                + "join (select d.CODIGO_MUNICIPIO, d.NOMBRE_MUNICIPIO, d.CODIGO_DEPARTAMENTO, (select e.NOMBRE_DEPARTAMENTO from sa.departamentos e where e.CODIGO_DEPARTAMENTO = d.CODIGO_DEPARTAMENTO) NOMBRE_DEPARTAMENTO "
+                + "      from sa.municipios d  "
+                + "      ) f on (a.sk_region_code = f.CODIGO_MUNICIPIO) "
+                + "order by inicio");
+        
+        Query query = em.createNativeQuery(searchQuery.toString());
+        
+        if(!ndc.equals("-1")) {
+            query.setParameter(2, ndc);
+        }
+        if(inicio != -1) {
+            query.setParameter(4, inicio);
+        }
+        if(fin != -1) {
+            query.setParameter(5, fin);
+        }
+        
+        List<Object> results = query.getResultList();
+        
+        if (results != null){
+            int i = 0;
+            for (Object oRow : results) {
+                Object[] value = (Object[]) oRow;
+                Integer inicioF = Integer.valueOf(value[0].toString());
+                Integer finF = Integer.valueOf(value[1].toString());
+
+                //NDC
+                NdNdc ndcF = new NdNdc();
+                ndcF.setNdnCodigo(Integer.valueOf(value[2].toString()));
+                ndcF.setNdtNombre(value[3].toString());
+                NtTipoNdc tipoNdc = new NtTipoNdc();
+                tipoNdc.setNtnCodigo(Integer.valueOf(value[4].toString()));
+                ndcF.setNtnCodigo(tipoNdc);
+
+                //EMPRESA
+                EmOperador empresaF = new EmOperador();
+                empresaF.setEmrCodigo(value[5].toString());
+                empresaF.setEmtNombre(value[6].toString());
+
+                //REGION
+                Municipios municipioF = new Municipios();
+                municipioF.setCodigoMunicipio((String)(value[7]));
+                municipioF.setNombreMunicipio(value[8].toString());
+                Departamentos departamentoF = new Departamentos();
+                departamentoF.setCodigoDepartamento((String)value[9]);
+                departamentoF.setNombreDepartamento(value[10].toString());
+                municipioF.setCodigoDepartamento(departamentoF);
+
+                //ESTADO
+                EsEstado estadoF = new EsEstado();
+                estadoF.setEsnCodigo(Integer.valueOf(value[11].toString()));
+                estadoF.setEstNombre((String)value[12]);
+
+                NuNumeracion num = new NuNumeracion();
+                num.setNunCodigo(i);
+                num.setNdnCodigo(ndcF);
+                num.setNunInicio(inicioF);
+                num.setNunFin(finF);
+                num.setEmrCodigo(empresaF);
+                num.setCodigoMunicipio(municipioF);
+                num.setEsnCodigo(estadoF);
+
+                numeracion.add(num);
+                i++;
+
+            }
+        }
+        
+        return numeracion;
+    }
 }
