@@ -104,7 +104,7 @@ public class NumeracionBean implements Serializable {
     private String seleccionIdAnterior = "-1";
     private Boolean seleccionRango = false;
     private String mensajeMatriz = "";
-    private static Integer RangoMatriz = 3;
+    private static Integer RangoMatriz = 5;
     
     private StreamedContent archivoZIP;
     private StreamedContent archivoCSV;
@@ -229,6 +229,13 @@ public class NumeracionBean implements Serializable {
             mensajeMatriz = "El número inicio debe ser menor que el número fin";
             return null;
         }
+        
+        // - - - Borrar selección - - - 
+        //seleccionId = "-1";
+        seleccionIdActual = "-1";
+        seleccionIdAnterior = "-1";
+        seleccionRango = false;
+        // - - - - - - - - - - - - - - -
         
         seleccionNum = new NuNumeracionVO();
         seleccionNumActual = new NuNumeracionVO();
@@ -355,7 +362,7 @@ public class NumeracionBean implements Serializable {
                 RequestContext.getCurrentInstance().execute("colorCeldas("+x+", "+y+", "+z+", "+xA+", "+yA+", "+zA+", "+true+");");
             }
             
-            System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
+            //System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
             
             seleccionRango = true;
             
@@ -412,7 +419,7 @@ public class NumeracionBean implements Serializable {
                 RequestContext.getCurrentInstance().execute("colorCeldas("+x+", "+y+", "+z+", "+xA+", "+yA+", "+zA+", "+false+");");
             }
             
-            System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
+            //System.out.println("Anterior: "+xA.toString()+yA.toString()+zA.toString()+"- Actual: "+x.toString()+y.toString()+z.toString());
             
             longitug = seleccionId.length();
             x = Integer.parseInt(seleccionId.substring(0, longitug-2));
@@ -806,7 +813,7 @@ public class NumeracionBean implements Serializable {
     public void detalleAccionNumMatriz(){
         facade fachada = new facade();
         List<NuNumeracionVO> numeracion = new ArrayList<NuNumeracionVO>();
-        numeracion = fachada.cargarNumeracionAgrupada(ndcVO.getNdtNombre(), seleccionNumAnterior.getNunInicio(), seleccionNumActual.getNunFin());
+        numeracion = fachada.cargarNumeracionAgrupadaTotal(ndcVO.getNdtNombre(), seleccionNumAnterior.getNunInicio(), seleccionNumActual.getNunFin());
         
         selectedNums = numeracion.toArray(new NuNumeracionVO[numeracion.size()]);
         
