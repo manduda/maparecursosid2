@@ -57,6 +57,9 @@ public class ServiceFactory {
     public static SeSenalizacionService createSeSenalizacionService() {
            return (new SeSenalizacionService());
     }
+    public static RiRecursosTdtService createRiRecursosTdtService()  {
+           return (new RiRecursosTdtService());
+    }
     public static TrTramitesService createTrTramitesService() {
            return (new TrTramitesService());
     }

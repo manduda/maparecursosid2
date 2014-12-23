@@ -7,6 +7,7 @@ package main;
 import OID.StringMD;
 import daos.MunicipiosDAO;
 import entities.Municipios;
+import entities.RiRecursosTdt;
 import facade.facade;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -31,6 +32,7 @@ import vo.Nc1xyVO;
 import vo.NrCodigosNrnVO;
 import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
+import vo.RiRecursosTdtVO;
 import vo.SeSenalizacionVO;
 import vo.TcTramiteCcVO;
 import vo.TrTramitesVO;
@@ -453,7 +455,7 @@ public class main {
         //-------------------------------------
         
         //---- ORDER BY CODIGOS CORTOS
-        List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
+        /*List<TrTramitesVO> vo = new ArrayList<TrTramitesVO>();
         vo = fachada.cargarTramites(0, -1, 75, -1, "-1", -1, -1, new ArrayList<Boolean>());
         
         for (int i = 0; i < vo.size(); i++){
@@ -463,8 +465,26 @@ public class main {
                 System.out.println(tc.getCcnCodigo().getCcnCodigoCorto());
             }
             
-        }
+        }*/
         //-------------------------------------
         
+        //----  CODIGOS CORTOS
+        List<RiRecursosTdtVO> vo = new ArrayList<RiRecursosTdtVO>();
+        int cantidad = 0;
+        cantidad = fachada.countCargarRecursosTdt("-1", 1, -1, -1, -1, "-1", "-1", -1, -1, -1);
+        vo = fachada.cargarRecursosTdt(0, -1, "-1", 1, 3, -1, -1, "-1", "-1", -1, -1, -1);
+        System.out.println("Cantidad:"+cantidad);
+        for(int i=0; i < vo.size();i++) {
+            int codigo = vo.get(i).getRinCodigo();
+            String operador = vo.get(i).getEmrCodigo().getEmtNombre();
+            String estado = vo.get(i).getEsnCodigo().getEstNombre();
+            String tipoRecurso = vo.get(i).getRnnCodigo().getRntNombre();
+            String tipoRed = vo.get(i).getRrnCodigo().getRrtNombre();
+            String canal = vo.get(i).getCanCodigo().getCatCanal();
+            int codigoRecurso = vo.get(i).getRinCodigoRecurso();
+            String tipoServicio = vo.get(i).getServicioCodigo().getTtnCodigo().getTttNombre();
+            System.out.println(codigo+"-"+operador+"-"+estado+"-"+tipoRecurso+"-"+tipoRed+"-"+canal+"-"+codigoRecurso+"-"+tipoServicio);
+	}
+        //-------------------------------------
     }
 }

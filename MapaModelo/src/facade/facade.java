@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import services.ServiceFactory;
+import vo.CaCanalTdtVO;
 import vo.CcCodigosCortosVO;
 import vo.CdCodigosMncVO;
 import vo.CiCodigosIinVO;
@@ -26,6 +27,7 @@ import vo.EtEstadoTramiteVO;
 import vo.MaMarcacionAbreviadaVO;
 import vo.MdModalidadCcVO;
 import vo.MoModalidad1xyVO;
+import vo.MuMultiplexVO;
 import vo.MunicipiosVO;
 import vo.Nc1xyVO;
 import vo.NdNdcVO;
@@ -34,6 +36,9 @@ import vo.NtTipoNdcVO;
 import vo.NuNumeracionVO;
 import vo.PtTipoPermisoVO;
 import vo.ReRegionVO;
+import vo.RiRecursosTdtVO;
+import vo.RnTipoRecursoTdtVO;
+import vo.RrTipoRedTdtVO;
 import vo.RsReservasTemporalesVO;
 import vo.RtTipoRegionVO;
 import vo.SeSenalizacionVO;
@@ -47,6 +52,7 @@ import vo.TmTramiteMncVO;
 import vo.TnTramiteNumeracionVO;
 import vo.TrTramitesVO;
 import vo.TsTramiteSenalizacionVO;
+import vo.TtTipoServicioTdtVO;
 import vo.UsUsuariosVO;
 import vo.UsersVO;
 import vo.UsuariosVO;
@@ -1478,6 +1484,194 @@ public class facade {
     
     //--------------------------------
     
+    //-------- RECURSOS TDT --------
+    
+    public List<RiRecursosTdtVO> cargarRecursosTdt(int first, int max, String operador, int codigo, int TipoRecurso, int tipoRed, int canal, String municipio, String departamento, int tipoServicio, int multiplex, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<RiRecursosTdtVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().cargarRecursosTdT(first, max, operador, codigo, TipoRecurso, tipoRed, canal, municipio, departamento, tipoServicio, multiplex, estado, em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public int countCargarRecursosTdt(String operador, int codigo, int TipoRecurso, int tipoRed, int canal, String municipio, String departamento, int tipoServicio, int multiplex, int estado){
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        int cantidad = 0;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            cantidad = ServiceFactory.createRiRecursosTdtService().countCargarRecursosTdt(operador, codigo, TipoRecurso, tipoRed, canal, municipio, departamento, tipoServicio, multiplex, estado, em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return cantidad;
+    }
+    
+    public List<EmOperadorVO> listaOperadorRecursosTdt() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<EmOperadorVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListOperadores(em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<RnTipoRecursoTdtVO> listaTipoRecursoTdt() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<RnTipoRecursoTdtVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListaTipoRecurso(em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<RrTipoRedTdtVO> listaTipoRedTdt() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<RrTipoRedTdtVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListaTipoRed(em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<CaCanalTdtVO> listaCanalTdt() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<CaCanalTdtVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListaCanal(em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<TtTipoServicioTdtVO> listaServicioTdt() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<TtTipoServicioTdtVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListaServicioTdt(em);
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    public List<MuMultiplexVO> listaMultiplex() {
+        EntityManagerFactory emf = null;
+        EntityManager em = null;
+        //EntityTransaction tx = null;
+        List<MuMultiplexVO> vo = null;
+        try {
+            emf = Persistence.createEntityManagerFactory("MapaModeloPU");
+            em = emf.createEntityManager();
+            //tx = em.getTransaction();
+            //tx.begin();
+            vo = ServiceFactory.createRiRecursosTdtService().getListaMultiplex(em); 
+            //tx.commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            //if(em != null && tx != null){
+            //    tx.rollback();
+            //}
+        } finally {
+            CloseEntityManager.close(em);
+        }
+        return vo;
+    }
+    
+    //--------------------------------
+    
     public List<UsUsuariosVO> listaUsuariosAplicacion() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
@@ -2390,7 +2584,7 @@ public class facade {
         return vo;
     }
     
-    public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc, boolean codigosCortos, boolean codigosLd, boolean marcacionAbreviada, boolean codigosNrn){
+    public boolean transferirRecursos(String operadorOrigen, String operadorDestino, boolean num, boolean sen, boolean iin, boolean mnc, boolean codigosCortos, boolean codigosLd, boolean marcacionAbreviada, boolean recursosTdt, boolean codigosNrn){
         EntityManagerFactory emf = null;
         EntityManager em = null;
         EntityTransaction tx = null;
@@ -2424,6 +2618,9 @@ public class facade {
             }
             if (codigosNrn){
                ServiceFactory.createNrCodigosNrnService().transferirCodigosNrn(operadorOrigen, operadorDestino, em);
+            }
+            if (recursosTdt){
+               ServiceFactory.createRiRecursosTdtService().transferirRecursosTdt(operadorOrigen, operadorDestino, em);
             }
             
             resultado=true;
@@ -2476,6 +2673,8 @@ public class facade {
                     resultado = ServiceFactory.createNrCodigosNrnService().reservarLiberarCodigosNrn((NrCodigosNrnVO) r, em, accion);
                 } else if (nombre.equals("CiCodigosIinVO")){
                     resultado = ServiceFactory.createCiCodigosIinService().reservarLiberarCodigosIin((CiCodigosIinVO) r, em, accion);
+                } else if (nombre.equals("RiRecursosTdtVO")){
+                    resultado = ServiceFactory.createRiRecursosTdtService().reservarLiberarRecursosTdT((RiRecursosTdtVO) r, em, accion);
                 }else {
                     resultado = 0;
                 }
@@ -2530,6 +2729,8 @@ public class facade {
                 recurso = ServiceFactory.createNrCodigosNrnService().getById(codigoRecurso, em);
             } else if(tipoRecurso.equals("CodigosIin")){
                 recurso = ServiceFactory.createCiCodigosIinService().getById(codigoRecurso, em);
+            } else if(tipoRecurso.equals("RecursosTdt")){
+                recurso = ServiceFactory.createReRegionService().getById(codigoRecurso, em);
             }
             //tx.commit();
         } catch (Exception e) {

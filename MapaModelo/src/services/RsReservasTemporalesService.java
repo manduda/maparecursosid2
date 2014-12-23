@@ -11,6 +11,7 @@ import daos.ClCodigosLdDAO;
 import daos.MaMarcacionAbreviadaDAO;
 import daos.NuNumeracionDAO;
 import daos.NrCodigosNrnDAO;
+import daos.RiRecursosTdtDAO;
 import daos.RsReservasTemporalesDAO;
 import daos.SeSenalizacionDAO;
 import entities.CcCodigosCortos;
@@ -21,6 +22,7 @@ import entities.EsEstado;
 import entities.MaMarcacionAbreviada;
 import entities.NrCodigosNrn;
 import entities.NuNumeracion;
+import entities.RiRecursosTdt;
 import entities.RsReservasTemporales;
 import entities.SeSenalizacion;
 import java.util.ArrayList;
@@ -135,6 +137,14 @@ public class RsReservasTemporalesService {
                 estado.setEsnCodigo(1);
                 codigosIin.setEsnCodigo(estado);
                 CiCodigosIinDAO.merge(codigosIin, em);
+            }
+            else if (r.getRstTipoRecurso().equals("RecursosTdt")){
+                RiRecursosTdt recursosTdt = new RiRecursosTdt();
+                recursosTdt = RiRecursosTdtDAO.findbyId(r.getRsnCodigoRecurso(), em);
+                EsEstado estado = new EsEstado();
+                estado.setEsnCodigo(1);
+                recursosTdt.setEsnCodigo(estado);
+                RiRecursosTdtDAO.merge(recursosTdt, em);
             }
             
             reserva.setRstEstado('N');

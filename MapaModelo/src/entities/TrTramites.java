@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,6 +24,7 @@ import vo.EtEstadoTramiteVO;
 import vo.GtGestionTramiteVO;
 import vo.TaTramiteMaVO;
 import vo.TcTramiteCcVO;
+import vo.TdTramiteTdtVO;
 import vo.TiTramiteIinVO;
 import vo.TkTramiteNrnVO;
 import vo.TlTramiteLdVO;
@@ -106,6 +106,9 @@ public class TrTramites implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
     private Collection<TiTramiteIin> tiTramiteIinCollection;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "trnCodigo")
+    private Collection<TdTramiteTdt> tdTramiteTdtCollection;
         
     public TrTramites() {
     }
@@ -167,6 +170,12 @@ public class TrTramites implements Serializable {
         Collection<TiTramiteIinVO> tramiteIinVO = new ArrayList<TiTramiteIinVO>();        
         for (TiTramiteIin ti : this.tiTramiteIinCollection) {
             tramiteIinVO.add(ti.toVO());
+        }
+        
+        // Tramite TDT
+        Collection<TdTramiteTdtVO> tramiteTdtVO = new ArrayList<TdTramiteTdtVO>();        
+        for (TdTramiteTdt td : this.tdTramiteTdtCollection) {
+            tramiteTdtVO.add(td.toVO());
         }
         
         vo.setTrnCodigo(this.getTrnCodigo());
@@ -354,6 +363,14 @@ public class TrTramites implements Serializable {
 
     public void setTiTramiteIinCollection(Collection<TiTramiteIin> tiTramiteIinCollection) {
         this.tiTramiteIinCollection = tiTramiteIinCollection;
+    }
+
+    public Collection<TdTramiteTdt> getTdTramiteTdtCollection() {
+        return tdTramiteTdtCollection;
+    }
+
+    public void setTdTramiteTdtCollection(Collection<TdTramiteTdt> tdTramiteTdtCollection) {
+        this.tdTramiteTdtCollection = tdTramiteTdtCollection;
     }
     
  }

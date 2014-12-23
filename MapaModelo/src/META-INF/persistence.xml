@@ -45,6 +45,19 @@
     <class>entities.PaPermisosAsesor</class>
     <class>entities.PtTipoPermiso</class>
     <class>entities.Usuarios</class>
+    <class>entities.RnTipoRecursoTdt</class>
+    <class>entities.CaCanalTdt</class>
+    <class>entities.MrMultiplexRecurso</class>
+    <class>entities.MuMultiplex</class>
+    <class>entities.RaRegionesTdt</class>
+    <class>entities.RiRecursosTdt</class>
+    <class>entities.RrTipoRedTdt</class>
+    <class>entities.StServiciosTdt</class>
+    <class>entities.TdTramiteTdt</class>
+    <class>entities.TgTramiteTdtRegiones</class>
+    <class>entities.TtTipoServicioTdt</class>
+    <class>entities.TvTramiteTdtServicios</class>
+    <class>entities.TxTramiteTdtMultiplex</class>
     <shared-cache-mode>NONE</shared-cache-mode>
     <!--<properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.0.204:1522:SIUST"/>
