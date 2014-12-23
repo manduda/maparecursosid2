@@ -23,6 +23,7 @@ public class Permisos implements Serializable {
     private boolean codigosMnc = false;
     private boolean marcacionAbreviada = false;
     private boolean codigosNrn = false;
+    private boolean recursosTdt = false;
     
     public Permisos() {
         this.numeracion = false;
@@ -34,6 +35,7 @@ public class Permisos implements Serializable {
         this.codigosMnc = false;
         this.marcacionAbreviada = false;
         this.codigosNrn = false;
+        this.recursosTdt = false;
     }
 
     public boolean isCodigos1xy() {
@@ -106,6 +108,14 @@ public class Permisos implements Serializable {
 
     public void setSenalizacion(boolean senalizacion) {
         this.senalizacion = senalizacion;
+    }
+
+    public boolean isRecursosTdt() {
+        return recursosTdt;
+    }
+
+    public void setRecursosTdt(boolean recursosTdt) {
+        this.recursosTdt = recursosTdt;
     }
     
 }

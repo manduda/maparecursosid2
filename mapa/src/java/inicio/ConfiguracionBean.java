@@ -36,6 +36,7 @@ public class ConfiguracionBean implements Serializable {
     private String rutaMarcacionAbreviada;
     private String rutaCodigosMnc;
     private String rutaNRN;
+    private String rutaRecursosTdt;
     private String rutaNormatividad;
     private String tiempoSesion;
     private boolean googleAnalytics;
@@ -83,6 +84,7 @@ public class ConfiguracionBean implements Serializable {
             rutaMarcacionAbreviada = rutaContexto + "marcacionAbreviada.xhtml";
             rutaCodigosMnc = rutaContexto + "codigosMNC.xhtml";
             rutaNRN = rutaContexto + "codigosNrn.xhtml";
+            rutaRecursosTdt = rutaContexto + "recursosTdt.xhtml";
             rutaNormatividad = rutaContexto + "normatividad.xhtml";
 
         } catch (IOException e) {
@@ -255,6 +257,14 @@ public class ConfiguracionBean implements Serializable {
         this.rutaCodigosMnc = rutaCodigosMnc;
     }
 
+    public String getRutaRecursosTdt() {
+        return rutaRecursosTdt;
+    }
+
+    public void setRutaRecursosTdt(String rutaRecursosTdt) {
+        this.rutaRecursosTdt = rutaRecursosTdt;
+    }
+    
     public boolean isGoogleAnalytics() {
         return googleAnalytics;
     }

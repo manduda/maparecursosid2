@@ -142,6 +142,7 @@ public class TramiteBean implements Serializable {
     private Boolean seleccionCodigosLd;
     private Boolean seleccionMarcacionAbreviada;
     private Boolean seleccionCodigosNrn;
+    private Boolean seleccionRecursosTdt;
     private Boolean opcionNumeracion;
     private Boolean opcionSenalizacion;
     private Boolean opcionIin;
@@ -985,6 +986,7 @@ public class TramiteBean implements Serializable {
         seleccionCodigosLd = false;
         seleccionMarcacionAbreviada = false;
         seleccionCodigosNrn = false;
+        seleccionRecursosTdt = false;
         //String a = buscarTramite();
         return configuracion.getRutaContexto()+"usuarios/buscarTramite";
     }
@@ -999,6 +1001,7 @@ public class TramiteBean implements Serializable {
         recursos.add(this.seleccionMnc);
         recursos.add(this.seleccionMarcacionAbreviada);
         recursos.add(this.seleccionCodigosNrn);
+        recursos.add(this.seleccionRecursosTdt);
         
         facade fachada = new facade();
 
@@ -2023,6 +2026,7 @@ public class TramiteBean implements Serializable {
         seleccionCodigosLd = false;
         seleccionMarcacionAbreviada = false;
         seleccionCodigosNrn = false;
+        seleccionRecursosTdt = false;
         opcionNumeracion = false;
         opcionSenalizacion = false;
         opcionIin = false;
@@ -2054,7 +2058,7 @@ public class TramiteBean implements Serializable {
             return null;
         }
 
-        if((!seleccionNumeracion) && (!seleccionSenalizacion) && (!seleccionIin) && (!seleccionMnc) && (!seleccionCodigosCortos) && (!seleccionCodigosLd) && (!seleccionMarcacionAbreviada) && (!seleccionCodigosNrn)){
+        if((!seleccionNumeracion) && (!seleccionSenalizacion) && (!seleccionIin) && (!seleccionMnc) && (!seleccionCodigosCortos) && (!seleccionCodigosLd) && (!seleccionMarcacionAbreviada) && (!seleccionCodigosNrn) && (!seleccionRecursosTdt)){
             mensajeTransferirRecursos = "<br><b>Error al transferir recursos.</b><br><br>Debes seleccionar por lo menos un recurso a transferir<br><br>";
             return null;
         }
@@ -2063,7 +2067,7 @@ public class TramiteBean implements Serializable {
                 
         mensajeTransferirRecursos = "";
         
-        transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc, seleccionCodigosCortos, seleccionCodigosLd, seleccionMarcacionAbreviada, seleccionCodigosNrn);
+        transferencia = fachada.transferirRecursos(operadorOrigen, operadorDestino, seleccionNumeracion, seleccionSenalizacion, seleccionIin, seleccionMnc, seleccionCodigosCortos, seleccionCodigosLd, seleccionMarcacionAbreviada, seleccionCodigosNrn, seleccionRecursosTdt);
        
         if (transferencia){
             mensajeTransferirRecursos = "<br><b>Recursos transferidos exitosamente.</b><br>";
@@ -2103,6 +2107,7 @@ public class TramiteBean implements Serializable {
         seleccionCodigosLd = false;
         seleccionMarcacionAbreviada = false;
         seleccionCodigosNrn = false;
+        seleccionRecursosTdt = false;
         
         facade fachada = new facade();
         
@@ -2909,4 +2914,12 @@ public class TramiteBean implements Serializable {
         this.seleccionMarcacionAbreviada = seleccionMarcacionAbreviada;
     }
 
+    public Boolean getSeleccionRecursosTdt() {
+        return seleccionRecursosTdt;
+    }
+
+    public void setSeleccionRecursosTdt(Boolean seleccionRecursosTdt) {
+        this.seleccionRecursosTdt = seleccionRecursosTdt;
+    }
+    
 }

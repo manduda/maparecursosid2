@@ -27,6 +27,7 @@ public class ConfiguracionModulosBean {
     private boolean moduloCodigosMnc = false;
     private boolean moduloMarcacionAbreviada = false;
     private boolean moduloCodigosNrn = false;
+    private boolean moduloRecursosTdt = false;
     
     private String mensajeConfiguracionModulos = "";
     
@@ -68,6 +69,10 @@ public class ConfiguracionModulosBean {
 
             if (fachada.buscarConfiguracionModulo(9).getCmtActivo() == 'S') {
                 moduloCodigosNrn = true;
+            }
+            
+            if (fachada.buscarConfiguracionModulo(10).getCmtActivo() == 'S') {
+                moduloRecursosTdt = true;
             }
             mensajeConfiguracionModulos = "";
         } catch (Exception e) {
@@ -148,6 +153,14 @@ public class ConfiguracionModulosBean {
         this.moduloSenalizacion = moduloSenalizacion;
     }
 
+    public boolean isModuloRecursosTdt() {
+        return moduloRecursosTdt;
+    }
+
+    public void setModuloRecursosTdt(boolean moduloRecursosTdt) {
+        this.moduloRecursosTdt = moduloRecursosTdt;
+    }
+    
     public String getMensajeConfiguracionModulos() {
         return mensajeConfiguracionModulos;
     }

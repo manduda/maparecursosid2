@@ -33,6 +33,8 @@ import vo.TcTramiteCcVO;
 @ManagedBean(name = "CodigosCortosBean")
 @ViewScoped
 public class CodigosCortosBean implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private Collection<SelectItem> listaOperador;
     private Collection<SelectItem> listaEstado;
     private Collection<SelectItem> listaModalidad;

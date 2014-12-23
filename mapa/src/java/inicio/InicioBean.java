@@ -308,6 +308,7 @@ public class InicioBean {
                         permisos.setCodigosMnc(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),7));
                         permisos.setMarcacionAbreviada(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),8));
                         permisos.setCodigosNrn(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),9));
+                        permisos.setRecursosTdt(fachada.tienePermiso(userBean.getUserVO().getUsnCodigo(),10));
                         
                         userBean.setPermisos(permisos);
                         

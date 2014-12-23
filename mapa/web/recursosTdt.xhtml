@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{ConfiguracionBean.rutaContexto}resources/Plantillas/normal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fnc="http://yournamespace.com/fnc">
+
+    <ui:define name="titulo">
+        <h:outputText value="Recursos TDT"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup rendered="#{!ConfiguracionModulosBean.moduloRecursosTdt}">
+            <h:outputText value="Este módulo está desactivado" style="color: red;"/>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{ConfiguracionModulosBean.moduloRecursosTdt}">
+            <p:panel header="Búsqueda" toggleable="true" toggleSpeed="100">
+                <h:form id="formRecursosTdt">
+                    <h:panelGrid>
+                        <h:panelGrid columns="2">
+                            
+                            <h:outputText value="Tipo recurso"/>
+                            <h:selectOneMenu value="#{RecursosTdtBean.tipoRecursoVO.rnnCodigo}">
+                                <f:selectItems value="#{RecursosTdtBean.listaTipoRecurso}" />
+                                <p:ajax update="formRecursosTdt" listener="#{RecursosTdtBean.borrarServicio}" global="false"/>
+                            </h:selectOneMenu>
+                            
+                            <h:outputText value="Tipo Servicio" rendered="#{RecursosTdtBean.tipoRecursoVO.rnnCodigo == 3}"/>
+                            <h:panelGrid id="listaServicio" columns="2" cellspacing="0" cellpadding="0" rendered="#{RecursosTdtBean.tipoRecursoVO.rnnCodigo == 3}">
+                                <h:selectOneMenu value="#{RecursosTdtBean.servicioVO.ttnCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaServicio}" />  
+                                    <p:ajax update="listaServicio" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.servicioVO.ttnCodigo != -1}" update="listaServicio" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.servicioVO.ttnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Operador"/>
+                            <h:panelGrid id="listaOperador" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.operadorVO.emrCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaOperador}" />
+                                    <p:ajax update="listaOperador" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.operadorVO.emrCodigo != -1}" update="listaOperador" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.operadorVO.emrCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Estado"/>
+                            <h:panelGrid id="listaEstado" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.estadoVO.esnCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaEstado}" />
+                                    <p:ajax update="listaEstado" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.estadoVO.esnCodigo != -1}" update="listaEstado" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.estadoVO.esnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Tipo red"/>
+                            <h:panelGrid id="listaTipoRed" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.tipoRedVO.rrnCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaTipoRed}" />  
+                                    <p:ajax update="listaTipoRed" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.tipoRedVO.rrnCodigo != -1}" update="listaTipoRed" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.tipoRedVO.rrnCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Canal"/>
+                            <h:panelGrid id="listaCanal" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.canalVO.canCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaCanal}" />  
+                                    <p:ajax update="listaCanal" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.canalVO.canCodigo != -1}" update="listaCanal" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.canalVO.canCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Multiplex"/>
+                            <h:panelGrid id="listaMultiplex" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.multiplexVO.munCodigo}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaMultiplex}" />  
+                                    <p:ajax update="listaMultiplex" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.multiplexVO.munCodigo != -1}" update="listaMultiplex" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.multiplexVO.munCodigo}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Departamento"/>
+                            <h:panelGrid id="listaDepartamento" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.departamentoVO.codigoDepartamento}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaDepartamento}" />
+                                    <p:ajax update="listaDepartamento,listaMunicipio" listener="#{RecursosTdtBean.cambiarDepartamento}" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.departamentoVO.codigoDepartamento != -1}" update="listaDepartamento,listaMunicipio" global="false" action="#{SenalizacionBean.cambiarDepartamento}">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.departamentoVO.codigoDepartamento}" value="-1" />
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.municipioVO.codigoMunicipio}" value="-1" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Municipio"/>
+                            <h:panelGrid id="listaMunicipio" columns="2" cellspacing="0" cellpadding="0">
+                                <h:selectOneMenu value="#{RecursosTdtBean.municipioVO.codigoMunicipio}">
+                                    <f:selectItems value="#{RecursosTdtBean.listaMunicipio}" />  
+                                    <p:ajax update="listaMunicipio" global="false"/>
+                                </h:selectOneMenu>
+                                <p:commandLink ajax="true" rendered="#{RecursosTdtBean.municipioVO.codigoMunicipio != -1}" update="listaMunicipio" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                            <h:outputText value="Código recurso"/>
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:inputText id="recursoTdt" value="#{RecursosTdtBean.recursoTdt}" maxlength="3" size="3" converter="javax.faces.Integer"
+                                             converterMessage="Debes ingresar un número entero" validator="#{Validador.enteroPositivo}"/>
+                                <p:message for="recursoTdt" />
+                            </h:panelGrid>
+                            
+                            <h:outputText value=" "/>
+                            <h:panelGrid columns="2" cellspacing="0" cellpadding="0">
+                                <h:outputText value="Borrar todos los filtros &nbsp;" />
+                                <p:commandLink ajax="true" update="formRecursosTdt" action="#{RecursosTdtBean.cambiarDepartamento}" global="false">
+                                    <p:graphicImage value="#{ConfiguracionBean.rutaContexto}resources/images/borrar.png" style="border:0px"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.operadorVO.emrCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.estadoVO.esnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.tipoRedVO.rrnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.canalVO.canCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.servicioVO.ttnCodigo}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.departamentoVO.codigoDepartamento}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.municipioVO.codigoMunicipio}" value="-1"/>
+                                    <f:setPropertyActionListener target="#{RecursosTdtBean.recursoTdt}" value=""/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:commandButton value="Consultar" actionListener="#{RecursosTdtBean.buscar}" ajax="true" update=":pgRecursosTdt,formRecursosTdt">
+                                <f:setPropertyActionListener target="#{RecursosTdtBean.selectedsAccion}" value="false"/>
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+
+            <h:panelGrid id="pgRecursosTdt" width="100%">
+                <h:form id="frmDatos">
+                    <h:panelGrid style="text-align: left;font-size:10px" rendered="#{UserBean.login}">
+                        <h:panelGroup id="opciones">
+                            <p:commandButton value="Acción" ajax="true" actionListener="#{RecursosTdtBean.detalleAccion}" update=":datosAccionRecurso,:display" oncomplete="AccionDialog.show();" icon="ui-icon ui-icon-cart" disabled="#{!RecursosTdtBean.selectedsAccion}" rendered="#{UserBean.permisos.codigosIin or (UserBean.liberar or UserBean.reservar)}"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+
+                    <p:dataTable id="datos" value="#{RecursosTdtBean.lazyModel}" var="recurso" paginator="true" paginatorPosition="top"
+                                 selectionMode="#{(UserBean.login == true and UserBean.permisos.codigosIin == true) or (UserBean.liberar or UserBean.reservar) ? 'multiple' : null}"
+                                 selection="#{RecursosTdtBean.selecteds}" rowIndexVar="rowIndex" widgetVar="datatableVar" rowKey="#{recurso.rinCodigo}"
+                                 rows="20" emptyMessage="No se encontraron registros" style="font-size:10px" lazy="true" rowsPerPageTemplate="10,20,30,40,50"
+                                 paginatorTemplate=" #{RecursosTdtBean.lazyModel.rowCount} registros encontrados {RowsPerPageDropdown} {CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+                        <p:ajax event="rowSelect" listener="#{RecursosTdtBean.onRowSelect}" update=":frmDatos:opciones" />
+                        <p:ajax event="rowUnselect" listener="#{RecursosTdtBean.onRowUnselect}" update=":frmDatos:opciones" />
+                        
+                        <p:column style="width:25px">
+                            <p:commandButton update=":display,:datosRecurso" oncomplete="Dialog.show();" icon="ui-icon ui-icon-search" action="#{RecursosTdtBean.detalle}">  
+                                <f:setPropertyActionListener target="#{RecursosTdtBean.selected}" value="#{recurso}"/>  
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="CÓDIGO RECURSO" style="text-align: center; width: 100px;">
+                                <h:outputText value="#{recurso.rinCodigoRecurso}"/>
+                        </p:column>
+                        <p:column headerText="TIPO RECURSO" >
+                            <h:outputText value="#{recurso.rnnCodigo.rntNombre}"/>
+                        </p:column>
+                        <p:column headerText="TIPO SERVICIO" rendered="#{RecursosTdtBean.tipoRecursoVO.rnnCodigo == 3}">
+                            <h:outputText value="#{recurso.servicioCodigo.ttnCodigo.tttNombre}"/>
+                        </p:column>
+                        <p:column headerText="TIPO RED" >
+                            <h:outputText value="#{recurso.rrnCodigo.rrtNombre}"/>
+                        </p:column>
+                        <p:column headerText="ESTADO" style="width: 100px">
+                            <div style="width: 100%; text-align: center;" class="#{recurso.esnCodigo.esnCodigo == '3' ? 'estado-asignado' :
+                                                                                   recurso.esnCodigo.esnCodigo == '4' ? 'estado-reserva' : 
+                                                                                   recurso.esnCodigo.esnCodigo == '2' ? 'estado-preasignado' :
+                                                                                   recurso.esnCodigo.esnCodigo == '1' ? 'estado-libre' :
+                                                                                   null}">
+                                <h:outputText value="#{recurso.esnCodigo.estNombre}"/>
+                            </div>
+                        </p:column>
+                        <p:column headerText="EMPRESA" style="min-width: 250px">
+                            <h:outputText value="#{recurso.emrCodigo.emtNombre}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+            </h:panelGrid>
+
+            <!-- DETALLE RECURSO -->
+            <h:panelGroup id="datosRecurso">
+                <p:dialog header="Detalle" widgetVar="Dialog" resizable="false" modal="true" draggable="false"
+                          width="500" showEffect="fade" hideEffect="fade" position="center">
+                    <h:panelGrid cellpadding="1" style="font-size: 10px;" width="400">
+                        <h:panelGrid columns="2" cellpadding="4" width="100%">
+                            <h:outputText value="Código recurso:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.rinCodigoRecurso}" />
+                            <h:outputText value="Tipo recurso:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.rnnCodigo.rntNombre}" />
+                            <h:outputText value="Tipo red:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.rrnCodigo.rrtNombre}" />
+                            <h:outputText value="Estado:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.esnCodigo.estNombre}" />
+                            <h:outputText value="Operador:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.emrCodigo.emtNombre}" />
+                            <h:outputText value="Observaciones:" style="font-weight: bold;"/>
+                            <h:outputText value="#{RecursosTdtBean.selected.ritObservaciones}" />
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                            <p:commandButton type="button" value="Ver Historia" onclick="historiaDialog.show();"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+
+                <!--<p:dialog header="Historia recurso" widgetVar="historiaDialog" resizable="false" modal="true" draggable="false" 
+                          width="400" height="300" showEffect="fade" hideEffect="fade" position="center">
+                    Falta el código
+                
+                </p:dialog>-->
+            </h:panelGroup>
+
+            <h:panelGroup id="datosAccionRecurso">
+
+                <p:dialog header="Detalle" widgetVar="AccionDialog" resizable="false" modal="true" draggable="false"
+                          width="700" showEffect="fade" hideEffect="fade" position="center">
+                    <h:panelGrid cellpadding="1" style="font-size: 10px;" width="100%">
+                        <h:form>
+                            <p:dataTable id="datosAccion" value="#{RecursosTdtBean.selecteds}" var="detalle" paginator="false" style="font-size:10px">
+                                <f:facet name="header">Detalle Recursos TDT</f:facet>
+                                <p:column headerText="CÓDIGO IIN" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalle.rinCodigoRecurso}"/>
+                                </p:column>
+                                <p:column headerText="TIPO RECURSO" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalle.rnnCodigo.rntNombre}"/>
+                                </p:column>
+                                <p:column headerText="TIPO RED" styleClass="tabla-recurso">
+                                    <h:outputText value="#{detalle.rrnCodigo.rrtNombre}"/>
+                                </p:column>
+                                <p:column headerText="ESTADO" >
+                                    <h:outputText value="#{detalle.esnCodigo.estNombre}"/>
+                                </p:column>
+                                <p:column headerText="EMPRESA" >
+                                    <h:outputText value="#{detalle.emrCodigo.emtNombre}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                            <h:panelGrid columns="2" width="100%" style="text-align: center;">
+                                <h:panelGroup rendered="#{UserBean.login}">
+                                    <h:outputText value="Los códigos en reserva solo pueden ser manipulados por el administrador" rendered="#{(!UserBean.reservar) and (RecursosTdtBean.selectedsLiberar)}" style="color: red;"/>
+                                    <p:commandButton value="Pre-Asignar" rendered="#{(UserBean.permisos.codigosIin and RecursosTdtBean.selectedsPreasignar)}" update=":datosPreasignar" oncomplete="AccionDialog.hide();preasignarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="codigosIin"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Recuperar" rendered="#{(UserBean.permisos.recursosTdt and RecursosTdtBean.selectedsRecuperar)}" update=":datosRecuperar" oncomplete="AccionDialog.hide();recuperarDialog.show();"/>
+                                    <p:commandButton value="Liberar" rendered="#{(UserBean.liberar and RecursosTdtBean.selectedsLiberar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgRecursosTdt" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="recursosTdt"/>
+                                        <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="1"/>
+                                    </p:commandButton>
+                                    <p:commandButton value="Reservar" rendered="#{(UserBean.reservar and RecursosTdtBean.selectedsReservar)}" action="#{TramiteBean.liberarReservarRecurso}" update=":datosResultadoAgregar,:pgRecursosTdt" oncomplete="AccionDialog.hide();resultadoAgregarDialog.show();">
+                                        <f:setPropertyActionListener target="#{TramiteBean.tipoRecurso}" value="recursosTdt"/>
+                                        <f:setPropertyActionListener target="#{TramiteBean.codigoAccion}" value="4"/>
+                                    </p:commandButton>
+                                </h:panelGroup>
+
+                            </h:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                </p:dialog>
+            </h:panelGroup>
+            
+            <h:panelGroup rendered="#{UserBean.permisos.codigosNrn or (UserBean.liberar or UserBean.reservar)}">
+                <ui:include src="#{ConfiguracionBean.rutaContexto}usuarios/detalleRecursosTdt.xhtml"/>
+            </h:panelGroup>
+            
+        </h:panelGroup>
+        
+    </ui:define>
+</ui:composition>
